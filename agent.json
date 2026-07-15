@@ -1,0 +1,58 @@
+{
+  "name": "Hermes Agent 🤖",
+  "for": "Speed Reading Việt Nam",
+  "owner": "Văn Hỉ",
+  "updated": "2026-07-15",
+  "schedule": [
+    {"time": "07:00", "task": "🎬 Gửi 3 kịch bản video TikTok/Reels", "detail": "Viết lời thoại 20-40s, hashtag, mẹo quay"},
+    {"time": "07:00", "task": "📚🤖 Gửi 10 nghiên cứu (5 Sách + 5 AI)", "detail": "Sách mới, diễn giả, xu hướng, AI tools, công nghệ"},
+    {"time": "08:00", "task": "🌅 Đăng bài Tips lên Facebook", "detail": "Kỹ thuật đọc nhanh, mẹo học tập"},
+    {"time": "12:00", "task": "☀️ Đăng bài Trend lên Facebook", "detail": "Tin xu hướng → lồng Speed Reading"},
+    {"time": "18:00", "task": "🌆 Đăng bài Mindset lên Facebook", "detail": "Tư duy, thói quen, cảm hứng đọc sách"},
+    {"time": "19:00", "task": "📚🤖 Gửi 10 nghiên cứu (5 Sách + 5 AI)", "detail": "Sách mới, diễn giả, xu hướng, AI tools, công nghệ"}
+  ],
+  "roles": [
+    {
+      "icon": "📝",
+      "title": "Content Creator",
+      "desc": "Viết 3 bài Facebook mỗi ngày cho Speed Reading HCM",
+      "skills": ["Viết content tiếng Việt", "Tối ưu giọng văn thương hiệu", "Trend-jacking", "SEO Facebook"]
+    },
+    {
+      "icon": "🎬",
+      "title": "Video Script Writer",
+      "desc": "Viết 3 kịch bản TikTok/Reels/Shorts mỗi sáng",
+      "skills": ["Viết lời thoại 20-40s", "Tối ưu cho từng nền tảng", "Hashtag strategy", "Call-to-action"]
+    },
+    {
+      "icon": "🔍",
+      "title": "Researcher",
+      "desc": "Nghiên cứu 20 thông tin mỗi ngày (10 sáng + 10 tối)",
+      "skills": ["Tìm kiếm thông tin đa nguồn", "Phân tích xu hướng", "Chọn lọc nội dung giá trị", "Gợi ý ứng dụng thực tế"]
+    },
+    {
+      "icon": "🎯",
+      "title": "SEO Specialist",
+      "desc": "Tối ưu SEO cho video YouTube & bài viết",
+      "skills": ["Nghiên cứu từ khóa", "Tối ưu tiêu đề", "SEO description", "Tag strategy"]
+    },
+    {
+      "icon": "📤",
+      "title": "Video Uploader",
+      "desc": "Upload video lên YouTube, Facebook, TikTok",
+      "skills": ["YouTube Data API", "Facebook Graph API", "TikTok Content API", "Thumbnail optimization"]
+    },
+    {
+      "icon": "🌐",
+      "title": "Web Developer",
+      "desc": "Quản lý & cập nhật website Speed Reading Insights",
+      "skills": ["HTML/CSS responsive", "GitHub Pages", "Python scripting", "UI/UX"]
+    },
+    {
+      "icon": "📊",
+      "title": "Social Media Manager",
+      "desc": "Lên lịch, đăng bài & theo dõi Facebook Page",
+      "skills": ["Lịch đăng bài tự động", "Facebook Graph API", "Content calendar", "Thống kê"]
+    }
+  ]
+}
