@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading Insights - Nghiên Cứu & Học Tập</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{
+            font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+            background:#0a0a1a;color:#e4e4f0;line-height:1.7;min-height:100vh
+        }
+        .bg-grid{
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(99,102,241,0.03) 1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .bg-glow{
+            position:fixed;top:-20%;right:-10%;
+            width:600px;height:600px;
+            background:radial-gradient(circle,rgba(99,102,241,0.08),transparent 70%);
+            border-radius:50%;z-index:-1;
+            animation:float 20s ease-in-out infinite
+        }
+        .bg-glow-2{
+            position:fixed;bottom:-20%;left:-10%;
+            width:500px;height:500px;
+            background:radial-gradient(circle,rgba(168,85,247,0.06),transparent 70%);
+            border-radius:50%;z-index:-1;
+            animation:float 25s ease-in-out infinite reverse
+        }
+        @keyframes float{
+            0%,100%{transform:translate(0,0)scale(1)}
+            33%{transform:translate(30px,-30px)scale(1.05)}
+            66%{transform:translate(-20px,20px)scale(0.95)}
+        }
+        header{text-align:center;padding:80px 20px 40px}
+        header .logo{font-size:3.5em;margin-bottom:12px;display:block}
+        header h1{
+            font-size:clamp(2em,5vw,3.5em);font-weight:800;
+            background:linear-gradient(135deg,#818cf8,#c084fc,#f472b6);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+        }
+        header p{color:#8b8ba7;font-size:1.1em;margin-top:10px;font-weight:300}
+        header .badge{
+            display:inline-block;background:rgba(99,102,241,0.15);color:#818cf8;
+            padding:6px 18px;border-radius:20px;font-size:0.85em;font-weight:500;
+            margin-top:14px;border:1px solid rgba(99,102,241,0.2)
+        }
+        .timeline{max-width:900px;margin:0 auto;padding:20px 20px 60px;position:relative}
+        .timeline::before{
+            content:'';position:absolute;left:50%;top:0;bottom:0;
+            width:2px;
+            background:linear-gradient(to bottom,transparent,rgba(99,102,241,0.3),rgba(99,102,241,0.3),transparent);
+            transform:translateX(-50%)
+        }
+        .timeline-item{display:flex;margin-bottom:40px;position:relative;opacity:0;animation:fadeInUp .6s ease forwards}
+        .timeline-item:nth-child(odd){animation-delay:.1s}
+        .timeline-item:nth-child(even){animation-delay:.2s}
+        @keyframes fadeInUp{
+            from{opacity:0;transform:translateY(20px)}
+            to{opacity:1;transform:translateY(0)}
+        }
+        .timeline-item .date{width:120px;text-align:right;padding-right:30px;font-size:.85em;color:#6b6b8a;padding-top:20px;flex-shrink:0}
+        .timeline-item .date .day{font-size:1.8em;font-weight:700;color:#818cf8;display:block}
+        .timeline-item .date .month{font-size:.9em}
+        .timeline-item .dot{
+            width:16px;height:16px;background:#818cf8;border-radius:50%;
+            position:absolute;left:50%;top:24px;transform:translateX(-50%);
+            border:3px solid #0a0a1a;box-shadow:0 0 20px rgba(99,102,241,0.4);flex-shrink:0;z-index:2
+        }
+        .timeline-item .dot.morning{background:#fbbf24;box-shadow:0 0 20px rgba(251,191,36,0.4)}
+        .timeline-item .dot.evening{background:#818cf8;box-shadow:0 0 20px rgba(99,102,241,0.4)}
+        .timeline-item .card{
+            flex:1;margin-left:30px;background:rgba(255,255,255,0.03);
+            border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px 28px;
+            backdrop-filter:blur(10px);transition:all .3s ease;cursor:pointer
+        }
+        .timeline-item .card:hover{
+            border-color:rgba(99,102,241,0.3);background:rgba(255,255,255,0.05);
+            transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,0,0,0.3)
+        }
+        .timeline-item .card .time-label{
+            display:inline-block;font-size:.75em;padding:3px 12px;border-radius:12px;
+            font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px
+        }
+        .time-label.morning{background:rgba(251,191,36,0.15);color:#fbbf24}
+        .time-label.evening{background:rgba(99,102,241,0.15);color:#818cf8}
+        .timeline-item .card h3{font-size:1.15em;font-weight:600;color:#e4e4f0;margin-bottom:6px}
+        .timeline-item .card .preview{color:#8b8ba7;font-size:.9em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .timeline-item .card .read-more{color:#818cf8;font-size:.85em;font-weight:500;margin-top:10px;display:inline-block}
+        .timeline-item .card .count{float:right;color:#6b6b8a;font-size:.85em}
+        footer{text-align:center;padding:40px 20px;color:#5a5a7a;font-size:.85em;border-top:1px solid rgba(255,255,255,0.04)}
+        footer a{color:#818cf8;text-decoration:none}
+        footer a:hover{text-decoration:underline}
+        @media(max-width:768px){
+            .timeline::before{left:20px}
+            .timeline-item{flex-direction:column;padding-left:50px}
+            .timeline-item .date{width:auto;text-align:left;padding-right:0;padding-top:0;margin-bottom:8px}
+            .timeline-item .date .day{display:inline;font-size:1.2em;margin-right:4px}
+            .timeline-item .date .month{display:inline}
+            .timeline-item .dot{left:20px;top:20px;width:12px;height:12px}
+            .timeline-item .card{margin-left:0;padding:18px 20px}
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <header>
+        <span class="logo">📚</span>
+        <h1>Speed Reading Insights</h1>
+        <p>Nghiên cứu, sách hay, diễn giả & xu hướng học tập mỗi ngày</p>
+        <span class="badge">🎯 Dành cho Speed Reading Việt Nam</span>
+    </header>
+
+    <div class="timeline" id="timeline"></div>
+
+    <footer>
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
+        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    </footer>
+
+    <script>
+        fetch('reports.json')
+            .then(r => r.json())
+            .then(reports => {
+                const container = document.getElementById('timeline');
+                if (!reports || reports.length === 0) {
+                    container.innerHTML = '<div style="text-align:center;padding:80px 20px;color:#6b6b8a;"><span style="font-size:3em;display:block;margin-bottom:16px;">📬</span><h3 style="color:#8b8ba7;font-weight:500;">Chưa có báo cáo nào</h3><p style="margin-top:8px;">Báo cáo đầu tiên sẽ xuất hiện ở đây</p></div>';
+                    return;
+                }
+                const sorted = [...reports].sort((a,b) => {
+                    const dA = new Date(a.date.split('/').reverse().join('-'));
+                    const dB = new Date(b.date.split('/').reverse().join('-'));
+                    return dA !== dB ? dB - dA : (b.time === 'sáng' ? 1 : -1);
+                });
+                container.innerHTML = sorted.map((r, i) => {
+                    const isMorning = r.time === 'sáng';
+                    const preview = r.items ? r.items.slice(0,2).map(x => x.title).join(' • ') : '';
+                    return `<div class="timeline-item" style="flex-direction:${i%2===0?'row':'row-reverse'}">
+                        <div class="date"><span class="day">${r.day}</span><span class="month">${r.month}</span></div>
+                        <div class="dot ${isMorning?'morning':'evening'}"></div>
+                        <div class="card" onclick="window.location.href='reports/${r.filename}'">
+                            <span class="time-label ${isMorning?'morning':'evening'}">${isMorning?'🌅 Sáng':'🌆 Tối'}</span>
+                            <span class="count">📌 ${r.items.length} mục</span>
+                            <h3>${r.title}</h3>
+                            <p class="preview">${preview}</p>
+                            <span class="read-more">Đọc thêm →</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            });
+    </script>
+</body>
+</html>

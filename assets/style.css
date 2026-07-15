@@ -1,0 +1,126 @@
+/* ============ SHARED STYLES FOR REPORT PAGES ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0a1a;
+    color: #e4e4f0;
+    line-height: 1.7;
+    min-height: 100vh;
+}
+a { color: #818cf8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Background */
+.bg-grid {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: -1;
+}
+.bg-glow {
+    position: fixed; top: -20%; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(99,102,241,0.08), transparent 70%);
+    border-radius: 50%; z-index: -1;
+    animation: float 20s ease-in-out infinite;
+}
+.bg-glow-2 {
+    position: fixed; bottom: -20%; left: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(168,85,247,0.06), transparent 70%);
+    border-radius: 50%; z-index: -1;
+    animation: float 25s ease-in-out infinite reverse;
+}
+@keyframes float {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-30px) scale(1.05); }
+    66% { transform: translate(-20px,20px) scale(0.95); }
+}
+
+/* Container */
+.container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+.report-page { padding: 40px 0 80px; }
+
+/* Back button */
+.back {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #8b8ba7; text-decoration: none;
+    font-size: 0.95em; margin-bottom: 30px;
+    transition: color 0.3s;
+}
+.back:hover { color: #818cf8 !important; text-decoration: none !important; }
+
+/* Report header */
+.report-header { margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.report-header .report-date { font-size: 0.85em; color: #818cf8; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+.report-header h1 {
+    font-size: clamp(1.5em,3vw,2.2em); font-weight: 700; margin: 8px 0 12px;
+    background: linear-gradient(135deg, #e4e4f0, #818cf8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.report-header p { color: #8b8ba7; font-size: 1em; }
+
+/* Research cards */
+.research-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 28px; margin-bottom: 24px;
+    transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+.research-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(to bottom, #818cf8, #c084fc);
+    border-radius: 0 2px 2px 0;
+}
+.research-card:hover {
+    border-color: rgba(99,102,241,0.25); background: rgba(255,255,255,0.05);
+    transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+.research-card .number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    background: rgba(99,102,241,0.15); color: #818cf8;
+    border-radius: 10px; font-weight: 700; font-size: 0.9em; margin-bottom: 12px;
+}
+.research-card h2 { font-size: 1.2em; font-weight: 600; color: #e4e4f0; margin-bottom: 12px; }
+.research-card .content { color: #c8c8e0; font-size: 0.95em; line-height: 1.8; }
+.research-card .content p { margin-bottom: 10px; }
+.research-card .meta {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);
+}
+.research-card .meta .tag {
+    display: inline-block; padding: 4px 14px;
+    background: rgba(99,102,241,0.1); color: #818cf8;
+    border-radius: 8px; font-size: 0.8em; font-weight: 500;
+}
+.research-card .meta .tag.green { background: rgba(52,211,153,0.1); color: #34d399; }
+.research-card .meta .tag.pink { background: rgba(244,114,182,0.1); color: #f472b6; }
+.research-card .meta .tag.amber { background: rgba(251,191,36,0.1); color: #fbbf24; }
+.research-card .apply-box {
+    margin-top: 16px; padding: 16px 20px;
+    background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.12);
+    border-radius: 12px;
+}
+.research-card .apply-box .label {
+    font-size: 0.8em; font-weight: 600; color: #818cf8;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+}
+.research-card .apply-box p { color: #b0b0d0; font-size: 0.9em; }
+
+/* Footer */
+footer {
+    text-align: center; padding: 40px 20px;
+    color: #5a5a7a; font-size: 0.85em;
+    border-top: 1px solid rgba(255,255,255,0.04);
+}
+footer a { color: #818cf8; text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .research-card { padding: 20px; }
+    .report-page { padding: 20px 0 60px; }
+}
