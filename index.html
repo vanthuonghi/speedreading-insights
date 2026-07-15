@@ -160,12 +160,14 @@
             c.innerHTML = s.map((r,i) => {
                 const am = r.time === 'sáng';
                 const pv = r.items ? r.items.slice(0,2).map(x => x.title).join(' • ') : '';
+                const readingBadge = r.reading ? `<span style="display:inline-block;font-size:.75em;padding:2px 10px;border-radius:8px;background:rgba(52,211,153,0.1);color:#34d399;margin-right:4px;">📚${r.reading}</span>` : '';
+                const aiBadge = r.ai ? `<span style="display:inline-block;font-size:.75em;padding:2px 10px;border-radius:8px;background:rgba(168,85,247,0.1);color:#a855f7;">🤖${r.ai}</span>` : '';
                 return `<div class="ti" style="flex-direction:${i%2===0?'row':'row-reverse'}">
                     <div class="d"><span class="dd">${r.day}</span><span class="mm">${r.month}</span></div>
                     <div class="dt ${am?'am':'pm'}"></div>
                     <div class="c" onclick="window.location.href='reports/${r.filename}'">
                         <span class="tlbl ${am?'am':'pm'}">${am?'🌅 Sáng':'🌆 Tối'}</span>
-                        <span class="cnt">📌 ${r.items.length} mục</span>
+                        <span class="cnt">${readingBadge}${aiBadge}</span>
                         <h3>${r.title}</h3>
                         <p class="pv">${pv}</p>
                         <span class="rm">Đọc thêm →</span>

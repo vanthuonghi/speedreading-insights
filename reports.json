@@ -6,21 +6,40 @@
     "time": "sáng",
     "title": "Báo cáo Sáng 2026-07-15",
     "filename": "2026-07-15-sáng.html",
+    "reading": 4,
+    "ai": 4,
     "items": [
       {
-        "title": "📖 Jim Kwik: \"Bạn không thể cải thiện thứ bạn không đo lường được\""
+        "title": "📖 Jim Kwik: \"Bạn không thể cải thiện thứ bạn không đo lường được\"",
+        "cat": "reading"
       },
       {
-        "title": "📚 Sách \"Limitless Expanded\" - Jim Kwik: Bản cập nhật 2026"
+        "title": "📚 Sách \"Limitless Expanded\" - Jim Kwik 2026",
+        "cat": "reading"
       },
       {
-        "title": "🔥 Xu hướng \"Micro-learning\" - Học nhỏ giọt lên ngôi 2026"
+        "title": "🔥 Micro-learning xu hướng số 1 đào tạo 2026",
+        "cat": "reading"
       },
       {
-        "title": "🧠 Nghiên cứu: Đọc sách 15 phút mỗi ngày giảm 30% nguy cơ suy giảm nhận thức"
+        "title": "🧠 Đọc sách 15 phút/ngày giảm 30% suy giảm nhận thức",
+        "cat": "reading"
       },
       {
-        "title": "🎤 Barbara Oakley: \"Học cách học quan trọng hơn học cái gì\""
+        "title": "🤖 ChatGPT-5 phân tích sách 300 trang 30 giây",
+        "cat": "ai"
+      },
+      {
+        "title": "📱 Notion AI 2026 - Ghi chú thông minh",
+        "cat": "ai"
+      },
+      {
+        "title": "⚡ Perplexity AI Deep Research - Research siêu tốc",
+        "cat": "ai"
+      },
+      {
+        "title": "🔬 Google Gemini 2.0 đọc PDF 1000 trang",
+        "cat": "ai"
       }
     ]
   }
