@@ -4,7 +4,7 @@
     "url": "https://youtube.com/watch?v=qWBcqD49nKA",
     "channel": "Parker Prompts",
     "duration": "8m13s",
-    "views": 9459,
+    "views": 9479,
     "date": "",
     "summary": "Go from ABSOLUTE ZERO to using AI like the people who do this for a living   ...",
     "category": "AI & Công nghệ"
@@ -40,13 +40,23 @@
     "category": "AI & Công nghệ"
   },
   {
-    "title": "The Best AI Tool for Making YouTube Videos (2026)",
-    "url": "https://youtube.com/watch?v=x7ne4LqKCl0",
-    "channel": "Youri van Hofwegen",
-    "duration": "10m31s",
-    "views": 21137,
+    "title": "How to Actually Use AI Tools in 2026 (Full Guide)",
+    "url": "https://youtube.com/watch?v=HPw4eiqOZfU",
+    "channel": "Parker Prompts",
+    "duration": "12m40s",
+    "views": 19466,
     "date": "",
-    "summary": "Start Making Visuals For Your YouTube Videos with Higgsfield https://youricreates.com/Higgsfield In this video, I show the AI ...",
+    "summary": "Go from ABSOLUTE ZERO to using AI like the people who do this for a living   ...",
+    "category": "AI & Công nghệ"
+  },
+  {
+    "title": "Why AI Agents are either the best or worst thing we’ve ever built",
+    "url": "https://youtube.com/watch?v=WnzR5aOElvw",
+    "channel": "Hannah Fry",
+    "duration": "20m19s",
+    "views": 1692992,
+    "date": "",
+    "summary": "I built an AI agent. She opened a shop selling novelty mugs, emailed a journalist without being asked, and then leaked our ...",
     "category": "AI & Công nghệ"
   },
   {
@@ -60,31 +70,11 @@
     "category": "AI & Công nghệ"
   },
   {
-    "title": "Why AI Agents are either the best or worst thing we’ve ever built",
-    "url": "https://youtube.com/watch?v=WnzR5aOElvw",
-    "channel": "Hannah Fry",
-    "duration": "20m19s",
-    "views": 1692982,
-    "date": "",
-    "summary": "I built an AI agent. She opened a shop selling novelty mugs, emailed a journalist without being asked, and then leaked our ...",
-    "category": "AI & Công nghệ"
-  },
-  {
-    "title": "The Four Types of Memory Every AI Agent Needs",
-    "url": "https://youtube.com/watch?v=BacJ6sEhqMo",
-    "channel": "IBM Technology",
-    "duration": "10m41s",
-    "views": 96884,
-    "date": "",
-    "summary": "Learn more about AI Agents here → https://ibm.biz/~OSlmklt3a AI agents remember in more than one way. Martin Keen explains ...",
-    "category": "AI & Công nghệ"
-  },
-  {
     "title": "Hermes Agent Just Got 10X Better (4 Insane NEW Features)",
     "url": "https://youtube.com/watch?v=oBdk_hFHEuY",
     "channel": "Zinho Automates",
     "duration": "10m38s",
-    "views": 24910,
+    "views": 24946,
     "date": "",
     "summary": "Hermes AI Agent Just Got 10X Better (4 Insane NEW Features). Join our FREE community: ...",
     "category": "AI & Công nghệ"
@@ -94,9 +84,19 @@
     "url": "https://youtube.com/watch?v=P5sKKnWCvzk",
     "channel": "Sandeep Swadia",
     "duration": "13m10s",
-    "views": 1605863,
+    "views": 1605902,
     "date": "",
     "summary": "... https://www.sandeepswadia.com/newsletter Most people still use AI like a better search box, but the real shift is AI agents, ...",
+    "category": "AI & Công nghệ"
+  },
+  {
+    "title": "Pydantic AI 2.0: The New Best Way to Build AI Agents is Composing Capabilities",
+    "url": "https://youtube.com/watch?v=PY7xIxybYNc",
+    "channel": "Cole Medin",
+    "duration": "15m1s",
+    "views": 21821,
+    "date": "",
+    "summary": "The new best way to build AI agents is to compose capabilities, instead of every agent being a unorganized pile of tools, ...",
     "category": "AI & Công nghệ"
   }
 ]

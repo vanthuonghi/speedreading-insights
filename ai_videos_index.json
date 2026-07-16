@@ -24,19 +24,15 @@
         "channel": "Future AI"
       },
       {
-        "title": "The Best AI Tool for Making YouTube Videos (2026)",
-        "channel": "Youri van Hofwegen"
-      },
-      {
-        "title": "5 AI Agent Terms You Need to Know",
-        "channel": "IBM Technology"
+        "title": "How to Actually Use AI Tools in 2026 (Full Guide)",
+        "channel": "Parker Prompts"
       },
       {
         "title": "Why AI Agents are either the best or worst thing we’ve ever built",
         "channel": "Hannah Fry"
       },
       {
-        "title": "The Four Types of Memory Every AI Agent Needs",
+        "title": "5 AI Agent Terms You Need to Know",
         "channel": "IBM Technology"
       },
       {
@@ -46,6 +42,10 @@
       {
         "title": "You’re Not Behind (Yet): Learn AI Agents in 13 Minutes",
         "channel": "Sandeep Swadia"
+      },
+      {
+        "title": "Pydantic AI 2.0: The New Best Way to Build AI Agents is Composing Capabilities",
+        "channel": "Cole Medin"
       }
     ]
   }
