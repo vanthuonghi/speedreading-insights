@@ -225,7 +225,7 @@
         function renderTimeline(data, containerId) {
             const c = document.getElementById(containerId);
             if (!data || data.length === 0) {
-                c.innerHTML = '<div class="empty"><span>📬</span><h3>Chưa có báo cáo nào</h3><p>Báo cáo đầu tiên sẽ xuất hiện ở đây</p></div>';
+                c.innerHTML = '<div class="empty"><span>📬</span><h3>Chưa có bài nghiên cứu nào</h3><p>Bài viết mới sẽ xuất hiện ở đây</p></div>';
                 return;
             }
             const s = [...data].sort((a,b) => {
@@ -235,17 +235,25 @@
             });
             c.innerHTML = s.map((r,i) => {
                 const am = r.time === 'sáng';
-                const pv = r.items ? r.items.slice(0,2).map(x => x.title).join(' • ') : '';
-                const readingBadge = r.reading ? `<span style="display:inline-block;font-size:.75em;padding:2px 10px;border-radius:8px;background:rgba(52,211,153,0.1);color:#34d399;margin-right:4px;">📚${r.reading}</span>` : '';
-                const aiBadge = r.ai ? `<span style="display:inline-block;font-size:.75em;padding:2px 10px;border-radius:8px;background:rgba(168,85,247,0.1);color:#a855f7;">🤖${r.ai}</span>` : '';
+                // Parse date
+                const parts = r.date.split('-');
+                const day = parts[2] || '';
+                const month = `${parts[1]}/${parts[0]}`;
+                
+                const catBadge = r.cat === 'ai' 
+                    ? '<span style="display:inline-block;font-size:.75em;padding:2px 10px;border-radius:8px;background:rgba(168,85,247,0.1);color:#a855f7;">🤖 AI</span>'
+                    : '<span style="display:inline-block;font-size:.75em;padding:2px 10px;border-radius:8px;background:rgba(52,211,153,0.1);color:#34d399;">📚 Sách</span>';
+                
+                const tags = r.tags ? r.tags.slice(0,3).map(t => `<span style="display:inline-block;font-size:.72em;padding:2px 10px;border-radius:6px;background:rgba(99,102,241,0.08);color:#8b8ba7;">${t}</span>`).join('') : '';
+                
                 return `<div class="ti" style="flex-direction:${i%2===0?'row':'row-reverse'}">
-                    <div class="d"><span class="dd">${r.day}</span><span class="mm">${r.month}</span></div>
+                    <div class="d"><span class="dd">${day}</span><span class="mm">${month}</span></div>
                     <div class="dt ${am?'am':'pm'}"></div>
-                    <div class="c" onclick="window.location.href='reports/${r.filename}'">
+                    <div class="c" onclick="window.location.href='articles/${r.filename}'">
                         <span class="tlbl ${am?'am':'pm'}">${am?'🌅 Sáng':'🌆 Tối'}</span>
-                        <span class="cnt">${readingBadge}${aiBadge}</span>
+                        <span class="cnt">${catBadge}</span>
                         <h3>${r.title}</h3>
-                        <p class="pv">${pv}</p>
+                        <p class="pv">${r.preview || ''}</p>
                         <span class="rm">Đọc thêm →</span>
                     </div>
                 </div>`;
@@ -298,23 +306,21 @@
 
         // Load data
         Promise.all([
-            fetch('reports.json').then(r => r.json()).catch(() => []),
+            fetch('articles.json').then(r => r.json()).catch(() => []),
             fetch('scripts.json').then(r => r.json()).catch(() => []),
             fetch('ai_videos_index.json').then(r => r.json()).catch(() => []),
             fetch('agent.json').then(r => r.json()).catch(() => null)
-        ]).then(([reports, scripts, aivideos, agent]) => {
-            renderTimeline(reports, 'research-timeline');
+        ]).then(([articles, scripts, aivideos, agent]) => {
+            renderTimeline(articles, 'research-timeline');
             renderScripts(scripts, 'scripts-list');
             renderAIvideos(aivideos, 'aivideos-list');
             renderAgent(agent);
             
-            document.getElementById('s1').textContent = reports.length;
+            document.getElementById('s1').textContent = articles.length;
             document.getElementById('s2').textContent = scripts.length;
             document.getElementById('s3').textContent = aivideos.length;
             
-            const totalItems = (reports.reduce((s,r) => s + (r.items?r.items.length:0), 0) +
-                               scripts.reduce((s,r) => s + (r.items?r.items.length:0), 0) +
-                               aivideos.reduce((s,r) => s + (r.items?r.items.length:0), 0));
+            const totalItems = articles.length + scripts.length + aivideos.length;
             document.getElementById('s4').textContent = totalItems;
         });
 
