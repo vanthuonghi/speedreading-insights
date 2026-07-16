@@ -113,16 +113,18 @@
 
     <!-- STATS -->
     <div class="stats" id="stats">
-        <div class="stat"><div class="num" id="s1">0</div><div class="lbl">Báo cáo</div></div>
-        <div class="stat"><div class="num" id="s2">0</div><div class="lbl">Kịch bản</div></div>
-        <div class="stat"><div class="num" id="s3">0</div><div class="lbl">Tổng mục</div></div>
+        <div class="stat"><div class="num" id="s1">0</div><div class="lbl">📚 Báo cáo</div></div>
+        <div class="stat"><div class="num" id="s2">0</div><div class="lbl">🎬 Kịch bản</div></div>
+        <div class="stat"><div class="num" id="s3">0</div><div class="lbl">🤖 AI Videos</div></div>
+        <div class="stat"><div class="num" id="s4">0</div><div class="lbl">📊 Tổng mục</div></div>
     </div>
 
     <!-- TABS -->
     <div class="tabs">
         <div class="tab active" onclick="switchTab('research')"><span class="icon">📚</span>Nghiên cứu</div>
         <div class="tab" onclick="switchTab('scripts')"><span class="icon">🎬</span>Kịch bản</div>
-        <div class="tab" onclick="switchTab('agent')"><span class="icon">🤖</span>Agent</div>
+        <div class="tab" onclick="switchTab('aivideos')"><span class="icon">🤖</span>AI Videos</div>
+        <div class="tab" onclick="switchTab('agent')"><span class="icon">⚙️</span>Agent</div>
     </div>
 
     <!-- PANEL: Research -->
@@ -133,6 +135,11 @@
     <!-- PANEL: Scripts -->
     <div class="panel" id="panel-scripts">
         <div id="scripts-list"></div>
+    </div>
+
+    <!-- PANEL: AI Videos -->
+    <div class="panel" id="panel-aivideos">
+        <div id="aivideos-list"></div>
     </div>
 
     <!-- PANEL: Agent -->
@@ -209,7 +216,9 @@
         function switchTab(name) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.querySelector(`.tab:nth-child(${name==='research'?1:2})`).classList.add('active');
+            const tabMap = {research:1, scripts:2, aivideos:3, agent:4};
+            const idx = tabMap[name] || 1;
+            document.querySelector(`.tab:nth-child(${idx})`).classList.add('active');
             document.getElementById(`panel-${name}`).classList.add('active');
         }
 
@@ -265,22 +274,48 @@
             }).join('');
         }
 
+        function renderAIvideos(data, containerId) {
+            const c = document.getElementById(containerId);
+            if (!data || data.length === 0) {
+                c.innerHTML = '<div class="empty"><span>🤖</span><h3>Chưa có video AI nào</h3><p>Video AI mới sẽ xuất hiện ở đây mỗi sáng</p></div>';
+                return;
+            }
+            const s = [...data].sort((a,b) => {
+                const dA = new Date(a.date.split('/').reverse().join('-'));
+                const dB = new Date(b.date.split('/').reverse().join('-'));
+                return dB - dA;
+            });
+            c.innerHTML = s.map(r => {
+                const pv = r.items ? r.items.slice(0,2).map(x => `📺 ${x.channel || ''}: ${x.title}`).join('<br>') : '';
+                return `<div class="sc" onclick="window.location.href='ai-videos/${r.filename}'" style="border-left:4px solid #a855f7;">
+                    <span class="tlbl" style="background:rgba(168,85,247,0.15);color:#a855f7;">🤖 AI Videos</span>
+                    <h3>${r.title}</h3>
+                    <p class="pv">${pv}</p>
+                    <span class="rm" style="color:#a855f7;">Xem video →</span>
+                </div>`;
+            }).join('');
+        }
+
         // Load data
         Promise.all([
             fetch('reports.json').then(r => r.json()).catch(() => []),
             fetch('scripts.json').then(r => r.json()).catch(() => []),
+            fetch('ai_videos_index.json').then(r => r.json()).catch(() => []),
             fetch('agent.json').then(r => r.json()).catch(() => null)
-        ]).then(([reports, scripts, agent]) => {
+        ]).then(([reports, scripts, aivideos, agent]) => {
             renderTimeline(reports, 'research-timeline');
             renderScripts(scripts, 'scripts-list');
+            renderAIvideos(aivideos, 'aivideos-list');
             renderAgent(agent);
             
             document.getElementById('s1').textContent = reports.length;
             document.getElementById('s2').textContent = scripts.length;
+            document.getElementById('s3').textContent = aivideos.length;
             
             const totalItems = (reports.reduce((s,r) => s + (r.items?r.items.length:0), 0) +
-                               scripts.reduce((s,r) => s + (r.items?r.items.length:0), 0));
-            document.getElementById('s3').textContent = totalItems;
+                               scripts.reduce((s,r) => s + (r.items?r.items.length:0), 0) +
+                               aivideos.reduce((s,r) => s + (r.items?r.items.length:0), 0));
+            document.getElementById('s4').textContent = totalItems;
         });
 
         function renderAgent(agent) {

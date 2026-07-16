@@ -97,7 +97,7 @@ def make_report_html(date_str: str, time_of_day: str, items: list) -> str:
             <div class="number">{idx}</div>
             {cat_badge}
             <h2>{title}</h2>
-            <div class="content"><p>{content}</p></div>
+            <div class="content">{"".join(f'<p>{p}</p>' for p in content.split(chr(10)+chr(10)) if p.strip())}</div>
             <div class="meta">
                 {tags_html}
                 {f'<span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">{src_html}</span>' if src_html else ''}
@@ -114,9 +114,11 @@ def make_report_html(date_str: str, time_of_day: str, items: list) -> str:
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
-        .cat-badge {{ display:inline-block; padding:4px 14px; border-radius:8px; font-size:.8em; font-weight:600; margin-bottom:10px; border:1px solid; margin-left:8px; }}
-        .research-card.cat-ai::before {{ background:linear-gradient(to bottom,#a855f7,#6366f1) !important; }}
-        .tag.purple {{ background:rgba(168,85,247,0.1) !important; color:#a855f7 !important; }}
+        .cat-badge { display:inline-block; padding:4px 14px; border-radius:8px; font-size:.8em; font-weight:600; margin-bottom:10px; border:1px solid; margin-left:8px; }
+        .research-card.cat-ai::before { background:linear-gradient(to bottom,#a855f7,#6366f1) !important; }
+        .tag.purple { background:rgba(168,85,247,0.1) !important; color:#a855f7 !important; }
+        .research-card .content p {{ margin-bottom: 12px; line-height: 1.8; }}
+        .research-card .content p:last-child {{ margin-bottom: 0; }}
     </style>
 </head>
 <body>
