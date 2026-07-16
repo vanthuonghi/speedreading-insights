@@ -129,7 +129,7 @@
         <div class="tab active" onclick="switchTab('research')"><span class="icon">📚</span>Nghiên cứu</div>
         <div class="tab" onclick="switchTab('scripts')"><span class="icon">🎬</span>Kịch bản</div>
         <div class="tab" onclick="switchTab('aivideos')"><span class="icon">🤖</span>AI Videos</div>
-        <div class="tab" onclick="switchTab('agent')"><span class="icon">⚙️</span>Agent</div>
+        <div class="tab" onclick="window.location.href='agent.html'"><span class="icon">⚙️</span>Agent</div>
     </div>
 
     <!-- PANEL: Research -->
@@ -141,33 +141,13 @@
     <!-- PANEL: AI Videos -->
     <div class="panel" id="panel-aivideos"></div>
 
-    <!-- PANEL: Agent -->
+    <!-- PANEL: Agent (chuyển hướng sang agent.html) -->
     <div class="panel" id="panel-agent">
-        <style>
-            .agent-section { margin-bottom: 40px; }
-            .agent-section h2 { font-size: 1.3em; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-            .agent-schedule { display: grid; gap: 8px; }
-            .agent-slot { display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 20px; transition: all .3s; }
-            .agent-slot:hover { background: rgba(255,255,255,0.05); border-color: rgba(99,102,241,0.2); }
-            .agent-slot .time { font-size: 1.1em; font-weight: 700; color: #818cf8; min-width: 60px; font-variant-numeric: tabular-nums; }
-            .agent-slot .bar { flex: 1; height: 4px; background: rgba(99,102,241,0.15); border-radius: 2px; position: relative; min-width: 40px; }
-            .agent-slot .bar .fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #818cf8, #c084fc); transition: width .5s ease; }
-            .agent-slot .task { flex: 2; }
-            .agent-slot .task .name { color: #e4e4f0; font-weight: 500; font-size: 0.95em; }
-            .agent-slot .task .detail { color: #6b6b8a; font-size: 0.82em; margin-top: 2px; }
-            .agent-roles { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-            .agent-role-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 22px; transition: all .3s; }
-            .agent-role-card:hover { border-color: rgba(99,102,241,0.25); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
-            .agent-role-card .icon { font-size: 2em; margin-bottom: 10px; display: block; }
-            .agent-role-card h3 { font-size: 1.05em; font-weight: 600; color: #e4e4f0; }
-            .agent-role-card .desc { color: #8b8ba7; font-size: 0.88em; margin: 6px 0 12px; }
-            .agent-role-card .skills { display: flex; flex-wrap: wrap; gap: 6px; }
-            .agent-role-card .skills span { display: inline-block; padding: 3px 10px; background: rgba(99,102,241,0.1); color: #818cf8; border-radius: 6px; font-size: 0.78em; font-weight: 500; }
-            .agent-status { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.12); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-            .agent-status .dot { width: 10px; height: 10px; background: #34d399; border-radius: 50%; box-shadow: 0 0 12px rgba(52,211,153,0.4); flex-shrink: 0; }
-            @media(max-width:768px){ .agent-slot { flex-wrap: wrap; gap: 8px; } .agent-slot .time { min-width: auto; } .agent-slot .bar { display: none; } .agent-roles { grid-template-columns: 1fr; } }
-        </style>
-        <div id="agent-content"></div>
+        <div class="empty">
+            <span>🤖</span>
+            <h3>Trang Agent riêng</h3>
+            <p><a href="agent.html" style="color:#818cf8;text-decoration:none;font-weight:500;">Click vào đây để xem →</a></p>
+        </div>
     </div>
 
     <footer>
@@ -321,13 +301,11 @@
         Promise.all([
             fetch('articles.json').then(r => r.json()).catch(() => []),
             fetch('scripts.json').then(r => r.json()).catch(() => []),
-            fetch('ai_videos_index.json').then(r => r.json()).catch(() => []),
-            fetch('agent.json').then(r => r.json()).catch(() => null)
-        ]).then(([articles, scripts, aivideos, agent]) => {
+            fetch('ai_videos_index.json').then(r => r.json()).catch(() => [])
+        ]).then(([articles, scripts, aivideos]) => {
             renderResearch(articles);
             renderScripts(scripts);
             renderAIvideos(aivideos);
-            renderAgent(agent);
 
             document.getElementById('s1').textContent = articles.length;
             document.getElementById('s2').textContent = scripts.length;

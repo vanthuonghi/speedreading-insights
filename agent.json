@@ -2,57 +2,192 @@
   "name": "Hermes Agent 🤖",
   "for": "Speed Reading Việt Nam",
   "owner": "Văn Hỉ",
-  "updated": "2026-07-15",
+  "updated": "2026-07-16",
   "schedule": [
-    {"time": "07:00", "task": "🎬 Gửi 3 kịch bản video TikTok/Reels", "detail": "Viết lời thoại 20-40s, hashtag, mẹo quay"},
-    {"time": "07:00", "task": "📚🤖 Gửi 10 nghiên cứu (5 Sách + 5 AI)", "detail": "Sách mới, diễn giả, xu hướng, AI tools, công nghệ"},
-    {"time": "08:00", "task": "🌅 Đăng bài Tips lên Facebook", "detail": "Kỹ thuật đọc nhanh, mẹo học tập"},
-    {"time": "12:00", "task": "☀️ Đăng bài Trend lên Facebook", "detail": "Tin xu hướng → lồng Speed Reading"},
-    {"time": "18:00", "task": "🌆 Đăng bài Mindset lên Facebook", "detail": "Tư duy, thói quen, cảm hứng đọc sách"},
-    {"time": "19:00", "task": "📚🤖 Gửi 10 nghiên cứu (5 Sách + 5 AI)", "detail": "Sách mới, diễn giả, xu hướng, AI tools, công nghệ"}
+    {
+      "time": "06:00",
+      "task": "🤖 Cập nhật trang Agent",
+      "detail": "Thống kê, nhật ký, lịch trình, vai trò mới nhất"
+    },
+    {
+      "time": "07:00",
+      "task": "🎬 Gửi 3 kịch bản video TikTok/Reels",
+      "detail": "Viết lời thoại 20-40s, hashtag, mẹo quay → website"
+    },
+    {
+      "time": "07:00",
+      "task": "📚 Nghiên cứu sáng (5 thông tin)",
+      "detail": "Sách mới, diễn giả, xu hướng, não bộ → individual articles"
+    },
+    {
+      "time": "07:00",
+      "task": "🤖 AI Videos mới nhất",
+      "detail": "Fetch 10 video YouTube → dịch tiếng Việt → website"
+    },
+    {
+      "time": "08:00",
+      "task": "🌅 Đăng bài Tips lên Facebook",
+      "detail": "Kỹ thuật đọc nhanh, mẹo học tập, sinh ảnh AI"
+    },
+    {
+      "time": "12:00",
+      "task": "☀️ Đăng bài Trend lên Facebook",
+      "detail": "Tin xu hướng → lồng Speed Reading, sinh ảnh AI"
+    },
+    {
+      "time": "18:00",
+      "task": "🌆 Đăng bài Mindset lên Facebook",
+      "detail": "Tư duy, thói quen, cảm hứng đọc sách, sinh ảnh AI"
+    },
+    {
+      "time": "19:00",
+      "task": "📚 Nghiên cứu tối (10 thông tin)",
+      "detail": "Sách mới, AI tools, công nghệ, bài học → individual articles"
+    }
   ],
   "roles": [
     {
       "icon": "📝",
       "title": "Content Creator",
-      "desc": "Viết 3 bài Facebook mỗi ngày cho Speed Reading HCM",
-      "skills": ["Viết content tiếng Việt", "Tối ưu giọng văn thương hiệu", "Trend-jacking", "SEO Facebook"]
+      "desc": "Viết 3 bài Facebook mỗi ngày cho Speed Reading HCM. Nội dung dễ đọc, xuống hàng, không link.",
+      "skills": [
+        "Viết content tiếng Việt",
+        "Tối ưu giọng văn thương hiệu",
+        "Trend-jacking",
+        "Sinh ảnh AI đa phương án",
+        "Loại bỏ link tự động"
+      ]
     },
     {
       "icon": "🎬",
       "title": "Video Script Writer",
-      "desc": "Viết 3 kịch bản TikTok/Reels/Shorts mỗi sáng",
-      "skills": ["Viết lời thoại 20-40s", "Tối ưu cho từng nền tảng", "Hashtag strategy", "Call-to-action"]
+      "desc": "Viết 3 kịch bản TikTok/Reels/Shorts mỗi sáng cho thuê bao quay.",
+      "skills": [
+        "Viết lời thoại 20-40s",
+        "Tối ưu cho từng nền tảng",
+        "Hashtag strategy",
+        "Call-to-action",
+        "Mẹo quay dựng"
+      ]
     },
     {
       "icon": "🔍",
       "title": "Researcher",
-      "desc": "Nghiên cứu 20 thông tin mỗi ngày (10 sáng + 10 tối)",
-      "skills": ["Tìm kiếm thông tin đa nguồn", "Phân tích xu hướng", "Chọn lọc nội dung giá trị", "Gợi ý ứng dụng thực tế"]
+      "desc": "Nghiên cứu 15 thông tin mỗi ngày (5 sáng + 10 tối). Viết thành individual articles trên website.",
+      "skills": [
+        "Tìm kiếm thông tin đa nguồn",
+        "Phân tích xu hướng",
+        "Chọn lọc nội dung giá trị",
+        "Gợi ý ứng dụng thực tế",
+        "Multi-paragraph content"
+      ]
     },
     {
-      "icon": "🎯",
-      "title": "SEO Specialist",
-      "desc": "Tối ưu SEO cho video YouTube & bài viết",
-      "skills": ["Nghiên cứu từ khóa", "Tối ưu tiêu đề", "SEO description", "Tag strategy"]
-    },
-    {
-      "icon": "📤",
-      "title": "Video Uploader",
-      "desc": "Upload video lên YouTube, Facebook, TikTok",
-      "skills": ["YouTube Data API", "Facebook Graph API", "TikTok Content API", "Thumbnail optimization"]
+      "icon": "🤖",
+      "title": "AI Video Curator",
+      "desc": "Tổng hợp 10 video AI mới nhất mỗi sáng từ YouTube, dịch tóm tắt sang tiếng Việt.",
+      "skills": [
+        "YouTube Data API",
+        "yt-dlp search",
+        "Dịch thuật AI (OpenRouter)",
+        "Tóm tắt nội dung",
+        "Embed video"
+      ]
     },
     {
       "icon": "🌐",
       "title": "Web Developer",
-      "desc": "Quản lý & cập nhật website Speed Reading Insights",
-      "skills": ["HTML/CSS responsive", "GitHub Pages", "Python scripting", "UI/UX"]
+      "desc": "Quản lý & cập nhật website Speed Reading Insights. 4 tabs, individual pages, 3 chế độ xem.",
+      "skills": [
+        "HTML/CSS responsive",
+        "GitHub Pages",
+        "Python scripting",
+        "View modes (List/Grid/Card)",
+        "Individual article system"
+      ]
+    },
+    {
+      "icon": "🎨",
+      "title": "Image Generator",
+      "desc": "Sinh ảnh AI cho Facebook posts với 7 phương án dự phòng, không lo lỗi.",
+      "skills": [
+        "Pollinations.ai",
+        "OpenRouter Flux",
+        "Unsplash API",
+        "HuggingFace",
+        "DeepInfra",
+        "FAL.ai",
+        "PIL Placeholder"
+      ]
     },
     {
       "icon": "📊",
       "title": "Social Media Manager",
-      "desc": "Lên lịch, đăng bài & theo dõi Facebook Page",
-      "skills": ["Lịch đăng bài tự động", "Facebook Graph API", "Content calendar", "Thống kê"]
+      "desc": "Lên lịch, đăng bài & theo dõi Facebook Page tự động 3x/ngày.",
+      "skills": [
+        "Facebook Graph API",
+        "Content calendar",
+        "Photo upload workaround",
+        "Auto hashtag",
+        "URL stripping"
+      ]
+    }
+  ],
+  "log": [
+    {
+      "tag": "🚀",
+      "type": "deploy",
+      "text": "Khởi tạo website Speed Reading Insights với dashboard 4 tabs (Nghiên cứu, Kịch bản, AI Videos, Agent)"
+    },
+    {
+      "tag": "📚",
+      "type": "build",
+      "text": "Tạo hệ thống individual articles — mỗi bài nghiên cứu là 1 trang HTML riêng, không gộp chung"
+    },
+    {
+      "tag": "🎬",
+      "type": "build",
+      "text": "Chuyển kịch bản video sang individual pages với generate_script_item.py"
+    },
+    {
+      "tag": "🤖",
+      "type": "build",
+      "text": "Thêm tab AI Videos — tự động fetch 10 video YouTube mới + dịch summary sang tiếng Việt (OpenRouter)"
+    },
+    {
+      "tag": "🎨",
+      "type": "build",
+      "text": "Thêm 7 phương án sinh ảnh cho Facebook auto post: Pollinations → OpenRouter → Unsplash → HF → DeepInfra → FAL → Placeholder"
+    },
+    {
+      "tag": "📋",
+      "type": "fix",
+      "text": "Thêm chế độ xem (List/Grid/Card) cho cả 3 tab Nghiên cứu, Kịch bản, AI Videos"
+    },
+    {
+      "tag": "🔗",
+      "type": "fix",
+      "text": "Loại bỏ link trong bài viết Facebook + xuống hàng dễ đọc + chống hashtag trùng"
+    },
+    {
+      "tag": "📤",
+      "type": "deploy",
+      "text": "Thiết lập cron job tự động: 3 bài FB + research sáng/tối + kịch bản + AI videos"
+    },
+    {
+      "tag": "🖼️",
+      "type": "fix",
+      "text": "Thêm retry 3 lần cho Pollinations.ai + OpenRouter image gen dùng chung API key có sẵn"
+    },
+    {
+      "tag": "⚙️",
+      "type": "build",
+      "text": "Tạo trang Agent riêng (agent.html) — thống kê, lịch trình, vai trò, nhật ký hoạt động"
+    },
+    {
+      "tag": "📊",
+      "type": "deploy",
+      "text": "Cập nhật Agent ngày 2026-07-16 — 📚8 bài • 🎬3 kịch bản • 🤖10 videos"
     }
   ]
 }

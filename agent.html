@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hermes Agent 🤖 | Speed Reading Insights</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;background:#0a0a1a;color:#e4e4f0;line-height:1.7;min-height:100vh}
+        .bg-grid{position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1}
+        .g1{position:fixed;top:-20%;right:-10%;width:600px;height:600px;
+            background:radial-gradient(circle,rgba(99,102,241,0.08),transparent 70%);border-radius:50%;z-index:-1;animation:f 20s ease-in-out infinite}
+        .g2{position:fixed;bottom:-20%;left:-10%;width:500px;height:500px;
+            background:radial-gradient(circle,rgba(168,85,247,0.06),transparent 70%);border-radius:50%;z-index:-1;animation:f 25s ease-in-out infinite reverse}
+        @keyframes f{0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(30px,-30px)scale(1.05)}66%{transform:translate(-20px,20px)scale(0.95)}}
+
+        .container{max-width:900px;margin:0 auto;padding:0 20px}
+        .page{padding:40px 0 80px}
+
+        /* Agent Header */
+        .agent-hero{text-align:center;padding:40px 20px 30px;margin-bottom:32px;
+            background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:24px;position:relative;overflow:hidden}
+        .agent-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+            background:linear-gradient(90deg,transparent,#34d399,#818cf8,#a855f7,transparent)}
+        .agent-hero .avatar{font-size:4em;display:block;margin-bottom:10px}
+        .agent-hero h1{font-size:clamp(1.5em,3vw,2.2em);font-weight:800;
+            background:linear-gradient(135deg,#34d399,#818cf8,#a855f7);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .agent-hero .subtitle{color:#8b8ba7;margin-top:6px;font-size:.95em}
+        .agent-status-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;
+            background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12);
+            border-radius:20px;margin-top:12px;font-size:.85em;color:#34d399}
+        .agent-status-badge .dot{width:8px;height:8px;background:#34d399;border-radius:50%;box-shadow:0 0 12px rgba(52,211,153,0.5);animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+        /* Section */
+        .section{margin-bottom:40px}
+        .section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+        .section-header h2{font-size:1.3em;font-weight:700}
+        .section-header .badge{font-size:.75em;padding:3px 12px;border-radius:8px;background:rgba(99,102,241,0.1);color:#818cf8;font-weight:500}
+
+        /* Stats Grid */
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:32px}
+        .stat-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;text-align:center;transition:all .3s}
+        .stat-card:hover{border-color:rgba(99,102,241,0.2);transform:translateY(-2px)}
+        .stat-card .num{font-size:2em;font-weight:800;background:linear-gradient(135deg,#818cf8,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .stat-card .lbl{font-size:.8em;color:#6b6b8a;margin-top:4px}
+
+        /* Schedule */
+        .schedule{display:grid;gap:8px}
+        .slot{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 20px;transition:all .3s}
+        .slot:hover{background:rgba(255,255,255,0.05);border-color:rgba(99,102,241,0.2)}
+        .slot .time{font-size:1.05em;font-weight:700;color:#818cf8;min-width:55px;font-variant-numeric:tabular-nums;text-align:center}
+        .slot .bar{flex:1;height:4px;background:rgba(99,102,241,0.12);border-radius:2px;position:relative;min-width:30px}
+        .slot .bar .fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#818cf8,#c084fc);transition:width .5s ease}
+        .slot .info{flex:2}
+        .slot .info .name{color:#e4e4f0;font-weight:500;font-size:.92em}
+        .slot .info .detail{color:#6b6b8a;font-size:.82em;margin-top:2px}
+        .slot.active{border-color:rgba(99,102,241,0.3);background:rgba(99,102,241,0.06)}
+        .slot.done{opacity:.5}
+
+        /* Roles */
+        .roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+        .role-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;transition:all .3s;position:relative;overflow:hidden}
+        .role-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:0 2px 2px 0}
+        .role-card:hover{border-color:rgba(99,102,241,0.25);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.2)}
+        .role-card .icon{font-size:2em;display:block;margin-bottom:8px}
+        .role-card h3{font-size:1.05em;font-weight:600;color:#e4e4f0}
+        .role-card .desc{color:#8b8ba7;font-size:.85em;margin:6px 0 12px;line-height:1.5}
+        .role-card .skills{display:flex;flex-wrap:wrap;gap:5px}
+        .role-card .skills span{display:inline-block;padding:3px 10px;background:rgba(99,102,241,0.08);color:#818cf8;border-radius:6px;font-size:.75em;font-weight:500}
+
+        /* Activity Timeline */
+        .tl{position:relative;padding:10px 0}
+        .tl::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,transparent,rgba(99,102,241,0.3),rgba(99,102,241,0.3),transparent)}
+        .tl-item{display:flex;gap:16px;margin-bottom:24px;position:relative}
+        .tl-dot{width:14px;height:14px;background:#818cf8;border-radius:50%;flex-shrink:0;margin-top:4px;border:3px solid #0a0a1a;box-shadow:0 0 16px rgba(99,102,241,0.3)}
+        .tl-dot.learn{background:#34d399;box-shadow:0 0 16px rgba(52,211,153,0.3)}
+        .tl-dot.build{background:#a855f7;box-shadow:0 0 16px rgba(168,85,247,0.3)}
+        .tl-dot.fix{background:#fbbf24;box-shadow:0 0 16px rgba(251,191,36,0.3)}
+        .tl-content{flex:1}
+        .tl-content .tl-tag{display:inline-block;font-size:.7em;padding:2px 10px;border-radius:6px;font-weight:600;margin-bottom:4px}
+        .tl-content .tl-tag.learn{background:rgba(52,211,153,0.12);color:#34d399}
+        .tl-content .tl-tag.build{background:rgba(168,85,247,0.12);color:#a855f7}
+        .tl-content .tl-tag.fix{background:rgba(251,191,36,0.12);color:#fbbf24}
+        .tl-content .tl-tag.deploy{background:rgba(99,102,241,0.12);color:#818cf8}
+        .tl-content p{color:#c8c8e0;font-size:.88em;line-height:1.6}
+
+        .back{display:inline-flex;align-items:center;gap:8px;color:#8b8ba7;text-decoration:none;font-size:.95em;margin-bottom:24px;transition:color .3s}
+        .back:hover{color:#818cf8!important;text-decoration:none!important}
+
+        footer{text-align:center;padding:30px 20px;color:#5a5a7a;font-size:.82em;border-top:1px solid rgba(255,255,255,0.04)}
+        footer a{color:#818cf8;text-decoration:none}
+
+        @media(max-width:768px){
+            .stats-grid{grid-template-columns:repeat(2,1fr)}
+            .roles-grid{grid-template-columns:1fr}
+            .slot{flex-wrap:wrap;gap:8px;padding:12px 14px}
+            .slot .time{min-width:auto;font-size:.9em}
+            .slot .bar{display:none}
+            .tl::before{left:16px}
+            .tl-item{gap:12px}
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="g1"></div>
+    <div class="g2"></div>
+    <div class="container page">
+        <a href="index.html" class="back">← Quay về Dashboard</a>
+
+        <!-- Hero -->
+        <div class="agent-hero" id="agent-hero">
+            <span class="avatar">🤖</span>
+            <h1>Hermes Agent</h1>
+            <div class="subtitle">Trợ lý AI tự động cho <strong>Speed Reading Việt Nam</strong></div>
+            <div class="agent-status-badge"><span class="dot"></span> Đang hoạt động • Cập nhật: <span id="update-date">Hôm nay</span></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card"><div class="num" id="stat-articles">0</div><div class="lbl">📚 Bài nghiên cứu</div></div>
+            <div class="stat-card"><div class="num" id="stat-scripts">0</div><div class="lbl">🎬 Kịch bản video</div></div>
+            <div class="stat-card"><div class="num" id="stat-videos">0</div><div class="lbl">🤖 AI Videos</div></div>
+            <div class="stat-card"><div class="num" id="stat-fb">0</div><div class="lbl">📤 Bài FB mỗi ngày</div></div>
+            <div class="stat-card"><div class="num" id="stat-files">0</div><div class="lbl">📁 Tổng file HTML</div></div>
+            <div class="stat-card"><div class="num">100%</div><div class="lbl">⏱ Uptime</div></div>
+        </div>
+
+        <!-- Schedule -->
+        <div class="section">
+            <div class="section-header"><h2>⏰ Lịch trình hằng ngày</h2><span class="badge">UTC+7</span></div>
+            <div class="schedule" id="schedule"></div>
+        </div>
+
+        <!-- Roles -->
+        <div class="section">
+            <div class="section-header"><h2>🛠️ Vai trò & Kỹ năng</h2><span class="badge">7 roles</span></div>
+            <div class="roles-grid" id="roles"></div>
+        </div>
+
+        <!-- Activity Timeline -->
+        <div class="section">
+            <div class="section-header"><h2>📜 Nhật ký hoạt động</h2><span class="badge">Gần đây</span></div>
+            <div class="tl" id="timeline"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
+    </footer>
+
+    <script>
+        // Current VN time
+        const now = new Date();
+        const vnTime = new Date(now.getTime() + 7*60*60*1000);
+        const vnHours = vnTime.getUTCHours();
+        const vnMinutes = vnTime.getUTCMinutes();
+        const currentMinutes = vnHours * 60 + vnMinutes;
+
+        // Format date
+        const today = new Date();
+        document.getElementById('update-date').textContent = today.toLocaleDateString('vi-VN', { 
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        });
+
+        // Load agent data
+        Promise.all([
+            fetch('agent.json').then(r => r.json()).catch(() => null),
+            fetch('articles.json').then(r => r.json()).catch(() => []),
+            fetch('scripts.json').then(r => r.json()).catch(() => []),
+            fetch('ai_videos_index.json').then(r => r.json()).catch(() => [])
+        ]).then(([agent, articles, scripts, videos]) => {
+            // Stats
+            document.getElementById('stat-articles').textContent = articles.length;
+            document.getElementById('stat-scripts').textContent = scripts.length;
+            document.getElementById('stat-videos').textContent = videos.length;
+            document.getElementById('stat-fb').textContent = '3';
+            document.getElementById('stat-files').textContent = articles.length + scripts.length + videos.length;
+
+            if (!agent) return;
+
+            // Schedule
+            const scheduleHtml = agent.schedule.map(slot => {
+                const [h, m] = slot.time.split(':').map(Number);
+                const slotMinutes = h * 60 + (m || 0);
+                const isActive = currentMinutes >= slotMinutes && currentMinutes < slotMinutes + 60;
+                const isDone = currentMinutes > slotMinutes + 60;
+                return `<div class="slot ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}">
+                    <div class="time">${slot.time}</div>
+                    <div class="bar"><div class="fill" style="width:${isDone ? 100 : isActive ? ((currentMinutes - slotMinutes) / 60 * 100) : 0}%"></div></div>
+                    <div class="info">
+                        <div class="name">${slot.task}</div>
+                        <div class="detail">${slot.detail}</div>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('schedule').innerHTML = scheduleHtml;
+
+            // Roles
+            const rolesHtml = agent.roles.map(role => {
+                const colors = ['#34d399','#818cf8','#a855f7','#fbbf24','#f472b6','#34d399','#818cf8'];
+                const color = colors[agent.roles.indexOf(role) % colors.length];
+                return `<div class="role-card" style="--accent:${color}">
+                    <div class="role-card" style="--accent:${color};display:block">
+                        <span class="icon">${role.icon}</span>
+                        <h3>${role.title}</h3>
+                        <div class="desc">${role.desc}</div>
+                        <div class="skills">${role.skills.map(s => `<span>${s}</span>`).join('')}</div>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('roles').innerHTML = rolesHtml;
+
+            // Timeline (from agent.log if available, otherwise defaults)
+            const timeline = agent.log || [
+                {tag:'🚀', type:'deploy', text:'Khởi tạo website Speed Reading Insights với dashboard 4 tabs'},
+                {tag:'📚', type:'build', text:'Tạo hệ thống individual articles — mỗi bài nghiên cứu 1 trang riêng'},
+                {tag:'🎬', type:'build', text:'Chuyển kịch bản video sang individual pages với generate_script_item.py'},
+                {tag:'🤖', type:'build', text:'Thêm tab AI Videos — tự động fetch YouTube + dịch summary sang tiếng Việt'},
+                {tag:'🎨', type:'build', text:'Thêm 7 phương án sinh ảnh (Pollinations, OpenRouter, Unsplash...) cho Facebook auto post'},
+                {tag:'📋', type:'fix', text:'Thêm chế độ xem List/Grid/Card cho cả 3 tab'},
+                {tag:'🔗', type:'fix', text:'Loại bỏ link trong bài viết Facebook + xuống hàng dễ đọc'},
+                {tag:'📤', type:'deploy', text:'Thiết lập cron job tự động: 3 bài FB + research sáng/tối + kịch bản + AI videos'},
+            ].reverse();
+
+            const tlHtml = timeline.map(item => {
+                const colors = {learn:'learn',build:'build',fix:'fix',deploy:'deploy'};
+                const type = colors[item.type] || 'deploy';
+                return `<div class="tl-item">
+                    <div class="tl-dot ${type}"></div>
+                    <div class="tl-content">
+                        <span class="tl-tag ${type}">${item.tag || '📌'}</span>
+                        <p>${item.text}</p>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('timeline').innerHTML = tlHtml;
+        });
+    </script>
+</body>
+</html>
