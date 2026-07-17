@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Kỹ thuật Chunking — Đọc cụm từ, không đọc từng chữ | Speed Reading Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        .script-header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .script-meta { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; font-size: .85em; color: #8b8ba7; }
+        .script-number-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; background: rgba(251,191,36,0.15); color: #fbbf24;
+            border-radius: 12px; font-weight: 700; font-size: 1.1em;
+        }
+        .script-title { font-size: clamp(1.3em,3vw,1.8em); font-weight: 700; margin-bottom: 4px; }
+        .script-content {
+            background: rgba(0,0,0,0.2); border-radius: 16px; padding: 28px;
+            font-size: 1.1em; line-height: 2; color: #e4e4f0;
+            border-left: 4px solid rgba(251,191,36,0.3);
+            margin-bottom: 20px;
+        }
+        .script-content p { margin-bottom: 12px; padding-left: 20px; border-left: 2px solid rgba(251,191,36,0.1); }
+        .script-content p:last-child { margin-bottom: 0; }
+        .script-content::before { content: '"'; font-size: 2em; color: #fbbf24; opacity: 0.3; display: block; margin-bottom: 8px; }
+        .script-content::after { content: '"'; font-size: 2em; color: #fbbf24; opacity: 0.3; display: block; margin-top: 8px; text-align: right; }
+        .hashtag-display { color: #fbbf24; font-size: .95em; }
+        .tip-box {
+            margin-top: 16px; padding: 16px 20px;
+            background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.12);
+            border-radius: 12px; color: #fbbf24; font-size: .9em; line-height: 1.6;
+        }
+        .copy-btn {
+            display: inline-block; margin-top: 16px; padding: 10px 24px;
+            background: rgba(251,191,36,0.12); color: #fbbf24;
+            border-radius: 8px; font-size: .9em; font-weight: 500; cursor: pointer;
+            transition: all .3s ease; border: 1px solid rgba(251,191,36,0.2);
+        }
+        .copy-btn:hover { background: rgba(251,191,36,0.2); }
+        .article-nav { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); }
+        .article-nav a { color: #fbbf24; text-decoration: none; font-weight: 500; }
+        .article-nav a:hover { color: #fcd34d; }
+        @media (max-width:768px) { .script-content { padding: 20px; font-size: 1em; } }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+    <div class="container report-page">
+        <a href="../index.html" class="back" style="color:#fbbf24;">← Quay về Dashboard</a>
+        
+        <div class="script-header">
+            <div class="script-meta">
+                <span class="script-number-badge">1</span>
+                <span>🎬 Kịch bản — Thứ Sáu, 17 tháng 07/2026</span>
+            </div>
+            <h1 class="script-title">🎬 Kỹ thuật Chunking — Đọc cụm từ, không đọc từng chữ</h1>
+        </div>
+        
+        <div class="script-content">
+            <p>Bạn có đọc sách mà mắt cứ dừng lại ở từng chữ một, đọc xong trang đầu đã mệt nhoài không? 😅</p><p>Bí quyết nè: thay vì đọc từng chữ, hãy tập đọc theo CỤM 3-4 chữ một lần 👀</p><p>Ví dụ, thay vì đọc "Hôm / nay / trời / đẹp / quá" thì hãy đọc "Hôm nay trời đẹp / quá trời luôn" — nghe quen không?</p><p>Kỹ thuật này gọi là Chunking — não bạn xử lý cụm từ nhanh hơn gấp 3 lần so với từng chữ riêng lẻ đấy! 🧠</p><p>Cách tập: lấy ngón tay dẫn đường, mỗi lần dừng là nhìn 1 cụm. Tập 5 phút mỗi ngày, 1 tuần sau tốc độ đọc của bạn sẽ tăng vọt 🚀</p><p>Thử nghiệm ngay bằng comment "CỤM TỪ" bên dưới, mình gửi thêm bài tập Chunking cho bạn nhé!</p>
+        </div>
+        
+        <div class="hashtag-display">🎯 #SpeedReading #Chunking #ĐọcNhanh #KỹThuậtĐọc #MẹoHọcTập</div>
+        <div class="tip-box">💡 <strong>Mẹo quay:</strong> Quay cận mặt, dùng tay chỉ dẫn trên bàn phím hoặc không khí. Thêm chữ text hiển thị cụm từ 3 chữ một lần để minh hoạ.</div>
+        
+        <div class="copy-btn" onclick="navigator.clipboard.writeText(document.querySelector('.script-content').innerText.replace(/[\n](3,)/g,'\n\n'))">📋 Copy lời thoại</div>
+        
+        <div class="article-nav">
+            <a href="../index.html">← Dashboard</a>
+            <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
+        </div>
+    </div>
+    <footer>
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
+        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    </footer>
+</body>
+</html>
