@@ -2,7 +2,7 @@
   "name": "Hermes Agent 🤖",
   "for": "Speed Reading Việt Nam",
   "owner": "Văn Hỉ",
-  "updated": "2026-07-16",
+  "updated": "2026-07-17",
   "schedule": [
     {
       "time": "06:00",
@@ -188,6 +188,11 @@
       "tag": "📊",
       "type": "deploy",
       "text": "Cập nhật Agent ngày 2026-07-16 — 📚8 bài • 🎬3 kịch bản • 🤖10 videos"
+    },
+    {
+      "tag": "📊",
+      "type": "deploy",
+      "text": "Cập nhật Agent ngày 2026-07-17 — 📚33 bài • 🎬8 kịch bản • 🤖13 videos"
     }
   ]
 }
