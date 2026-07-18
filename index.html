@@ -349,7 +349,10 @@
                     const color = typeColors[r.type] || '#f59e0b';
                     const bg = typeBg[r.type] || 'rgba(245,158,11,0.15)';
                     const typeLabels = {'sp_ad': 'Bài viết + Ảnh', 'sp_video_script': 'Kịch bản Video', 'sp_hook': 'Bài viết Cảm xúc'};
-                    return `<div class="item-card" style="border-left:${view==='list'?'3px':'0'} solid ${color};">
+                    // Tìm filename từ ads_items_index
+                    const filename = r.filename || '';
+                    const href = filename ? `ads-items/${filename}` : '#';
+                    return `<div class="item-card" onclick="window.location.href='${href}'" style="border-left:${view==='list'?'3px':'0'} solid ${color};cursor:pointer;">
                         <div class="item-badge" style="background:${bg};color:${color};">${icon}</div>
                         <div class="item-body">
                             <h3>${r.title}</h3>
@@ -377,7 +380,7 @@
             fetch('scripts.json').then(r => r.json()).catch(() => []),
             fetch('ai_videos_index.json').then(r => r.json()).catch(() => []),
             fetch('notebooks_index.json').then(r => r.json()).catch(() => []),
-            fetch('ads_index.json').then(r => r.json()).catch(() => [])
+            fetch('ads_items_index.json').then(r => r.json()).catch(() => [])
         ]).then(([articles, scripts, aivideos, notebooks, ads]) => {
             renderResearch(articles);
             renderScripts(scripts);
