@@ -129,6 +129,8 @@
             <div class="stat-card"><div class="num" id="stat-articles">0</div><div class="lbl">📚 Bài nghiên cứu</div></div>
             <div class="stat-card"><div class="num" id="stat-scripts">0</div><div class="lbl">🎬 Kịch bản video</div></div>
             <div class="stat-card"><div class="num" id="stat-videos">0</div><div class="lbl">🤖 AI Videos</div></div>
+            <div class="stat-card"><div class="num" id="stat-notebooks">0</div><div class="lbl">📓 Notebook</div></div>
+            <div class="stat-card"><div class="num" id="stat-ads">0</div><div class="lbl">📢 Quảng cáo</div></div>
             <div class="stat-card"><div class="num" id="stat-fb">0</div><div class="lbl">📤 Bài FB mỗi ngày</div></div>
             <div class="stat-card"><div class="num" id="stat-files">0</div><div class="lbl">📁 Tổng file HTML</div></div>
             <div class="stat-card"><div class="num">100%</div><div class="lbl">⏱ Uptime</div></div>
@@ -176,14 +178,30 @@
             fetch('agent.json').then(r => r.json()).catch(() => null),
             fetch('articles.json').then(r => r.json()).catch(() => []),
             fetch('scripts.json').then(r => r.json()).catch(() => []),
-            fetch('ai_videos_index.json').then(r => r.json()).catch(() => [])
-        ]).then(([agent, articles, scripts, videos]) => {
+            fetch('ai_videos_index.json').then(r => r.json()).catch(() => []),
+            fetch('notebooks_index.json').then(r => r.json()).catch(() => []),
+            fetch('ads_index.json').then(r => r.json()).catch(() => [])
+        ]).then(([agent, articles, scripts, videos, notebooks, ads]) => {
             // Stats
-            document.getElementById('stat-articles').textContent = articles.length;
-            document.getElementById('stat-scripts').textContent = scripts.length;
-            document.getElementById('stat-videos').textContent = videos.length;
+            const aCount = articles.length;
+            const sCount = scripts.length;
+            const vCount = videos.length;
+            const nCount = notebooks.length;
+            const adCount = ads.length;
+            const totalFiles = aCount + sCount + vCount + nCount + 5; // + index, agent, json files
+            
+            document.getElementById('stat-articles').textContent = aCount;
+            document.getElementById('stat-scripts').textContent = sCount;
+            document.getElementById('stat-videos').textContent = vCount;
+            document.getElementById('stat-notebooks').textContent = nCount;
+            document.getElementById('stat-ads').textContent = adCount;
             document.getElementById('stat-fb').textContent = '3';
-            document.getElementById('stat-files').textContent = articles.length + scripts.length + videos.length;
+            document.getElementById('stat-files').textContent = totalFiles;
+
+            // Update role count badge
+            if (agent && agent.roles) {
+                document.querySelector('.section-header .badge').textContent = agent.roles.length + ' roles';
+            }
 
             if (!agent) return;
 

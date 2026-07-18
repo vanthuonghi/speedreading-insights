@@ -2,7 +2,7 @@
   "name": "Hermes Agent 🤖",
   "for": "Speed Reading Việt Nam",
   "owner": "Văn Hỉ",
-  "updated": "2026-07-17",
+  "updated": "2026-07-18",
   "schedule": [
     {
       "time": "06:00",
@@ -11,8 +11,8 @@
     },
     {
       "time": "07:00",
-      "task": "🎬 Gửi 3 kịch bản video TikTok/Reels",
-      "detail": "Viết lời thoại 20-40s, hashtag, mẹo quay → website"
+      "task": "🎬 Gửi 5 kịch bản video TikTok/Reels",
+      "detail": "Viết lời thoại 30-60s, hashtag, mẹo quay → website (10 chủ đề, không trùng)"
     },
     {
       "time": "07:00",
@@ -26,18 +26,18 @@
     },
     {
       "time": "08:00",
-      "task": "🌅 Đăng bài Tips lên Facebook",
-      "detail": "Kỹ thuật đọc nhanh, mẹo học tập, sinh ảnh AI"
+      "task": "🌅 Đăng Quảng cáo sp-online sáng",
+      "detail": "sp_ad (bài viết + ảnh) hoặc sp_hook (cảm xúc) — random 5 biến thể"
     },
     {
       "time": "12:00",
-      "task": "☀️ Đăng bài Trend lên Facebook",
-      "detail": "Tin xu hướng → lồng Speed Reading, sinh ảnh AI"
+      "task": "☀️ Đăng Quảng cáo sp-online trưa",
+      "detail": "sp_video_script (kịch bản video) hoặc sp_ad — random 5 biến thể"
     },
     {
       "time": "18:00",
-      "task": "🌆 Đăng bài Mindset lên Facebook",
-      "detail": "Tư duy, thói quen, cảm hứng đọc sách, sinh ảnh AI"
+      "task": "🌆 Đăng Quảng cáo sp-online tối",
+      "detail": "sp_hook (câu chuyện/cảm xúc) hoặc sp_ad (chốt sale) — random 5 biến thể"
     },
     {
       "time": "19:00",
@@ -45,7 +45,29 @@
       "detail": "Sách mới, AI tools, công nghệ, bài học → individual articles"
     }
   ],
+  "stats": {
+    "articles": 38,
+    "scripts": 13,
+    "ai_videos": 30,
+    "notebooks": 6,
+    "ads_variants": 15,
+    "total_html": 92,
+    "fb_posts_per_day": 3
+  },
   "roles": [
+    {
+      "icon": "📢",
+      "title": "Ad Creator (sp-online)",
+      "desc": "Tạo 3 nội dung quảng cáo mỗi ngày cho lớp Zoom 7 buổi Speed Reading Online (980.000đ). 15 biến thể: 5 sp_ad + 5 sp_video_script + 5 sp_hook.",
+      "skills": [
+        "Problem/Solution ads",
+        "Objection handling",
+        "Social proof ads",
+        "Video script writing",
+        "Emotional hook writing",
+        "Limited offer urgency"
+      ]
+    },
     {
       "icon": "📝",
       "title": "Content Creator",
@@ -61,11 +83,11 @@
     {
       "icon": "🎬",
       "title": "Video Script Writer",
-      "desc": "Viết 3 kịch bản TikTok/Reels/Shorts mỗi sáng cho thuê bao quay.",
+      "desc": "Viết 5 kịch bản mỗi ngày từ 10 nhóm chủ đề, mỗi kịch bản 30-60s, không trùng chủ đề trong ngày.",
       "skills": [
-        "Viết lời thoại 20-40s",
+        "Viết lời thoại 30-60s",
         "Tối ưu cho từng nền tảng",
-        "Hashtag strategy",
+        "10 nhóm chủ đề đa dạng",
         "Call-to-action",
         "Mẹo quay dựng"
       ]
@@ -97,13 +119,14 @@
     {
       "icon": "🌐",
       "title": "Web Developer",
-      "desc": "Quản lý & cập nhật website Speed Reading Insights. 4 tabs, individual pages, 3 chế độ xem.",
+      "desc": "Quản lý & cập nhật website Speed Reading Insights. 5 tabs (thêm Quảng cáo), individual pages, 3 chế độ xem.",
       "skills": [
         "HTML/CSS responsive",
         "GitHub Pages",
         "Python scripting",
         "View modes (List/Grid/Card)",
-        "Individual article system"
+        "Individual article system",
+        "Tab Quảng cáo"
       ]
     },
     {
@@ -123,13 +146,14 @@
     {
       "icon": "📊",
       "title": "Social Media Manager",
-      "desc": "Lên lịch, đăng bài & theo dõi Facebook Page tự động 3x/ngày.",
+      "desc": "Lên lịch, đăng bài & theo dõi Facebook Page tự động 3x/ngày. Nội dung quảng cáo sp-online đa dạng.",
       "skills": [
         "Facebook Graph API",
-        "Content calendar",
+        "Content calendar (3x/ngày)",
         "Photo upload workaround",
         "Auto hashtag",
-        "URL stripping"
+        "URL stripping",
+        "A/B test nội dung"
       ]
     }
   ],
@@ -193,6 +217,26 @@
       "tag": "📊",
       "type": "deploy",
       "text": "Cập nhật Agent ngày 2026-07-17 — 📚33 bài • 🎬8 kịch bản • 🤖13 videos"
+    },
+    {
+      "tag": "📢",
+      "type": "build",
+      "text": "Tạo 3 content types quảng cáo sp-online: sp_ad (5 biến), sp_video_script (5 biến), sp_hook (5 biến) — 15 biến thể cho lớp Zoom 7 buổi 980.000đ"
+    },
+    {
+      "tag": "📢",
+      "type": "deploy",
+      "text": "Thêm tab Quảng cáo vào website + ads_index.json + deploy GitHub Pages"
+    },
+    {
+      "tag": "📤",
+      "type": "deploy",
+      "text": "Cập nhật cron jobs: 3 bài FB/ngày chạy random từ 15 biến thể quảng cáo sp-online + content cũ"
+    },
+    {
+      "tag": "📊",
+      "type": "deploy",
+      "text": "Cập nhật Agent ngày 2026-07-18 — 📚38 bài • 🎬13 kịch bản • 🤖30 videos • 📓6 notebooks • 📢15 quảng cáo • 📁92 file HTML"
     }
   ]
 }
