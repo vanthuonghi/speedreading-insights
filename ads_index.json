@@ -1,0 +1,152 @@
+[
+  {
+    "title": "📢 Quảng cáo Problem/Solution - Lớp Zoom 7 buổi",
+    "type": "sp_ad",
+    "subtype": "ad_problem_solution",
+    "date": "2026-07-18",
+    "preview": "Bạn có tin không? Một học viên của mình từng đọc 300 từ/phút. Sau 7 buổi Zoom cùng Speed Reading Việt Nam, bạn ấy đã nhảy vọt lên 1.000 từ/phút...",
+    "status": "active",
+    "content_type": "bài viết + ảnh",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "📢 Quảng cáo Lộ trình 7 buổi - Curriculum Detail",
+    "type": "sp_ad",
+    "subtype": "ad_curriculum_detail",
+    "date": "2026-07-18",
+    "preview": "Bạn có biết chỉ 7 buổi Zoom, bạn sẽ thay đổi hoàn toàn cách đọc sách? Buổi 1: Kích hoạt đôi mắt thiên tài...",
+    "status": "active",
+    "content_type": "bài viết + ảnh",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "📢 Xử lý lời từ chối - Objection Handling",
+    "type": "sp_ad",
+    "subtype": "ad_objection_handling",
+    "date": "2026-07-18",
+    "preview": "Tôi bận, không có thời gian - Mỗi buổi chỉ 60 phút/tối. Tôi sợ đọc nhanh không hiểu - Khóa học tập trung vào ĐỌC HIỂU...",
+    "status": "active",
+    "content_type": "bài viết + ảnh",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "📢 Bằng chứng xã hội - Social Proof",
+    "type": "sp_ad",
+    "subtype": "ad_social_proof",
+    "date": "2026-07-18",
+    "preview": "Nhiều bạn hỏi mình: Học Speed Reading xong có hiệu quả thật không? Đây là câu chuyện có thật của một học viên...",
+    "status": "active",
+    "content_type": "bài viết + ảnh",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "📢 Ưu đãi có hạn - Limited Offer",
+    "type": "sp_ad",
+    "subtype": "ad_limited_offer",
+    "date": "2026-07-18",
+    "preview": "Mình thông báo nhanh: Chỉ còn 5 suất ưu đãi cuối cùng cho lớp Zoom 7 buổi Speed Reading Online...",
+    "status": "active",
+    "content_type": "bài viết + ảnh",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "🎬 Video - Hook Problem (30-45s)",
+    "type": "sp_video_script",
+    "subtype": "video_hook_problem",
+    "date": "2026-07-18",
+    "preview": "Bạn mất bao lâu để đọc hết một cuốn sách 300 trang? Một tuần? Một tháng?... Hay bạn đọc mãi vẫn chưa xong?",
+    "status": "active",
+    "content_type": "kịch bản video",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "🎬 Video - Quick Tip + Pivot (25-35s)",
+    "type": "sp_video_script",
+    "subtype": "video_quick_tip",
+    "date": "2026-07-18",
+    "preview": "Hôm nay mình sẽ chỉ bạn 1 kỹ thuật đọc nhanh siêu đơn giản... Chỉ tay dẫn đường - kỹ thuật đơn giản nhất nhưng hiệu quả nhất...",
+    "status": "active",
+    "content_type": "kịch bản video",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "🎬 Video - Kể chuyện học viên (40-60s)",
+    "type": "sp_video_script",
+    "subtype": "video_student_result",
+    "date": "2026-07-18",
+    "preview": "Nhiều bạn hỏi mình: Học Speed Reading xong có hiệu quả thật không? Mình sẽ kể bạn nghe câu chuyện của một học viên...",
+    "status": "active",
+    "content_type": "kịch bản video",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "🎬 Video - Flash lộ trình 7 buổi (30-40s)",
+    "type": "sp_video_script",
+    "subtype": "video_curriculum_flash",
+    "date": "2026-07-18",
+    "preview": "Chỉ 7 buổi Zoom, bạn sẽ thay đổi hoàn toàn cách đọc sách. Buổi 1: Kích hoạt mắt - xóa đọc thầm. Buổi 2: Đọc cụm từ - 1000 từ/phút...",
+    "status": "active",
+    "content_type": "kịch bản video",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "🎬 Video - Chốt Sale khẩn cấp (30-40s)",
+    "type": "sp_video_script",
+    "subtype": "video_urgency_close",
+    "date": "2026-07-18",
+    "preview": "Mình thông báo nhanh cho các bạn quan tâm lớp Speed Reading: Học phí ưu đãi chỉ 980.000đ, giảm 75% so với giá trị gốc 4.000.000đ...",
+    "status": "active",
+    "content_type": "kịch bản video",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "💬 Hook - Câu chuyện cảm xúc",
+    "type": "sp_hook",
+    "subtype": "hook_emotional_story",
+    "date": "2026-07-18",
+    "preview": "Ngày xưa mình ghét đọc sách. Không phải vì sách không hay, mà vì mình đọc quá chậm. Một trang sách 15 phút, đọc xong chẳng nhớ gì...",
+    "status": "active",
+    "content_type": "bài viết cảm xúc",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "💬 Hook - Phá vỡ lầm tưởng",
+    "type": "sp_hook",
+    "subtype": "hook_myth_busting",
+    "date": "2026-07-18",
+    "preview": "Bạn có tin rằng 'Đọc nhanh là đọc lướt, không hiểu gì'? Đây là lầm tưởng lớn nhất về Speed Reading. Sự thật là...",
+    "status": "active",
+    "content_type": "bài viết cảm xúc",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "💬 Hook - Future Self (Bản thân tương lai)",
+    "type": "sp_hook",
+    "subtype": "hook_future_self",
+    "date": "2026-07-18",
+    "preview": "Hãy thử tưởng tượng 3 tháng nữa, bạn có thể đọc 1 cuốn sách chỉ trong 2-3 ngày. Tự tin chia sẻ kiến thức với đồng nghiệp...",
+    "status": "active",
+    "content_type": "bài viết cảm xúc",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "💬 Hook - Before/After So sánh",
+    "type": "sp_hook",
+    "subtype": "hook_comparison",
+    "date": "2026-07-18",
+    "preview": "TRƯỚC: Đọc 300 từ/phút, đọc thầm từng chữ, mất 1 tuần đọc 1 cuốn sách, đọc xong quên 80%... SAU: Đọc 1000+ từ/phút...",
+    "status": "active",
+    "content_type": "bài viết cảm xúc",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  },
+  {
+    "title": "💬 Hook - Số liệu gây sốc",
+    "type": "sp_hook",
+    "subtype": "hook_stat_impact",
+    "date": "2026-07-18",
+    "preview": "80% người trưởng thành không đọc hết 1 cuốn sách/năm. Tốc độ đọc trung bình của người Việt: ~250 từ/phút. Não bộ có thể xử lý 600-1000 từ/phút...",
+    "status": "active",
+    "content_type": "bài viết cảm xúc",
+    "target_course": "Lớp Zoom 7 buổi - 980.000đ"
+  }
+]

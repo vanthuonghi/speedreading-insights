@@ -124,6 +124,7 @@
         <div class="stat"><div class="num" id="s3">0</div><div class="lbl">🤖 AI Videos</div></div>
         <div class="stat"><div class="num" id="s4">0</div><div class="lbl">📓 Notebook</div></div>
         <div class="stat"><div class="num" id="s5">0</div><div class="lbl">📊 Tổng</div></div>
+        <div class="stat"><div class="num" id="s6">0</div><div class="lbl">📢 Quảng cáo</div></div>
     </div>
 
     <div class="tabs">
@@ -131,6 +132,7 @@
         <div class="tab" onclick="switchTab('scripts')"><span class="icon">🎬</span>Kịch bản</div>
         <div class="tab" onclick="switchTab('aivideos')"><span class="icon">🤖</span>AI Videos</div>
         <div class="tab" onclick="switchTab('notebooks')"><span class="icon">📓</span>Notebook</div>
+        <div class="tab" onclick="switchTab('ads')"><span class="icon">📢</span>Quảng cáo</div>
         <div class="tab" onclick="window.location.href='agent.html'"><span class="icon">⚙️</span>Agent</div>
     </div>
 
@@ -146,6 +148,10 @@
     <!-- PANEL: Notebook -->
     <div class="panel" id="panel-notebooks">
         <div id="notebooks-list"></div>
+    </div>
+
+    <!-- PANEL: Quảng cáo -->
+    <div class="panel" id="panel-ads">
     </div>
 
     <!-- PANEL: Agent (chuyển hướng sang agent.html) -->
@@ -168,7 +174,7 @@
         function switchTab(name) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            const tabMap = {research:1, scripts:2, aivideos:3, notebook:4, agent:5};
+            const tabMap = {research:1, scripts:2, aivideos:3, notebook:4, ads:5, agent:6};
             document.querySelector(`.tab:nth-child(${tabMap[name] || 1})`).classList.add('active');
             document.getElementById(`panel-${name}`).classList.add('active');
         }
@@ -324,23 +330,67 @@
             }).join('');
         }
 
+        // ===== RENDER: Ads =====
+        function renderAds(ads) {
+            const c = document.getElementById('panel-ads');
+            if (!ads || ads.length === 0) {
+                c.innerHTML = '<div class="empty"><span>📢</span><h3>Chưa có quảng cáo nào</h3><p>Nội dung quảng cáo sp-online sẽ xuất hiện ở đây</p></div>';
+                return;
+            }
+            const s = [...ads];
+            
+            const render = (view) => {
+                const cls = view === 'grid' ? 'item-grid' : view === 'cards' ? 'item-cards' : 'item-list';
+                const items = s.map(r => {
+                    const typeIcons = {'sp_ad': '📢', 'sp_video_script': '🎬', 'sp_hook': '💬'};
+                    const typeColors = {'sp_ad': '#f59e0b', 'sp_video_script': '#ef4444', 'sp_hook': '#8b5cf6'};
+                    const typeBg = {'sp_ad': 'rgba(245,158,11,0.15)', 'sp_video_script': 'rgba(239,68,68,0.15)', 'sp_hook': 'rgba(139,92,246,0.15)'};
+                    const icon = typeIcons[r.type] || '📢';
+                    const color = typeColors[r.type] || '#f59e0b';
+                    const bg = typeBg[r.type] || 'rgba(245,158,11,0.15)';
+                    const typeLabels = {'sp_ad': 'Bài viết + Ảnh', 'sp_video_script': 'Kịch bản Video', 'sp_hook': 'Bài viết Cảm xúc'};
+                    return `<div class="item-card" style="border-left:${view==='list'?'3px':'0'} solid ${color};">
+                        <div class="item-badge" style="background:${bg};color:${color};">${icon}</div>
+                        <div class="item-body">
+                            <h3>${r.title}</h3>
+                            <div class="preview">${r.preview || ''}</div>
+                            <div class="item-meta">
+                                <span>📅 ${r.date}</span>
+                                <span>📄 ${typeLabels[r.type] || r.content_type}</span>
+                                <span>🎯 ${r.target_course || ''}</span>
+                                <span style="color:${r.status === 'active' ? '#34d399' : '#6b6b8a'};">${r.status === 'active' ? '✅ Đang chạy' : '⏸️ Tạm dừng'}</span>
+                            </div>
+                            ${view === 'cards' ? '<span class="read-more" style="color:'+color+';">Xem chi tiết →</span>' : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+                return renderToolbar('panel-ads', s.length, 'quảng cáo') + `<div class="${cls}">${items}</div>`;
+            };
+            
+            c.innerHTML = render(currentView);
+            window.reRender = () => { c.innerHTML = render(currentView); };
+        }
+
         // ===== LOAD DATA =====
         Promise.all([
             fetch('articles.json').then(r => r.json()).catch(() => []),
             fetch('scripts.json').then(r => r.json()).catch(() => []),
             fetch('ai_videos_index.json').then(r => r.json()).catch(() => []),
-            fetch('notebooks_index.json').then(r => r.json()).catch(() => [])
-        ]).then(([articles, scripts, aivideos, notebooks]) => {
+            fetch('notebooks_index.json').then(r => r.json()).catch(() => []),
+            fetch('ads_index.json').then(r => r.json()).catch(() => [])
+        ]).then(([articles, scripts, aivideos, notebooks, ads]) => {
             renderResearch(articles);
             renderScripts(scripts);
             renderAIvideos(aivideos);
             renderNotebooks(notebooks, 'notebooks-list');
+            renderAds(ads);
 
             document.getElementById('s1').textContent = articles.length;
             document.getElementById('s2').textContent = scripts.length;
             document.getElementById('s3').textContent = aivideos.length;
             document.getElementById('s4').textContent = notebooks.length;
-            document.getElementById('s5').textContent = articles.length + scripts.length + aivideos.length + notebooks.length;
+            document.getElementById('s5').textContent = articles.length + scripts.length + aivideos.length + notebooks.length + ads.length;
+            document.getElementById('s6').textContent = ads.length;
         });
 
         // ===== RENDER: Agent =====
