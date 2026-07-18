@@ -79,7 +79,7 @@ def generate_ad_page(ad):
         
         <div class="content">
             <span class="section-title">📝 Nội dung quảng cáo</span>
-            {ad['preview']}
+            {ad.get('content', ad['preview'])}
         </div>
         
         <div class="footer">
@@ -106,7 +106,7 @@ def main():
             "date": ad['date'],
             "type": ad['type'],
             "subtype": ad['subtype'],
-            "preview": ad['preview'][:100],
+            "preview": ad.get('content', ad['preview'])[:200],
             "content_type": ad['content_type'],
             "target_course": ad['target_course'],
             "status": ad['status']
