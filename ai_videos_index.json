@@ -73,11 +73,11 @@
   },
   {
     "title": "You’re Not Behind (Yet): Learn AI Agents in 13 Minutes",
-    "filename": "2026-07-16-youre-not-behind-yet-learn-ai-agents-in-13-minutes.html",
-    "date": "2026-07-16",
-    "channel": "",
+    "filename": "2026-07-19-youre-not-behind-yet-learn-ai-agents-in-13-minutes.html",
+    "date": "2026-07-19",
+    "channel": "Sandeep Swadia",
     "duration": "13m10s",
-    "preview": "... https://www.sandeepswadia.com/newsletter Most people still use AI like a better search box, but the real shift is AI"
+    "preview": "**Tiêu đề video:** Bạn Chưa Bị Bỏ Lại Đâu (Chưa): Học Về AI Agent Trong 13 Phút\n\n**Mô tả đã dịch:**\nHầu hết mọi người vẫ"
   },
   {
     "title": "Updated Essential AI Skills For 2026",
@@ -121,19 +121,19 @@
   },
   {
     "title": "AI Agents, Clearly Explained",
-    "filename": "2026-07-18-ai-agents-clearly-explained.html",
-    "date": "2026-07-18",
+    "filename": "2026-07-19-ai-agents-clearly-explained.html",
+    "date": "2026-07-19",
     "channel": "Jeff Su",
     "duration": "10m9s",
-    "preview": "Tiêu đề video: AI Agents, Giải Thích Rõ Ràng\n\nMô tả: Video này phân tích quá trình phát triển từ các mô hình LLM cơ bản "
+    "preview": "Tiêu đề: AI Agents, Giải Thích Rõ Ràng\n\nMô tả: Video này phân tích quá trình phát triển từ các LLM cơ bản như #ChatGPT, "
   },
   {
     "title": "AI agents explained: Build your first agent in 8 minutes",
-    "filename": "2026-07-18-ai-agents-explained-build-your-first-agent-in-8-minutes.html",
-    "date": "2026-07-18",
+    "filename": "2026-07-19-ai-agents-explained-build-your-first-agent-in-8-minutes.html",
+    "date": "2026-07-19",
     "channel": "Google Cloud Tech",
     "duration": "8m29s",
-    "preview": "Follow the codelab → https://goo.gle/3Q5TSt3 GitHub repo → https://goo.gle/4fsahT8 Google Agent Development Kit (ADK) .."
+    "preview": "Tiêu đề: AI agents giải thích đơn giản: Xây dựng agent đầu tiên của bạn trong 8 phút\n\nMô tả:\nHướng dẫn từng bước trong c"
   },
   {
     "title": "How to Build an AI Agent with Claude Code (Claude AI Agent Tutorial)",
@@ -150,5 +150,21 @@
     "channel": "IBM Technology",
     "duration": "8m3s",
     "preview": "Learn more about AI Agents here → https://ibm.biz/~TjxCNJCU3 Choosing how to extend an AI agent isn't always obvious. Ce"
+  },
+  {
+    "title": "AI Agents are the new SaaS",
+    "filename": "2026-07-19-ai-agents-are-the-new-saas.html",
+    "date": "2026-07-19",
+    "channel": "Greg Isenberg",
+    "duration": "26m4s",
+    "preview": "**Tiêu đề:** AI Agents là SaaS mới\n\n**Mô tả:** Trong tập solo này, tôi giải thích lý do vì sao tôi tin rằng xây dựng các"
+  },
+  {
+    "title": "Local AI Agents In 26 Minutes",
+    "filename": "2026-07-19-local-ai-agents-in-26-minutes.html",
+    "date": "2026-07-19",
+    "channel": "Tina Huang",
+    "duration": "26m0s",
+    "preview": "Join the waitlist for my AI Agent Bootcamp: https://www.lonelyoctopus.com/ai-agent-bootcamp Business Inquiries: ..."
   }
 ]
