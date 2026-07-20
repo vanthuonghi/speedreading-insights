@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speed Reading Membership | Đọc 300 → 1000+ từ/phút</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --surface: #111128;
+      --surface-hover: #1a1a3a;
+      --border: rgba(255,255,255,0.06);
+      --border-light: rgba(255,255,255,0.1);
+      --ink: #e4e4f0;
+      --ink-muted: #8b8ba7;
+      --ink-dim: #5a5a7a;
+      --accent: #f59e0b;
+      --accent-soft: rgba(245,158,11,0.12);
+      --accent-glow: rgba(245,158,11,0.25);
+      --green: #34d399;
+      --red: #ef4444;
+      --purple: #c084fc;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .bg-grid {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: -1;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* ─── NAV ─── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 0; border-bottom: 1px solid var(--border);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1em; text-decoration: none; color: var(--ink); }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: var(--ink-muted); text-decoration: none; font-size: .9em; transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      padding: 8px 20px; border-radius: 8px; background: var(--accent);
+      color: #0a0a1a !important; font-weight: 600; font-size: .85em;
+    }
+    .nav-cta:hover { background: #eab308; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 80px 0 60px; text-align: center;
+      position: relative;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 600px; height: 600px; transform: translate(-50%,-50%);
+      background: radial-gradient(circle, rgba(245,158,11,0.04) 0%, transparent 70%);
+      pointer-events: none; z-index: -1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 16px; border-radius: 20px;
+      background: var(--accent-soft); color: var(--accent);
+      font-size: .82em; font-weight: 600; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2em, 5vw, 3.5em); font-weight: 900; line-height: 1.15;
+      max-width: 800px; margin: 0 auto 16px;
+    }
+    .hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p {
+      font-size: 1.15em; color: var(--ink-muted); max-width: 600px; margin: 0 auto 32px;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 40px; margin-bottom: 36px;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num { font-size: 1.8em; font-weight: 800; color: var(--accent); }
+    .hero-stat .label { font-size: .82em; color: var(--ink-muted); }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 40px; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      color: #0a0a1a; font-weight: 700; font-size: 1.05em;
+      text-decoration: none; transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 30px var(--accent-glow); }
+    .hero-note { font-size: .82em; color: var(--ink-dim); margin-top: 12px; }
+
+    /* ─── VIDEO SECTION ─── */
+    .video-section {
+      padding: 60px 0; text-align: center;
+    }
+    .video-section h2 { font-size: 1.6em; font-weight: 700; margin-bottom: 8px; }
+    .video-section p { color: var(--ink-muted); margin-bottom: 28px; }
+    .video-wrapper {
+      max-width: 700px; margin: 0 auto; border-radius: var(--radius-lg);
+      overflow: hidden; border: 1px solid var(--border);
+      aspect-ratio: 16/9; background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .video-placeholder {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      color: var(--ink-dim); cursor: pointer;
+    }
+    .video-placeholder .play-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
+      font-size: 1.5em; transition: background .2s;
+    }
+    .video-placeholder:hover .play-icon { background: var(--accent-glow); }
+
+    /* ─── VALUE PROPS ─── */
+    .value-section {
+      padding: 60px 0; border-top: 1px solid var(--border);
+    }
+    .value-section h2 {
+      text-align: center; font-size: 1.8em; font-weight: 800; margin-bottom: 48px;
+    }
+    .value-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .value-card {
+      padding: 28px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      transition: border-color .2s, transform .2s;
+    }
+    .value-card:hover { border-color: var(--accent-glow); transform: translateY(-2px); }
+    .value-card .icon { font-size: 1.8em; margin-bottom: 12px; }
+    .value-card h3 { font-size: 1.05em; font-weight: 700; margin-bottom: 8px; }
+    .value-card p { font-size: .88em; color: var(--ink-muted); line-height: 1.6; }
+
+    /* ─── CURRICULUM ─── */
+    .curriculum-section {
+      padding: 60px 0; border-top: 1px solid var(--border);
+    }
+    .curriculum-section h2 { text-align: center; font-size: 1.8em; font-weight: 800; margin-bottom: 8px; }
+    .curriculum-section > .container > p { text-align: center; color: var(--ink-muted); margin-bottom: 40px; }
+    .curriculum-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;
+    }
+    .session-card {
+      padding: 20px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .session-card .num {
+      flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-soft); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: .9em;
+    }
+    .session-card .info h4 { font-size: .95em; font-weight: 600; margin-bottom: 4px; }
+    .session-card .info p { font-size: .82em; color: var(--ink-muted); }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonial-section {
+      padding: 60px 0; border-top: 1px solid var(--border);
+    }
+    .testimonial-section h2 { text-align: center; font-size: 1.8em; font-weight: 800; margin-bottom: 40px; }
+    .testimonial-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
+    }
+    .testimonial-card {
+      padding: 24px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+    }
+    .testimonial-card .quote {
+      font-size: .92em; color: var(--ink-muted); line-height: 1.7;
+      margin-bottom: 16px; font-style: italic;
+    }
+    .testimonial-card .author {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .testimonial-card .author .avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: var(--accent); font-size: .9em;
+    }
+    .testimonial-card .author .name { font-weight: 600; font-size: .88em; }
+    .testimonial-card .author .role { font-size: .78em; color: var(--ink-dim); }
+    .testimonial-card .result {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 12px; padding: 4px 12px; border-radius: 6px;
+      background: rgba(52,211,153,0.1); color: var(--green); font-size: .82em; font-weight: 600;
+    }
+
+    /* ─── BENEFITS ─── */
+    .benefits-section {
+      padding: 60px 0; border-top: 1px solid var(--border);
+    }
+    .benefits-section h2 { text-align: center; font-size: 1.8em; font-weight: 800; margin-bottom: 48px; }
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+    }
+    .benefit-card {
+      padding: 24px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .benefit-card .icon { font-size: 1.5em; flex-shrink: 0; }
+    .benefit-card h3 { font-size: 1em; font-weight: 700; margin-bottom: 4px; }
+    .benefit-card p { font-size: .85em; color: var(--ink-muted); }
+
+    /* ─── PRICING ─── */
+    .pricing-section {
+      padding: 80px 0; border-top: 1px solid var(--border);
+    }
+    .pricing-section h2 { text-align: center; font-size: 1.8em; font-weight: 800; margin-bottom: 8px; }
+    .pricing-section > .container > p { text-align: center; color: var(--ink-muted); margin-bottom: 40px; }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+      max-width: 800px; margin: 0 auto;
+    }
+    .pricing-card {
+      padding: 36px; border-radius: var(--radius-lg);
+      background: var(--surface); border: 1px solid var(--border);
+      position: relative; transition: border-color .2s;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent); background: linear-gradient(135deg, rgba(245,158,11,0.04), transparent);
+    }
+    .pricing-card.featured::before {
+      content: '🔥 PHỔ BIẾN NHẤT'; position: absolute; top: -12px; left: 50%;
+      transform: translateX(-50%); padding: 4px 16px; border-radius: 20px;
+      background: var(--accent); color: #0a0a1a; font-size: .72em; font-weight: 700;
+      letter-spacing: .5px; white-space: nowrap;
+    }
+    .pricing-card .name { font-size: 1.1em; font-weight: 700; margin-bottom: 4px; }
+    .pricing-card .desc { font-size: .85em; color: var(--ink-muted); margin-bottom: 20px; }
+    .pricing-card .price {
+      font-size: 2.4em; font-weight: 900; color: var(--accent); margin-bottom: 4px;
+    }
+    .pricing-card .price .orig {
+      font-size: .4em; font-weight: 400; color: var(--ink-dim);
+      text-decoration: line-through; margin-left: 8px;
+    }
+    .pricing-card .price-note { font-size: .82em; color: var(--ink-dim); margin-bottom: 24px; }
+    .pricing-card ul { list-style: none; margin-bottom: 28px; }
+    .pricing-card ul li {
+      padding: 8px 0; font-size: .88em; color: var(--ink-muted);
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .pricing-card ul li:last-child { border-bottom: none; }
+    .pricing-card ul li .check { color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .pricing-card ul li .cross { color: var(--ink-dim); font-weight: 700; flex-shrink: 0; }
+    .pricing-card .cta {
+      display: block; text-align: center; padding: 14px;
+      border-radius: 10px; font-weight: 700; font-size: .95em;
+      text-decoration: none; transition: transform .2s, box-shadow .2s;
+    }
+    .pricing-card .cta.basic {
+      background: var(--surface-hover); color: var(--ink); border: 1px solid var(--border-light);
+    }
+    .pricing-card .cta.premium {
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      color: #0a0a1a; box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .pricing-card .cta:hover { transform: translateY(-2px); }
+    .pricing-card .cta.premium:hover { box-shadow: 0 6px 30px var(--accent-glow); }
+    .guarantee {
+      text-align: center; margin-top: 24px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      color: var(--ink-muted); font-size: .88em;
+    }
+
+    /* ─── FAQ ─── */
+    .faq-section {
+      padding: 60px 0; border-top: 1px solid var(--border);
+    }
+    .faq-section h2 { text-align: center; font-size: 1.8em; font-weight: 800; margin-bottom: 40px; }
+    .faq-list { max-width: 700px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid var(--border); padding: 0;
+    }
+    .faq-q {
+      width: 100%; padding: 18px 0; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; cursor: pointer;
+      background: none; border: none; color: var(--ink); font-size: .95em;
+      font-weight: 600; text-align: left; font-family: var(--font);
+      transition: color .2s;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-q .toggle { font-size: .8em; color: var(--ink-dim); transition: transform .2s; }
+    .faq-item.open .faq-q .toggle { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease;
+      padding: 0; color: var(--ink-muted); font-size: .88em; line-height: 1.7;
+    }
+    .faq-item.open .faq-a {
+      max-height: 300px; padding: 0 0 18px;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      padding: 40px 0; border-top: 1px solid var(--border);
+      text-align: center; color: var(--ink-dim); font-size: .82em;
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero { padding: 50px 0 40px; }
+      .hero-stats { gap: 20px; flex-wrap: wrap; }
+      .value-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card.featured { order: -1; }
+      .nav-links { display: none; }
+      .curriculum-grid { grid-template-columns: 1fr; }
+      .testimonial-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<!-- ─── NAV ─── -->
+<nav class="container nav">
+  <a href="#" class="nav-brand">📚 Speed Reading <span>VIP</span></a>
+  <div class="nav-links">
+    <a href="#curriculum">Lộ trình</a>
+    <a href="#testimonials">Học viên</a>
+    <a href="#pricing">Bảng giá</a>
+    <a href="#faq">FAQ</a>
+    <a href="#pricing" class="nav-cta">Đăng ký ngay</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">🎯 Cam kết hoàn phí sau buổi 1</div>
+    <h1>Đọc 300 → 1000+ từ/phút<br>chỉ sau <em>7 buổi Zoom</em></h1>
+    <p>Khoá học Speed Reading Online — phương pháp khoa học giúp bạn đọc nhanh gấp 3 lần, nhớ sâu hơn, áp dụng được ngay.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">500+</div><div class="label">Học viên</div></div>
+      <div class="hero-stat"><div class="num">7</div><div class="label">Buổi Zoom</div></div>
+      <div class="hero-stat"><div class="num">3x</div><div class="label">Tốc độ đọc</div></div>
+      <div class="hero-stat"><div class="num">100%</div><div class="label">Hoàn tiền</div></div>
+    </div>
+    <a href="#pricing" class="hero-cta">🚀 Đăng ký ngay — chỉ 980.000đ</a>
+    <div class="hero-note">⚡ Chỉ còn 5 suất kèm cặp 1:1 qua Zalo</div>
+  </div>
+</section>
+
+<!-- ─── VIDEO ─── -->
+<section class="video-section">
+  <div class="container">
+    <h2>🎬 Xem học viên thay đổi như thế nào</h2>
+    <p>Trải nghiệm thực tế từ những người đã tham gia khoá học</p>
+    <div class="video-wrapper">
+      <div class="video-placeholder" onclick="alert('📹 Video testimonial học viên sẽ được cập nhật tại đây!\n\nHiện tại có 8 video học viên thực tế + 10 ảnh kết quả từ nhóm Zalo.\nInbox mình để xem ngay!')">
+        <div class="play-icon">▶</div>
+        <div>Xem video testimonial</div>
+        <div style="font-size:.82em;color:var(--ink-dim)">8+ học viên chia sẻ kết quả thật</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── VALUE PROPS ─── -->
+<section class="value-section">
+  <div class="container">
+    <h2>Mọi thứ bạn cần để <em style="font-style:normal;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">đọc nhanh & nhớ sâu</em></h2>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="icon">📚</div>
+        <h3>Khoá học chuyên sâu</h3>
+        <p>7 buổi Zoom thực chiến — từ kỹ thuật chỉ tay dẫn đường, đọc cụm từ, đến ghi nhớ chủ động. Có bài tập giữa các buổi.</p>
+      </div>
+      <div class="value-card">
+        <div class="icon">🎤</div>
+        <h3>Livestream độc quyền</h3>
+        <p>Tham gia livestream hàng tuần chỉ dành cho học viên. Đặt câu hỏi trực tiếp, xem lại bất cứ lúc nào.</p>
+      </div>
+      <div class="value-card">
+        <div class="icon">📦</div>
+        <h3>Thư viện tài nguyên</h3>
+        <p>Ebook, Mind Map, Smart Note templates, danh sách sách nên đọc — tất cả trong một kho tài liệu độc quyền.</p>
+      </div>
+      <div class="value-card">
+        <div class="icon">💬</div>
+        <h3>Kèm cặp 1:1 qua Zalo</h3>
+        <p>Được hỗ trợ riêng, sửa lỗi phát âm, chỉnh kỹ thuật đọc — không lo bỏ cuộc giữa chừng.</p>
+      </div>
+      <div class="value-card">
+        <div class="icon">🔄</div>
+        <h3>Cập nhật liên tục</h3>
+        <p>Nội dung mới được cập nhật hàng tuần — xu hướng, kỹ thuật mới, công cụ AI hỗ trợ đọc sách.</p>
+      </div>
+      <div class="value-card">
+        <div class="icon">🤝</div>
+        <h3>Cộng đồng học viên</h3>
+        <p>Tham gia group Zalo riêng, kết nối với 500+ học viên, trao đổi, chia sẻ và cùng nhau phát triển.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CURRICULUM ─── -->
+<section class="curriculum-section" id="curriculum">
+  <div class="container">
+    <h2>📖 Lộ trình 7 buổi chi tiết</h2>
+    <p>Mỗi buổi 60-90 phút, học qua Zoom — có ghi hình để xem lại</p>
+    <div class="curriculum-grid">
+      <div class="session-card">
+        <div class="num">1</div>
+        <div class="info">
+          <h4>Kích hoạt đôi mắt thiên tài</h4>
+          <p>Kỹ thuật 3-2-1, chỉ tay dẫn đường — tăng tốc ngay lập tức</p>
+        </div>
+      </div>
+      <div class="session-card">
+        <div class="num">2</div>
+        <div class="info">
+          <h4>Bí thuật đọc cụm từ</h4>
+          <p>Loại bỏ đọc thầm, cơ chế Tai-Mắt-Não — đọc nhanh gấp 3 lần</p>
+        </div>
+      </div>
+      <div class="session-card">
+        <div class="num">3</div>
+        <div class="info">
+          <h4>Thấu thị toàn bộ cuốn sách</h4>
+          <p>Skimming 15 phút, bản đồ cấu trúc — hiểu sách trước khi đọc</p>
+        </div>
+      </div>
+      <div class="session-card">
+        <div class="num">4</div>
+        <div class="info">
+          <h4>Ghi chép thông minh</h4>
+          <p>Smart Note, Mind Map, hệ thống 3 ô — nhớ ngay, nhớ mãi</p>
+        </div>
+      </div>
+      <div class="session-card">
+        <div class="num">5</div>
+        <div class="info">
+          <h4>Tư duy chọn sách đúng</h4>
+          <p>Tiết kiệm 90% ngân sách mua sách — chỉ đọc cuốn đáng đọc</p>
+        </div>
+      </div>
+      <div class="session-card">
+        <div class="num">6</div>
+        <div class="info">
+          <h4>Công thức truyền tin 4 bước</h4>
+          <p>Chia sẻ tri thức tự tin — dạy lại để nhớ sâu</p>
+        </div>
+      </div>
+      <div class="session-card">
+        <div class="num">7</div>
+        <div class="info">
+          <h4>Tổng kết & Ôn tập</h4>
+          <p>Ghi nhớ chủ động — thuộc vĩnh viễn, áp dụng được ngay</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="testimonial-section" id="testimonials">
+  <div class="container">
+    <h2>💬 Học viên nói gì?</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="quote">"Em không ngờ mình có thể đọc nhanh như vậy. Từ 300 từ/phút lên 1.000 từ/phút chỉ sau 7 buổi. Cảm ơn thầy nhiều!"</div>
+        <div class="author">
+          <div class="avatar">N</div>
+          <div><div class="name">Nguyễn Thuỳ Ngân</div><div class="role">Nhân viên văn phòng, TP.HCM</div></div>
+        </div>
+        <div class="result">🚀 300 → 1.000 từ/phút</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote">"Mình từng nghĩ đọc nhanh là đọc lướt, không hiểu gì. Sai hoàn toàn! Đọc nhanh + kỹ thuật ghi nhớ chủ động giúp mình hiểu SÂU hơn."</div>
+        <div class="author">
+          <div class="avatar">M</div>
+          <div><div class="name">Minh Tuấn</div><div class="role">Sinh viên, ĐH Bách Khoa</div></div>
+        </div>
+        <div class="result">🚀 250 → 900 từ/phút</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote">"Mỗi tối học 60 phút, không ảnh hưởng công việc. Sau 7 buổi mình đọc sách nhanh gấp 3, tự tin chia sẻ với đồng nghiệp."</div>
+        <div class="author">
+          <div class="avatar">H</div>
+          <div><div class="name">Hoàng Anh</div><div class="role">Quản lý dự án, Hà Nội</div></div>
+        </div>
+        <div class="result">🚀 350 → 1.100 từ/phút</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BENEFITS ─── -->
+<section class="benefits-section">
+  <div class="container">
+    <h2>🎯 Tham gia Membership, bạn nhận được gì?</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="icon">⏱</div>
+        <div><h3>Tiết kiệm thời gian</h3><p>Đọc 1 cuốn sách trong 2-3 ngày thay vì 1 tuần — tiết kiệm hàng trăm giờ mỗi năm</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">🧠</div>
+        <div><h3>Ghi nhớ chủ động</h3><p>Kỹ thuật Active Recall + Spaced Repetition — nhớ gấp 3 lần so với đọc thường</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">🤝</div>
+        <div><h3>Không học một mình</h3><p>Group Zalo riêng, kèm cặp 1:1, giải đáp mọi thắc mắc trong suốt khoá học</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">📈</div>
+        <div><h3>Đo lường được kết quả</h3><p>Đo tốc độ trước và sau — con số không biết nói dối. 80% học viên đạt 1000+ từ/phút</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">📱</div>
+        <div><h3>Học mọi lúc, mọi nơi</h3><p>Zoom online, có ghi hình — xem lại bất cứ lúc nào. Học trên điện thoại, laptop đều được</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="icon">🔄</div>
+        <div><h3>Cập nhật xu hướng mới</h3><p>AI trong đọc sách, kỹ thuật mới, công cụ hỗ trợ — nội dung luôn được cập nhật</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ─── -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <h2>💎 Chọn gói phù hợp với bạn</h2>
+    <p>Cam kết hoàn phí 100% nếu không hài lòng sau buổi 1</p>
+    <div class="pricing-grid">
+      <!-- BASIC -->
+      <div class="pricing-card">
+        <div class="name">📘 Cơ Bản</div>
+        <div class="desc">Dành cho bạn tự học, muốn tiết kiệm</div>
+        <div class="price">980.000đ<span class="orig">4.000.000đ</span></div>
+        <div class="price-note">Thanh toán 1 lần — học trọn đời</div>
+        <ul>
+          <li><span class="check">✓</span> 7 buổi Zoom thực chiến</li>
+          <li><span class="check">✓</span> Giáo trình & Ebook độc quyền</li>
+          <li><span class="check">✓</span> Group Zalo học viên</li>
+          <li><span class="check">✓</span> Cam kết hoàn phí sau buổi 1</li>
+          <li><span class="check">✓</span> Xem lại ghi hình khoá học</li>
+          <li><span class="cross">✗</span> Kèm cặp 1:1 qua Zalo</li>
+          <li><span class="cross">✗</span> Livestream độc quyền</li>
+        </ul>
+        <a href="#" class="cta basic" onclick="alert('📩 Vui lòng inbox Facebook Speed Reading HCM để đăng ký gói Cơ Bản!\n\nHoặc chuyển khoản:\n• 980.000đ\n• Ngân hàng: ...\n• SĐT: 0899.320.202')">Đăng ký ngay</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="pricing-card featured">
+        <div class="name">🔥 Cao Cấp</div>
+        <div class="desc">Kèm cặp 1:1 — kết quả nhanh nhất</div>
+        <div class="price">1.980.000đ<span class="orig">6.000.000đ</span></div>
+        <div class="price-note">Thanh toán 1 lần — tất cả đặc quyền</div>
+        <ul>
+          <li><span class="check">✓</span> 7 buổi Zoom thực chiến</li>
+          <li><span class="check">✓</span> Giáo trình & Ebook độc quyền</li>
+          <li><span class="check">✓</span> Group Zalo học viên</li>
+          <li><span class="check">✓</span> Cam kết hoàn phí sau buổi 1</li>
+          <li><span class="check">✓</span> Xem lại ghi hình khoá học</li>
+          <li><span class="check">✓</span> Kèm cặp 1:1 qua Zalo (trị giá 1tr)</li>
+          <li><span class="check">✓</span> Livestream độc quyền hàng tuần</li>
+          <li><span class="check">✓</span> Review kỹ thuật đọc cá nhân hoá</li>
+          <li><span class="check">✓</span> Định hướng sách phù hợp với bạn</li>
+        </ul>
+        <a href="#" class="cta premium" onclick="alert('📩 Vui lòng inbox Facebook Speed Reading HCM để đăng ký gói Cao Cấp!\n\nHoặc chuyển khoản:\n• 1.980.000đ\n• Ngân hàng: ...\n• SĐT: 0899.320.202')">🔥 Đăng ký ngay — tiết kiệm 67%</a>
+      </div>
+    </div>
+    <div class="guarantee">🛡️ Cam kết hoàn tiền 100% nếu không hài lòng sau buổi 1 — <strong>không có rủi ro</strong></div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <h2>❓ Câu hỏi thường gặp</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Khoá học có phù hợp với người mới bắt đầu không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Có! Khoá học được thiết kế từ cơ bản đến nâng cao. Bạn không cần bất kỳ kiến thức nền nào về speed reading. Buổi 1 sẽ hướng dẫn bạn từ những kỹ thuật đơn giản nhất. 80% học viên của mình là người mới hoàn toàn.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Học online qua Zoom có hiệu quả không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Rất hiệu quả! Zoom tương tác trực tiếp, mình sửa lỗi từng người. Có ghi hình lại để bạn xem lại bất cứ lúc nào. Ngoài ra còn kèm cặp qua Zalo sau mỗi buổi — hiệu quả hơn học offline nhiều lần.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Đọc nhanh có hiểu được không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Đây là lầm tưởng lớn nhất! Speed Reading không phải đọc lướt — nó là kỹ thuật đọc có phương pháp. Khi bạn đọc nhanh, não bộ tập trung hơn, hiểu SÂU hơn. Khoá học của mình đặc biệt chú trọng vào ĐỌC HIỂU, có kỹ thuật ghi nhớ chủ động đi kèm.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Có được hoàn tiền không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Có! Mình cam kết hoàn phí 100% nếu bạn không hài lòng sau buổi 1. Không có rủi ro nào cả. Mình tự tin vào chất lượng khoá học.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Mỗi buổi học bao lâu? Học mấy buổi/tuần? <span class="toggle">▼</span></button>
+        <div class="faq-a">Mỗi buổi 60-90 phút, tuần học 2 buổi tối. Hoàn toàn online qua Zoom — không mất thời gian đi lại. Ai cũng sắp xếp được.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Tôi có thể đăng ký gói 1 tháng không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Khoá học được thiết kế theo lộ trình 7 buổi — thanh toán 1 lần, học trọn đời. Bạn có thể xem lại ghi hình bất cứ lúc nào, không giới hạn thời gian.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Đã đăng ký nhưng chưa thấy kích hoạt? <span class="toggle">▼</span></button>
+        <div class="faq-a">Sau khi chuyển khoản, vui lòng inbox Facebook Speed Reading HCM hoặc gọi 0899.320.202 để mình kích hoạt ngay cho bạn trong vòng 24h.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+  <div class="container">
+    <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
+    <p style="margin-top:8px;">📩 Inbox Facebook: <a href="#">Speed Reading HCM</a> để được tư vấn</p>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
