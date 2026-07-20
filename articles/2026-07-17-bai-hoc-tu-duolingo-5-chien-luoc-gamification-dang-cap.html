@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 Bài Học Từ Duolingo: 5 Chiến Lược Gamification Đẳng Cấp Thế Giới Áp Dụng Cho Speed Reading Việt Nam | Speed Reading Insights</title>
+    <title>Bài Học Từ Duolingo: 5 Chiến Lược Gamification Đẳng Cấp Thế Giới Áp Dụng Cho Speed Reading Việt Nam | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/394/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,39 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌅 Thứ Sáu, 17 tháng 07/2026</span>
-                    <span>📖 Duolingo Q2 2026 Earnings Report, Blinkist Official Blog, Duolingo Blog (Design Philosophy), Gamification Research 2026</span>
+                    <span class="footer-tag">📖 Duolingo Q2 2026 Earnings Report, Blinkist Official Blog, Duolingo Blog (Design Philosophy), Gamification Research 2026</span>
                 </div>
-                <h1 class="article-title">💡 Bài Học Từ Duolingo: 5 Chiến Lược Gamification Đẳng Cấp Thế Giới Áp Dụng Cho Speed Reading Việt Nam</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">Bài Học Từ Duolingo: 5 Chiến Lược Gamification Đẳng Cấp Thế Giới Áp Dụng Cho Speed Reading Việt Nam</h1>
+                <div class="article-tags">
                     <span class="tag pink">bài học</span><span class="tag pink">học tập</span><span class="tag pink">speed reading</span><span class="tag pink">phát triển</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Duolingo — ứng dụng học ngôn ngữ với hơn 500 triệu người dùng toàn cầu — không chỉ là một câu chuyện thành công về EdTech, mà còn là 'phòng thí nghiệm' về cách biến việc học trở nên gây nghiện. Năm 2026, Duolingo báo cáo doanh thu 732 triệu USD với 37 triệu người dùng hoạt động hàng ngày. Bài học từ 'cỗ máy tăng trưởng' này có thể áp dụng trực tiếp cho Speed Reading Việt Nam.</p><p>1. Streak — Sức mạnh của chuỗi liên tục: Duolingo sử dụng 'streak' (chuỗi ngày học liên tiếp) như một áp lực tích cực. Người dùng không muốn phá vỡ chuỗi của mình. Kết quả: người dùng có streak 30 ngày trở lên có tỷ lệ duy trì gấp 5 lần người dùng thông thường. Speed Reading Việt Nam có thể triển khai 'Thử thách 30 ngày đọc nhanh' — mỗi ngày một bài tập, giữ streak để được giảm giá khóa học.</p><p>2. Notification thông minh — Duolingo gửi thông báo 'Con cú xanh đang lo cho bạn' thay vì 'Hãy học tiếng Anh'. Tỷ lệ click-through của thông báo hài hước cao hơn 40% so với thông báo khô khan. Speed Reading có thể dùng: 'Sách của bạn đang buồn vì bạn chưa đọc hôm nay' — tạo cảm giác kết nối cảm xúc.</p><p>3. Phân cấp kỹ năng — Duolingo chia nhỏ kỹ năng ngôn ngữ thành hàng trăm 'bài tập nhỏ', mỗi bài chỉ 3-5 phút. Speed Reading nên thiết kế lộ trình tương tự: 'Bài 1: Đo tốc độ đọc → Bài 2: Loại bỏ subvocalization → Bài 3: Mở rộng tầm mắt → ...' — mỗi bài là một chiến thắng nhỏ.</p><p>4. Cạnh tranh xã hội (Leaderboard) — Duolingo chia người dùng thành các league (Bronze, Silver, Gold, ...) với 30 người/league. Ai đứng cuối sẽ bị xuống hạng. Tính cạnh tranh này làm tăng thời gian học lên 27%. Speed Reading Việt Nam có thể tạo 'Bảng xếp hạng tốc độ đọc' hàng tuần cho học viên.</p><p>5. Micro-transactions cho mục tiêu học tập — Duolingo dùng 'lingots' (điểm thưởng) để mua tính năng: 'tăng streak freeze', 'gấp đôi XP', 'thử thách thời gian'. Speed Reading có thể tạo 'ReadCoins' — kiếm được khi hoàn thành bài tập, dùng để đổi giờ học kèm 1-1 hoặc ebook miễn phí.</p><p>Ngoài Duolingo, một case study khác là Blinkist — ứng dụng tóm tắt sách với 40 triệu người dùng. Blinkist thành công nhờ '3 phút cho một ý tưởng lớn': mỗi cuốn sách được tóm tắt trong 15 phút đọc hoặc nghe. Đây là mô hình kết hợp hoàn hảo với speed reading: dạy người dùng cách nắm bắt ý chính trong thời gian ngắn nhất.</p><p>Speed Reading Việt Nam đang ở vị trí thuận lợi để áp dụng những bài học này vì thị trường đào tạo kỹ năng đọc tại Việt Nam còn rất ít đối thủ áp dụng gamification chuyên nghiệp. Việc xây dựng một hệ thống học tập 'gây nghiện' sẽ tạo lợi thế cạnh tranh bền vững.</p>
+                <p>Duolingo — ứng dụng học ngôn ngữ với hơn  người dùng toàn cầu — không chỉ là một câu chuyện thành công về EdTech, mà còn là 'phòng thí nghiệm' về cách biến việc học trở nên gây nghiện. Năm 2026, Duolingo báo cáo doanh thu  USD với  người dùng hoạt động hàng ngày. Bài học từ 'cỗ máy tăng trưởng' này có thể áp dụng trực tiếp cho Speed Reading Việt Nam.</p>
+<p>Streak — Sức mạnh của chuỗi liên tục: Duolingo sử dụng 'streak' (chuỗi ngày học liên tiếp) như một áp lực tích cực. Người dùng không muốn phá vỡ chuỗi của mình. Kết quả: người dùng có streak  trở lên có tỷ lệ duy trì gấp 5 lần người dùng thông thường. Speed Reading Việt Nam có thể triển khai 'Thử thách  đọc nhanh' — mỗi ngày một bài tập, giữ streak để được giảm giá khóa học.</p>
+<p>Notification thông minh — Duolingo gửi thông báo 'Con cú xanh đang lo cho bạn' thay vì 'Hãy học tiếng Anh'. Tỷ lệ click-through của thông báo hài hước cao hơn  so với thông báo khô khan. Speed Reading có thể dùng: 'Sách của bạn đang buồn vì bạn chưa đọc hôm nay' — tạo cảm giác kết nối cảm xúc.</p>
+<p>Phân cấp kỹ năng — Duolingo chia nhỏ kỹ năng ngôn ngữ thành hàng trăm 'bài tập nhỏ', mỗi bài chỉ 3-. Speed Reading nên thiết kế lộ trình tương tự: 'Bài 1: Đo tốc độ đọc → Bài 2: Loại bỏ subvocalization → Bài 3: Mở rộng tầm mắt → ...' — mỗi bài là một chiến thắng nhỏ.</p>
+<p>Cạnh tranh xã hội (Leaderboard) — Duolingo chia người dùng thành các league (Bronze, Silver, Gold, ...) với /league. Ai đứng cuối sẽ bị xuống hạng. Tính cạnh tranh này làm tăng thời gian học lên . Speed Reading Việt Nam có thể tạo 'Bảng xếp hạng tốc độ đọc' hàng tuần cho học viên.</p>
+<p>Micro-transactions cho mục tiêu học tập — Duolingo dùng 'lingots' (điểm thưởng) để mua tính năng: 'tăng streak freeze', 'gấp đôi XP', 'thử thách thời gian'. Speed Reading có thể tạo 'ReadCoins' — kiếm được khi hoàn thành bài tập, dùng để đổi giờ học kèm 1-1 hoặc ebook miễn phí.</p>
+<p>Ngoài Duolingo, một case study khác là Blinkist — ứng dụng tóm tắt sách với  người dùng. Blinkist thành công nhờ ' cho một ý tưởng lớn': mỗi cuốn sách được tóm tắt trong  đọc hoặc nghe. Đây là mô hình kết hợp hoàn hảo với speed reading: dạy người dùng cách nắm bắt ý chính trong thời gian ngắn nhất.</p>
+<p>Speed Reading Việt Nam đang ở vị trí thuận lợi để áp dụng những bài học này vì thị trường đào tạo kỹ năng đọc tại Việt Nam còn rất ít đối thủ áp dụng gamification chuyên nghiệp. Việc xây dựng một hệ thống học tập 'gây nghiện' sẽ tạo lợi thế cạnh tranh bền vững.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Speed Reading Việt Nam có thể: (1) Phát triển ứng dụng di động với tính năng streak, leaderboard và micro-transactions, (2) Thiết kế lại lộ trình học thành các 'bài tập nhỏ' kiểu Duolingo, (3) Tạo chương trình '30 ngày Speed Reading Challenge' với thông báo hài hước và phần thưởng, (4) Học cách Blinkist tóm tắt sách để tạo nội dung 'Speed Review' — tóm tắt sách trong 15 phút, (5) Xây dựng cộng đồng học viên với bảng xếp hạng tốc độ đọc hàng tuần.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Speed Reading Việt Nam có thể: (1) Phát triển ứng dụng di động với tính năng streak, leaderboard và micro-transactions, (2) Thiết kế lại lộ trình học thành các 'bài tập nhỏ' kiểu Duolingo, (3) Tạo chương trình '30 ngày Speed Reading Challenge' với thông báo hài hước và phần thưởng, (4) Học cách Blinkist tóm tắt sách để tạo nội dung 'Speed Review' — tóm tắt sách trong 15 phút, (5) Xây dựng cộng đồng học viên với bảng xếp hạng tốc độ đọc hàng tuần.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 Duolingo Q2 2026 Earnings Report, Blinkist Official Blog, Duolingo Blog (Design Philosophy), Gamification Research 2026</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌅 Sáng — Thứ Sáu</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Duolingo Q2 2026 Earnings Report, Blinkist Official Blog, Duolingo Blog (Design Philosophy), Gamification Research 2026</span>
+                <span class="footer-tag">🌅 Sáng — Thứ Sáu</span>
             </div>
         </article>
         
@@ -92,9 +292,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

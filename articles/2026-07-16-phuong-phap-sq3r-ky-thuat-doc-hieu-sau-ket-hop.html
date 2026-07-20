@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎯 Phương Pháp SQ3R: Kỹ Thuật Đọc Hiểu Sâu Kết Hợp Speed Reading Được Nghiên Cứu Từ Thập Niên 1940 | Speed Reading Insights</title>
+    <title>Phương Pháp SQ3R: Kỹ Thuật Đọc Hiểu Sâu Kết Hợp Speed Reading Được Nghiên Cứu Từ Thập Niên 1940 | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/526/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,37 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌆 Thứ Năm, 16 tháng 07/2026</span>
-                    <span>📖 Francis P. Robinson - Effective Study (1946), Đại học Cornell, Đại học Ohio State</span>
+                    <span class="footer-tag">📖 Francis P. Robinson - Effective Study (1946), Đại học Cornell, Đại học Ohio State</span>
                 </div>
-                <h1 class="article-title">🎯 Phương Pháp SQ3R: Kỹ Thuật Đọc Hiểu Sâu Kết Hợp Speed Reading Được Nghiên Cứu Từ Thập Niên 1940</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">Phương Pháp SQ3R: Kỹ Thuật Đọc Hiểu Sâu Kết Hợp Speed Reading Được Nghiên Cứu Từ Thập Niên 1940</h1>
+                <div class="article-tags">
                     <span class="tag">bài học</span><span class="tag">học tập</span><span class="tag">speed reading</span><span class="tag">nghiên cứu</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Phương pháp SQ3R — viết tắt của Survey, Question, Read, Recite, Review — được phát triển bởi nhà tâm lý học giáo dục Francis P. Robinson tại Đại học Ohio State từ năm 1946. Mặc dù đã gần 80 năm tuổi, SQ3R vẫn là một trong những phương pháp đọc hiểu sâu hiệu quả nhất và đặc biệt phù hợp khi kết hợp với speed reading trong thời đại số.</p><p>5 bước của SQ3R hoạt động như sau: Bước 1 — Survey (Khảo sát): Dành 2-3 phút lướt qua toàn bộ tài liệu. Đọc tiêu đề, mục lục, tóm tắt, đoạn đầu và cuối mỗi chương, hình ảnh, biểu đồ. Mục tiêu là có một bức tranh tổng quan. Bước 2 — Question (Đặt câu hỏi): Chuyển mỗi tiêu đề thành một câu hỏi. Ví dụ: tiêu đề "Nguyên nhân của biến đổi khí hậu" → "Những nguyên nhân chính của biến đổi khí hậu là gì?" Điều này kích hoạt não bộ tìm kiếm câu trả lời. Bước 3 — Read (Đọc): Đọc kỹ để tìm câu trả lời cho các câu hỏi đã đặt. Đây là lúc áp dụng speed reading — đọc nhanh để tìm thông tin, dùng ngón tay dẫn đường, tránh đọc thầm. Bước 4 — Recite (Nhẩm lại): Đóng sách lại, nhẩm lại câu trả lời bằng lời nói của bạn. Ghi chép nhanh các ý chính. Bước 5 — Review (Ôn tập): Sau khi đọc xong toàn bộ, ôn lại các ghi chép và câu trả lời. Lên lịch ôn tập định kỳ.</p><p>Kết hợp SQ3R với speed reading tạo ra một quy trình đọc cực kỳ hiệu quả. Ví dụ: với một cuốn sách 200 trang, bạn có thể dành 10 phút Survey, 15 phút tạo Question, 90 phút Read (speed reading), 30 phút Recite, và 15 phút Review. Tổng cộng 2 giờ 40 phút cho một cuốn sách, thay vì 10-15 giờ đọc thông thường. Theo nghiên cứu của Đại học Cornell, sinh viên sử dụng SQ3R có khả năng hiểu và nhớ nội dung cao hơn 40% so với đọc thông thường.</p><p>SQ3R đặc biệt hiệu quả vì nó kết hợp nhiều nguyên tắc học tập đã được kiểm chứng: Survey kích hoạt prior knowledge; Question tạo ra sự tò mò và định hướng; Read kết hợp speed reading để tối ưu thời gian; Recite là active recall mạnh mẽ; Review là spaced repetition. Đây không chỉ là phương pháp đọc, mà là một hệ thống học tập toàn diện.</p><p>Một biến thể hiện đại của SQ3R là hệ thống SQ4R (thêm Reflect — suy ngẫm) và PQ4R (thêm Preview và Reflect). Trong thời đại AI, SQ3R còn có thể được hỗ trợ bởi các công cụ như ChatGPT để tạo câu hỏi tự động, hoặc NotebookLM để tóm tắt và tạo study guide. Tuy nhiên, giá trị cốt lõi của phương pháp — sự chủ động của người đọc — vẫn không thay đổi.</p><p>Ứng dụng cho Speed Reading: Speed Reading Vietnam có thể xây dựng khóa học "SQ3R Speed Reading" kết hợp kỹ thuật đọc nhanh với phương pháp đọc hiểu sâu. Mỗi buổi học có thể thực hành trên một tài liệu thực tế: Survey (5 phút), Question (5 phút), Speed Read (20 phút), Recite (10 phút), Review (5 phút). Học viên sẽ có thể đọc hiểu một cuốn sách kinh doanh 200 trang trong 2-3 giờ với comprehension trên 80%. Đây là kỹ năng cực kỳ giá trị cho dân văn phòng và sinh viên.</p>
+                <p>Phương pháp SQ3R — viết tắt của Survey, Question, Read, Recite, Review — được phát triển bởi nhà tâm lý học giáo dục <strong class="person">Francis P. Robinson</strong> tại Đại học Ohio State từ năm 1946. Mặc dù đã gần  tuổi, SQ3R vẫn là một trong những phương pháp đọc hiểu sâu hiệu quả nhất và đặc biệt phù hợp khi kết hợp với speed reading trong thời đại số.</p>
+<p>5 bước của SQ3R hoạt động như sau: Bước 1 — Survey (Khảo sát): Dành 2-"> lướt qua toàn bộ tài liệu. Đọc tiêu đề, mục lục, tóm tắt, đoạn đầu và cuối mỗi chương, hình ảnh, biểu đồ. Mục tiêu là có một bức tranh tổng quan. Bước 2 — Question (Đặt câu hỏi): Chuyển mỗi tiêu đề thành một câu hỏi. Ví dụ: tiêu đề "Nguyên nhân của biến đổi khí hậu" → "Những nguyên nhân chính của biến đổi khí hậu là gì?" Điều này kích hoạt não bộ tìm kiếm câu trả lời. Bước 3 — Read (Đọc): Đọc kỹ để tìm câu trả lời cho các câu hỏi đã đặt. Đây là lúc áp dụng speed reading — đọc nhanh để tìm thông tin, dùng ngón tay dẫn đường, tránh đọc thầm. Bước 4 — Recite (Nhẩm lại): Đóng sách lại, nhẩm lại câu trả lời bằng lời nói của bạn. Ghi chép nhanh các ý chính. Bước 5 — Review (Ôn tập): Sau khi đọc xong toàn bộ, ôn lại các ghi chép và câu trả lời. Lên lịch ôn tập định kỳ.</p>
+<p>Kết hợp SQ3R với speed reading tạo ra một quy trình đọc cực kỳ hiệu quả. Ví dụ: với một cuốn sách , bạn có thể dành  Survey,  tạo Question,  Read (speed reading),  Recite, và  Review. Tổng cộng   cho một cuốn sách, thay vì 10- đọc thông thường. Theo nghiên cứu của Đại học Cornell, sinh viên sử dụng SQ3R có khả năng hiểu và nhớ nội dung cao hơn  so với đọc thông thường.</p>
+<p>SQ3R đặc biệt hiệu quả vì nó kết hợp nhiều nguyên tắc học tập đã được kiểm chứng: Survey kích hoạt prior knowledge; Question tạo ra sự tò mò và định hướng; Read kết hợp speed reading để tối ưu thời gian; Recite là active recall mạnh mẽ; Review là spaced repetition. Đây không chỉ là phương pháp đọc, mà là một hệ thống học tập toàn diện.</p>
+<p>Một biến thể hiện đại của SQ3R là hệ thống SQ4R (thêm Reflect — suy ngẫm) và PQ4R (thêm Preview và Reflect). Trong thời đại AI, SQ3R còn có thể được hỗ trợ bởi các công cụ như ChatGPT để tạo câu hỏi tự động, hoặc NotebookLM để tóm tắt và tạo study guide. Tuy nhiên, giá trị cốt lõi của phương pháp — sự chủ động của người đọc — vẫn không thay đổi.</p>
+<p>Ứng dụng cho Speed Reading: Speed Reading Vietnam có thể xây dựng khóa học "SQ3R Speed Reading" kết hợp kỹ thuật đọc nhanh với phương pháp đọc hiểu sâu. Mỗi buổi học có thể thực hành trên một tài liệu thực tế: Survey (), Question (), Speed Read (), Recite (), Review (). Học viên sẽ có thể đọc hiểu một cuốn sách kinh doanh  trong 2- với comprehension trên . Đây là kỹ năng cực kỳ giá trị cho dân văn phòng và sinh viên.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Speed Reading Vietnam có thể thiết kế 'SQ3R Pro' — gói đào tạo chuyên sâu 8 buổi: (1) Buổi 1: Survey và kỹ thuật skimming; (2) Buổi 2: Question và tư duy phản biện; (3) Buổi 3-5: Speed Reading theo từng thể loại (sách kinh doanh, học thuật, văn học); (4) Buổi 6: Recite và note-taking; (5) Buổi 7: Review và long-term retention; (6) Buổi 8: Tích hợp AI và các công cụ hiện đại. Đây là sản phẩm cao cấp cho đối tượng doanh nhân và chuyên gia.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Speed Reading Vietnam có thể thiết kế 'SQ3R Pro' — gói đào tạo chuyên sâu 8 buổi: (1) Buổi 1: Survey và kỹ thuật skimming; (2) Buổi 2: Question và tư duy phản biện; (3) Buổi 3-5: Speed Reading theo từng thể loại (sách kinh doanh, học thuật, văn học); (4) Buổi 6: Recite và note-taking; (5) Buổi 7: Review và long-term retention; (6) Buổi 8: Tích hợp AI và các công cụ hiện đại. Đây là sản phẩm cao cấp cho đối tượng doanh nhân và chuyên gia.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 Francis P. Robinson - Effective Study (1946), Đại học Cornell, Đại học Ohio State</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌆 Tối — Thứ Năm</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Francis P. Robinson - Effective Study (1946), Đại học Cornell, Đại học Ohio State</span>
+                <span class="footer-tag">🌆 Tối — Thứ Năm</span>
             </div>
         </article>
         
@@ -92,9 +290,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

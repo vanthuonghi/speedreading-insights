@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Xu Hướng Học Tập 2026: AI Cá Nhân Hóa Việc Đọc — Mỗi Người Một Giáo Trình Riêng | Speed Reading Insights</title>
+    <title>Xu Hướng Học Tập 2026: AI Cá Nhân Hóa Việc Đọc — Mỗi Người Một Giáo Trình Riêng | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/903/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,41 @@
                         🤖 AI & Công nghệ
                     </span>
                     <span>🌅 Thứ Sáu, 17 tháng 07/2026</span>
-                    <span>📖 HolonIQ Global EdTech Report 2026, LinkedIn Learning 2026, VNIES 2026, Đại học Oxford Research 2026</span>
+                    <span class="footer-tag">📖 HolonIQ Global EdTech Report 2026, LinkedIn Learning 2026, VNIES 2026, Đại học Oxford Research 2026</span>
                 </div>
-                <h1 class="article-title">🔥 Xu Hướng Học Tập 2026: AI Cá Nhân Hóa Việc Đọc — Mỗi Người Một Giáo Trình Riêng</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">Xu Hướng Học Tập 2026: AI Cá Nhân Hóa Việc Đọc — Mỗi Người Một Giáo Trình Riêng</h1>
+                <div class="article-tags">
                     <span class="tag purple">xu hướng</span><span class="tag purple">học tập</span><span class="tag purple">ai</span><span class="tag purple">công nghệ</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Năm 2026 đánh dấu bước ngoặt trong giáo dục với sự bùng nổ của 'Personalized AI Learning' — học tập cá nhân hóa bằng trí tuệ nhân tạo. Không còn là khái niệm xa vời, AI đã trở thành 'gia sư cá nhân' cho hàng triệu người học trên toàn thế giới.</p><p>Theo báo cáo 'Global EdTech Trends 2026' của HolonIQ, thị trường EdTech toàn cầu đạt 404 tỷ USD vào năm 2026, tăng 16,3% so với năm 2025. Trong đó, phân khúc AI-powered learning tools chiếm 87 tỷ USD, tăng trưởng nóng nhất với 34% so với năm trước.</p><p>Các xu hướng chính tác động trực tiếp đến việc đọc và học tập:</p><p>1. AI Reading Assistants — ChatGPT-5, Gemini 2.0 và Claude 4 đều có khả năng tóm tắt sách, phân tích văn bản và trả lời câu hỏi về nội dung đã đọc. Một báo cáo từ Đại học Oxford cho thấy sinh viên sử dụng AI reading assistants tiết kiệm được 60% thời gian đọc tài liệu mà vẫn duy trì mức độ hiểu tương đương.</p><p>2. Microlearning 2.0 — Nội dung học được chia nhỏ thành các 'nano-bài học' 3-5 phút, được cá nhân hóa theo trình độ và sở thích của từng người. LinkedIn Learning báo cáo rằng 78% người dùng thích microlearning hơn các khóa học truyền thống.</p><p>3. Adaptive Reading Platforms — Các nền tảng như Readwise Reader, Matter và Omnivore đã tích hợp AI để tự động điều chỉnh độ khó của văn bản, đánh dấu các phần quan trọng và gợi ý tài liệu đọc tiếp theo dựa trên hành vi của người dùng.</p><p>4. Spaced Repetition + AI — Công cụ như Anki và RemNote kết hợp AI để tối ưu hóa lịch trình ôn tập, giúp người học nhớ tới 92% kiến thức sau 30 ngày (so với 23% khi không ôn tập).</p><p>5. Audio Learning — Sách nói và podcast tăng trưởng 28% năm 2026. ElevenLabs ra mắt tính năng 'Voice Cloning for Reading' — cho phép người dùng nghe bất kỳ văn bản nào bằng giọng của người nổi tiếng hoặc chính giọng của họ.</p><p>Tại Việt Nam, theo báo cáo từ Viện Nghiên cứu Giáo dục (VNIES), 62% học sinh, sinh viên đã sử dụng AI trong học tập, tăng gấp 3 lần so với năm 2024. Tuy nhiên, chỉ 15% được hướng dẫn sử dụng AI một cách hiệu quả, tạo ra khoảng trống lớn cho các trung tâm đào tạo kỹ năng học tập.</p><p>Speed Reading Việt Nam hoàn toàn có thể tận dụng xu hướng này bằng cách xây dựng nền tảng học tập kết hợp speed reading với AI — ví dụ: ứng dụng di động giúp người dùng đọc nhanh hơn, ghi nhớ lâu hơn và được cá nhân hóa theo năng lực từng người.</p>
+                <p>Năm 2026 đánh dấu bước ngoặt trong giáo dục với sự bùng nổ của 'Personalized AI Learning' — học tập cá nhân hóa bằng trí tuệ nhân tạo. Không còn là khái niệm xa vời, AI đã trở thành 'gia sư cá nhân' cho hàng triệu người học trên toàn thế giới.</p>
+<p>Theo báo cáo 'Global EdTech Trends 2026' của HolonIQ, thị trường EdTech toàn cầu đạt  USD vào năm 2026, tăng  so với năm 2025. Trong đó, phân khúc AI-powered learning tools chiếm  USD, tăng trưởng nóng nhất với  so với năm trước.</p>
+<h3 class="section-heading">Các xu hướng chính tác động trực tiếp đến việc đọc và học tập:</h3>
+<p>AI Reading Assistants — ChatGPT-5, Gemini 2.0 và Claude 4 đều có khả năng tóm tắt sách, phân tích văn bản và trả lời câu hỏi về nội dung đã đọc. Một báo cáo từ Đại học Oxford cho thấy sinh viên sử dụng AI reading assistants tiết kiệm được  thời gian đọc tài liệu mà vẫn duy trì mức độ hiểu tương đương.</p>
+<p>Microlearning 2.0 — Nội dung học được chia nhỏ thành các 'nano-bài học' 3-, được cá nhân hóa theo trình độ và sở thích của từng người. LinkedIn Learning báo cáo rằng  người dùng thích microlearning hơn các khóa học truyền thống.</p>
+<p>Adaptive Reading Platforms — Các nền tảng như Readwise Reader, Matter và Omnivore đã tích hợp AI để tự động điều chỉnh độ khó của văn bản, đánh dấu các phần quan trọng và gợi ý tài liệu đọc tiếp theo dựa trên hành vi của người dùng.</p>
+<p>Spaced Repetition + AI — Công cụ như Anki và RemNote kết hợp AI để tối ưu hóa lịch trình ôn tập, giúp người học nhớ tới  kiến thức sau  (so với  khi không ôn tập).</p>
+<p>Audio Learning — Sách nói và podcast tăng trưởng  năm 2026. ElevenLabs ra mắt tính năng 'Voice Cloning for Reading' — cho phép người dùng nghe bất kỳ văn bản nào bằng giọng của người nổi tiếng hoặc chính giọng của họ.</p>
+<p>Tại Việt Nam, theo báo cáo từ Viện Nghiên cứu Giáo dục (VNIES),  học sinh, sinh viên đã sử dụng AI trong học tập, tăng gấp 3 lần so với năm 2024. Tuy nhiên, chỉ  được hướng dẫn sử dụng AI một cách hiệu quả, tạo ra khoảng trống lớn cho các trung tâm đào tạo kỹ năng học tập.</p>
+<p>Speed Reading Việt Nam hoàn toàn có thể tận dụng xu hướng này bằng cách xây dựng nền tảng học tập kết hợp speed reading với AI — ví dụ: ứng dụng di động giúp người dùng đọc nhanh hơn, ghi nhớ lâu hơn và được cá nhân hóa theo năng lực từng người.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Speed Reading Việt Nam nên: (1) Phát triển ứng dụng/web app học speed reading kết hợp AI, (2) Tạo khóa học 'Speed Reading với AI' — dạy học viên cách kết hợp công cụ AI vào quy trình đọc, (3) Hợp tác với các nền tảng EdTech để phân phối nội dung, (4) Tổ chức webinar định kỳ về xu hướng công nghệ đọc để thu hút khách hàng mới.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Speed Reading Việt Nam nên: (1) Phát triển ứng dụng/web app học speed reading kết hợp AI, (2) Tạo khóa học 'Speed Reading với AI' — dạy học viên cách kết hợp công cụ AI vào quy trình đọc, (3) Hợp tác với các nền tảng EdTech để phân phối nội dung, (4) Tổ chức webinar định kỳ về xu hướng công nghệ đọc để thu hút khách hàng mới.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 HolonIQ Global EdTech Report 2026, LinkedIn Learning 2026, VNIES 2026, Đại học Oxford Research 2026</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌅 Sáng — Thứ Sáu</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 HolonIQ Global EdTech Report 2026, LinkedIn Learning 2026, VNIES 2026, Đại học Oxford Research 2026</span>
+                <span class="footer-tag">🌅 Sáng — Thứ Sáu</span>
             </div>
         </article>
         
@@ -92,9 +294,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

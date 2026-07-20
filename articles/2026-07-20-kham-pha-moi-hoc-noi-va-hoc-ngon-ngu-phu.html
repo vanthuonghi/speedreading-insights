@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🗣️ Khám Phá Mới: Học Nói Và Học Ngôn Ngữ Phụ Thuộc Vào Cảm Giác Nhiều Hơn Vận Động — Bài Học Cho Speed Reading | Speed Reading Insights</title>
+    <title>Khám Phá Mới: Học Nói Và Học Ngôn Ngữ Phụ Thuộc Vào Cảm Giác Nhiều Hơn Vận Động — Bài Học Cho Speed Reading | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/556/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,38 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌆 Thứ Hai, 20 tháng 07/2026</span>
-                    <span>📖 Đại học McGill & Trường Y Yale — PNAS (2026), DOI: 10.1073/pnas.2525468123. ScienceDaily, 23 June 2026</span>
+                    <span class="footer-tag">📖 Đại học McGill & Trường Y Yale — PNAS (2026), DOI: 10.1073/pnas.2525468123. ScienceDaily, 23 June 2026</span>
                 </div>
-                <h1 class="article-title">🗣️ Khám Phá Mới: Học Nói Và Học Ngôn Ngữ Phụ Thuộc Vào Cảm Giác Nhiều Hơn Vận Động — Bài Học Cho Speed Reading</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">Khám Phá Mới: Học Nói Và Học Ngôn Ngữ Phụ Thuộc Vào Cảm Giác Nhiều Hơn Vận Động — Bài Học Cho Speed Reading</h1>
+                <div class="article-tags">
                     <span class="tag pink">nghiên cứu</span><span class="tag pink">khoa học</span><span class="tag pink">não bộ</span><span class="tag pink">học tập</span><span class="tag pink">speed reading</span><span class="tag pink">bài học</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Một nghiên cứu đột phá từ Đại học McGill và Trường Y Yale (Mỹ) đã làm đảo lộn hiểu biết truyền thống về cách não bộ học nói. Công bố trên tạp chí Proceedings of the National Academy of Sciences (PNAS), nghiên cứu cho thấy việc học và ghi nhớ lời nói phụ thuộc nhiều hơn vào các vùng xử lý âm thanh và cảm giác (sensory systems) — chứ không phải các vùng vận động (motor areas) như giới khoa học từng tin tưởng trong nhiều thập kỷ.</p><p>'Khoa học thần kinh vận động-cảm giác (sensorimotor neuroscience) từ lâu đã tập trung vào các vùng vận động phía trước não như là tác nhân chính của vận động. Nghiên cứu này thay đổi hiểu biết đó bằng cách cho thấy việc học nói của con người mang bản chất cảm giác ở mức độ sâu rộng,' GS. David Ostry, giáo sư tâm lý học tại Đại học McGill, giải thích.</p><p>Để đi đến kết luận này, các nhà khoa học đã sử dụng một phương pháp thông minh: họ thay đổi giọng nói của người tham gia trong thời gian thực và phát lại qua tai nghe, khuyến khích họ điều chỉnh cách nói. Sau đó, họ sử dụng kích thích từ xuyên sọ (TMS) — một phương pháp kích thích não không xâm lấn — để tạm thời làm gián đoạn hoạt động ở ba vùng não quan trọng: vỏ não thính giác (auditory cortex), vỏ não cảm giác thân thể (somatosensory cortex) và vỏ não vận động (motor cortex).</p><p>Kết quả thật bất ngờ: khi hoạt động ở vỏ não thính giác hoặc vỏ não cảm giác thân thể bị gián đoạn, người tham gia cho thấy khả năng duy trì các kỹ năng nói mới học được kém hơn đáng kể. Ngược lại, làm gián đoạn vỏ não vận động hầu như không ảnh hưởng đến khả năng ghi nhớ. 'Nghiên cứu của chúng tôi thách thức giả định rằng các ký ức về lời nói mới chỉ dựa vào những thay đổi trong các vùng vận động của não,' TS. Nishant Rao từ Đại học Yale cho biết.</p><p>Phát hiện này có ý nghĩa sâu sắc đối với việc học ngoại ngữ, phục hồi chức năng sau đột quỵ và — quan trọng nhất đối với chúng ta — cách chúng ta học bất kỳ kỹ năng mới nào, bao gồm cả đọc nhanh. Nếu việc học nói — một kỹ năng vận động tinh vi — lại phụ thuộc nhiều vào cảm giác hơn là vận động, thì việc học đọc nhanh cũng có thể tuân theo nguyên tắc tương tự.</p><p>Điều này có nghĩa là khi bạn luyện đọc nhanh, thay vì chỉ tập trung vào chuyển động của mắt (yếu tố vận động), bạn nên tập trung vào việc cải thiện cách não bộ xử lý thông tin thị giác và thính giác (yếu tố cảm giác). Đọc to, nghe audio book trong khi đọc, và sử dụng nhiều giác quan cùng lúc có thể là chìa khóa để học đọc nhanh hiệu quả hơn.</p><p>Nghiên cứu này là một phần của nỗ lực lớn hơn nhằm hiểu cách tính dẻo thần kinh (plasticity) trong các hệ thống cảm giác của não đóng góp vào việc học tập và trí nhớ dài hạn. Các nghiên cứu trước đây của cùng nhóm về chuyển động tay và cánh tay cũng cho thấy kết quả tương tự: làm gián đoạn các vùng cảm giác của não đã can thiệp vào khả năng học và duy trì các kỹ năng vận động mới.</p>
+                <p>Một nghiên cứu đột phá từ Đại học McGill và Trường Y Yale (Mỹ) đã làm đảo lộn hiểu biết truyền thống về cách não bộ học nói. Công bố trên tạp chí Proceedings of the National Academy of Sciences (PNAS), nghiên cứu cho thấy việc học và ghi nhớ lời nói phụ thuộc nhiều hơn vào các vùng xử lý âm thanh và cảm giác (sensory systems) — chứ không phải các vùng vận động (motor areas) như giới khoa học từng tin tưởng trong nhiều thập kỷ.</p>
+<p>'Khoa học thần kinh vận động-cảm giác (sensorimotor neuroscience) từ lâu đã tập trung vào các vùng vận động phía trước não như là tác nhân chính của vận động. Nghiên cứu này thay đổi hiểu biết đó bằng cách cho thấy việc học nói của con người mang bản chất cảm giác ở mức độ sâu rộng,' GS. David Ostry, giáo sư tâm lý học tại Đại học McGill, giải thích.</p>
+<p>Để đi đến kết luận này, các nhà khoa học đã sử dụng một phương pháp thông minh: họ thay đổi giọng nói của người tham gia trong thời gian thực và phát lại qua tai nghe, khuyến khích họ điều chỉnh cách nói. Sau đó, họ sử dụng kích thích từ xuyên sọ (TMS) — một phương pháp kích thích não không xâm lấn — để tạm thời làm gián đoạn hoạt động ở ba vùng não quan trọng: vỏ não thính giác (auditory cortex), vỏ não cảm giác thân thể (somatosensory cortex) và vỏ não vận động (motor cortex).</p>
+<p>Kết quả thật bất ngờ: khi hoạt động ở vỏ não thính giác hoặc vỏ não cảm giác thân thể bị gián đoạn, người tham gia cho thấy khả năng duy trì các kỹ năng nói mới học được kém hơn đáng kể. Ngược lại, làm gián đoạn vỏ não vận động hầu như không ảnh hưởng đến khả năng ghi nhớ. 'Nghiên cứu của chúng tôi thách thức giả định rằng các ký ức về lời nói mới chỉ dựa vào những thay đổi trong các vùng vận động của não,' TS. Nishant Rao từ Đại học Yale cho biết.</p>
+<p>Phát hiện này có ý nghĩa sâu sắc đối với việc học ngoại ngữ, phục hồi chức năng sau đột quỵ và — quan trọng nhất đối với chúng ta — cách chúng ta học bất kỳ kỹ năng mới nào, bao gồm cả đọc nhanh. Nếu việc học nói — một kỹ năng vận động tinh vi — lại phụ thuộc nhiều vào cảm giác hơn là vận động, thì việc học đọc nhanh cũng có thể tuân theo nguyên tắc tương tự.</p>
+<p>Điều này có nghĩa là khi bạn luyện đọc nhanh, thay vì chỉ tập trung vào chuyển động của mắt (yếu tố vận động), bạn nên tập trung vào việc cải thiện cách não bộ xử lý thông tin thị giác và thính giác (yếu tố cảm giác). Đọc to, nghe audio book trong khi đọc, và sử dụng nhiều giác quan cùng lúc có thể là chìa khóa để học đọc nhanh hiệu quả hơn.</p>
+<p>Nghiên cứu này là một phần của nỗ lực lớn hơn nhằm hiểu cách tính dẻo thần kinh (plasticity) trong các hệ thống cảm giác của não đóng góp vào việc học tập và trí nhớ dài hạn. Các nghiên cứu trước đây của cùng nhóm về chuyển động tay và cánh tay cũng cho thấy kết quả tương tự: làm gián đoạn các vùng cảm giác của não đã can thiệp vào khả năng học và duy trì các kỹ năng vận động mới.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Speed Reading có thể áp dụng phát hiện này để thiết kế lại phương pháp giảng dạy: thay vì chỉ tập trung vào kỹ thuật mắt (chuyển động vận động), hãy thêm các bài tập 'đa giác quan' — đọc kết hợp nghe, đọc kết hợp ghi chép bằng tay, và đọc kết hợp nói to. Đây có thể trở thành USP (Unique Selling Proposition) của Speed Reading: 'Phương pháp đọc nhanh đa giác quan — dựa trên khoa học thần kinh mới nhất từ McGill và Yale.'</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Speed Reading có thể áp dụng phát hiện này để thiết kế lại phương pháp giảng dạy: thay vì chỉ tập trung vào kỹ thuật mắt (chuyển động vận động), hãy thêm các bài tập 'đa giác quan' — đọc kết hợp nghe, đọc kết hợp ghi chép bằng tay, và đọc kết hợp nói to. Đây có thể trở thành USP (Unique Selling Proposition) của Speed Reading: 'Phương pháp đọc nhanh đa giác quan — dựa trên khoa học thần kinh mới nhất từ McGill và Yale.'</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 Đại học McGill & Trường Y Yale — PNAS (2026), DOI: 10.1073/pnas.2525468123. ScienceDaily, 23 June 2026</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌆 Tối — Thứ Hai</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Đại học McGill & Trường Y Yale — PNAS (2026), DOI: 10.1073/pnas.2525468123. ScienceDaily, 23 June 2026</span>
+                <span class="footer-tag">🌆 Tối — Thứ Hai</span>
             </div>
         </article>
         
@@ -92,9 +291,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

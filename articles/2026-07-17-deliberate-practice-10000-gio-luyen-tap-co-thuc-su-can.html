@@ -7,54 +7,242 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/761/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,35 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌆 Thứ Sáu, 17 tháng 07/2026</span>
-                    <span>📖 Anders Ericsson & Robert Pool, Peak: Secrets from the New Science of Expertise (2016); Carnegie Mellon University Study 2023 – Deliberate Practice in Reading Speed; Malcolm Gladwell, Outliers (2008)</span>
+                    <span class="footer-tag">📖 Anders Ericsson & Robert Pool, Peak: Secrets from the New Science of Expertise (2016); Carnegie Mellon University Study 2023 – Deliberate Practice in Reading Speed; Malcolm Gladwell, Outliers (2008)</span>
                 </div>
                 <h1 class="article-title">Deliberate Practice – 10.000 Giờ Luyện Tập Có Thực Sự Cần Thiết Để Đọc Nhanh?</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div class="article-tags">
                     <span class="tag pink">bài học</span><span class="tag pink">khoa học</span><span class="tag pink">speed reading</span><span class="tag pink">phát triển</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Khái niệm '10,000 giờ luyện tập để thành chuyên gia' của Malcolm Gladwell trong cuốn Outliers đã trở nên phổ biến, nhưng ít người hiểu đúng về bản chất của deliberate practice – luyện tập có chủ đích. Nhà tâm lý học Anders Ericsson, người đặt nền móng cho khái niệm này, nhấn mạnh rằng không phải bất kỳ sự luyện tập nào cũng mang lại kết quả. Chỉ có deliberate practice – luyện tập có mục tiêu, có phản hồi, có điều chỉnh liên tục – mới tạo ra sự khác biệt.</p><p>Ericsson, giáo sư tại Đại học Florida State, đã dành 30 năm nghiên cứu về các chuyên gia đỉnh cao trong nhiều lĩnh vực, từ vận động viên cờ vua, nghệ sĩ violin đến vận động viên thể thao. Kết luận của ông: 'Không có bằng chứng nào cho thấy tài năng bẩm sinh quyết định thành công. Thay vào đó, deliberate practice là yếu tố dự báo mạnh nhất.' Tuy nhiên, ông cũng cảnh báo rằng con số 10,000 giờ chỉ là trung bình thống kê, không phải quy tắc cứng nhắc. Một số người có thể đạt trình độ chuyên gia sau 3,000 giờ, trong khi người khác cần 20,000 giờ.</p><p>Áp dụng deliberate practice vào speed reading, các nghiên cứu cho thấy kết quả ấn tượng. Một thí nghiệm tại Đại học Carnegie Mellon năm 2023 chia 100 người tham gia thành 2 nhóm: nhóm đọc thông thường và nhóm áp dụng deliberate practice (đặt mục tiêu tốc độ cụ thể, đo lường từng buổi, phân tích lỗi, điều chỉnh kỹ thuật). Sau 12 tuần, nhóm deliberate practice cải thiện tốc độ đọc trung bình 82% (từ 240 lên 437 từ/phút) so với chỉ 15% ở nhóm đọc thông thường. Khả năng hiểu văn bản ở nhóm deliberate practice thậm chí còn tăng 12%.</p><p>Các yếu tố cốt lõi của deliberate practice trong speed reading gồm: (1) Mục tiêu cụ thể – 'đọc 300 từ/phút với độ hiểu 80%', (2) Phản hồi tức thời – sử dụng phần mềm đo tốc độ và comprehension test, (3) Vùng khó vừa phải – tăng dần tốc độ, không quá sức nhưng cũng không quá dễ, (4) Sửa lỗi có hệ thống – ghi lại lỗi subvocalization, regression, hay fixation, (5) Luyện tập thường xuyên – tối thiểu 20 phút/ngày, 5 ngày/tuần. Đây là khung sườn khoa học mà bất kỳ ai muốn đọc nhanh cũng cần áp dụng.</p>
+                <p>Khái niệm ' luyện tập để thành chuyên gia' của <strong class="person">Malcolm Gladwell</strong> trong cuốn Outliers đã trở nên phổ biến, nhưng ít người hiểu đúng về bản chất của deliberate practice – luyện tập có chủ đích. Nhà tâm lý học <strong class="person">Anders Ericsson</strong>, người đặt nền móng cho khái niệm này, nhấn mạnh rằng không phải bất kỳ sự luyện tập nào cũng mang lại kết quả. Chỉ có deliberate practice – luyện tập có mục tiêu, có phản hồi, có điều chỉnh liên tục – mới tạo ra sự khác biệt.</p>
+<p>Ericsson, giáo sư tại Đại học Florida State, đã dành  nghiên cứu về các chuyên gia đỉnh cao trong nhiều lĩnh vực, từ vận động viên cờ vua, nghệ sĩ violin đến vận động viên thể thao. Kết luận của ông: 'Không có bằng chứng nào cho thấy tài năng bẩm sinh quyết định thành công. Thay vào đó, deliberate practice là yếu tố dự báo mạnh nhất.' Tuy nhiên, ông cũng cảnh báo rằng con số  chỉ là trung bình thống kê, không phải quy tắc cứng nhắc. Một số người có thể đạt trình độ chuyên gia sau , trong khi người khác cần .</p>
+<p>Áp dụng deliberate practice vào speed reading, các nghiên cứu cho thấy kết quả ấn tượng. Một thí nghiệm tại Đại học Carnegie Mellon năm 2023 chia  tham gia thành 2 nhóm: nhóm đọc thông thường và nhóm áp dụng deliberate practice (đặt mục tiêu tốc độ cụ thể, đo lường từng buổi, phân tích lỗi, điều chỉnh kỹ thuật). Sau 12 tuần, nhóm deliberate practice cải thiện tốc độ đọc trung bình  (từ 240 lên 437 từ/phút) so với chỉ  ở nhóm đọc thông thường. Khả năng hiểu văn bản ở nhóm deliberate practice thậm chí còn tăng .</p>
+<p>Các yếu tố cốt lõi của deliberate practice trong speed reading gồm: (1) Mục tiêu cụ thể – 'đọc 300 từ/phút với độ hiểu ', (2) Phản hồi tức thời – sử dụng phần mềm đo tốc độ và comprehension test, (3) Vùng khó vừa phải – tăng dần tốc độ, không quá sức nhưng cũng không quá dễ, (4) Sửa lỗi có hệ thống – ghi lại lỗi subvocalization, regression, hay fixation, (5) Luyện tập thường xuyên – tối thiểu /ngày, /tuần. Đây là khung sườn khoa học mà bất kỳ ai muốn đọc nhanh cũng cần áp dụng.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Đây là nền tảng lý thuyết vững chắc để Speed Reading Việt Nam thiết kế chương trình đào tạo dựa trên deliberate practice. Thay vì hứa hẹn kết quả 'thần kỳ', hãy xây dựng lộ trình 12 tuần có đo lường, có feedback, có điều chỉnh. Mỗi buổi học: đặt mục tiêu tốc độ → đọc thử → comprehension test → phân tích → điều chỉnh kỹ thuật. Đây là phương pháp đã được kiểm chứng, tạo độ tin cậy cho thương hiệu.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Đây là nền tảng lý thuyết vững chắc để Speed Reading Việt Nam thiết kế chương trình đào tạo dựa trên deliberate practice. Thay vì hứa hẹn kết quả 'thần kỳ', hãy xây dựng lộ trình 12 tuần có đo lường, có feedback, có điều chỉnh. Mỗi buổi học: đặt mục tiêu tốc độ → đọc thử → comprehension test → phân tích → điều chỉnh kỹ thuật. Đây là phương pháp đã được kiểm chứng, tạo độ tin cậy cho thương hiệu.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 Anders Ericsson & Robert Pool, Peak: Secrets from the New Science of Expertise (2016); Carnegie Mellon University Study 2023 – Deliberate Practice in Reading Speed; Malcolm Gladwell, Outliers (2008)</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌆 Tối — Thứ Sáu</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Anders Ericsson & Robert Pool, Peak: Secrets from the New Science of Expertise (2016); Carnegie Mellon University Study 2023 – Deliberate Practice in Reading Speed; Malcolm Gladwell, Outliers (2008)</span>
+                <span class="footer-tag">🌆 Tối — Thứ Sáu</span>
             </div>
         </article>
         
@@ -92,9 +288,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

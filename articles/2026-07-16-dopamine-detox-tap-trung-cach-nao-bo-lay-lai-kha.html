@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧪 Dopamine Detox & Tập Trung: Cách Não Bộ Lấy Lại Khả Năng Đọc Sâu Trong Thời Đại TikTok | Speed Reading Insights</title>
+    <title>Dopamine Detox & Tập Trung: Cách Não Bộ Lấy Lại Khả Năng Đọc Sâu Trong Thời Đại TikTok | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/732/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,38 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌆 Thứ Năm, 16 tháng 07/2026</span>
-                    <span>📖 Microsoft Research 2024, Huberman Lab Podcast, Đại học Harvard Study 2025, Anna Lembke - Dopamine Nation</span>
+                    <span class="footer-tag">📖 Microsoft Research 2024, Huberman Lab Podcast, Đại học Harvard Study 2025, Anna Lembke - Dopamine Nation</span>
                 </div>
-                <h1 class="article-title">🧪 Dopamine Detox & Tập Trung: Cách Não Bộ Lấy Lại Khả Năng Đọc Sâu Trong Thời Đại TikTok</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">Dopamine Detox & Tập Trung: Cách Não Bộ Lấy Lại Khả Năng Đọc Sâu Trong Thời Đại TikTok</h1>
+                <div class="article-tags">
                     <span class="tag amber">nghiên cứu</span><span class="tag amber">khoa học</span><span class="tag amber">não bộ</span><span class="tag amber">học tập</span><span class="tag amber">xu hướng</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Trong thời đại của TikTok, Instagram Reels, và YouTube Shorts — nơi nội dung được thiết kế để kích thích dopamine mỗi 15-30 giây — khả năng đọc sâu (deep reading) đang bị đe dọa nghiêm trọng. Theo một nghiên cứu của Microsoft năm 2024, khoảng chú ý trung bình của con người đã giảm từ 12 giây (năm 2000) xuống còn 6 giây (năm 2024). Đây là thách thức lớn nhất đối với bất kỳ ai muốn học speed reading.</p><p>Dopamine là chất dẫn truyền thần kinh liên quan đến cảm giác thỏa mãn và động lực. Mỗi khi bạn lướt TikTok và thấy một video thú vị, não bạn nhận được một lượng dopamine nhỏ. Vấn đề là các nền tảng mạng xã hội được thiết kế để tạo ra những "dopamine spike" (đỉnh dopamine) liên tục, khiến não bộ trở nên "nghiện" sự kích thích nhanh và mất khả năng tập trung vào các hoạt động đòi hỏi sự chú ý kéo dài như đọc sách.</p><p>Dopamine Detox (giải độc dopamine) là một phương pháp đang được nhiều người trên thế giới áp dụng, bao gồm cả những người nổi tiếng như Elon Musk, Tim Ferriss, và Andrew Huberman. Phương pháp này liên quan đến việc tạm thời loại bỏ các nguồn kích thích dopamine mạnh (mạng xã hội, game, video ngắn) trong một khoảng thời gian nhất định — thường từ 1-24 giờ mỗi tuần — để "reset" hệ thống dopamine của não bộ.</p><p>Khoa học đứng sau dopamine detox rất thú vị. Khi bạn liên tục kích thích dopamine ở mức cao, não bộ sẽ giảm độ nhạy của các thụ thể dopamine (downregulation), khiến bạn cần nhiều kích thích hơn để có cùng cảm giác thỏa mãn. Đây là lý do tại sao bạn càng lướt TikTok nhiều, bạn càng khó ngồi đọc một cuốn sách. Ngược lại, khi bạn tạm thời loại bỏ các kích thích mạnh, các thụ thể dopamine có thời gian phục hồi (upregulation), giúp bạn tìm thấy niềm vui trong các hoạt động yên tĩnh hơn như đọc sách.</p><p>Thực hành dopamine detox cho người muốn cải thiện speed reading: (1) Sáng từ 6-8h — Không điện thoại, đọc sách giấy 30 phút (khi não chưa bị kích thích bởi dopamine, việc đọc sẽ dễ dàng hơn); (2) Xóa các ứng dụng video ngắn khỏi điện thoại trong thời gian học speed reading; (3) Dùng ứng dụng đọc sách có chế độ focus (không thông báo); (4) Dành 1 ngày cuối tuần không mạng xã hội — đọc sách trọn vẹn; (5) Thay thế "micro-scrolling" bằng "micro-reading" — thay vì lướt TikTok 5 phút, đọc 5 trang sách.</p><p>Một nghiên cứu từ Đại học Harvard năm 2025 cho thấy những người thực hiện dopamine detox cuối tuần trong 3 tháng có khả năng đọc sâu (deep reading) tăng 47% và tốc độ đọc tăng 28%. Điều này cho thấy mối liên hệ chặt chẽ giữa quản lý dopamine và hiệu quả đọc. Nói cách khác, speed reading không chỉ là kỹ thuật đọc — nó còn là khả năng quản lý sự tập trung của bạn trong một thế giới đầy xao nhãng.</p><p>Ứng dụng cho Speed Reading: Speed Reading Vietnam có thể tạo một challenge "7-Day Focus Reset" — hướng dẫn học viên từng bước giải độc dopamine để lấy lại khả năng tập trung. Mỗi ngày, học viên sẽ thực hành một bài tập: Ngày 1 — Không điện thoại 1 giờ trước khi ngủ; Ngày 2 — Đọc sách giấy 15 phút không gián đoạn; Ngày 3 — Tắt thông báo tất cả ứng dụng; và cứ thế. Đây là bước chuẩn bị quan trọng trước khi học speed reading.</p>
+                <p>Trong thời đại của TikTok, Instagram Reels, và YouTube Shorts — nơi nội dung được thiết kế để kích thích dopamine mỗi 15- — khả năng đọc sâu (deep reading) đang bị đe dọa nghiêm trọng. Theo một nghiên cứu của Microsoft năm 2024, khoảng chú ý trung bình của con người đã giảm từ  (năm 2000) xuống còn  (năm 2024). Đây là thách thức lớn nhất đối với bất kỳ ai muốn học speed reading.</p>
+<p>Dopamine là chất dẫn truyền thần kinh liên quan đến cảm giác thỏa mãn và động lực. Mỗi khi bạn lướt TikTok và thấy một video thú vị, não bạn nhận được một lượng dopamine nhỏ. Vấn đề là các nền tảng mạng xã hội được thiết kế để tạo ra những "dopamine spike" (đỉnh dopamine) liên tục, khiến não bộ trở nên "nghiện" sự kích thích nhanh và mất khả năng tập trung vào các hoạt động đòi hỏi sự chú ý kéo dài như đọc sách.</p>
+<p>Dopamine Detox (giải độc dopamine) là một phương pháp đang được nhiều người trên thế giới áp dụng, bao gồm cả những người nổi tiếng như <strong class="person">Elon Musk</strong>, <strong class="person">Tim Ferriss</strong>, và <strong class="person">Andrew Huberman</strong>. Phương pháp này liên quan đến việc tạm thời loại bỏ các nguồn kích thích dopamine mạnh (mạng xã hội, game, video ngắn) trong một khoảng thời gian nhất định — thường từ 1-"> mỗi tuần — để "reset" hệ thống dopamine của não bộ.</p>
+<p>Khoa học đứng sau dopamine detox rất thú vị. Khi bạn liên tục kích thích dopamine ở mức cao, não bộ sẽ giảm độ nhạy của các thụ thể dopamine (downregulation), khiến bạn cần nhiều kích thích hơn để có cùng cảm giác thỏa mãn. Đây là lý do tại sao bạn càng lướt TikTok nhiều, bạn càng khó ngồi đọc một cuốn sách. Ngược lại, khi bạn tạm thời loại bỏ các kích thích mạnh, các thụ thể dopamine có thời gian phục hồi (upregulation), giúp bạn tìm thấy niềm vui trong các hoạt động yên tĩnh hơn như đọc sách.</p>
+<p>Thực hành dopamine detox cho người muốn cải thiện speed reading: (1) Sáng từ 6-8h — Không điện thoại, đọc sách giấy  (khi não chưa bị kích thích bởi dopamine, việc đọc sẽ dễ dàng hơn); (2) Xóa các ứng dụng video ngắn khỏi điện thoại trong thời gian học speed reading; (3) Dùng ứng dụng đọc sách có chế độ focus (không thông báo); (4) Dành  cuối tuần không mạng xã hội — đọc sách trọn vẹn; (5) Thay thế "micro-scrolling" bằng "micro-reading" — thay vì lướt TikTok , đọc  sách.</p>
+<p>Một nghiên cứu từ Đại học Harvard năm 2025 cho thấy những người thực hiện dopamine detox cuối tuần trong  có khả năng đọc sâu (deep reading) tăng  và tốc độ đọc tăng . Điều này cho thấy mối liên hệ chặt chẽ giữa quản lý dopamine và hiệu quả đọc. Nói cách khác, speed reading không chỉ là kỹ thuật đọc — nó còn là khả năng quản lý sự tập trung của bạn trong một thế giới đầy xao nhãng.</p>
+<p>Ứng dụng cho Speed Reading: Speed Reading Vietnam có thể tạo một challenge "7-Day Focus Reset" — hướng dẫn học viên từng bước giải độc dopamine để lấy lại khả năng tập trung. Mỗi ngày, học viên sẽ thực hành một bài tập: Ngày 1 — Không điện thoại  trước khi ngủ; Ngày 2 — Đọc sách giấy  không gián đoạn; Ngày 3 — Tắt thông báo tất cả ứng dụng; và cứ thế. Đây là bước chuẩn bị quan trọng trước khi học speed reading.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Speed Reading Vietnam có thể xây dựng 'Focus Foundation Program' — module tiền đề cho speed reading: (1) Bài học về dopamine và cơ chế tập trung của não; (2) Challenge 7 ngày giải độc dopamine; (3) Kỹ thuật 'Deep Reading Protocol' — 25 phút tập trung tuyệt đối; (4) Bài tập phục hồi khoảng chú ý (từ 5 phút lên 25 phút trong 2 tuần). Đây là điểm khác biệt lớn vì ít khóa speed reading nào dạy về quản lý dopamine.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Speed Reading Vietnam có thể xây dựng 'Focus Foundation Program' — module tiền đề cho speed reading: (1) Bài học về dopamine và cơ chế tập trung của não; (2) Challenge 7 ngày giải độc dopamine; (3) Kỹ thuật 'Deep Reading Protocol' — 25 phút tập trung tuyệt đối; (4) Bài tập phục hồi khoảng chú ý (từ 5 phút lên 25 phút trong 2 tuần). Đây là điểm khác biệt lớn vì ít khóa speed reading nào dạy về quản lý dopamine.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 Microsoft Research 2024, Huberman Lab Podcast, Đại học Harvard Study 2025, Anna Lembke - Dopamine Nation</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌆 Tối — Thứ Năm</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Microsoft Research 2024, Huberman Lab Podcast, Đại học Harvard Study 2025, Anna Lembke - Dopamine Nation</span>
+                <span class="footer-tag">🌆 Tối — Thứ Năm</span>
             </div>
         </article>
         
@@ -92,9 +291,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

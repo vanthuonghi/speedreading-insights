@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 "Atomic Habits" — James Clear: Sức Mạnh Của Thói Quen Đọc Sách 1% Mỗi Ngày | Speed Reading Insights</title>
+    <title>"Atomic Habits" — James Clear: Sức Mạnh Của Thói Quen Đọc Sách 1% Mỗi Ngày | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/556/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,38 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌆 Thứ Năm, 16 tháng 07/2026</span>
-                    <span>📖 James Clear - Atomic Habits (2018), Amazon Best Sellers, Clear's Blog 2026</span>
+                    <span class="footer-tag">📖 James Clear - Atomic Habits (2018), Amazon Best Sellers, Clear's Blog 2026</span>
                 </div>
-                <h1 class="article-title">📚 "Atomic Habits" — James Clear: Sức Mạnh Của Thói Quen Đọc Sách 1% Mỗi Ngày</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">"Atomic Habits" — James Clear: Sức Mạnh Của Thói Quen Đọc Sách 1% Mỗi Ngày</h1>
+                <div class="article-tags">
                     <span class="tag amber">sách</span><span class="tag amber">bài học</span><span class="tag amber">học tập</span><span class="tag amber">phát triển</span><span class="tag amber">speed reading</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Cuốn sách "Atomic Habits" (Thói quen nguyên tử) của James Clear đã bán được hơn 15 triệu bản trên toàn thế giới và được dịch ra hơn 50 ngôn ngữ. Tại Việt Nam, sách của Clear cũng nằm trong top best-seller nhiều năm liền. Nhưng ít ai biết rằng những nguyên tắc trong "Atomic Habits" có thể được áp dụng một cách hoàn hảo để xây dựng thói quen đọc sách hàng ngày — điều kiện tiên quyết để thành thạo speed reading.</p><p>Nguyên lý cốt lõi của Clear rất đơn giản: Cải thiện 1% mỗi ngày. Nếu bạn chỉ đọc nhanh hơn 1% mỗi ngày, sau 1 năm bạn sẽ đọc nhanh hơn 3.700% so với lúc bắt đầu. Công thức này dựa trên sức mạnh của lãi kép (compound interest) trong thói quen — mỗi cải thiện nhỏ tưởng chừng không đáng kể nhưng tích lũy theo thời gian sẽ tạo ra sự khác biệt to lớn.</p><p>Clear đưa ra 4 quy luật để xây dựng thói quen tốt: (1) Làm cho nó rõ ràng (Make it obvious) — Đặt sách ở nơi dễ thấy nhất trong nhà; (2) Làm cho nó hấp dẫn (Make it attractive) — Kết hợp đọc sách với một thú vui khác như nghe nhạc nhẹ; (3) Làm cho nó dễ dàng (Make it easy) — Chỉ cần đọc 2 trang mỗi ngày, không cần nhiều hơn; (4) Làm cho nó thỏa mãn (Make it satisfying) — Track số trang/ngày và tự thưởng khi đạt mục tiêu.</p><p>Áp dụng vào speed reading, một lộ trình "Atomic Habits for Speed Reading" có thể như sau: Tuần 1 — Đọc 5 phút mỗi ngày với tốc độ thoải mái (xây dựng thói quen). Tuần 2 — Đọc 10 phút mỗi ngày, áp dụng một kỹ thuật speed reading đơn giản (dùng tay dẫn đường). Tuần 3 — Đọc 15 phút mỗi ngày, kết hợp đo tốc độ và comprehension. Tuần 4 — Đọc 20 phút mỗi ngày, tập trung vào giảm subvocalization. Sau 3 tháng, học viên sẽ có thói quen đọc 30 phút mỗi ngày với tốc độ gấp 2-3 lần ban đầu.</p><p>Theo Clear, chìa khóa để duy trì thói quen không phải là ý chí hay động lực, mà là thiết kế môi trường. Ông nói: "Bạn không cần phải kỷ luật hơn, bạn chỉ cần thiết kế môi trường tốt hơn." Đối với việc đọc, điều này có nghĩa là: tắt thông báo điện thoại, tạo góc đọc riêng biệt, luôn có sẵn sách trên bàn làm việc, và sử dụng ứng dụng đọc sách thay vì mạng xã hội.</p><p>Một trong những kỹ thuật nổi tiếng nhất của Clear là "Habit Stacking" (Xếp chồng thói quen) — gắn thói quen mới vào một thói quen hiện có. Ví dụ: "Sau khi uống cà phê sáng, tôi sẽ đọc 10 trang sách." Kỹ thuật này cực kỳ hiệu quả cho việc xây dựng thói quen đọc hàng ngày, đặc biệt là khi kết hợp với speed reading — bạn có thể đọc xong 10 trang trong 5-7 phút và cảm thấy thành tựu.</p><p>Ứng dụng cho Speed Reading: Speed Reading Vietnam có thể thiết kế "30-Day Atomic Reading Challenge" dựa trên nguyên tắc của James Clear. Ngày 1: Chọn một cuốn sách và đặt nó ở nơi dễ thấy. Ngày 2: Đọc 2 trang. Ngày 3: Đọc 3 trang, dùng ngón tay dẫn đường. Cứ thế tăng dần. Sau 30 ngày, học viên không chỉ đọc nhanh hơn mà còn có thói quen đọc mạnh mẽ. Đây là cách tạo ra sự thay đổi bền vững, không chỉ là một khóa học ngắn hạn.</p>
+                <p>Cuốn sách "Atomic Habits" (Thói quen nguyên tử) của <strong class="person">James Clear</strong> đã bán được hơn "> bản trên toàn thế giới và được dịch ra hơn 50 ngôn ngữ. Tại Việt Nam, sách của Clear cũng nằm trong top best-seller nhiều năm liền. Nhưng ít ai biết rằng những nguyên tắc trong "Atomic Habits" có thể được áp dụng một cách hoàn hảo để xây dựng thói quen đọc sách hàng ngày — điều kiện tiên quyết để thành thạo speed reading.</p>
+<p>Nguyên lý cốt lõi của Clear rất đơn giản: Cải thiện  mỗi ngày. Nếu bạn chỉ đọc nhanh hơn  mỗi ngày, sau  bạn sẽ đọc nhanh hơn  so với lúc bắt đầu. Công thức này dựa trên sức mạnh của lãi kép (compound interest) trong thói quen — mỗi cải thiện nhỏ tưởng chừng không đáng kể nhưng tích lũy theo thời gian sẽ tạo ra sự khác biệt to lớn.</p>
+<p>Clear đưa ra 4 quy luật để xây dựng thói quen tốt: (1) Làm cho nó rõ ràng (Make it obvious) — Đặt sách ở nơi dễ thấy nhất trong nhà; (2) Làm cho nó hấp dẫn (Make it attractive) — Kết hợp đọc sách với một thú vui khác như nghe nhạc nhẹ; (3) Làm cho nó dễ dàng (Make it easy) — Chỉ cần đọc  mỗi ngày, không cần nhiều hơn; (4) Làm cho nó thỏa mãn (Make it satisfying) — Track số trang/ngày và tự thưởng khi đạt mục tiêu.</p>
+<p>Áp dụng vào speed reading, một lộ trình "Atomic Habits for Speed Reading" có thể như sau: Tuần 1 — Đọc  mỗi ngày với tốc độ thoải mái (xây dựng thói quen). Tuần 2 — Đọc  mỗi ngày, áp dụng một kỹ thuật speed reading đơn giản (dùng tay dẫn đường). Tuần 3 — Đọc  mỗi ngày, kết hợp đo tốc độ và comprehension. Tuần 4 — Đọc  mỗi ngày, tập trung vào giảm subvocalization. Sau , học viên sẽ có thói quen đọc  mỗi ngày với tốc độ gấp 2-3 lần ban đầu.</p>
+<p>Theo Clear, chìa khóa để duy trì thói quen không phải là ý chí hay động lực, mà là thiết kế môi trường. Ông nói: "Bạn không cần phải kỷ luật hơn, bạn chỉ cần thiết kế môi trường tốt hơn." Đối với việc đọc, điều này có nghĩa là: tắt thông báo điện thoại, tạo góc đọc riêng biệt, luôn có sẵn sách trên bàn làm việc, và sử dụng ứng dụng đọc sách thay vì mạng xã hội.</p>
+<p>Một trong những kỹ thuật nổi tiếng nhất của Clear là "Habit Stacking" (Xếp chồng thói quen) — gắn thói quen mới vào một thói quen hiện có. Ví dụ: "Sau khi uống cà phê sáng, tôi sẽ đọc stat"> sách." Kỹ thuật này cực kỳ hiệu quả cho việc xây dựng thói quen đọc hàng ngày, đặc biệt là khi kết hợp với speed reading — bạn có thể đọc xong  trong 5- và cảm thấy thành tựu.</p>
+<p>Ứng dụng cho Speed Reading: Speed Reading Vietnam có thể thiết kế "30-Day Atomic Reading Challenge" dựa trên nguyên tắc của <strong class="person">James Clear</strong>. Ngày 1: Chọn một cuốn sách và đặt nó ở nơi dễ thấy. Ngày 2: Đọc . Ngày 3: Đọc , dùng ngón tay dẫn đường. Cứ thế tăng dần. Sau , học viên không chỉ đọc nhanh hơn mà còn có thói quen đọc mạnh mẽ. Đây là cách tạo ra sự thay đổi bền vững, không chỉ là một khóa học ngắn hạn.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Speed Reading Vietnam có thể triển khai 'Atomic Reading Program' — khóa 30 ngày: (1) Tuần 1: Xây dựng thói quen (5 phút/ngày); (2) Tuần 2: Kỹ thuật cơ bản (10 phút/ngày + hand pacing); (3) Tuần 3: Tăng tốc (15 phút/ngày + comprehension test); (4) Tuần 4: Tối ưu hóa (20 phút/ngày + loại bỏ subvocalization). Mỗi ngày chỉ cần 5-20 phút — phù hợp với người bận rộn. Đây là sản phẩm online dễ scale.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Speed Reading Vietnam có thể triển khai 'Atomic Reading Program' — khóa 30 ngày: (1) Tuần 1: Xây dựng thói quen (5 phút/ngày); (2) Tuần 2: Kỹ thuật cơ bản (10 phút/ngày + hand pacing); (3) Tuần 3: Tăng tốc (15 phút/ngày + comprehension test); (4) Tuần 4: Tối ưu hóa (20 phút/ngày + loại bỏ subvocalization). Mỗi ngày chỉ cần 5-20 phút — phù hợp với người bận rộn. Đây là sản phẩm online dễ scale.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 James Clear - Atomic Habits (2018), Amazon Best Sellers, Clear's Blog 2026</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌆 Tối — Thứ Năm</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 James Clear - Atomic Habits (2018), Amazon Best Sellers, Clear's Blog 2026</span>
+                <span class="footer-tag">🌆 Tối — Thứ Năm</span>
             </div>
         </article>
         
@@ -92,9 +291,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

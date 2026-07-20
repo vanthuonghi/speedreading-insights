@@ -1,1 +1,20 @@
-{}
+{
+  "nguyenvana@example.com_remind_1h": {
+    "step": "remind_1h",
+    "email": "nguyenvana@example.com",
+    "sent_at": "2026-07-20T18:00:20.430728",
+    "status": "skipped"
+  },
+  "nguyenvana@example.com_remind_10m": {
+    "step": "remind_10m",
+    "email": "nguyenvana@example.com",
+    "sent_at": "2026-07-20T19:50:22.675814",
+    "status": "skipped"
+  },
+  "nguyenvana@example.com_thanks_replay": {
+    "step": "thanks_replay",
+    "email": "nguyenvana@example.com",
+    "sent_at": "2026-07-20T21:30:21.290813",
+    "status": "skipped"
+  }
+}

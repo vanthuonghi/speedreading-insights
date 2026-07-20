@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎵 Học Nhạc Cụ Ở Tuổi 70: Cách Đơn Giản Giúp Bảo Vệ Trí Nhớ Khi Về Già — Nghiên Cứu 4 Năm Từ Nhật Bản | Speed Reading Insights</title>
+    <title>Học Nhạc Cụ Ở Tuổi 70: Cách Đơn Giản Giúp Bảo Vệ Trí Nhớ Khi Về Già — Nghiên Cứu 4 Năm Từ Nhật Bản | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/592/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,27 +251,37 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌆 Thứ Hai, 20 tháng 07/2026</span>
-                    <span>📖 Đại học Kyoto — Imaging Neuroscience (2025), DOI: 10.1162/IMAG.a.48. ScienceDaily, 13 June 2026</span>
+                    <span class="footer-tag">📖 Đại học Kyoto — Imaging Neuroscience (2025), DOI: 10.1162/IMAG.a.48. ScienceDaily, 13 June 2026</span>
                 </div>
-                <h1 class="article-title">🎵 Học Nhạc Cụ Ở Tuổi 70: Cách Đơn Giản Giúp Bảo Vệ Trí Nhớ Khi Về Già — Nghiên Cứu 4 Năm Từ Nhật Bản</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">Học Nhạc Cụ Ở Tuổi 70: Cách Đơn Giản Giúp Bảo Vệ Trí Nhớ Khi Về Già — Nghiên Cứu 4 Năm Từ Nhật Bản</h1>
+                <div class="article-tags">
                     <span class="tag pink">nghiên cứu</span><span class="tag pink">khoa học</span><span class="tag pink">não bộ</span><span class="tag pink">học tập</span><span class="tag pink">bài học</span>
                 </div>
             </div>
             
+            
+            
             <div class="article-content">
-                <p>Bạn có biết rằng việc học chơi một nhạc cụ — ngay cả ở tuổi 70 — có thể giúp bảo vệ trí nhớ và làm chậm quá trình lão hóa não? Đây là kết luận từ một nghiên cứu kéo dài 4 năm của các nhà khoa học tại Đại học Kyoto (Nhật Bản), được công bố trên tạp chí Imaging Neuroscience (2025).</p><p>Nghiên cứu bắt đầu từ năm 2020, khi các nhà khoa học theo dõi những người lớn tuổi (trung bình 73 tuổi) tham gia khóa học nhạc cụ trong 4 tháng. Sau đó, khoảng một nửa số người tham gia tiếp tục chơi nhạc cụ trong hơn 3 năm, trong khi những người còn lại chuyển sang các sở thích khác. Kết quả sau 4 năm thật đáng kinh ngạc.</p><p>Những người ngừng chơi nhạc cho thấy sự suy giảm rõ rệt trong trí nhớ làm việc bằng lời nói (verbal working memory) và giảm thể tích chất xám trong vùng putamen — một vùng não quan trọng liên quan đến học tập và kiểm soát vận động. Ngược lại, những người tiếp tục chơi nhạc cụ không chỉ duy trì được trí nhớ mà còn giữ được thể tích chất xám ở vùng putamen. Họ cũng có hoạt động não mạnh mẽ hơn ở cả hai bán cầu tiểu não (cerebellum).</p><p>'Chúng tôi rất ngạc nhiên khi phát hiện ra rằng tác động lên não bộ của những người lớn tuổi bắt đầu và tiếp tục thực hành nhạc cụ cũng tập trung ở hai vùng não này, và đây là một cách hiệu quả để ngăn ngừa suy giảm liên quan đến tuổi tác,' TS. Kaoru Sekiyama, tác giả chính của nghiên cứu, cho biết. Bà nhấn mạnh: 'Không bao giờ là quá muộn để bắt đầu chơi một nhạc cụ, và bắt đầu ở tuổi già có thể mang lại lợi ích lớn.'</p><p>Điều thú vị là hai vùng não bị ảnh hưởng — putamen và tiểu não — cũng chính là những vùng liên quan đến khả năng đọc và xử lý thông tin nhanh. Khi chúng ta luyện đọc nhanh, chúng ta cũng đang kích hoạt và củng cố các vùng não tương tự như khi chơi nhạc cụ. Đây là một sự trùng hợp đầy ý nghĩa.</p><p>TS. Sekiyama cũng lưu ý rằng âm nhạc đặc biệt có giá trị cho những người gặp khó khăn trong việc tham gia hoạt động thể chất: 'Đối với những người gặp khó khăn trong việc vận động do đau nhức cơ thể hoặc các vấn đề khác, chơi nhạc cụ có thể là một lựa chọn thay thế tuyệt vời. Thật may mắn khi thực hành âm nhạc có tác động tích cực đến não bộ và chức năng nhận thức!'</p>
+                <p>Bạn có biết rằng việc học chơi một nhạc cụ — ngay cả ở tuổi 70 — có thể giúp bảo vệ trí nhớ và làm chậm quá trình lão hóa não? Đây là kết luận từ một nghiên cứu kéo dài  của các nhà khoa học tại Đại học Kyoto (Nhật Bản), được công bố trên tạp chí Imaging Neuroscience (2025).</p>
+<p>Nghiên cứu bắt đầu từ năm 2020, khi các nhà khoa học theo dõi những người lớn tuổi (trung bình ) tham gia khóa học nhạc cụ trong . Sau đó, khoảng một nửa số người tham gia tiếp tục chơi nhạc cụ trong hơn , trong khi những người còn lại chuyển sang các sở thích khác. Kết quả sau  thật đáng kinh ngạc.</p>
+<p>Những người ngừng chơi nhạc cho thấy sự suy giảm rõ rệt trong trí nhớ làm việc bằng lời nói (verbal working memory) và giảm thể tích chất xám trong vùng putamen — một vùng não quan trọng liên quan đến học tập và kiểm soát vận động. Ngược lại, những người tiếp tục chơi nhạc cụ không chỉ duy trì được trí nhớ mà còn giữ được thể tích chất xám ở vùng putamen. Họ cũng có hoạt động não mạnh mẽ hơn ở cả hai bán cầu tiểu não (cerebellum).</p>
+<p>'Chúng tôi rất ngạc nhiên khi phát hiện ra rằng tác động lên não bộ của những người lớn tuổi bắt đầu và tiếp tục thực hành nhạc cụ cũng tập trung ở hai vùng não này, và đây là một cách hiệu quả để ngăn ngừa suy giảm liên quan đến tuổi tác,' TS. Kaoru Sekiyama, tác giả chính của nghiên cứu, cho biết. Bà nhấn mạnh: 'Không bao giờ là quá muộn để bắt đầu chơi một nhạc cụ, và bắt đầu ở tuổi già có thể mang lại lợi ích lớn.'</p>
+<p>Điều thú vị là hai vùng não bị ảnh hưởng — putamen và tiểu não — cũng chính là những vùng liên quan đến khả năng đọc và xử lý thông tin nhanh. Khi chúng ta luyện đọc nhanh, chúng ta cũng đang kích hoạt và củng cố các vùng não tương tự như khi chơi nhạc cụ. Đây là một sự trùng hợp đầy ý nghĩa.</p>
+<p>TS. Sekiyama cũng lưu ý rằng âm nhạc đặc biệt có giá trị cho những người gặp khó khăn trong việc tham gia hoạt động thể chất: 'Đối với những người gặp khó khăn trong việc vận động do đau nhức cơ thể hoặc các vấn đề khác, chơi nhạc cụ có thể là một lựa chọn thay thế tuyệt vời. Thật may mắn khi thực hành âm nhạc có tác động tích cực đến não bộ và chức năng nhận thức!'</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Speed Reading có thể phát triển nội dung về 'Luyện não đa phương thức' — kết hợp speed reading với các bài tập âm nhạc để tối ưu hóa sự phát triển của não bộ. Có thể tạo một chuỗi bài tập 5 phút mỗi ngày: 2 phút đọc nhanh + 3 phút chơi nhạc cụ/gõ nhịp. Đây là một góc nhìn độc đáo giúp Speed Reading khác biệt so với các khóa học speed reading thông thường chỉ tập trung vào kỹ thuật đọc thuần túy.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Speed Reading có thể phát triển nội dung về 'Luyện não đa phương thức' — kết hợp speed reading với các bài tập âm nhạc để tối ưu hóa sự phát triển của não bộ. Có thể tạo một chuỗi bài tập 5 phút mỗi ngày: 2 phút đọc nhanh + 3 phút chơi nhạc cụ/gõ nhịp. Đây là một góc nhìn độc đáo giúp Speed Reading khác biệt so với các khóa học speed reading thông thường chỉ tập trung vào kỹ thuật đọc thuần túy.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 Đại học Kyoto — Imaging Neuroscience (2025), DOI: 10.1162/IMAG.a.48. ScienceDaily, 13 June 2026</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌆 Tối — Thứ Hai</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Đại học Kyoto — Imaging Neuroscience (2025), DOI: 10.1162/IMAG.a.48. ScienceDaily, 13 June 2026</span>
+                <span class="footer-tag">🌆 Tối — Thứ Hai</span>
             </div>
         </article>
         
@@ -92,9 +290,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

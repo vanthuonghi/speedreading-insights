@@ -7,54 +7,242 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/633/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,30 +251,41 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌅 Chủ Nhật, 19 tháng 07/2026</span>
-                    <span>🔗 <a href="https://www.sciencedaily.com/releases/2026/07/260712011912.htm" target="_blank" style="color:#818cf8;">Nguồn tham khảo</a></span>
+                    <span class="footer-tag">📖 Nguồn tham khảo</span>
                 </div>
                 <h1 class="article-title">Não bộ tái cấu trúc để thực sự đa nhiệm: Phát hiện đột phá từ Georgetown University</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div class="article-tags">
                     <span class="tag amber">nghiên cứu</span><span class="tag amber">não bộ</span><span class="tag amber">khoa học</span><span class="tag amber">speed reading</span><span class="tag amber">đa nhiệm</span>
                 </div>
             </div>
             
+            <details class="toc"><summary>📑 Mục lục</summary><ol><li>Các phát hiện chính của nghiên cứu:</li></ol></details>
+            
             <div class="article-content">
-                <p>Một nghiên cứu mới từ các nhà khoa học thần kinh tại Đại học Georgetown (Mỹ) đã phát hiện ra rằng não bộ có khả năng tự tái cấu trúc vật lý khi con người luyện tập một kỹ năng đến mức thuần thục — cho phép các tác vụ được thực hiện song song thay vì chỉ chuyển đổi nhanh giữa chúng.</p><p>Nghiên cứu được công bố trên tạp chí Journal of Cognitive Neuroscience vào tháng 6/2026, với sự tham gia của các tình nguyện viên thực hiện hơn 30.000 lượt phân loại hình ảnh trong 5-10 tuần thông qua ứng dụng điện thoại được thiết kế như một trò chơi. Kết quả cho thấy: khi mới học, vỏ não trước trán (prefrontal cortex) — khu vực chịu trách nhiệm về lập kế hoạch, lý luận và ra quyết định có ý thức — hoạt động rất mạnh. Nhưng sau nhiều tuần luyện tập, hoạt động não đã chuyển sang vỏ não thái dương (temporal cortex), khu vực liên quan đến trí nhớ và nhận diện vật thể phức tạp.</p><p>"Trải nghiệm tái cấu trúc não bộ để vượt qua nút thắt của vỏ não trước trán. Vỏ não trước trán sau đó được giải phóng để làm bất cứ điều gì khác bạn muốn, gia tăng năng lực xử lý," — Giáo sư Maximilian Riesenhuber, tác giả chính của nghiên cứu, giải thích.</p><p>Các phát hiện chính của nghiên cứu:</p><p>- Sau 30.000+ lần luyện tập, não bộ đã "di dời" tác vụ đã thành thạo khỏi vỏ não trước trán và chuyển sang vỏ não thái dương, giải phóng tài nguyên nhận thức cho các tác vụ khác.
-- Thông tin từ khu vực chuyên biệt mới trong vỏ não thái dương có thể đi thẳng đến vùng não chịu trách nhiệm phản hồi, hoàn toàn bỏ qua vỏ não trước trán.
-- Những người tham gia có khả năng "offload" tác vụ khỏi vỏ não trước trán càng nhiều thì càng thực hiện tốt tác vụ thứ hai cùng lúc.
-- Kết quả thách thức niềm tin lâu đời rằng con người không thể thực sự đa nhiệm — thay vào đó, não bộ thực sự thay đổi mạch điện để làm hai việc cùng lúc.</p><p>Ý nghĩa của nghiên cứu này rất sâu rộng. Nó giải thích tại sao một bác sĩ X-quang giàu kinh nghiệm có thể phân loại khối u lành tính hay ác tính gần như tự động, và tại sao những người lái xe lâu năm có thể vừa lái xe vừa trò chuyện an toàn. Nó cũng lý giải tại sao các thói quen khó bỏ — vì chúng đã được chuyển vào các mạch não ít phụ thuộc vào kiểm soát có ý thức.</p><p>Phát hiện này cũng mở ra hướng nghiên cứu mới về cách AI có thể học tập liên tục mà không làm xáo trộn kiến thức đã có, một thách thức lớn của các hệ thống AI hiện tại.</p>
+                <p>Một nghiên cứu mới từ các nhà khoa học thần kinh tại Đại học Georgetown (Mỹ) đã phát hiện ra rằng não bộ có khả năng tự tái cấu trúc vật lý khi con người luyện tập một kỹ năng đến mức thuần thục — cho phép các tác vụ được thực hiện song song thay vì chỉ chuyển đổi nhanh giữa chúng.</p>
+<p>Nghiên cứu được công bố trên tạp chí Journal of Cognitive Neuroscience vào tháng 6/2026, với sự tham gia của các tình nguyện viên thực hiện hơn 30.000 lượt phân loại hình ảnh trong 5-10 tuần thông qua ứng dụng điện thoại được thiết kế như một trò chơi. Kết quả cho thấy: khi mới học, vỏ não trước trán (prefrontal cortex) — khu vực chịu trách nhiệm về lập kế hoạch, lý luận và ra quyết định có ý thức — hoạt động rất mạnh. Nhưng sau nhiều tuần luyện tập, hoạt động não đã chuyển sang vỏ não thái dương (temporal cortex), khu vực liên quan đến trí nhớ và nhận diện vật thể phức tạp.</p>
+<p>"Trải nghiệm tái cấu trúc não bộ để vượt qua nút thắt của vỏ não trước trán. Vỏ não trước trán sau đó được giải phóng để làm bất cứ điều gì khác bạn muốn, gia tăng năng lực xử lý," — Giáo sư Maximilian Riesenhuber, tác giả chính của nghiên cứu, giải thích.</p>
+<h3 class="section-heading">Các phát hiện chính của nghiên cứu:</h3>
+<p>Sau 30.000+ lần luyện tập, não bộ đã "di dời" tác vụ đã thành thạo khỏi vỏ não trước trán và chuyển sang vỏ não thái dương, giải phóng tài nguyên nhận thức cho các tác vụ khác.</p>
+<p>Thông tin từ khu vực chuyên biệt mới trong vỏ não thái dương có thể đi thẳng đến vùng não chịu trách nhiệm phản hồi, hoàn toàn bỏ qua vỏ não trước trán.</p>
+<p>Những người tham gia có khả năng "offload" tác vụ khỏi vỏ não trước trán càng nhiều thì càng thực hiện tốt tác vụ thứ hai cùng lúc.</p>
+<p>Kết quả thách thức niềm tin lâu đời rằng con người không thể thực sự đa nhiệm — thay vào đó, não bộ thực sự thay đổi mạch điện để làm hai việc cùng lúc.</p>
+<p>Ý nghĩa của nghiên cứu này rất sâu rộng. Nó giải thích tại sao một bác sĩ X-quang giàu kinh nghiệm có thể phân loại khối u lành tính hay ác tính gần như tự động, và tại sao những người lái xe lâu năm có thể vừa lái xe vừa trò chuyện an toàn. Nó cũng lý giải tại sao các thói quen khó bỏ — vì chúng đã được chuyển vào các mạch não ít phụ thuộc vào kiểm soát có ý thức.</p>
+<p>Phát hiện này cũng mở ra hướng nghiên cứu mới về cách AI có thể học tập liên tục mà không làm xáo trộn kiến thức đã có, một thách thức lớn của các hệ thống AI hiện tại.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Kết quả này củng cố trực tiếp phương pháp đào tạo Speed Reading: Khi học viên luyện tập đọc nhanh một cách có hệ thống (30.000+ lượt), kỹ năng đọc nhanh sẽ dần trở thành tự động, giải phóng vỏ não trước trán để tập trung vào phân tích và ghi nhớ nội dung. Speed Reading Việt Nam nên nhấn mạnh vào yếu tố 'luyện tập có hệ thống và lặp lại' trong chương trình giảng dạy, thiết kế các bài tập thực hành với số lần lặp cao để kích hoạt quá trình tái cấu trúc não bộ này. Các bài tập eye-tracking, chunking, và scanning nên được thiết kế thành các 'trò chơi' trên app để đạt được số lần lặp cần thiết.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Kết quả này củng cố trực tiếp phương pháp đào tạo Speed Reading: Khi học viên luyện tập đọc nhanh một cách có hệ thống (30.000+ lượt), kỹ năng đọc nhanh sẽ dần trở thành tự động, giải phóng vỏ não trước trán để tập trung vào phân tích và ghi nhớ nội dung. Speed Reading Việt Nam nên nhấn mạnh vào yếu tố 'luyện tập có hệ thống và lặp lại' trong chương trình giảng dạy, thiết kế các bài tập thực hành với số lần lặp cao để kích hoạt quá trình tái cấu trúc não bộ này. Các bài tập eye-tracking, chunking, và scanning nên được thiết kế thành các 'trò chơi' trên app để đạt được số lần lặp cần thiết.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🔗 <a href="https://www.sciencedaily.com/releases/2026/07/260712011912.htm" target="_blank" style="color:#818cf8;">Nguồn tham khảo</a></span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌅 Sáng — Chủ Nhật</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Nguồn tham khảo</span>
+                <span class="footer-tag">🌅 Sáng — Chủ Nhật</span>
             </div>
         </article>
         
@@ -95,9 +294,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>

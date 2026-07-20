@@ -3,58 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 5 bài học chiến lược cho Speed Reading Việt Nam từ xu hướng toàn cầu 2026 | Speed Reading Insights</title>
+    <title>5 bài học chiến lược cho Speed Reading Việt Nam từ xu hướng toàn cầu 2026 | Speed Reading Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
     <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
         .article-header {
-            margin-bottom: 40px; padding-bottom: 30px;
+            margin-bottom: 36px; padding-bottom: 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .article-meta {
-            display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: .85em; color: #8b8ba7;
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
         }
         .article-meta .cat-badge {
-            display: inline-block; padding: 4px 14px; border-radius: 8px;
-            font-size: .8em; font-weight: 600;
-            border: 1px solid;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
         }
         .article-title {
-            font-size: clamp(1.4em,3vw,2em); font-weight: 700; line-height: 1.4;
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
             margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
         }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
         .article-content {
-            font-size: 1.05em; line-height: 1.9; color: #e0e0f0;
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
         }
-        .article-content p { margin-bottom: 18px; }
+        .article-content p {
+            margin-bottom: 18px;
+        }
         .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
         .article-footer {
-            margin-top: 40px; padding-top: 24px;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; gap: 12px; flex-wrap: wrap;
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
         }
         .article-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .article-nav a {
             color: #818cf8; text-decoration: none; font-weight: 500;
-            transition: color .2s;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .container { padding: 0 16px; }
             .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
-    <div class="container report-page">
-        <a href="../index.html" class="back">← Quay về Dashboard</a>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/751/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
         
         <article>
             <div class="article-header">
@@ -63,44 +251,66 @@
                         📚 Sách & Đọc
                     </span>
                     <span>🌅 Thứ Bảy, 18 tháng 07/2026</span>
-                    <span>📖 Tổng hợp từ các nghiên cứu, xu hướng và phân tích thị trường 2026</span>
+                    <span class="footer-tag">📖 Tổng hợp từ các nghiên cứu, xu hướng và phân tích thị trường 2026</span>
                 </div>
-                <h1 class="article-title">💡 5 bài học chiến lược cho Speed Reading Việt Nam từ xu hướng toàn cầu 2026</h1>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <h1 class="article-title">5 bài học chiến lược cho Speed Reading Việt Nam từ xu hướng toàn cầu 2026</h1>
+                <div class="article-tags">
                     <span class="tag pink">bài học</span><span class="tag pink">speed reading</span><span class="tag pink">phát triển</span><span class="tag pink">chiến lược</span><span class="tag pink">marketing</span>
                 </div>
             </div>
             
+            <details class="toc"><summary>📑 Mục lục</summary><ol><li>KẾT LUẬN:</li></ol></details>
+            
             <div class="article-content">
-                <p>Từ các nghiên cứu, xu hướng và phân tích trong 4 bài viết trước, Speed Reading Việt Nam có thể rút ra 5 bài học chiến lược để phát triển thương hiệu và mở rộng thị trường trong năm 2026-2027.</p><p>BÀI HỌC 1: AI LÀ CÔNG CỤ, KHÔNG PHẢI ĐỐI THỦ</p><p>Thay vì lo sợ AI sẽ thay thế việc dạy đọc nhanh, hãy coi AI như một trợ giảng đắc lực. Các ứng dụng thực tế:</p><p>• Phát triển 'AI Reading Coach' — chatbot phân tích bài đọc của học viên, đưa ra phản hồi tức thời về tốc độ và comprehension.
-• Sử dụng AI để tạo nội dung luyện đọc đa dạng — từ báo chí, khoa học đến văn học — phù hợp với từng trình độ.
-• Tích hợp voice AI để đọc mẫu (model reading) với tốc độ có thể điều chỉnh — từ 100 wpm đến 600 wpm.
-• Tận dụng ChatGPT/Claude để tạo bài kiểm tra comprehension và gợi ý sách phù hợp.</p><p>BÀI HỌC 2: XÂY DỰNG HỆ SINH THÁI HỌC TẬP, KHÔNG CHỈ LÀ KHÓA HỌC</p><p>Thị trường đang dịch chuyển từ 'khóa học' sang 'hệ sinh thái học tập'. Speed Reading Việt Nam cần:</p><p>• Ứng dụng di động: Luyện đọc 5 phút/ngày, theo dõi tiến độ, nhận thông báo ôn tập.
-• Podcast hàng tuần: Phân tích sách mới, chia sẻ kỹ thuật đọc nhanh, phỏng vấn chuyên gia.
-• Cộng đồng Facebook/Zalo: Nơi học viên chia sẻ thành tích và thử thách đọc sách hàng tháng.
-• Sự kiện offline: Workshop 'Đọc 1 cuốn sách trong 30 phút' tổ chức hàng tháng tại các thành phố lớn.
-• Book Club: CLB đọc sách hàng tuần với sự hướng dẫn của giảng viên Speed Reading.</p><p>BÀI HỌC 3: CÁ NHÂN HÓA LÀ CHÌA KHÓA</p><p>Dữ liệu từ các nghiên cứu cho thấy học viên có nhu cầu và phong cách học khác nhau. Giải pháp:</p><p>• Bài test đầu vào: Đo tốc độ đọc, comprehension, phong cách học (thị giác/thính giác/vận động), mục tiêu cá nhân.
-• Lộ trình 3 cấp độ: Cơ bản (200-300 wpm) → Trung cấp (300-500 wpm) → Nâng cao (500-800+ wpm).
-• Lộ trình theo ngành nghề: Speed reading cho sinh viên, cho nhân viên văn phòng, cho quản lý cấp cao.
-• Gợi ý sách cá nhân hóa dựa trên sở thích và mục tiêu của từng học viên.</p><p>BÀI HỌC 4: MARKETING DỰA TRÊN DỮ LIỆU KHOA HỌC</p><p>Người Việt Nam ngày càng quan tâm đến các phương pháp có cơ sở khoa học. Chiến lược marketing:</p><p>• Chia sẻ các nghiên cứu từ Stanford, Harvard, MIT về speed reading và neuroplasticity (bài viết số 4).
-• Công bố số liệu thực tế: 'Học viên của chúng tôi tăng tốc độ đọc trung bình từ 180 wpm lên 450 wpm sau 8 tuần'.
-• Case study học viên: Video phỏng vấn học viên thành công — từ 'đọc chậm, dễ quên' đến 'đọc nhanh, nhớ lâu'.
-• Content marketing: Blog, video, infographic về các chủ đề khoa học não bộ, xu hướng học tập, review sách mới.
-• Hợp tác với các KOLs trong lĩnh vực giáo dục, phát triển bản thân để mở rộng tầm ảnh hưởng.</p><p>BÀI HỌC 5: TẬN DỤNG SỨC MẠNH CỦA 'CỘNG ĐỒNG VÀ THỬ THÁCH'</p><p>Các nghiên cứu về tâm lý học hành vi cho thấy yếu tố cộng đồng và thử thách làm tăng tỷ lệ hoàn thành khóa học lên 60%:</p><p>• Thử thách '30 ngày đọc nhanh': Mỗi ngày đọc 1 bài ngắn, tăng dần tốc độ. Có bảng xếp hạng và phần thưởng.
-• 'Reading Marathon': Sự kiện đọc sách 6 tiếng liên tục — vừa rèn luyện speed reading vừa xây dựng tinh thần cộng đồng.
-• Chương trình giới thiệu: 'Mời bạn cùng đọc' — học viên giới thiệu bạn bè sẽ được tặng thêm buổi học hoặc sách.
-• Gamification: Hệ thống điểm, huy hiệu, cấp độ — biến việc luyện đọc thành trò chơi thú vị.</p><p>KẾT LUẬN:</p><p>2026 là năm của sự chuyển mình. Speed Reading Việt Nam không chỉ là một khóa học — đó là một phong trào, một cộng đồng những người yêu sách và muốn làm chủ kỹ năng đọc trong thời đại thông tin. Với 5 bài học chiến lược trên, thương hiệu có thể vươn lên dẫn đầu thị trường đào tạo kỹ năng đọc nhanh tại Việt Nam.</p>
+                <p>Từ các nghiên cứu, xu hướng và phân tích trong 4 bài viết trước, Speed Reading Việt Nam có thể rút ra 5 bài học chiến lược để phát triển thương hiệu và mở rộng thị trường trong năm 2026-2027.</p>
+<p>BÀI HỌC 1: AI LÀ CÔNG CỤ, KHÔNG PHẢI ĐỐI THỦ</p>
+<p>Thay vì lo sợ AI sẽ thay thế việc dạy đọc nhanh, hãy coi AI như một trợ giảng đắc lực. Các ứng dụng thực tế:</p>
+<p>Phát triển 'AI Reading Coach' — chatbot phân tích bài đọc của học viên, đưa ra phản hồi tức thời về tốc độ và comprehension.</p>
+<p>Sử dụng AI để tạo nội dung luyện đọc đa dạng — từ báo chí, khoa học đến văn học — phù hợp với từng trình độ.</p>
+<p>Tích hợp voice AI để đọc mẫu (model reading) với tốc độ có thể điều chỉnh — từ 100 wpm đến 600 wpm.</p>
+<p>Tận dụng ChatGPT/Claude để tạo bài kiểm tra comprehension và gợi ý sách phù hợp.</p>
+<p>BÀI HỌC 2: XÂY DỰNG HỆ SINH THÁI HỌC TẬP, KHÔNG CHỈ LÀ KHÓA HỌC</p>
+<p>Thị trường đang dịch chuyển từ 'khóa học' sang 'hệ sinh thái học tập'. Speed Reading Việt Nam cần:</p>
+<p>Ứng dụng di động: Luyện đọc /ngày, theo dõi tiến độ, nhận thông báo ôn tập.</p>
+<p>Podcast hàng tuần: Phân tích sách mới, chia sẻ kỹ thuật đọc nhanh, phỏng vấn chuyên gia.</p>
+<p>Cộng đồng Facebook/Zalo: Nơi học viên chia sẻ thành tích và thử thách đọc sách hàng tháng.</p>
+<p>Sự kiện offline: Workshop 'Đọc 1 cuốn sách trong ' tổ chức hàng tháng tại các thành phố lớn.</p>
+<p>Book Club: CLB đọc sách hàng tuần với sự hướng dẫn của giảng viên Speed Reading.</p>
+<p>BÀI HỌC 3: CÁ NHÂN HÓA LÀ CHÌA KHÓA</p>
+<p>Dữ liệu từ các nghiên cứu cho thấy học viên có nhu cầu và phong cách học khác nhau. Giải pháp:</p>
+<p>Bài test đầu vào: Đo tốc độ đọc, comprehension, phong cách học (thị giác/thính giác/vận động), mục tiêu cá nhân.</p>
+<p>Lộ trình 3 cấp độ: Cơ bản (200-300 wpm) → Trung cấp (300-500 wpm) → Nâng cao (500-800+ wpm).</p>
+<p>Lộ trình theo ngành nghề: Speed reading cho sinh viên, cho nhân viên văn phòng, cho quản lý cấp cao.</p>
+<p>Gợi ý sách cá nhân hóa dựa trên sở thích và mục tiêu của từng học viên.</p>
+<p>BÀI HỌC 4: MARKETING DỰA TRÊN DỮ LIỆU KHOA HỌC</p>
+<p>Người Việt Nam ngày càng quan tâm đến các phương pháp có cơ sở khoa học. Chiến lược marketing:</p>
+<p>Chia sẻ các nghiên cứu từ Stanford, Harvard, MIT về speed reading và neuroplasticity (bài viết số 4).</p>
+<p>Công bố số liệu thực tế: 'Học viên của chúng tôi tăng tốc độ đọc trung bình từ 180 wpm lên 450 wpm sau 8 tuần'.</p>
+<p>Case study học viên: Video phỏng vấn học viên thành công — từ 'đọc chậm, dễ quên' đến 'đọc nhanh, nhớ lâu'.</p>
+<p>Content marketing: Blog, video, infographic về các chủ đề khoa học não bộ, xu hướng học tập, review sách mới.</p>
+<p>Hợp tác với các KOLs trong lĩnh vực giáo dục, phát triển bản thân để mở rộng tầm ảnh hưởng.</p>
+<p>BÀI HỌC 5: TẬN DỤNG SỨC MẠNH CỦA 'CỘNG ĐỒNG VÀ THỬ THÁCH'</p>
+<p>Các nghiên cứu về tâm lý học hành vi cho thấy yếu tố cộng đồng và thử thách làm tăng tỷ lệ hoàn thành khóa học lên :</p>
+<p>Thử thách ' đọc nhanh': Mỗi ngày đọc 1 bài ngắn, tăng dần tốc độ. Có bảng xếp hạng và phần thưởng.</p>
+<p>'Reading Marathon': Sự kiện đọc sách 6 tiếng liên tục — vừa rèn luyện speed reading vừa xây dựng tinh thần cộng đồng.</p>
+<p>Chương trình giới thiệu: 'Mời bạn cùng đọc' — học viên giới thiệu bạn bè sẽ được tặng thêm buổi học hoặc sách.</p>
+<p>Gamification: Hệ thống điểm, huy hiệu, cấp độ — biến việc luyện đọc thành trò chơi thú vị.</p>
+<h3 class="section-heading">KẾT LUẬN:</h3>
+<p>2026 là năm của sự chuyển mình. Speed Reading Việt Nam không chỉ là một khóa học — đó là một phong trào, một cộng đồng những người yêu sách và muốn làm chủ kỹ năng đọc trong thời đại thông tin. Với 5 bài học chiến lược trên, thương hiệu có thể vươn lên dẫn đầu thị trường đào tạo kỹ năng đọc nhanh tại Việt Nam.</p>
             </div>
             
             
         <div class="apply-box">
-            <div class="label">💡 Ứng dụng cho Speed Reading</div>
-            <p>Đây là bài viết tổng kết, áp dụng trực tiếp cho Speed Reading Việt Nam. Các bài học chiến lược đã được trình bày chi tiết trong nội dung bài viết. Ưu tiên hàng đầu: phát triển ứng dụng di động, xây dựng hệ sinh thái nội dung (podcast + blog + video), và tổ chức các sự kiện cộng đồng thường xuyên.</p>
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Đây là bài viết tổng kết, áp dụng trực tiếp cho Speed Reading Việt Nam. Các bài học chiến lược đã được trình bày chi tiết trong nội dung bài viết. Ưu tiên hàng đầu: phát triển ứng dụng di động, xây dựng hệ sinh thái nội dung (podcast + blog + video), và tổ chức các sự kiện cộng đồng thường xuyên.</p>
+            </div>
         </div>
             
             <div class="article-footer">
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">📖 Tổng hợp từ các nghiên cứu, xu hướng và phân tích thị trường 2026</span>
-                <span class="tag" style="background:rgba(139,139,167,0.1);color:#8b8ba7;">🌅 Sáng — Thứ Bảy</span>
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">📖 Tổng hợp từ các nghiên cứu, xu hướng và phân tích thị trường 2026</span>
+                <span class="footer-tag">🌅 Sáng — Thứ Bảy</span>
             </div>
         </article>
         
@@ -109,9 +319,19 @@
             <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
         </div>
     </div>
-    <footer>
-        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a></p>
-        <p>Hotline: 0899.320.202 | Email: admin@speedreading.vn</p>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
     </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
 </body>
 </html>
