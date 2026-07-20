@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshop Speed Reading Miễn Phí | Đọc nhanh gấp 3 lần</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a1a;--surface:#111128;--surface-hover:#1a1a3a;--border:rgba(255,255,255,0.06);--ink:#e4e4f0;--ink-muted:#8b8ba7;--ink-dim:#5a5a7a;--accent:#f59e0b;--accent-soft:rgba(245,158,11,0.12);--accent-glow:rgba(245,158,11,0.25);--green:#34d399;--blue:#818cf8;--purple:#c084fc;--red:#ef4444;--radius:12px;--radius-lg:20px;--font:'Inter',system-ui,-apple-system,sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.7;overflow-x:hidden}
+    .bg-grid{position:fixed;top:0;left:0;right:0;bottom:0;
+      background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+      background-size:60px 60px;z-index:-1}
+    .glow{position:fixed;top:-30%;right:-20%;width:700px;height:700px;
+      background:radial-gradient(circle,rgba(245,158,11,0.06),transparent 70%);border-radius:50%;z-index:-1;pointer-events:none}
+    .glow2{position:fixed;bottom:-30%;left:-20%;width:600px;height:600px;
+      background:radial-gradient(circle,rgba(129,140,248,0.05),transparent 70%);border-radius:50%;z-index:-1;pointer-events:none}
+    .container{max-width:720px;margin:0 auto;padding:0 20px}
+
+    .hero{text-align:center;padding:60px 0 40px;position:relative}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;background:var(--accent-soft);color:var(--accent);font-size:.82em;font-weight:600;margin-bottom:16px}
+    .hero h1{font-size:clamp(1.8em,5vw,3em);font-weight:900;line-height:1.15;margin-bottom:12px}
+    .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero p{font-size:1.05em;color:var(--ink-muted);max-width:600px;margin:0 auto 24px}
+    .hero-info{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+    .hero-info span{display:inline-flex;align-items:center;gap:6px;font-size:.9em;color:var(--ink-muted);padding:6px 16px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid var(--border)}
+
+    /* ─── FORM ─── */
+    .form-section{padding:20px 0 40px}
+    .form-card{background:linear-gradient(135deg,var(--surface),rgba(245,158,11,0.03));border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px}
+    .form-card h2{font-size:1.3em;font-weight:700;text-align:center;margin-bottom:20px}
+    .form-card h2 span{color:var(--accent)}
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-size:.85em;font-weight:600;color:var(--ink-muted);margin-bottom:4px}
+    .form-group input,.form-group select{width:100%;padding:12px 16px;border-radius:8px;background:var(--bg);border:1px solid var(--border);color:var(--ink);font-size:.95em;font-family:var(--font);transition:border-color .2s;outline:none}
+    .form-group input:focus,.form-group select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+    .form-group input::placeholder{color:var(--ink-dim)}
+    .form-group select option{background:var(--surface);color:var(--ink)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .form-submit{width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#d97706);color:#0a0a1a;font-weight:700;font-size:1.05em;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:var(--font);margin-top:8px}
+    .form-submit:hover{transform:translateY(-2px);box-shadow:0 6px 30px var(--accent-glow)}
+    .form-note{text-align:center;font-size:.82em;color:var(--ink-dim);margin-top:12px}
+    .form-note strong{color:var(--green)}
+    .form-success{display:none;text-align:center;padding:30px 20px}
+    .form-success.show{display:block}
+    .form-success .icon{font-size:3em;margin-bottom:12px}
+    .form-success h3{font-size:1.2em;font-weight:700;margin-bottom:6px}
+    .form-success p{color:var(--ink-muted);font-size:.9em}
+    .form-success .steps{text-align:left;margin-top:16px;padding:16px 20px;background:rgba(255,255,255,0.03);border-radius:var(--radius);border-left:3px solid var(--accent)}
+    .form-success .steps li{margin:8px 0;font-size:.85em;color:var(--ink-muted)}
+
+    /* ─── WHAT YOU'LL LEARN ─── */
+    .learn-section{padding:40px 0;border-top:1px solid var(--border)}
+    .learn-section h2{text-align:center;font-size:1.4em;font-weight:800;margin-bottom:24px}
+    .learn-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .learn-item{padding:18px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);display:flex;gap:14px;align-items:flex-start}
+    .learn-item .icon{font-size:1.3em;flex-shrink:0}
+    .learn-item h4{font-size:.9em;font-weight:600;margin-bottom:2px}
+    .learn-item p{font-size:.82em;color:var(--ink-muted)}
+
+    /* ─── HOST ─── */
+    .host-section{padding:40px 0;border-top:1px solid var(--border);text-align:center}
+    .host-section h2{font-size:1.3em;font-weight:800;margin-bottom:20px}
+    .host-card{display:flex;align-items:center;gap:20px;max-width:500px;margin:0 auto;text-align:left;padding:24px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)}
+    .host-avatar{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:1.8em;flex-shrink:0}
+    .host-info h3{font-size:1em;font-weight:700}
+    .host-info p{font-size:.85em;color:var(--ink-muted)}
+
+    /* ─── TESTIMONIAL ─── */
+    .testi-section{padding:40px 0;border-top:1px solid var(--border)}
+    .testi-section h2{text-align:center;font-size:1.3em;font-weight:800;margin-bottom:20px}
+    .testi-card{padding:20px 24px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);margin-bottom:14px}
+    .testi-card .quote{font-style:italic;font-size:.9em;color:var(--ink-muted);margin-bottom:10px}
+    .testi-card .author{font-size:.82em;font-weight:600;color:var(--accent)}
+
+    /* ─── FAQ ─── */
+    .faq-section{padding:40px 0;border-top:1px solid var(--border)}
+    .faq-section h2{text-align:center;font-size:1.3em;font-weight:800;margin-bottom:20px}
+    .faq-item{border-bottom:1px solid var(--border)}
+    .faq-q{width:100%;padding:16px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;background:none;border:none;color:var(--ink);font-size:.9em;font-weight:600;cursor:pointer;font-family:var(--font);text-align:left}
+    .faq-q:hover{color:var(--accent)}
+    .faq-q .toggle{font-size:.75em;color:var(--ink-dim);transition:transform .2s}
+    .faq-item.open .faq-q .toggle{transform:rotate(180deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s;padding:0;color:var(--ink-muted);font-size:.85em;line-height:1.7}
+    .faq-item.open .faq-a{max-height:300px;padding:0 0 16px}
+
+    .footer{text-align:center;padding:30px 0;color:var(--ink-dim);font-size:.82em;border-top:1px solid var(--border);margin-top:20px}
+    .footer a{color:var(--blue);text-decoration:none}
+
+    @media(max-width:640px){
+      .form-row{grid-template-columns:1fr}
+      .learn-grid{grid-template-columns:1fr}
+      .hero-info{gap:10px}
+      .hero-info span{font-size:.82em;padding:4px 12px}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="glow"></div>
+<div class="glow2"></div>
+
+<div class="container" style="padding-top:20px;text-align:center;">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--ink-muted);text-decoration:none;font-size:.82em;">← Quay về Dashboard</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">🎯 Hoàn toàn miễn phí</div>
+    <h1>Workshop: Đọc nhanh gấp <em>3 lần</em> chỉ trong <em>60 phút</em></h1>
+    <p>Tham gia workshop Zoom 60 phút — học kỹ thuật đọc nhanh thực tế, áp dụng được ngay sau buổi học.</p>
+    <div class="hero-info">
+      <span>📅 <strong>Thứ 2 hàng tuần</strong></span>
+      <span>⏰ <strong>20:00 - 21:00</strong></span>
+      <span>💻 <strong>Online qua Zoom</strong></span>
+      <span>🎫 <strong>Miễn phí</strong></span>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="dangky">
+  <div class="container">
+    <div class="form-card" id="formCard">
+      <div id="formContent">
+        <h2>📝 Đăng ký ngay — <span>còn 12 suất</span> cho tuần này</h2>
+        <form id="workshopForm" onsubmit="submitForm(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Họ và tên *</label>
+              <input type="text" id="name" placeholder="Nguyễn Văn A" required>
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" id="email" placeholder="email@example.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Số điện thoại *</label>
+            <input type="tel" id="phone" placeholder="0899 320 202" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bạn biết đến workshop qua?</label>
+              <select id="source">
+                <option>Facebook Group</option>
+                <option>Facebook Page</option>
+                <option>Bạn bè giới thiệu</option>
+                <option>TikTok</option>
+                <option>Khác</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tốc độ đọc hiện tại (từ/phút)</label>
+              <select id="speed">
+                <option>Dưới 200</option>
+                <option>200-300</option>
+                <option>300-500</option>
+                <option>500-800</option>
+                <option>Trên 800</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="form-submit">🚀 Đăng ký tham gia miễn phí</button>
+        </form>
+        <div class="form-note">
+          ✅ <strong>Cam kết không spam</strong> — Bạn chỉ nhận email liên quan đến workshop<br>
+          📩 Sau khi đăng ký, kiểm tra email để nhận link Zoom
+        </div>
+      </div>
+
+      <div class="form-success" id="formSuccess">
+        <div class="icon">🎉</div>
+        <h3>Đăng ký thành công!</h3>
+        <p>Cảm ơn bạn đã đăng ký workshop Speed Reading.</p>
+        <div class="steps">
+          <strong>📋 Các bước tiếp theo:</strong>
+          <ol style="padding-left:18px;margin-top:6px;">
+            <li>✅ Kiểm tra email <strong id="confirmedEmail">của bạn</strong> — mình đã gửi xác nhận</li>
+            <li>🔔 Mình sẽ nhắc bạn 1 tiếng trước giờ workshop qua email</li>
+            <li>💻 20:00 tối <strong>Thứ 2</strong> — click link Zoom trong email để tham gia</li>
+            <li>🎁 Sau workshop, bạn sẽ nhận tài liệu + ưu đãi đặc biệt qua email</li>
+          </ol>
+        </div>
+        <p style="margin-top:16px;font-size:.85em;color:var(--ink-dim);">
+          ⏰ Đã thêm vào lịch? <a href="#" style="color:var(--blue);" onclick="addCalendar()">Thêm vào Google Calendar</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU'LL LEARN -->
+<section class="learn-section">
+  <div class="container">
+    <h2>📖 Trong 60 phút, bạn sẽ học được</h2>
+    <div class="learn-grid">
+      <div class="learn-item">
+        <div class="icon">👆</div>
+        <div><h4>Chỉ tay dẫn đường</h4><p>Kỹ thuật đơn giản nhất — tăng tốc ngay lập tức 30-50%</p></div>
+      </div>
+      <div class="learn-item">
+        <div class="icon">🔇</div>
+        <div><h4>Loại bỏ đọc thầm</h4><p>Cách tắt "giọng nói trong đầu" — mở khoá tốc độ 1000+ từ/phút</p></div>
+      </div>
+      <div class="learn-item">
+        <div class="icon">📊</div>
+        <div><h4>Đo tốc độ thực tế</h4><p>Biết chính xác bạn đang đọc bao nhiêu từ/phút</p></div>
+      </div>
+      <div class="learn-item">
+        <div class="icon">🧠</div>
+        <div><h4>Ghi nhớ chủ động</h4><p>Kỹ thuật Active Recall — nhớ gấp 3 lần sau khi đọc</p></div>
+      </div>
+      <div class="learn-item">
+        <div class="icon">📚</div>
+        <div><h4>Lộ trình 7 buổi</h4><p>Giới thiệu lộ trình từ 300 → 1000+ từ/phút sau khoá học</p></div>
+      </div>
+      <div class="learn-item">
+        <div class="icon">🎁</div>
+        <div><h4>Quà tặng độc quyền</h4><p>Ebook + tài liệu Speed Reading tặng riêng người tham dự</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOST -->
+<section class="host-section">
+  <div class="container">
+    <h2>👨‍🏫 Người hướng dẫn</h2>
+    <div class="host-card">
+      <div class="host-avatar">👤</div>
+      <div class="host-info">
+        <h3>Văn Hỉ</h3>
+        <p>Giảng viên Speed Reading — 500+ học viên đã đạt 1000+ từ/phút. Sáng lập Speed Reading HCM và Speed Reading Việt Nam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testi-section">
+  <div class="container">
+    <h2>💬 Học viên nói gì?</h2>
+    <div class="testi-card">
+      <div class="quote">"Em tham gia workshop miễn phí, không nghĩ 60 phút mà học được nhiều kỹ thuật đến vậy. Sau đó em đăng ký khoá luôn!"</div>
+      <div class="author">— Nguyễn Thuỳ Ngân, TP.HCM</div>
+    </div>
+    <div class="testi-card">
+      <div class="quote">"Mình đã thử nhiều cách đọc nhanh nhưng workshop này mới thực sự có kỹ thuật cụ thể. Áp dụng được ngay."</div>
+      <div class="author">— Minh Tuấn, ĐH Bách Khoa</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <h2>❓ Câu hỏi thường gặp</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Workshop có mất phí không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Hoàn toàn miễn phí! Bạn chỉ cần đăng ký để nhận link Zoom qua email. Không cần thẻ tín dụng, không có ràng buộc gì.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Tôi cần chuẩn bị gì? <span class="toggle">▼</span></button>
+        <div class="faq-a">Một cuốn sách bất kỳ bạn chưa đọc (hoặc đọc dở), một cây bút, giấy note. Và tinh thần sẵn sàng thay đổi cách đọc!</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Tôi không biết gì về Speed Reading, có theo kịp không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Có! Workshop được thiết kế cho người mới hoàn toàn. Bạn sẽ được hướng dẫn từ những kỹ thuật cơ bản nhất.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Có xem lại được không? <span class="toggle">▼</span></button>
+        <div class="faq-a">Workshop được ghi hình. Người đăng ký sẽ nhận link xem lại qua email sau buổi học.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Sau workshop, tôi có thể học tiếp ở đâu? <span class="toggle">▼</span></button>
+        <div class="faq-a">Người tham gia workshop sẽ nhận ưu đãi đặc biệt khi đăng ký khoá Speed Reading Online 7 buổi. Chi tiết sẽ được gửi qua email sau workshop.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
+  <p style="margin-top:4px;">📍 <a href="membership.html" style="color:var(--accent);">Xem khoá học Speed Reading Online →</a></p>
+</div>
+
+<script>
+function toggleFaq(btn) {
+  btn.closest('.faq-item').classList.toggle('open');
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const source = document.getElementById('source').value;
+  const speed = document.getElementById('speed').value;
+
+  // Validate
+  if (!name || !email || !phone) return;
+
+  // Show success
+  document.getElementById('formContent').style.display = 'none';
+  document.getElementById('formSuccess').classList.add('show');
+  document.getElementById('confirmedEmail').textContent = email;
+
+  // Lưu vào localStorage để các script khác đọc được
+  const registrations = JSON.parse(localStorage.getItem('workshop_regs') || '[]');
+  registrations.push({
+    name, email, phone, source, speed,
+    registered_at: new Date().toISOString(),
+    workshop_date: getNextMonday()
+  });
+  localStorage.setItem('workshop_regs', JSON.stringify(registrations));
+
+  // Ở đây bạn có thể thêm API call để ghi nhận vào database
+  console.log('📝 Workshop Registration:', { name, email, phone, source, speed });
+
+  // track conversion
+  if (typeof fbq === 'function') {
+    fbq('track', 'Lead');
+  }
+}
+
+function getNextMonday() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? 1 : day === 1 ? 7 : 8 - day;
+  const next = new Date(now);
+  next.setDate(now.getDate() + diff);
+  next.setHours(20, 0, 0, 0);
+  return next.toISOString();
+}
+
+function addCalendar() {
+  const monday = new Date(getNextMonday());
+  const end = new Date(monday);
+  end.setHours(21, 0, 0, 0);
+
+  const startStr = monday.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+  const endStr = end.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+
+  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE
+&text=Workshop+Speed+Reading+-+%C4%90%E1%BB%8Dc+nhanh+g%E1%BA%A5p+3+l%E1%BA%A7n
+&dates=${startStr}/${endStr}
+&details=Workshop+60+ph%C3%BAt+-+K%E1%BB%B9+thu%E1%BA%ADt+%C4%91%E1%BB%8Dc+nhanh+th%E1%BB%B1c+t%E1%BA%BF
+&location=Online+qua+Zoom
+&sf=true&output=xml`.replace(/\n/g, '');
+
+  window.open(url, '_blank');
+}
+
+// Update countdown each week
+function updateSlotCount() {
+  const regs = JSON.parse(localStorage.getItem('workshop_regs') || '[]');
+  // Count registrations for this week's workshop
+  const thisWeek = regs.filter(r => {
+    const d = new Date(r.registered_at);
+    const now = new Date();
+    return d > new Date(now.getTime() - 7*24*60*60*1000);
+  });
+  const slotsLeft = Math.max(0, 20 - thisWeek.length);
+  const badge = document.querySelector('.form-card h2 span');
+  if (badge) badge.textContent = `còn ${slotsLeft} suất`;
+}
+updateSlotCount();
+</script>
+</body>
+</html>
