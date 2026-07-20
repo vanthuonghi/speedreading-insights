@@ -317,7 +317,48 @@
     .footer a { color: var(--accent); text-decoration: none; }
 
     /* ─── RESPONSIVE ─── */
-    @media (max-width: 768px) {
+    /* ─── MODAL ─── */
+  .modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7); z-index: 1000;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 36px;
+    max-width: 480px; width: 90%; max-height: 90vh; overflow-y: auto;
+    position: relative;
+  }
+  .modal .close {
+    position: absolute; top: 16px; right: 16px;
+    background: none; border: none; color: var(--ink-dim);
+    font-size: 1.4em; cursor: pointer;
+  }
+  .modal h2 { font-size: 1.3em; font-weight: 700; margin-bottom: 4px; }
+  .modal .price-tag { font-size: 2em; font-weight: 900; color: var(--accent); margin: 12px 0; }
+  .modal .bank-card {
+    background: var(--bg); border-radius: var(--radius);
+    padding: 20px; margin: 16px 0; border: 1px solid var(--border);
+  }
+  .modal .bank-card .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: .9em; }
+  .modal .bank-card .row .label { color: var(--ink-muted); }
+  .modal .bank-card .row .val { color: var(--ink); font-weight: 600; }
+  .modal .bank-card .highlight { color: var(--accent); font-weight: 700; font-size: 1.1em; }
+  .modal .note { font-size: .85em; color: var(--ink-dim); margin-top: 12px; line-height: 1.6; }
+  .modal .btn-inbox {
+    display: block; text-align: center; padding: 14px; margin-top: 16px;
+    border-radius: 10px; font-weight: 700; font-size: .95em;
+    background: linear-gradient(135deg, var(--accent), #d97706);
+    color: #0a0a1a; text-decoration: none; transition: transform .2s;
+  }
+  .modal .btn-inbox:hover { transform: translateY(-2px); }
+  .modal .qr-placeholder {
+    width: 180px; height: 180px; margin: 16px auto;
+    background: white; border-radius: 12px; display: flex;
+    align-items: center; justify-content: center;
+    color: #333; font-size: .8em; text-align: center;
+  }
       .hero { padding: 50px 0 40px; }
       .hero-stats { gap: 20px; flex-wrap: wrap; }
       .value-grid { grid-template-columns: 1fr; }
@@ -563,7 +604,7 @@
           <li><span class="cross">✗</span> Kèm cặp 1:1 qua Zalo</li>
           <li><span class="cross">✗</span> Livestream độc quyền</li>
         </ul>
-        <a href="#" class="cta basic" onclick="alert('📩 Vui lòng inbox Facebook Speed Reading HCM để đăng ký gói Cơ Bản!\n\nHoặc chuyển khoản:\n• 980.000đ\n• Ngân hàng: ...\n• SĐT: 0899.320.202')">Đăng ký ngay</a>
+        <a href="#" class="cta basic" onclick="showPayment('basic')">Đăng ký ngay</a>
       </div>
 
       <!-- PREMIUM -->
@@ -583,7 +624,7 @@
           <li><span class="check">✓</span> Review kỹ thuật đọc cá nhân hoá</li>
           <li><span class="check">✓</span> Định hướng sách phù hợp với bạn</li>
         </ul>
-        <a href="#" class="cta premium" onclick="alert('📩 Vui lòng inbox Facebook Speed Reading HCM để đăng ký gói Cao Cấp!\n\nHoặc chuyển khoản:\n• 1.980.000đ\n• Ngân hàng: ...\n• SĐT: 0899.320.202')">🔥 Đăng ký ngay — tiết kiệm 67%</a>
+        <a href="#" class="cta premium" onclick="showPayment('premium')">🔥 Đăng ký ngay — tiết kiệm 67%</a>
       </div>
     </div>
     <div class="guarantee">🛡️ Cam kết hoàn tiền 100% nếu không hài lòng sau buổi 1 — <strong>không có rủi ro</strong></div>
@@ -627,6 +668,38 @@
   </div>
 </section>
 
+<!-- ─── MODAL THANH TOÁN ─── -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal">
+    <button class="close" onclick="closePayment()">✕</button>
+    <h2 id="modalTitle">📘 Gói Cơ Bản</h2>
+    <div class="price-tag" id="modalPrice">980.000đ</div>
+
+    <div class="bank-card">
+      <div class="row"><span class="label">Ngân hàng</span><span class="val">MB Bank</span></div>
+      <div class="row"><span class="label">Số tài khoản</span><span class="val highlight">0899 320 202</span></div>
+      <div class="row"><span class="label">Chủ tài khoản</span><span class="val">Văn Hỉ</span></div>
+      <div class="row"><span class="label">Nội dung CK</span><span class="val" id="modalRef">SR_BASIC_HỌ_TÊN</span></div>
+    </div>
+
+    <div class="bank-card" style="margin-top:12px;">
+      <div class="row"><span class="label">Ví Momo</span><span class="val highlight">0899 320 202</span></div>
+      <div class="row"><span class="label">Nội dung CK</span><span class="val" id="modalRefMomo">SR_BASIC_HỌ_TÊN</span></div>
+    </div>
+
+    <div class="qr-placeholder" id="qrArea">
+      📱 QR Momo / MB Bank<br><span style="font-size:.8em;color:#666;">(Chụp màn hình để quét)</span>
+    </div>
+
+    <div class="note">
+      ✅ Sau khi chuyển khoản, inbox Facebook <strong>Speed Reading HCM</strong> kèm ảnh chuyển khoản để mình kích hoạt ngay cho bạn trong vòng 24h!
+      <br><br>
+      Hoặc gọi/Zalo: <strong>0899.320.202</strong>
+    </div>
+    <a href="https://m.me/701172629741862" class="btn-inbox" target="_blank">📩 Inbox Facebook ngay</a>
+  </div>
+</div>
+
 <!-- ─── FOOTER ─── -->
 <footer class="footer">
   <div class="container">
@@ -636,6 +709,36 @@
 </footer>
 
 <script>
+const PLANS = {
+  basic: { name: '📘 Gói Cơ Bản', price: '980.000đ', ref: 'SR_BASIC' },
+  premium: { name: '🔥 Gói Cao Cấp', price: '1.980.000đ', ref: 'SR_PREMIUM' },
+};
+
+function showPayment(plan) {
+  const p = PLANS[plan];
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalPrice').textContent = p.price;
+  document.getElementById('modalRef').textContent = p.ref + '_HỌ_TÊN';
+  document.getElementById('modalRefMomo').textContent = p.ref + '_HỌ_TÊN';
+  document.getElementById('paymentModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePayment() {
+  document.getElementById('paymentModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// Click overlay to close
+document.getElementById('paymentModal').addEventListener('click', function(e) {
+  if (e.target === this) closePayment();
+});
+
+// Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePayment();
+});
+
 function toggleFaq(btn) {
   const item = btn.closest('.faq-item');
   item.classList.toggle('open');
