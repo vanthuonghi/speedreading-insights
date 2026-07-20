@@ -112,6 +112,17 @@
         .day-group.open .day-header{background:rgba(99,102,241,0.04)}
         .day-group.open .day-arrow{color:#818cf8}
 
+        /* Research compact mode */
+        .research-compact{display:flex;flex-direction:column;gap:2px}
+        .research-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .15s;text-decoration:none}
+        .research-item:hover{background:rgba(99,102,241,0.08)}
+        .research-item .ri-badge{font-size:.85em;width:22px;text-align:center;flex-shrink:0}
+        .research-item .ri-time{font-size:.75em;color:#6b6b8a;width:18px;text-align:center;flex-shrink:0}
+        .research-item .ri-title{flex:1;font-size:.88em;color:#d0d0e8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+        .research-item:hover .ri-title{color:#e4e4f0}
+        .research-item .ri-arrow{font-size:.75em;color:#4a4a6a;flex-shrink:0;transition:all .2s;opacity:0}
+        .research-item:hover .ri-arrow{color:#818cf8;opacity:1;transform:translateX(2px)}
+
         footer{text-align:center;padding:30px 20px;color:#5a5a7a;font-size:.82em;border-top:1px solid rgba(255,255,255,0.04)}
         footer a{color:#818cf8;text-decoration:none}
         footer a:hover{text-decoration:underline}
@@ -218,7 +229,7 @@
             </div>`;
         }
 
-        // ===== RENDER: Research (grouped by date) =====
+        // ===== RENDER: Research (compact — chỉ ngày + tiêu đề) =====
                 function renderResearch(articles) {
                     const c = document.getElementById('panel-research');
                     if (!articles || articles.length === 0) {
@@ -249,53 +260,38 @@
                         return `${days[d.getDay()]}, ${parts[2]}/${parts[1]}/${parts[0]}`;
                     }
 
-                    const render = (view) => {
-                        const cls = view === 'grid' ? 'item-grid' : view === 'cards' ? 'item-cards' : 'item-list';
-
+                    // Compact render: for each day, show items as simple title rows
+                    function renderCompact() {
                         let html = `<div class="view-toolbar">
-                            <span class="count">${articles.length} bài nghiên cứu — ${sortedDates.length} ngày</span>
-                            <div class="view-options">
-                                <button class="view-btn ${currentView==='list'?'active':''}" data-view="list" onclick="setView('list','panel-research'); reRender()">📋 Danh sách</button>
-                                <button class="view-btn ${currentView==='grid'?'active':''}" data-view="grid" onclick="setView('grid','panel-research'); reRender()">🔲 Lưới</button>
-                                <button class="view-btn ${currentView==='cards'?'active':''}" data-view="cards" onclick="setView('cards','panel-research'); reRender()">🃏 Thẻ</button>
-                            </div>
+                            <span class="count">📚 ${articles.length} bài nghiên cứu — ${sortedDates.length} ngày</span>
+                            <span style="color:#6b6b8a;font-size:.82em;">Nhấn vào bài để đọc →</span>
                         </div>`;
 
                         sortedDates.forEach((dateStr, di) => {
                             const items = groups[dateStr];
-                            // Limit to 20 per day, show "+N more" badge
-                            const showItems = items.slice(0, 20);
-                            const extra = items.length - 20;
+                            const isFirst = di === 0;
 
-                            html += `<div class="day-group ${di === 0 ? 'open' : ''}">
+                            html += `<div class="day-group ${isFirst ? 'open' : ''}">
                                 <div class="day-header" onclick="toggleDay(this)">
-                                    <span class="day-arrow">${di === 0 ? '▼' : '▶'}</span>
+                                    <span class="day-arrow">${isFirst ? '▼' : '▶'}</span>
                                     <span class="day-label">${formatDateVN(dateStr)}</span>
                                     <span class="day-count">${items.length} bài</span>
-                                    ${extra > 0 ? `<span class="day-extra">+${extra} thêm</span>` : ''}
-                                    <span class="day-toggle" style="margin-left:auto;color:var(--ink-dim);font-size:.8em;">${di === 0 ? 'Thu gọn' : 'Mở rộng'}</span>
                                 </div>
-                                <div class="day-body" style="${di === 0 ? 'display:block' : 'display:none'}">
-                                    <div class="${cls}">`;
+                                <div class="day-body" style="${isFirst ? 'display:block' : 'display:none'}">
+                                    <div class="research-compact">`;
 
-                            showItems.forEach(r => {
-                                const parts = r.date.split('-');
-                                const day = parts[2] || '';
-                                const month = `${parts[1]}/${parts[0]}`;
+                            items.forEach(r => {
                                 const catColor = r.cat === 'ai' ? '#a855f7' : '#34d399';
-                                const catBg = r.cat === 'ai' ? 'rgba(168,85,247,0.15)' : 'rgba(52,211,153,0.15)';
                                 const badge = r.cat === 'ai' ? '🤖' : '📚';
-                                const tags = r.tags ? r.tags.slice(0,3).join(', ') : '';
-                                const meta = `<span>${r.time === 'sáng' ? '🌅' : '🌆'} ${day}/${month}</span>${tags ? `<span>🏷 ${tags}</span>` : ''}`;
+                                const timeIcon = r.time === 'sáng' ? '🌅' : '🌆';
+                                // Strip emoji prefix from title for cleaner look
+                                const cleanTitle = r.title.replace(/^[📚🤖🔥🧠💡⏱️🧪🌱🎤💬⚡🔬🎯💊🍊🎭⏰😴🧘🎵🥑💪🚀🌟☕🚨🗣️🔮🧬]\s*/, '');
 
-                                html += `<div class="item-card" onclick="window.location.href='articles/${r.filename}'>
-                                    <div class="item-badge" style="background:${catBg};color:${catColor};">${badge}</div>
-                                    <div class="item-body">
-                                        <h3>${r.title}</h3>
-                                        <div class="preview">${r.preview || ''}</div>
-                                        <div class="item-meta">${meta}</div>
-                                        ${view === 'cards' ? '<span class="read-more">Đọc thêm →</span>' : ''}
-                                    </div>
+                                html += `<div class="research-item" onclick="window.location.href='articles/${r.filename}'">
+                                    <span class="ri-badge" style="color:${catColor};">${badge}</span>
+                                    <span class="ri-time">${timeIcon}</span>
+                                    <span class="ri-title">${cleanTitle}</span>
+                                    <span class="ri-arrow">→</span>
                                 </div>`;
                             });
 
@@ -303,21 +299,18 @@
                         });
 
                         return html;
-                    };
+                    }
 
-                    c.innerHTML = render(currentView);
-                    window.reRender = () => { c.innerHTML = render(currentView); };
+                    c.innerHTML = renderCompact();
                 }
 
                 function toggleDay(header) {
                     const group = header.closest('.day-group');
                     const body = group.querySelector('.day-body');
                     const arrow = group.querySelector('.day-arrow');
-                    const toggle = group.querySelector('.day-toggle');
                     const isOpen = body.style.display !== 'none';
                     body.style.display = isOpen ? 'none' : 'block';
                     arrow.textContent = isOpen ? '▶' : '▼';
-                    toggle.textContent = isOpen ? 'Mở rộng' : 'Thu gọn';
                     group.classList.toggle('open', !isOpen);
                 }
 

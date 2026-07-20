@@ -131,8 +131,11 @@
             <div class="stat-card"><div class="num" id="stat-videos">0</div><div class="lbl">🤖 AI Videos</div></div>
             <div class="stat-card"><div class="num" id="stat-notebooks">0</div><div class="lbl">📓 Notebook</div></div>
             <div class="stat-card"><div class="num" id="stat-ads">0</div><div class="lbl">📢 Quảng cáo</div></div>
-            <div class="stat-card"><div class="num" id="stat-fb">0</div><div class="lbl">📤 Bài FB mỗi ngày</div></div>
-            <div class="stat-card"><div class="num" id="stat-files">0</div><div class="lbl">📁 Tổng file HTML</div></div>
+            <div class="stat-card"><div class="num" id="stat-group">0</div><div class="lbl">💬 Bài Group</div></div>
+            <div class="stat-card"><div class="num" id="stat-membership">0</div><div class="lbl">💎 Membership</div></div>
+            <div class="stat-card"><div class="num" id="stat-workshop">0</div><div class="lbl">🎯 Workshop</div></div>
+            <div class="stat-card"><div class="num" id="stat-cron">0</div><div class="lbl">⏰ Cron Jobs</div></div>
+            <div class="stat-card"><div class="num" id="stat-tabs">0</div><div class="lbl">📑 Dashboard tabs</div></div>
             <div class="stat-card"><div class="num">100%</div><div class="lbl">⏱ Uptime</div></div>
         </div>
 
@@ -173,37 +176,26 @@
             weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
         });
 
-        // Load agent data
-        Promise.all([
-            fetch('agent.json').then(r => r.json()).catch(() => null),
-            fetch('articles.json').then(r => r.json()).catch(() => []),
-            fetch('scripts.json').then(r => r.json()).catch(() => []),
-            fetch('ai_videos_index.json').then(r => r.json()).catch(() => []),
-            fetch('notebooks_index.json').then(r => r.json()).catch(() => []),
-            fetch('ads_index.json').then(r => r.json()).catch(() => [])
-        ]).then(([agent, articles, scripts, videos, notebooks, ads]) => {
-            // Stats
-            const aCount = articles.length;
-            const sCount = scripts.length;
-            const vCount = videos.length;
-            const nCount = notebooks.length;
-            const adCount = ads.length;
-            const totalFiles = aCount + sCount + vCount + nCount + 5; // + index, agent, json files
+        // Load agent data + stats from agent.json
+        fetch('agent.json').then(r => r.json()).catch(() => null).then(agent => {
+            if (!agent) return;
+            const s = agent.stats || {};
             
-            document.getElementById('stat-articles').textContent = aCount;
-            document.getElementById('stat-scripts').textContent = sCount;
-            document.getElementById('stat-videos').textContent = vCount;
-            document.getElementById('stat-notebooks').textContent = nCount;
-            document.getElementById('stat-ads').textContent = adCount;
-            document.getElementById('stat-fb').textContent = '3';
-            document.getElementById('stat-files').textContent = totalFiles;
+            document.getElementById('stat-articles').textContent = s.articles || 0;
+            document.getElementById('stat-scripts').textContent = s.scripts || 0;
+            document.getElementById('stat-videos').textContent = s.ai_videos || 0;
+            document.getElementById('stat-notebooks').textContent = s.notebooks || 0;
+            document.getElementById('stat-ads').textContent = s.ads_variants || 0;
+            document.getElementById('stat-group').textContent = s.group_posts || 0;
+            document.getElementById('stat-membership').textContent = s.membership_pages || 0;
+            document.getElementById('stat-workshop').textContent = s.workshop_pages || 0;
+            document.getElementById('stat-cron').textContent = s.cron_jobs || 0;
+            document.getElementById('stat-tabs').textContent = s.tabs_on_dashboard || 0;
 
             // Update role count badge
-            if (agent && agent.roles) {
+            if (agent.roles) {
                 document.querySelector('.section-header .badge').textContent = agent.roles.length + ' roles';
             }
-
-            if (!agent) return;
 
             // Schedule
             const scheduleHtml = agent.schedule.map(slot => {
@@ -224,7 +216,7 @@
 
             // Roles
             const rolesHtml = agent.roles.map(role => {
-                const colors = ['#34d399','#818cf8','#a855f7','#fbbf24','#f472b6','#34d399','#818cf8'];
+                const colors = ['#34d399','#818cf8','#a855f7','#fbbf24','#f472b6','#34d399','#818cf8','#f59e0b','#ec4899','#06b6d4','#84cc16'];
                 const color = colors[agent.roles.indexOf(role) % colors.length];
                 return `<div class="role-card" style="--accent:${color}">
                     <div class="role-card" style="--accent:${color};display:block">
@@ -237,19 +229,9 @@
             }).join('');
             document.getElementById('roles').innerHTML = rolesHtml;
 
-            // Timeline (from agent.log if available, otherwise defaults)
-            const timeline = agent.log || [
-                {tag:'🚀', type:'deploy', text:'Khởi tạo website Speed Reading Insights với dashboard 4 tabs'},
-                {tag:'📚', type:'build', text:'Tạo hệ thống individual articles — mỗi bài nghiên cứu 1 trang riêng'},
-                {tag:'🎬', type:'build', text:'Chuyển kịch bản video sang individual pages với generate_script_item.py'},
-                {tag:'🤖', type:'build', text:'Thêm tab AI Videos — tự động fetch YouTube + dịch summary sang tiếng Việt'},
-                {tag:'🎨', type:'build', text:'Thêm 7 phương án sinh ảnh (Pollinations, OpenRouter, Unsplash...) cho Facebook auto post'},
-                {tag:'📋', type:'fix', text:'Thêm chế độ xem List/Grid/Card cho cả 3 tab'},
-                {tag:'🔗', type:'fix', text:'Loại bỏ link trong bài viết Facebook + xuống hàng dễ đọc'},
-                {tag:'📤', type:'deploy', text:'Thiết lập cron job tự động: 3 bài FB + research sáng/tối + kịch bản + AI videos'},
-            ].reverse();
-
-            const tlHtml = timeline.map(item => {
+            // Timeline (from agent.log)
+            const timeline = agent.log || [];
+            const tlHtml = [...timeline].reverse().map(item => {
                 const colors = {learn:'learn',build:'build',fix:'fix',deploy:'deploy'};
                 const type = colors[item.type] || 'deploy';
                 return `<div class="tl-item">
