@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quy trình làm việc hàng ngày | Speed Reading Insights</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a1a;--surface:#111128;--surface-hover:#1a1a3a;--border:rgba(255,255,255,0.06);--ink:#e4e4f0;--ink-muted:#8b8ba7;--ink-dim:#5a5a7a;--accent:#f59e0b;--accent-soft:rgba(245,158,11,0.12);--green:#34d399;--blue:#818cf8;--purple:#c084fc;--red:#ef4444;--radius:12px;--radius-lg:20px;--font:'Inter',system-ui,-apple-system,sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.7}
+    .bg-grid{position:fixed;top:0;left:0;right:0;bottom:0;
+      background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+      background-size:60px 60px;z-index:-1}
+    .container{max-width:900px;margin:0 auto;padding:0 20px}
+    .page{padding:40px 0 60px}
+
+    .back{display:inline-flex;align-items:center;gap:8px;color:var(--ink-muted);text-decoration:none;font-size:.9em;margin-bottom:20px;transition:color .2s}
+    .back:hover{color:var(--blue)}
+
+    .header{padding:20px 0;border-bottom:1px solid var(--border);margin-bottom:32px;text-align:center}
+    .header h1{font-size:clamp(1.6em,4vw,2.4em);font-weight:900;
+      background:linear-gradient(135deg,var(--accent),var(--purple),var(--blue));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .header p{color:var(--ink-muted);margin-top:8px;font-size:1em}
+    .header .meta{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:12px;color:var(--ink-dim);font-size:.85em}
+    .header .meta .pill{padding:4px 14px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+
+    /* ─── TIMELINE ─── */
+    .timeline{position:relative;padding-left:40px}
+    .timeline::before{content:'';position:absolute;left:16px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),var(--purple),var(--blue));border-radius:1px}
+
+    .timeline-block{position:relative;margin-bottom:28px;opacity:0;transform:translateY(20px);animation:fadeIn .5s ease forwards}
+    .timeline-block:nth-child(1){animation-delay:.1s}
+    .timeline-block:nth-child(2){animation-delay:.2s}
+    .timeline-block:nth-child(3){animation-delay:.3s}
+    .timeline-block:nth-child(4){animation-delay:.4s}
+    .timeline-block:nth-child(5){animation-delay:.5s}
+    .timeline-block:nth-child(6){animation-delay:.6s}
+    .timeline-block:nth-child(7){animation-delay:.7s}
+    .timeline-block:nth-child(8){animation-delay:.8s}
+    .timeline-block:nth-child(9){animation-delay:.9s}
+    .timeline-block:nth-child(10){animation-delay:1s}
+    @keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
+
+    .timeline-dot{position:absolute;left:-24px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid;z-index:1}
+    .timeline-dot.morning{background:var(--accent-soft);border-color:var(--accent)}
+    .timeline-dot.midday{background:rgba(129,140,248,0.15);border-color:var(--blue)}
+    .timeline-dot.evening{background:rgba(192,132,252,0.15);border-color:var(--purple)}
+    .timeline-dot.night{background:rgba(52,211,153,0.1);border-color:var(--green)}
+
+    .timeline-time{font-size:.78em;color:var(--ink-dim);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+    .timeline-time .badge{font-size:.72em;padding:2px 10px;border-radius:6px;font-weight:600}
+    .timeline-time .badge.morning{background:rgba(245,158,11,0.1);color:var(--accent)}
+    .timeline-time .badge.midday{background:rgba(129,140,248,0.1);color:var(--blue)}
+    .timeline-time .badge.evening{background:rgba(192,132,252,0.1);color:var(--purple)}
+    .timeline-time .badge.night{background:rgba(52,211,153,0.1);color:var(--green)}
+
+    .timeline-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;transition:border-color .2s,transform .2s}
+    .timeline-card:hover{border-color:rgba(245,158,11,0.2);transform:translateX(4px)}
+    .timeline-card h3{font-size:1.05em;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+    .timeline-card h3 .icon{font-size:1.2em}
+    .timeline-card .desc{font-size:.88em;color:var(--ink-muted);line-height:1.6}
+    .timeline-card .desc .step{display:block;padding:3px 0;padding-left:16px;position:relative}
+    .timeline-card .desc .step::before{content:'→';position:absolute;left:0;color:var(--accent);font-weight:700}
+    .timeline-card .desc .highlight{color:var(--accent);font-weight:600}
+    .timeline-card .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+    .timeline-card .actions .link{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:6px;font-size:.78em;font-weight:500;text-decoration:none;transition:background .2s}
+    .timeline-card .actions .link.blue{background:rgba(129,140,248,0.1);color:var(--blue)}
+    .timeline-card .actions .link.blue:hover{background:rgba(129,140,248,0.2)}
+    .timeline-card .actions .link.green{background:rgba(52,211,153,0.1);color:var(--green)}
+    .timeline-card .actions .link.green:hover{background:rgba(52,211,153,0.2)}
+    .timeline-card .actions .link.amber{background:rgba(245,158,11,0.1);color:var(--accent)}
+    .timeline-card .actions .link.amber:hover{background:rgba(245,158,11,0.2)}
+    .timeline-card .actions .link.purple{background:rgba(192,132,252,0.1);color:var(--purple)}
+    .timeline-card .actions .link.purple:hover{background:rgba(192,132,252,0.2)}
+
+    /* ─── SUMMARY CARD ─── */
+    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:36px}
+    .summary-card{padding:18px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);text-align:center;transition:border-color .2s}
+    .summary-card:hover{border-color:var(--accent-glow, rgba(245,158,11,0.25))}
+    .summary-card .num{font-size:1.6em;font-weight:800;color:var(--accent)}
+    .summary-card .label{font-size:.78em;color:var(--ink-muted);margin-top:2px}
+    .summary-card .sub{font-size:.7em;color:var(--ink-dim);margin-top:2px}
+
+    /* ─── TIPS ─── */
+    .tips-section{margin-top:48px;border-top:1px solid var(--border);padding-top:32px}
+    .tips-section h2{text-align:center;font-size:1.4em;font-weight:800;margin-bottom:20px}
+    .tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .tip-card{padding:18px 20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);display:flex;gap:14px;align-items:flex-start}
+    .tip-card .icon{font-size:1.3em;flex-shrink:0}
+    .tip-card h4{font-size:.9em;font-weight:600;margin-bottom:2px}
+    .tip-card p{font-size:.82em;color:var(--ink-muted);line-height:1.5}
+
+    .footer{text-align:center;padding:30px 0;color:var(--ink-dim);font-size:.82em;border-top:1px solid var(--border);margin-top:40px}
+    .footer a{color:var(--blue);text-decoration:none}
+
+    @media(max-width:768px){
+      .summary-grid{grid-template-columns:repeat(2,1fr)}
+      .tips-grid{grid-template-columns:1fr}
+      .timeline{padding-left:32px}
+      .timeline-card{padding:16px 18px}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<div class="container page">
+  <a href="index.html" class="back">← Quay về Dashboard</a>
+
+  <div class="header">
+    <h1>⚡ Quy trình làm việc hàng ngày</h1>
+    <p>Lộ trình tối ưu — từ sáng đến tối, tận dụng tất cả tính năng trên website</p>
+    <div class="meta">
+      <span class="pill">⏱ 2-3 tiếng/ngày</span>
+      <span class="pill">🎯 5 đầu việc chính</span>
+      <span class="pill">🔄 Lặp lại mỗi ngày</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="num">07:00</div>
+      <div class="label">🌅 Sáng</div>
+      <div class="sub">Nghiên cứu + Nội dung</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">12:00</div>
+      <div class="label">🌤 Trưa</div>
+      <div class="sub">Đăng tương tác nhóm</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">18:00</div>
+      <div class="label">🌆 Chiều</div>
+      <div class="sub">Quảng cáo + Video</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">21:00</div>
+      <div class="label">🌙 Tối</div>
+      <div class="sub">Đăng Facebook + Theo dõi</div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+
+    <!-- BLOCK 1: SÁNG 7H -->
+    <div class="timeline-block">
+      <div class="timeline-dot morning"></div>
+      <div class="timeline-time">
+        <span>🌅 07:00 — 08:30</span>
+        <span class="badge morning">SÁNG</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">📚</span> Đọc bài nghiên cứu mới</h3>
+        <div class="desc">
+          Mở tab <span class="highlight">Nghiên cứu</span> trên Dashboard, chọn ngày hôm nay hoặc hôm qua có bài mới.
+          <span class="step">Đọc lướt nhanh các tiêu đề — chọn 3-5 bài tâm đắc nhất</span>
+          <span class="step">Đọc chi tiết từng bài — note lại ý chính, số liệu, câu nói hay</span>
+          <span class="step">Lưu ý: các bài nghiên cứu được nhóm theo ngày, mỗi ngày tối đa 20 bài — click vào ngày để mở rộng</span>
+        </div>
+        <div class="actions">
+          <a href="index.html" class="link blue">📚 Mở tab Nghiên cứu</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 2: SÁNG 8h30 -->
+    <div class="timeline-block">
+      <div class="timeline-dot morning"></div>
+      <div class="timeline-time">
+        <span>🌅 08:30 — 09:30</span>
+        <span class="badge morning">SÁNG</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">💬</span> Chọn & chuẩn bị nội dung đăng nhóm</h3>
+        <div class="desc">
+          Vào tab <span class="highlight">Group</span> trên Dashboard, chọn bài viết phù hợp để đăng lên các nhóm Facebook.
+          <span class="step">Dùng bộ lọc (💡 Mẹo đọc / 📖 Câu chuyện / 📊 Số liệu / ❓ Hỏi đáp / 🎯 Thử thách) để chọn loại bài phù hợp với nhóm</span>
+          <span class="step">Click <span class="highlight">"📋 Copy bài viết"</span> — nội dung tự động copy vào clipboard</span>
+          <span class="step">Chọn 2-3 nhóm Facebook khác nhau — mỗi nhóm 1 bài khác nhau</span>
+          <span class="step">Paste bài viết lên nhóm — nhớ tag tên nhóm, không kèm link</span>
+        </div>
+        <div class="actions">
+          <a href="group-content.html" class="link green">💬 Mở kho nội dung Group</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 3: SÁNG 9h30 -->
+    <div class="timeline-block">
+      <div class="timeline-dot morning"></div>
+      <div class="timeline-time">
+        <span>🌅 09:30 — 10:00</span>
+        <span class="badge morning">SÁNG</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">📢</span> Chọn quảng cáo đăng hôm nay</h3>
+        <div class="desc">
+          Vào tab <span class="highlight">Quảng cáo</span> để xem các mẫu quảng cáo có sẵn.
+          <span class="step">Chọn 1-2 quảng cáo từ danh sách — ưu tiên luân phiên các góc: Problem/Solution, Social Proof, Hook cảm xúc</span>
+          <span class="step">Click vào bài để xem nội dung đầy đủ — đã được viết chi tiết, sẵn sàng để đăng</span>
+          <span class="step">Đăng lên Facebook Page Speed Reading HCM — hoặc dùng làm bài quảng cáo trả phí</span>
+        </div>
+        <div class="actions">
+          <a href="index.html" class="link amber">📢 Mở tab Quảng cáo</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 4: TRƯA 12H -->
+    <div class="timeline-block">
+      <div class="timeline-dot midday"></div>
+      <div class="timeline-time">
+        <span>🌤 12:00 — 12:30</span>
+        <span class="badge midday">TRƯA</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">💬</span> Tương tác lại các nhóm</h3>
+        <div class="desc">
+          Quay lại các nhóm đã đăng bài sáng nay — trả lời bình luận, tương tác với thành viên.
+          <span class="step">Trả lời từng comment — cảm ơn, giải đáp thắc mắc, gợi ý thêm</span>
+          <span class="step">Nếu có bạn hỏi về Speed Reading — inbox riêng để tư vấn (không sale trong group)</span>
+          <span class="step">Ghi nhận feedback — chủ đề nào được quan tâm nhiều nhất?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 5: CHIỀU 18H -->
+    <div class="timeline-block">
+      <div class="timeline-dot evening"></div>
+      <div class="timeline-time">
+        <span>🌆 18:00 — 18:30</span>
+        <span class="badge evening">CHIỀU</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">🎬</span> Xem kịch bản & AI Videos mới</h3>
+        <div class="desc">
+          Vào tab <span class="highlight">Kịch bản</span> và <span class="highlight">AI Videos</span> để xem nội dung mới trong ngày.
+          <span class="step">Kịch bản: 5 kịch bản video/ngày — chọn 1-2 kịch bản hay nhất để quay</span>
+          <span class="step">AI Videos: xem video mẫu — học hỏi cách dẫn, cách trình bày</span>
+          <span class="step">Ghi chú lại ý tưởng cho video TikTok/Reels của riêng bạn</span>
+        </div>
+        <div class="actions">
+          <a href="index.html" class="link purple">🎬 Mở tab Kịch bản</a>
+          <a href="index.html" class="link blue">🤖 Mở tab AI Videos</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 6: TỐI 21H -->
+    <div class="timeline-block">
+      <div class="timeline-dot night"></div>
+      <div class="timeline-time">
+        <span>🌙 21:00 — 21:30</span>
+        <span class="badge night">TỐI</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">📱</span> Đăng bài Facebook Page</h3>
+        <div class="desc">
+          Đăng bài lên <span class="highlight">Facebook Page Speed Reading HCM</span> — theo lịch 3 bài/ngày.
+          <span class="step">Bài 1 (đã đăng sáng): Dùng nội dung từ tab Quảng cáo</span>
+          <span class="step">Bài 2 (đã đăng trưa): Dùng nội dung từ tab Group</span>
+          <span class="step">Bài 3 (tối nay): Chọn 1 quảng cáo hoặc 1 bài group còn lại</span>
+          <span class="step">Kiểm tra: TUYỆT ĐỐI KHÔNG có link trong bài viết — CTA bằng chữ thuần</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 7: TỐI 21H30 -->
+    <div class="timeline-block">
+      <div class="timeline-dot night"></div>
+      <div class="timeline-time">
+        <span>🌙 21:30 — 22:00</span>
+        <span class="badge night">TỐI</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">📊</span> Theo dõi & tổng kết</h3>
+        <div class="desc">
+          Kiểm tra kết quả trong ngày, chuẩn bị cho ngày mai.
+          <span class="step">Xem thống kê trên Dashboard: tổng số bài nghiên cứu, kịch bản, quảng cáo</span>
+          <span class="step">Ghi lại: bài đăng nào có tương tác tốt nhất? Chủ đề nào hot?</span>
+          <span class="step">Mở tab <span class="highlight">Membership</span> — kiểm tra có ai đăng ký không</span>
+          <span class="step">Lên ý tưởng: ngày mai cần thêm nội dung gì? Cần cải thiện gì?</span>
+        </div>
+        <div class="actions">
+          <a href="index.html" class="link green">📊 Về Dashboard</a>
+          <a href="membership.html" class="link amber">💎 Xem Membership</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 8: BẤT KỲ LÚC NÀO -->
+    <div class="timeline-block">
+      <div class="timeline-dot morning"></div>
+      <div class="timeline-time">
+        <span>🔄 Bất kỳ lúc nào</span>
+        <span class="badge morning">Linh hoạt</span>
+      </div>
+      <div class="timeline-card">
+        <h3><span class="icon">💎</span> Xem & cập nhật Membership</h3>
+        <div class="desc">
+          Trang <span class="highlight">Membership</span> là nơi bạn giới thiệu khoá học — có thể gửi link cho khách hàng bất kỳ lúc nào.
+          <span class="step">Khi có người hỏi về khoá học → gửi link membership</span>
+          <span class="step">Khi có người chuyển khoản → kiểm tra, kích hoạt, inbox xác nhận</span>
+          <span class="step">Cập nhật giá, thông tin khi cần</span>
+        </div>
+        <div class="actions">
+          <a href="membership.html" class="link amber">💎 Mở Membership</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIPS SECTION -->
+  <div class="tips-section">
+    <h2>💡 Mẹo tối ưu quy trình</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="icon">🎯</div>
+        <div><h4>Ưu tiên tương tác nhóm</h4>
+        <p>Đăng bài lên nhóm Facebook là kênh hiệu quả nhất để xây dựng uy tín và thu hút học viên. Dành ưu tiên cao nhất cho việc này.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">📚</div>
+        <div><h4>Đọc nghiên cứu trước, viết sau</h4>
+        <p>Đọc bài nghiên cứu buổi sáng giúp bạn có kiến thức nền — từ đó viết nội dung group và quảng cáo chất lượng hơn.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">🔄</div>
+        <div><h4>Luân phiên nội dung</h4>
+        <p>25 bài group content được chia 5 loại. Luân phiên mỗi ngày một loại khác nhau — tránh lặp, giữ sự mới mẻ cho người xem.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">⏱</div>
+        <div><h4>Không làm quá nhiều</h4>
+        <p>2-3 tiếng/ngày là đủ. Quan trọng là DUY TRÌ đều đặn, không cố gắng quá sức rồi bỏ giữa chừng.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">📊</div>
+        <div><h4>Theo dõi số liệu</h4>
+        <p>Dashboard hiển thị tổng số bài nghiên cứu, kịch bản, quảng cáo. Theo dõi mỗi ngày để thấy sự tiến bộ.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">🚀</div>
+        <div><h4>Tận dụng Cron Job</h4>
+        <p>Hệ thống tự động tạo nghiên cứu, kịch bản, quảng cáo mỗi ngày — bạn chỉ cần vào đọc, chọn và đăng.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
+    <p style="margin-top:4px;">⚡ Làm việc thông minh, không làm việc chăm chỉ</p>
+  </div>
+</div>
+</body>
+</html>
