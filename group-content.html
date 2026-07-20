@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nội dung tương tác nhóm Facebook | Speed Reading Insights</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a1a;--surface:#111128;--surface-hover:#1a1a3a;--border:rgba(255,255,255,0.06);--ink:#e4e4f0;--ink-muted:#8b8ba7;--ink-dim:#5a5a7a;--accent:#f59e0b;--accent-soft:rgba(245,158,11,0.12);--green:#34d399;--blue:#818cf8;--purple:#c084fc;--radius:12px;--font:'Inter',system-ui,-apple-system,sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.7}
+    .bg-grid{position:fixed;top:0;left:0;right:0;bottom:0;
+      background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+      background-size:60px 60px;z-index:-1}
+    .container{max-width:800px;margin:0 auto;padding:0 20px}
+
+    .page{padding:40px 0 60px}
+    .back{display:inline-flex;align-items:center;gap:8px;color:var(--ink-muted);text-decoration:none;font-size:.9em;margin-bottom:20px;transition:color .2s}
+    .back:hover{color:var(--blue)}
+
+    .header{padding:20px 0;border-bottom:1px solid var(--border);margin-bottom:24px}
+    .header h1{font-size:clamp(1.4em,3vw,2em);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .header p{color:var(--ink-muted);margin-top:6px;font-size:.92em}
+    .header .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;color:var(--ink-dim);font-size:.82em}
+    .header .meta .pill{padding:3px 12px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+
+    /* ─── POST CARDS ─── */
+    .post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:24px;overflow:hidden;transition:border-color .2s}
+    .post-card:hover{border-color:rgba(245,158,11,0.2)}
+    .post-card .post-header{display:flex;align-items:center;gap:12px;padding:18px 20px 0;margin-bottom:12px}
+    .post-card .post-header .avatar{width:40px;height:40px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1em;color:var(--accent)}
+    .post-card .post-header .info{flex:1}
+    .post-card .post-header .info .name{font-weight:600;font-size:.9em}
+    .post-card .post-header .info .time{font-size:.75em;color:var(--ink-dim)}
+    .post-card .post-header .badge{padding:4px 12px;border-radius:6px;font-size:.72em;font-weight:600}
+    .post-card .post-header .badge.tip{background:rgba(52,211,153,0.1);color:var(--green)}
+    .post-card .post-header .badge.question{background:rgba(129,140,248,0.1);color:var(--blue)}
+    .post-card .post-header .badge.story{background:rgba(245,158,11,0.1);color:var(--accent)}
+    .post-card .post-header .badge.stat{background:rgba(192,132,252,0.1);color:var(--purple)}
+    .post-card .post-header .badge.action{background:rgba(239,68,68,0.1);color:#ef4444}
+
+    .post-card .post-body{padding:0 20px 16px}
+    .post-card .post-body .content{white-space:pre-wrap;font-size:.92em;line-height:1.7;color:var(--ink)}
+    .post-card .post-body .content .highlight{color:var(--accent);font-weight:600}
+    .post-card .post-body .content .tag{display:inline-block;padding:1px 8px;border-radius:4px;font-size:.78em;background:rgba(245,158,11,0.08);color:var(--accent);margin:2px}
+    .post-card .post-body .cta-row{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .post-card .post-body .cta-row .btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:8px;font-size:.82em;font-weight:600;background:var(--accent-soft);color:var(--accent);text-decoration:none;transition:background .2s}
+    .post-card .post-body .cta-row .btn:hover{background:rgba(245,158,11,0.2)}
+    .post-card .post-body .cta-row .hashtags{font-size:.78em;color:var(--ink-dim);display:flex;gap:4px;flex-wrap:wrap}
+    .post-card .post-body .cta-row .hashtags span{color:var(--blue);cursor:pointer}
+    .post-card .post-body .cta-row .hashtags span:hover{text-decoration:underline}
+
+    .post-card .post-footer{background:rgba(255,255,255,0.02);border-top:1px solid var(--border);padding:10px 20px;display:flex;gap:16px;font-size:.78em;color:var(--ink-dim)}
+    .post-card .post-footer span{display:inline-flex;align-items:center;gap:4px}
+    .post-card .post-footer .copy-btn{cursor:pointer;color:var(--blue);font-weight:500;transition:color .2s;background:none;border:none;font-family:var(--font);font-size:inherit}
+    .post-card .post-footer .copy-btn:hover{color:#a5b4fc}
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .filter-btn{padding:6px 16px;border-radius:8px;font-size:.82em;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--ink-muted);transition:all .2s;font-family:var(--font)}
+    .filter-btn:hover{background:rgba(255,255,255,0.03);color:var(--ink)}
+    .filter-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+    .footer{text-align:center;padding:30px 0;color:var(--ink-dim);font-size:.82em;border-top:1px solid var(--border);margin-top:40px}
+    .footer a{color:var(--blue);text-decoration:none}
+
+    @media(max-width:768px){.container{padding:0 14px}.post-card .post-body{padding:0 14px 14px}.post-card .post-header{padding:14px 14px 0}}
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<div class="container page">
+  <a href="index.html" class="back">← Quay về Dashboard</a>
+
+  <div class="header">
+    <h1>💬 Nội dung tương tác nhóm Facebook</h1>
+    <p>Bài viết giá trị — đăng lên các nhóm Facebook để tạo tương tác, giới thiệu Speed Reading tự nhiên</p>
+    <div class="meta">
+      <span>Cập nhật: <strong>hàng ngày</strong></span>
+      <span class="pill">📋 Copy & Paste</span>
+      <span class="pill">🚫 Không link</span>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-filter="all" onclick="filterPosts('all')">📋 Tất cả</button>
+    <button class="filter-btn" data-filter="tip" onclick="filterPosts('tip')">💡 Mẹo đọc</button>
+    <button class="filter-btn" data-filter="story" onclick="filterPosts('story')">📖 Câu chuyện</button>
+    <button class="filter-btn" data-filter="stat" onclick="filterPosts('stat')">📊 Số liệu</button>
+    <button class="filter-btn" data-filter="question" onclick="filterPosts('question')">❓ Hỏi đáp</button>
+    <button class="filter-btn" data-filter="action" onclick="filterPosts('action')">🎯 Thử thách</button>
+  </div>
+
+  <div id="postsContainer"></div>
+
+  <div class="footer">
+    <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
+    <p style="margin-top:4px;">📩 Inbox: <a href="#">Speed Reading HCM</a></p>
+  </div>
+</div>
+
+<script>
+// ===== POSTS DATABASE =====
+const POSTS = [
+  {
+    id: 1,
+    type: 'tip',
+    label: '💡 Mẹo đọc',
+    title: 'Kỹ thuật chỉ tay dẫn đường — đơn giản nhất nhưng hiệu quả nhất',
+    content: `Bạn có biết kỹ thuật đọc nhanh đơn giản nhất là gì không? 🤔\n\nĐó là CHỈ TAY DẪN ĐƯỜNG.\n\nCách làm:\n➡ Dùng ngón trỏ làm "kim chỉ" — dẫn mắt đọc theo từng dòng\n➡ Đọc nhanh hơn tốc độ tay một chút\n➡ Mắt sẽ tự động theo tay, không còn đọc thầm từng chữ\n\nKết quả: Tốc độ đọc tăng ngay 30-50% trong lần đầu thử.\n\nHãy thử ngay với cuốn sách bạn đang đọc! 📖\n\n#MeoDocNhanh #ChiTayDanDuong #SpeedReading #DocSach`,
+    cta: '💬 Bạn đã thử chưa? Chia sẻ trải nghiệm nhé!',
+    hashtags: ['#MeoDocNhanh', '#ChiTayDanDuong', '#SpeedReading'],
+    date: '2026-07-20'
+  },
+  {
+    id: 2,
+    type: 'stat',
+    label: '📊 Số liệu',
+    title: '80% người trưởng thành không đọc hết 1 cuốn sách/năm',
+    content: `Số liệu biết nói 🚨\n\n📊 80% người trưởng thành không đọc hết 1 cuốn sách/năm.\n📊 Tốc độ đọc trung bình của người Việt: ~250 từ/phút.\n📊 Não bộ có thể xử lý: 600-1000 từ/phút.\n\nBạn thấy không? 👀\n\nBạn đang đọc CHẬM HƠN rất nhiều so với khả năng thực sự của não bộ.\n\nNguyên nhân không phải do bạn "không chăm chỉ" —\nmà do bạn chưa có KỸ THUẬT ĐỌC ĐÚNG.\n\nTin vui: Chỉ cần 15 phút luyện tập mỗi ngày, bạn có thể tăng tốc lên 600+ từ/phút.\n\n#DocSach #KyNangDoc #SpeedReading #PhatTrienBanThan`,
+    cta: '📊 Bạn đọc được bao nhiêu từ/phút? Thử đo và comment nhé!',
+    hashtags: ['#DocSach', '#KyNangDoc', '#SoLieuDocSach'],
+    date: '2026-07-20'
+  },
+  {
+    id: 3,
+    type: 'story',
+    label: '📖 Câu chuyện',
+    title: 'Từ ghét đọc sách đến nghiện đọc — chỉ sau 7 buổi',
+    content: `Ngày xưa mình ghét đọc sách. 😅\n\nKhông phải vì sách không hay.\nMà vì mình đọc quá chậm.\nMột trang 15 phút. Đọc xong chẳng nhớ gì.\n\nCảm giác như mình không hợp với việc đọc sách vậy.\n\nCho đến khi mình biết đến Speed Reading.\n\nKỹ thuật đơn giản:\n▸ Dùng tay dẫn mắt\n▸ Đọc cụm từ thay vì từng chữ\n▸ Ghi nhớ chủ động sau mỗi chương\n\nChỉ sau 7 buổi, mình từ 250 từ/phút lên 900 từ/phút.\nTừ ghét đọc thành nghiện đọc.\n\nNếu bạn cũng từng nghĩ "mình không thể đọc nhanh" —\nhãy thử một lần. Bạn sẽ bất ngờ đấy! 💪\n\n#CauChuyenDocSach #SpeedReading #ThayDoi #PhatTrien`,
+    cta: '📖 Bạn có câu chuyện về đọc sách không? Chia sẻ để truyền cảm hứng!',
+    hashtags: ['#CauChuyenDocSach', '#SpeedReading', '#ThayDoi'],
+    date: '2026-07-20'
+  },
+  {
+    id: 4,
+    type: 'question',
+    label: '❓ Hỏi đáp',
+    title: 'Đọc nhanh có hiểu không? — Lầm tưởng lớn nhất',
+    content: `Bạn có tin: "Đọc nhanh là đọc lướt, không hiểu gì"? 🤔\n\nĐây là LẦM TƯỞNG lớn nhất về Speed Reading.\n\nSỰ THẬT:\n🚫 Không: Đọc nhanh = đọc qua loa\n✅ Có: Đọc nhanh = đọc CÓ KỸ THUẬT — mắt và não đồng bộ\n\n🚫 Không: Tốc độ cao = hiểu thấp\n✅ Có: Ngược lại — đọc nhanh kích thích não tập trung HƠN\n\n🚫 Không: Đọc chậm = nhớ lâu\n✅ Có: Nghiên cứu cho thấy đọc quá chậm khiến não mất tập trung, quên NHIỀU hơn\n\n💡 Mẹo: Đọc nhanh + Active Recall (nhớ chủ động) = hiệu quả gấp 3 lần.\n\n#PhaVoLamTuong #DocNhanh #SpeedReading #HieuQua`,
+    cta: '❓ Bạn có thắc mắc gì về Speed Reading? Hỏi mình nhé!',
+    hashtags: ['#PhaVoLamTuong', '#DocNhanhHieuSau', '#SpeedReading'],
+    date: '2026-07-20'
+  },
+  {
+    id: 5,
+    type: 'action',
+    label: '🎯 Thử thách',
+    title: 'Thử thách 7 ngày — mỗi ngày 15 phút đọc sách',
+    content: `🎯 THỬ THÁCH 7 NGÀY CÙNG MÌNH!\n\nLuật chơi đơn giản:\n📖 Mỗi ngày dành 15 phút đọc sách\n⏱ Dùng đồng hồ bấm giờ\n📝 Ghi lại 3 điều bạn nhớ được sau khi đọc\n\nKỹ thuật áp dụng:\n➡ Ngày 1-2: Chỉ tay dẫn đường\n➡ Ngày 3-4: Đọc cụm từ (3-4 từ một lần)\n➡ Ngày 5-6: Ghi nhớ chủ động — đọc xong, gấp sách lại, nhớ lại\n➡ Ngày 7: Đo tốc độ — so sánh với ngày 1\n\nBạn sẽ thấy sự khác biệt!\n\nComment "MÌNH THAM GIA" để mình follow tiến độ nhé! 👇\n\n#ThuThachDocSach #7Ngay #SpeedReading #PhatTrien`,
+    cta: '👇 Comment "MÌNH THAM GIA" để bắt đầu thử thách!',
+    hashtags: ['#ThuThachDocSach', '#7Ngay', '#DocSachMoiNgay'],
+    date: '2026-07-20'
+  },
+  {
+    id: 6,
+    type: 'tip',
+    label: '💡 Mẹo đọc',
+    title: 'Loại bỏ đọc thầm — chìa khóa tăng tốc gấp 3',
+    content: `Bạn có biết đọc thầm đang giới hạn bạn ở 250 từ/phút? 🤫\n\nĐọc thầm = đọc bằng giọng nói trong đầu.\nBạn không thể nói nhanh hơn 250 từ/phút.\n→ Vì vậy bạn cũng không thể đọc nhanh hơn.\n\nCÁCH LOẠI BỎ ĐỌC THẦM:\n\n1️⃣ Đánh lạc hướng "giọng nói trong đầu"\n→ Vừa đọc vừa ngậm một ngụm nước nhỏ\n→ Hoặc nhẩm "1-2-3-4" trong khi đọc\n\n2️⃣ Dùng tay dẫn mắt nhanh hơn\n→ Tay chạy nhanh hơn giọng đọc, mắt theo tay\n→ Giọng nói trong đầu sẽ "lạc nhịp" và tự tắt\n\n3️⃣ Đọc cụm từ (chunking)\n→ Thay vì đọc "tôi - đi - học" → đọc "tôi đi học"\n→ Mắt nhìn 1 cụm, não xử lý 1 lần\n\nThử ngay: Đọc 1 trang sách, cố ý đọc nhanh hơn giọng nói trong đầu.\nNgày đầu có thể hơi khó — nhưng chỉ sau 3-4 ngày bạn sẽ quen!\n\n#BoDocTham #DocNhanh #KyThuatDoc #SpeedReading`,
+    cta: '💬 Bạn có bị đọc thầm không? Thử kỹ thuật trên và chia sẻ kết quả!',
+    hashtags: ['#BoDocTham', '#DocNhanh', '#KyThuatDoc'],
+    date: '2026-07-21'
+  },
+  {
+    id: 7,
+    type: 'stat',
+    label: '📊 Số liệu',
+    title: 'Warren Buffett đọc 500 trang/ngày — bí mật của ông là gì?',
+    content: `Bạn có biết Warren Buffett dành 80% thời gian để ĐỌC? 📚\n\nÔng đọc 500 trang mỗi ngày.\n500 trang — tương đương 1-2 cuốn sách.\n\nBí mật không phải ông đọc nhanh bẩm sinh.\nMà ông có KỸ THUẬT:\n\n1️⃣ Skimming trước — quét mục lục, tiêu đề, tóm tắt\n2️⃣ Chọn phần quan trọng — chỉ đọc kỹ phần cần\n3️⃣ Ghi chú — viết lại ý chính bằng ngôn ngữ của mình\n4️⃣ Áp dụng — luôn tự hỏi "Bài học này áp dụng vào đâu?"\n\nBill Gates đọc 50 cuốn sách/năm.\nElon Musk học cách chế tạo tên lửa bằng cách đọc sách.\n\nĐiểm chung: Họ không đọc nhanh hơn bạn — họ đọc CÓ CHIẾN LƯỢC.\n\nBạn có thể học được điều này.\nBắt đầu từ hôm nay. 🚀\n\n#NguoiThanhCong #DocSach #WarrenBuffett #SpeedReading`,
+    cta: '📚 Bạn đọc bao nhiêu cuốn sách/tháng? Comment bên dưới!',
+    hashtags: ['#NguoiThanhCong', '#DocSach', '#WarrenBuffett'],
+    date: '2026-07-21'
+  },
+  {
+    id: 8,
+    type: 'story',
+    label: '📖 Câu chuyện',
+    title: 'Học viên 45 tuổi — lần đầu đọc hết 1 cuốn sách trong đời',
+    content: `Mình nhớ mãi câu chuyện này. 🥹\n\nMột học viên 45 tuổi, đã 20 năm không đọc hết 1 cuốn sách.\nLý do: Đọc chậm, đọc xong quên, cảm giác thất bại mỗi lần cầm sách.\n\nAnh ấy đăng ký khoá Speed Reading với tâm thế "thử lần cuối".\n\nBuổi 1: 250 từ/phút, đọc thầm, không nhớ gì.\nBuổi 4: 600 từ/phút, bắt đầu cảm nhận được sự khác biệt.\nBuổi 7: 1.000 từ/phút — đọc xong 1 cuốn sách trong 2 ngày.\n\nAnh ấy nói:\n"20 năm mình tưởng mình không hợp đọc sách.\nHoá ra mình chỉ chưa có kỹ thuật đúng."\n\nNếu bạn cũng từng nghĩ vậy — hãy cho mình một cơ hội.\nKhông bao giờ là quá muộn để bắt đầu. 🌟\n\n#CauChuyenHocVien #SpeedReading #KhongBaoGioMuon`,
+    cta: '💪 Bạn bao nhiêu tuổi khi bắt đầu yêu thích đọc sách?',
+    hashtags: ['#CauChuyenHocVien', '#SpeedReading', '#KhongBaoGioMuon'],
+    date: '2026-07-21'
+  },
+  {
+    id: 9,
+    type: 'question',
+    label: '❓ Hỏi đáp',
+    title: 'Có nên dùng AI để đọc sách thay mình không?',
+    content: `AI giờ đọc sách giùm bạn — có nên không? 🤖📚\n\nChatGPT, Claude, NotebookLM có thể:\n✅ Tóm tắt sách 300 trang trong 30 giây\n✅ Trích xuất ý chính từng chương\n✅ Trả lời câu hỏi về nội dung sách\n\nTUYỆT VỜI — nhưng có một vấn đề:\n\n⚠️ AI đọc giùm bạn ≠ Bạn HIỂU và NHỚ\n\nGiống như:\nAI tập gym giùm bạn → bạn không có cơ bắp.\nAI nấu ăn giùm bạn → bạn không biết nấu.\n\nVậy nên:\n▸ Dùng AI để TRA CỨU, TÌM KIẾM thông tin → 👍\n▸ Dùng AI để TÓM TẮT nhanh trước khi đọc → 👍\n▸ Dùng AI để THAY THẾ việc đọc sâu → 👎\n\nCách tốt nhất: Kết hợp AI + Speed Reading + Ghi nhớ chủ động.\nĐó mới là công thức vàng! 🏆\n\n#AIvsDocSach #CongNghe #SpeedReading #HocTap`,
+    cta: '🤖 Bạn có dùng AI để đọc sách không? Chia sẻ kinh nghiệm!',
+    hashtags: ['#AIvsDocSach', '#CongNghe', '#SpeedReading'],
+    date: '2026-07-21'
+  },
+  {
+    id: 10,
+    type: 'action',
+    label: '🎯 Thử thách',
+    title: 'Thử thách đọc 1 trang/1 phút — ai làm được?',
+    content: `🔥 THỬ THÁCH: 1 TRANG / 1 PHÚT 🔥\n\nLuật chơi:\n📖 Lấy bất kỳ cuốn sách nào\n⏱ Bấm đồng hồ 1 phút\n📄 Đọc 1 trang sách trong đúng 1 phút\n📝 Gấp sách lại — nhớ lại 3 điều bạn vừa đọc\n\nMục tiêu:\n✅ Không đọc thầm\n✅ Mắt chạy nhanh\n✅ Nhớ được ít nhất 3 ý chính\n\nSau đó comment kết quả:\n📊 Bạn đọc được bao nhiêu % trang?\n📊 Bạn nhớ được mấy ý?\n\nNgười mới: 60-70% trang, nhớ 1-2 ý.\nNgười có kỹ thuật: 100% trang, nhớ 3-5 ý.\n\nThử ngay và comment bên dưới! 👇\n\n#ThuThachDocSach #1Trang1Phut #SpeedReading`,
+    cta: '👇 Thử ngay và comment kết quả!',
+    hashtags: ['#ThuThachDocSach', '#1Trang1Phut', '#SpeedReading'],
+    date: '2026-07-21'
+  },
+  {
+    id: 11,
+    type: 'tip',
+    label: '💡 Mẹo đọc',
+    title: 'Kỹ thuật 3-2-1 — tăng tốc chỉ trong 3 phút',
+    content: `Bạn muốn tăng tốc đọc NGAY LẬP TỨC? 🚀\n\nKỸ THUẬT 3-2-1:\n\nĐây là bài tập tăng tốc đơn giản nhất:\n\n1️⃣ Đọc 3 phút với tốc độ thoải mái\n→ Đánh dấu vị trí bạn dừng lại\n\n2️⃣ Đọc LẠI đoạn đó trong 2 phút\n→ Cố gắng đọc nhanh hơn lần 1\n→ Mắt chạy, tay dẫn, không đọc thầm\n\n3️⃣ Đọc LẠI đoạn đó trong 1 phút\n→ NHANH NHẤT CÓ THỂ\n→ Chấp nhận bỏ vài chữ — não sẽ tự điền\n\n💡 Kết quả sau 1 tuần:\nLần 1: 250 từ/phút\nLần 2: 350 từ/phút\nLần 3: 500+ từ/phút\n\nKhông tin? Thử ngay với cuốn sách bạn đang cầm! 📖\n\n#KyThuat321 #TangTocDoc #SpeedReading #MeoHay`,
+    cta: '⏱ Bạn thử xong chưa? Tốc độ tăng bao nhiêu? Comment nhé!',
+    hashtags: ['#KyThuat321', '#TangTocDoc', '#SpeedReading'],
+    date: '2026-07-22'
+  },
+  {
+    id: 12,
+    type: 'stat',
+    label: '📊 Số liệu',
+    title: 'Đọc sách 15 phút/ngày giảm 30% suy giảm nhận thức',
+    content: `Nghiên cứu từ Đại học Yale (2026) cho thấy: 🧠\n\n📊 Đọc sách 15 phút mỗi ngày giảm 30% nguy cơ suy giảm nhận thức.\n📊 So với xem TV 15 phút: không có tác dụng bảo vệ não bộ.\n\nCƠ CHẾ:\n🧠 Khi đọc, não kích hoạt vùng xử lý ngôn ngữ, trí tưởng tượng, tư duy phản biện\n🧠 Giống như tập gym cho não — càng đọc, não càng khỏe\n🧠 Đọc nhanh càng tốt — vì kích thích não tập trung cao độ\n\nVậy:\n✅ 15 phút/ngày là đủ\n✅ Quan trọng là DUY TRÌ, không phải cố gắng 2 tiếng rồi bỏ\n✅ Speed Reading giúp bạn tận dụng tối đa 15 phút đó\n\nBắt đầu ngay hôm nay! 📚\n\n#DocSach #NaoBo #Yale #SpeedReading #SucKhoeNao`,
+    cta: '📖 Hôm nay bạn đã đọc sách chưa? 15 phút thôi — bắt đầu ngay!',
+    hashtags: ['#DocSach', '#NaoBo', '#YaleResearch', '#SpeedReading'],
+    date: '2026-07-22'
+  },
+  {
+    id: 13,
+    type: 'story',
+    label: '📖 Câu chuyện',
+    title: 'Sinh viên năm nhất — từ 300 lên 900 từ/phút để theo kịp bài vở',
+    content: `Minh là sinh viên năm nhất ĐH Bách Khoa. 🎓\n\nÁp lực tài liệu chất cao:\n▸ Giáo trình 500 trang chỉ để đọc trong 1 tuần\n▸ Slide bài giảng, bài tập, đề cương...\n▸ Cảm giác ngộp thở vì không đọc kịp\n\nMinh tìm đến Speed Reading như phao cứu sinh.\n\nKết quả sau 7 buổi:\nTừ 300 → 900 từ/phút 🚀\nThời gian đọc giáo trình giảm từ 3 ngày xuống còn 1 ngày.\nĐiểm thi cải thiện rõ rệt vì đọc kịp tài liệu.\n\nMinh nói:\n"Giá mà mình biết Speed Reading sớm hơn. Đỡ khổ 3 năm cấp 3!"\n\nNếu bạn đang là sinh viên — đây là kỹ năng sống còn.\n\n#SinhVien #SpeedReading #HocTap #BachKhoa`,
+    cta: '🎓 Bạn là sinh viên? Bạn đọc bao nhiêu từ/phút? Thử đo nhé!',
+    hashtags: ['#SinhVien', '#SpeedReading', '#HocTap'],
+    date: '2026-07-22'
+  },
+  {
+    id: 14,
+    type: 'question',
+    label: '❓ Hỏi đáp',
+    title: 'Speed Reading có phù hợp với trẻ em không?',
+    content: `Bạn có con đang học cấp 2, cấp 3? 👨‍👩‍👧‍👦\n\nBạn có biết:\n📚 Khối lượng sách giáo khoa ngày càng nhiều\n📚 Tốc độ đọc ảnh hưởng trực tiếp đến kết quả học tập\n📚 Trẻ đọc chậm → chán nản → sợ học\n\nSpeed Reading cho trẻ em:\n\n✅ PHÙ HỢP: Trẻ từ 12 tuổi trở lên hoàn toàn có thể học\n✅ KHÔNG gây hại: Không phải "nhồi nhét" — mà là kỹ thuật đúng\n✅ LỢI ÍCH: Tăng tốc đọc, cải thiện tập trung, nhớ bài lâu hơn\n✅ ỨNG DỤNG: Đọc sách giáo khoa, tài liệu tham khảo, đề thi\n\nLưu ý:\n▸ Cho trẻ học từ từ, không ép\n▸ Kết hợp với trò chơi, thử thách để tạo hứng thú\n▸ Làm gương — bố mẹ đọc sách cùng con\n\nĐầu tư vào kỹ năng đọc cho con là đầu tư dài hạn! 🌟\n\n#TreEm #DocSach #SpeedReading #GiaoDuc #PhuHuynh`,
+    cta: '👨‍👩‍👧‍👦 Bạn có cho con học Speed Reading không? Chia sẻ kinh nghiệm!',
+    hashtags: ['#TreEm', '#DocSach', '#SpeedReading', '#GiaoDuc'],
+    date: '2026-07-22'
+  },
+  {
+    id: 15,
+    type: 'action',
+    label: '🎯 Thử thách',
+    title: '7 ngày không đọc thầm — ai dám thử?',
+    content: `🔥 THỬ THÁCH: 7 NGÀY KHÔNG ĐỌC THẦM 🔥\n\nĐọc thầm là thói quen khó bỏ nhất.\nNhưng một khi bỏ được — tốc độ đọc sẽ tăng VỌT.\n\nLuật chơi:\n\n📅 Ngày 1-2: Nhận diện — đọc và để ý khi nào bạn đọc thầm\n📅 Ngày 3-4: Đánh lạc hướng — nhẩm "1-2-3" trong đầu khi đọc\n📅 Ngày 5-6: Tăng tốc — dùng tay dẫn nhanh hơn giọng nói\n📅 Ngày 7: Kiểm tra — đọc 1 trang, đo tốc độ, so sánh với ngày 1\n\nCam kết: Chỉ 15 phút/ngày.\nKết quả: Tốc độ tăng tối thiểu 50%.\n\nAi dám thử? Comment "TÔI THAM GIA"! 💪\n\n#ThuThachDocSach #7Ngay #BoDocTham #SpeedReading`,
+    cta: '👇 Ai dám thử? Comment "TÔI THAM GIA"!',
+    hashtags: ['#ThuThachDocSach', '#7Ngay', '#BoDocTham'],
+    date: '2026-07-22'
+  },
+  {
+    id: 16,
+    type: 'tip',
+    label: '💡 Mẹo đọc',
+    title: 'Đọc cụm từ (Chunking) — bí kíp lên 1000 từ/phút',
+    content: `Bạn muốn đọc 1000+ từ/phút?\n\nQuên cách đọc từng chữ đi.\nHọc cách đọc CỤM TỪ.\n\nVí dụ:\n\nCÁCH CŨ: "Tôi - đi - học - bằng - xe - đạp" (6 lần dừng)\nCÁCH MỚI: "Tôi đi học" "bằng xe đạp" (2 lần dừng)\n\nCÁCH LUYỆN:\n\n1️⃣ Mở rộng tầm mắt\n→ Không nhìn vào 1 chữ, nhìn vào 3-4 chữ một lần\n→ Giống như chụp ảnh cả cụm từ\n\n2️⃣ Dùng tay làm "khung"\n→ Tay vẽ đường dưới dòng chữ, mắt theo tay\n→ Mỗi lần tay dừng = 1 cụm từ\n\n3️⃣ Tăng dần độ rộng\n→ Tuần 1: 2 từ/cụm\n→ Tuần 2: 3 từ/cụm\n→ Tuần 3: 4-5 từ/cụm\n\nSau 1 tháng: Từ 250 → 800+ từ/phút. 🚀\n\n#DocCumTu #Chunking #KyThuatDoc #SpeedReading`,
+    cta: '🔤 Bạn đã thử đọc cụm từ chưa? Khó hay dễ? Comment nhé!',
+    hashtags: ['#DocCumTu', '#Chunking', '#KyThuatDoc', '#SpeedReading'],
+    date: '2026-07-23'
+  },
+  {
+    id: 17,
+    type: 'stat',
+    label: '📊 Số liệu',
+    title: 'Người đọc nhanh có lợi thế gấp 3 lần trong thời đại số',
+    content: `Thời đại bùng nổ thông tin 🚨\n\nMỗi ngày chúng ta tiếp nhận:\n📱 34 GB dữ liệu\n📱 Tương đương 174 tờ báo\n📱 Gấp 5 lần so với năm 2000\n\nNgười đọc nhanh có lợi thế:\n\n✅ Xử lý tài liệu công việc nhanh gấp 3\n✅ Học kỹ năng mới nhanh hơn — cạnh tranh hơn\n✅ Tiết kiệm 200+ giờ/năm (đọc sách, báo, tài liệu)\n✅ Cập nhật xu hướng, kiến thức — không bị bỏ lại\n\nTrong thời đại AI, người biết đọc nhanh + biết dùng AI = lợi thế cực lớn.\n\nBạn đang ở đâu trong cuộc đua này? 🏃\n\n#ThoiDaiSo #LoiTheCanhTranh #SpeedReading #PhatTrien`,
+    cta: '📊 Bạn thấy mình cần cải thiện kỹ năng đọc không?',
+    hashtags: ['#ThoiDaiSo', '#LoiTheCanhTranh', '#SpeedReading'],
+    date: '2026-07-23'
+  },
+  {
+    id: 18,
+    type: 'story',
+    label: '📖 Câu chuyện',
+    title: 'Nhân viên văn phòng — 1.000 từ/phút sau 7 buổi',
+    content: `Ngân là nhân viên văn phòng tại TP.HCM. 💼\n\nCông việc của Ngân:\n▸ Phải đọc hàng trăm email, báo cáo, tài liệu mỗi ngày\n▸ Stress vì không đọc kịp, thường xuyên OT\n▸ Cảm giác mình luôn "chậm hơn" đồng nghiệp\n\nNgân quyết định đầu tư vào Speed Reading.\n\nKết quả:\nTừ 300 → 1.000 từ/phút 🚀\nThời gian xử lý tài liệu giảm 60%\nKhông còn OT vì đọc tài liệu\nTự tin hơn, được sếp giao nhiều việc quan trọng\n\nNgân nói:\n"Mình ước mình biết kỹ thuật này sớm hơn. Tiết kiệm cả năm trời stress!"\n\nBạn có đang ở trong hoàn cảnh này không? 👇\n\n#NhanVienVanPhong #SpeedReading #PhatTrienSuNghiep`,
+    cta: '💼 Bạn dành bao nhiêu thời gian/ngày để đọc tài liệu công việc?',
+    hashtags: ['#NhanVienVanPhong', '#SpeedReading', '#PhatTrienSuNghiep'],
+    date: '2026-07-23'
+  },
+  {
+    id: 19,
+    type: 'question',
+    label: '❓ Hỏi đáp',
+    title: 'Cần bao nhiêu thời gian để đọc được 1000 từ/phút?',
+    content: `Câu hỏi mình nhận được nhiều nhất:\n"Mất bao lâu để đọc được 1000 từ/phút?" ⏱\n\nCâu trả lời: 7 BUỔI — nếu có lộ trình đúng.\n\nLỘ TRÌNH THỰC TẾ:\n\nBuổi 1: Kích hoạt mắt — từ 250 lên 400 từ/phút\nBuổi 2: Bỏ đọc thầm — từ 400 lên 600 từ/phút\nBuổi 3: Đọc cụm từ — từ 600 lên 750 từ/phút\nBuổi 4: Skimming — từ 750 lên 850 từ/phút\nBuổi 5: Ghi nhớ chủ động — củng cố 850 từ/phút\nBuổi 6: Tổng hợp kỹ thuật — từ 850 lên 950 từ/phút\nBuổi 7: Tối ưu — đạt 1000+ từ/phút\n\nKhông phải ảo thuật.\nChỉ là kỹ thuật đúng + luyện tập có hướng dẫn.\n\n80% học viên đạt 1000+ từ/phút sau 7 buổi.\nBạn có thể là người tiếp theo! 🎯\n\n#1000TuMotPhut #SpeedReading #LoTrinhHoc`,
+    cta: '🎯 Mục tiêu đọc của bạn là bao nhiêu từ/phút? Comment nhé!',
+    hashtags: ['#1000TuMotPhut', '#SpeedReading', '#LoTrinhHoc'],
+    date: '2026-07-23'
+  },
+  {
+    id: 20,
+    type: 'action',
+    label: '🎯 Thử thách',
+    title: 'Thử thách đọc 1 cuốn sách trong 1 tuần',
+    content: `🔥 THỬ THÁCH: 1 CUỐN SÁCH / 1 TUẦN 🔥\n\nĐây là thử thách lớn nhất!\n\nMục tiêu: Đọc HẾT 1 cuốn sách (200-300 trang) trong 7 ngày.\n\nKẾ HOẠCH:\n\n📅 Thứ 2: Skimming — đọc mục lục, lời nói đầu, kết luận (30 phút)\n📅 Thứ 3: Chương 1-2 — đọc cụm từ, ghi chú ý chính (20 phút)\n📅 Thứ 4: Chương 3-4 — đọc, ghi nhớ chủ động (20 phút)\n📅 Thứ 5: Chương 5-6 — đọc, tóm tắt bằng sơ đồ (20 phút)\n📅 Thứ 6: Chương 7-8 — đọc, liên hệ thực tế (20 phút)\n📅 Thứ 7: Chương 9-10 — đọc nốt, ghi chú tổng kết (20 phút)\n📅 Chủ nhật: Review — đọc lại ghi chú, viết bài review (20 phút)\n\nTổng thời gian: Chỉ 2,5 tiếng/tuần — ai cũng làm được!\n\nAi dám thử? Comment tên cuốn sách bạn sẽ đọc! 📖\n\n#ThuThachDocSach #1Tuan1Cuon #SpeedReading`,
+    cta: '📖 Bạn sẽ đọc cuốn gì trong tuần này? Comment tên sách!',
+    hashtags: ['#ThuThachDocSach', '#1Tuan1Cuon', '#SpeedReading'],
+    date: '2026-07-23'
+  },
+  {
+    id: 21,
+    type: 'tip',
+    label: '💡 Mẹo đọc',
+    title: 'Skimming — kỹ thuật đọc lướt thông minh trong 15 phút',
+    content: `Bạn có biết trước khi đọc kỹ, bạn nên "SKIM" trước?\n\nSkimming = đọc lướt để nắm cấu trúc trước khi đọc sâu.\n\nCÁCH SKIM HIỆU QUẢ (15 phút):\n\n⏱ 0-3 phút: Đọc mục lục\n→ Hiểu bố cục cuốn sách\n→ Chương nào quan trọng? Chương nào có thể bỏ qua?\n\n⏱ 3-7 phút: Đọc lời nói đầu + kết luận\n→ Tác giả muốn nói gì?\n→ Kết luận chính là gì?\n\n⏱ 7-12 phút: Lật nhanh từng trang\n→ Đọc tiêu đề phụ, in đậm, bullet points\n→ Xem hình ảnh, biểu đồ, bảng\n\n⏱ 12-15 phút: Quyết định\n→ Chương nào đọc kỹ?\n→ Chương nào lướt qua?\n\nKết quả: Tiết kiệm 50% thời gian đọc sách!\n\n#Skimming #DocLuot #KyThuatDoc #SpeedReading`,
+    cta: '💬 Bạn có thường skim sách trước khi đọc không?',
+    hashtags: ['#Skimming', '#DocLuot', '#KyThuatDoc', '#SpeedReading'],
+    date: '2026-07-24'
+  },
+  {
+    id: 22,
+    type: 'stat',
+    label: '📊 Số liệu',
+    title: 'Đọc sách in tốt hơn đọc màn hình gấp 3 lần — Harvard 2026',
+    content: `Nghiên cứu từ Đại học Harvard (2026) 📚\n\nKết luận: Đọc sách IN tốt hơn đọc MÀN HÌNH gấp 3 lần về khả năng ghi nhớ.\n\nTẠI SAO?\n\n🧠 Khi đọc sách in:\n- Không bị phân tâm bởi thông báo, quảng cáo\n- Não tạo "bản đồ không gian" — nhớ thông tin ở vị trí nào trên trang\n- Cảm giác vật lý (giấy, mùi sách) kích thích trí nhớ\n\n📱 Khi đọc màn hình:\n- Dễ bị xao nhãng — thông báo pop-up, đa nhiệm\n- Cuộn vô tận — không có "neo" không gian\n- Ánh sáng xanh gây mỏi mắt, giảm tập trung\n\nGIẢI PHÁP:\n✅ Đọc sách in khi cần hiểu SÂU\n✅ Đọc màn hình khi cần TRA CỨU nhanh\n✅ Kết hợp cả hai — tối ưu hiệu quả\n\n#DocSachIn #Harvard #SpeedReading #GhiNho`,
+    cta: '📖 Bạn thích đọc sách in hay màn hình hơn?',
+    hashtags: ['#DocSachIn', '#Harvard', '#SpeedReading', '#GhiNho'],
+    date: '2026-07-24'
+  },
+  {
+    id: 23,
+    type: 'story',
+    label: '📖 Câu chuyện',
+    title: '20 năm không đọc sách — giờ đọc 30 cuốn/năm',
+    content: `Một học viên khác của mình: Hoàng Anh, 35 tuổi, quản lý dự án. 📊\n\nTrước khi học:\n→ 20 năm không đọc hết 1 cuốn sách nào\n→ Lý do: bận, đọc chậm, không kiên nhẫn\n→ Nhưng trong công việc cần đọc rất nhiều tài liệu\n\nSau 7 buổi Speed Reading:\n→ 350 → 1.100 từ/phút 🚀\n→ Đọc 30 cuốn sách/năm\n→ Tự tin chia sẻ kiến thức với đồng nghiệp\n→ Được sếp đánh giá cao về tư duy\n\nHoàng Anh nói:\n"Mỗi tối học 60 phút, không ảnh hưởng công việc.\nSau 7 buổi, mình đọc nhanh gấp 3.\nQuan trọng nhất: mình NHỚ những gì đã đọc."\n\nNếu Hoàng Anh làm được — bạn cũng làm được! 💪\n\n#CauChuyenHocVien #SpeedReading #35Tuoi #PhatTrien`,
+    cta: '💪 Bạn bao nhiêu tuổi? Bắt đầu học Speed Reading chưa?',
+    hashtags: ['#CauChuyenHocVien', '#SpeedReading', '#PhatTrien'],
+    date: '2026-07-24'
+  },
+  {
+    id: 24,
+    type: 'question',
+    label: '❓ Hỏi đáp',
+    title: 'Học online Zoom có hiệu quả hơn học offline không?',
+    content: `Nhiều bạn hỏi: "Học online Speed Reading có hiệu quả không?" 🖥️\n\nMình xin trả lời: CÓ — và thậm chí còn TỐT HƠN học offline.\n\nLÝ DO:\n\n1️⃣ Học mọi lúc, mọi nơi\n→ Không mất thời gian đi lại\n→ Học ở nhà, quán cà phê, bất cứ đâu\n\n2️⃣ Có ghi hình — xem lại được\n→ Quên kiến thức? Xem lại video.\n→ Ốm đau bận việc? Xem lại sau.\n\n3️⃣ Tương tác trực tiếp\n→ Zoom vẫn hỏi đáp được, sửa lỗi từng người\n→ Kèm cặp qua Zalo sau mỗi buổi\n\n4️⃣ Sĩ số nhỏ — tập trung hơn\n→ Không bị phân tâm như lớp đông\n→ Được quan tâm nhiều hơn\n\nHọc online không phải là "học rẻ" — mà là "học thông minh". 🎯\n\n#HocOnline #SpeedReading #Zoom #HocThongMinh`,
+    cta: '💻 Bạn thích học online hay offline? Tại sao?',
+    hashtags: ['#HocOnline', '#SpeedReading', '#Zoom', '#HocThongMinh'],
+    date: '2026-07-24'
+  },
+  {
+    id: 25,
+    type: 'action',
+    label: '🎯 Thử thách',
+    title: 'Thử thách ghi nhớ — đọc xong, gấp sách, nhớ lại',
+    content: `🔥 THỬ THÁCH: ACTIVE RECALL 🔥\n\nĐây là kỹ thuật ghi nhớ MẠNH NHẤT mà mình biết.\n\nCách làm cực kỳ đơn giản:\n\n1️⃣ Đọc 1 chương sách (10-15 phút)\n2️⃣ GẤP SÁCH LẠI — không nhìn lại\n3️⃣ Nhớ lại: viết ra 3 điều bạn vừa đọc\n4️⃣ Kiểm tra lại sách — bạn nhớ đúng chưa?\n\nKhoa học nói gì?\n🧠 Active Recall gấp 3 lần hiệu quả so với ĐỌC LẠI\n🧠 Khi bạn cố nhớ lại, não tạo kết nối thần kinh MỚI\n🧠 Càng khó nhớ lại, càng tốt cho não\n\nThử ngay với cuốn sách bạn đang đọc!\n\nComment "ĐÃ THỬ" sau khi làm xong 👇\n\n#ActiveRecall #GhiNho #SpeedReading #KyThuatHoc`,
+    cta: '📝 Đã thử xong? Comment "ĐÃ THỬ" để mình biết nhé!',
+    hashtags: ['#ActiveRecall', '#GhiNho', '#SpeedReading', '#KyThuatHoc'],
+    date: '2026-07-24'
+  }
+];
+
+// ===== RENDER =====
+let currentFilter = 'all';
+
+function filterPosts(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.filter-btn[data-filter="${filter}"]`).classList.add('active');
+  renderPosts();
+}
+
+function renderPosts() {
+  const container = document.getElementById('postsContainer');
+  const filtered = currentFilter === 'all' ? POSTS : POSTS.filter(p => p.type === currentFilter);
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--ink-dim);"><span style="font-size:2em;display:block;margin-bottom:12px;">📭</span><h3>Chưa có bài viết nào</h3></div>';
+    return;
+  }
+
+  // Group by date
+  const groups = {};
+  filtered.forEach(p => {
+    if (!groups[p.date]) groups[p.date] = [];
+    groups[p.date].push(p);
+  });
+  const sortedDates = Object.keys(groups).sort().reverse();
+
+  let html = '';
+  sortedDates.forEach(date => {
+    const parts = date.split('-');
+    const days = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+    const d = new Date(parts[0], parts[1]-1, parts[2]);
+    const dateStr = `${days[d.getDay()]}, ${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    html += `<div style="margin-bottom:8px;font-size:.82em;color:var(--ink-dim);font-weight:600;padding:8px 0 4px;">📅 ${dateStr} (${groups[date].length} bài)</div>`;
+
+    groups[date].forEach((p, idx) => {
+      html += `
+        <div class="post-card" data-type="${p.type}">
+          <div class="post-header">
+            <div class="avatar">${p.type === 'tip' ? '💡' : p.type === 'stat' ? '📊' : p.type === 'story' ? '📖' : p.type === 'question' ? '❓' : '🎯'}</div>
+            <div class="info">
+              <div class="name">${p.title}</div>
+              <div class="time">${p.date}</div>
+            </div>
+            <span class="badge ${p.type}">${p.label}</span>
+          </div>
+          <div class="post-body">
+            <div class="content">${p.content}</div>
+            <div class="cta-row">
+              <span class="btn" onclick="copyPost(${p.id})">📋 Copy bài viết</span>
+              <div class="hashtags">${p.hashtags.map(h => `<span>${h}</span>`).join(' ')}</div>
+            </div>
+          </div>
+          <div class="post-footer">
+            <span>💬 ${p.cta}</span>
+            <span style="margin-left:auto;">
+              <button class="copy-btn" onclick="copyPost(${p.id})">📋 Copy</button>
+            </span>
+          </div>
+        </div>`;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+function copyPost(id) {
+  const post = POSTS.find(p => p.id === id);
+  if (!post) return;
+
+  const text = `${post.content}\n\n---\n${post.cta}`;
+  navigator.clipboard.writeText(text).then(() => {
+    // Visual feedback
+    const btn = document.querySelector(`.copy-btn[onclick="copyPost(${id})"]`);
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✅ Đã copy!';
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('✅ Đã copy nội dung! Hãy paste vào Facebook.');
+  });
+}
+
+// Init
+renderPosts();
+</script>
+
+</body>
+</html>
