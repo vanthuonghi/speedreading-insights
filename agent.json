@@ -2,7 +2,7 @@
   "name": "Hermes Agent 🤖",
   "for": "Speed Reading Việt Nam",
   "owner": "Văn Hỉ",
-  "updated": "2026-07-20",
+  "updated": "2026-07-21",
   "platform": "Hermes Agent (Nous Research) — Telegram + Local",
   "model": "deepseek/deepseek-v4-flash (OpenRouter)",
   "schedule": [
@@ -29,27 +29,27 @@
     {
       "time": "08:00",
       "task": "📝 Đăng bài FB #1 — Kiến thức mới + Mẹo đọc",
-      "detail": "tips content: chia sẻ mẹo đọc nhanh, kỹ thuật học tập, kinh nghiệm thực tế"
+      "detail": "tips content: chia sẻ mẹo đọc nhanh, kỹ thuật học tập, kinh nghiệm thực tế. Xưng 'Hỉ', phong cách kể chuyện gần gũi, thực dụng, có giá trị lợi ích"
     },
     {
       "time": "12:00",
       "task": "📚 Đăng bài FB #2 — Review sách + Bài học",
-      "detail": "review content: giới thiệu sách hay, bài học tâm đắc, khuyến khích đọc sách"
+      "detail": "review content: giới thiệu sách hay, bài học tâm đắc, khuyến khích đọc sách. Xưng 'Hỉ', có chiều sâu, logic, liên hệ thực tế"
     },
     {
       "time": "15:00",
       "task": "🧠 Đăng bài FB #3 — Nghiên cứu + Não bộ",
-      "detail": "mindset content: khoa học não bộ, sự thật thú vị, nghiên cứu về đọc và học tập"
+      "detail": "mindset content: khoa học não bộ, sự thật thú vị, nghiên cứu về đọc và học tập. Xưng 'Hỉ', thực dụng, áp dụng được ngay"
     },
     {
       "time": "18:00",
       "task": "🎯 Đăng bài FB #4 — Giới thiệu SR + Course",
-      "detail": "course content: giới thiệu khóa học, webinar, kêu gọi đăng ký"
+      "detail": "course content: giới thiệu khóa học, webinar, kêu gọi đăng ký. Xưng 'Hỉ', giá trị lợi ích rõ ràng, không bán hàng lộ liễu"
     },
     {
       "time": "20:00",
       "task": "💪 Đăng bài FB #5 — Động lực + Group content",
-      "detail": "mindset content: động lực đọc sách, thói quen thành công, câu chuyện truyền cảm hứng"
+      "detail": "mindset content: động lực đọc sách, thói quen thành công, câu chuyện truyền cảm hứng. Xưng 'Hỉ', gần gũi, thực tế"
     },
     {
       "time": "19:00",
@@ -131,14 +131,16 @@
     {
       "icon": "📱",
       "title": "Facebook Page Manager",
-      "desc": "Đăng 5 bài/ngày lên Speed Reading HCM (ID: 701172629741862). Nội dung đa dạng: Mẹo đọc (8h) → Review sách (12h) → Nghiên cứu não bộ (15h) → Giới thiệu khóa học (18h) → Động lực (20h). Cron job tự động, ảnh AI Gemini/GPT-5 chất lượng cao.",
+      "desc": "Đăng 5 bài/ngày lên Speed Reading HCM (ID: 701172629741862). Nội dung đa dạng: Mẹo đọc (8h) → Review sách (12h) → Nghiên cứu não bộ (15h) → Giới thiệu khóa học (18h) → Động lực (20h). Cron job tự động, ảnh AI Gemini 3.1 Flash Image chất lượng cao. Xưng 'Hỉ', phong cách kể chuyện thực tế, thực dụng, có giá trị, rõ ràng logic.",
       "skills": [
         "Viết content tiếng Việt",
         "Lịch đăng 5x/ngày (8h, 12h, 15h, 18h, 20h)",
         "Facebook Graph API",
-        "Photo upload (dev mode workaround)",
+        "Photo upload (source=@)",
         "URL strip tự động",
-        "Pollinations.ai image gen"
+        "Gemini 3.1 Flash Image gen",
+        "Xưng 'Hỉ' — gần gũi, chân thật",
+        "Nội dung thực dụng, có giá trị lợi ích"
       ]
     },
     {
@@ -204,15 +206,14 @@
     {
       "icon": "🎨",
       "title": "Image Generator",
-      "desc": "Sinh ảnh AI cho Facebook posts. 7 phương án dự phòng: Pollinations.ai → OpenRouter Flux → Unsplash → HuggingFace → DeepInfra → FAL.ai → PIL Placeholder.",
+      "desc": "Sinh ảnh AI cho Facebook posts. Ưu tiên: Gemini 3.1 Flash Image → GPT-5 Image → Gemini 3.1 Flash Lite Image (qua OpenRouter). Ảnh riêng theo từng loại nội dung: tips/review/mindset/course.",
       "skills": [
-        "Pollinations.ai API",
-        "OpenRouter Flux",
-        "Unsplash API",
-        "HuggingFace Inference",
-        "DeepInfra",
-        "FAL.ai",
-        "PIL Placeholder"
+        "Gemini 3.1 Flash Image API",
+        "GPT-5 Image API",
+        "Gemini 3.1 Flash Lite Image",
+        "OpenRouter images/generations",
+        "Prompt ảnh theo loại content",
+        "Base64 decode + file save"
       ]
     }
   ],
@@ -326,6 +327,21 @@
       "tag": "🎨",
       "type": "fix",
       "text": "Cải thiện ảnh Facebook: thay Pollinations.ai bằng GPT-5 Image/Gemini Imagen 3 qua OpenRouter. Chất lượng ảnh tăng vượt bậc, giá chỉ $0.002-0.04/ảnh."
+    },
+    {
+      "tag": "🐞",
+      "type": "fix",
+      "text": "Sửa lỗi upload ảnh Facebook: url=@ -> source=@. Đăng bài kèm ảnh hoạt động trở lại."
+    },
+    {
+      "tag": "✍️",
+      "type": "update",
+      "text": "Cập nhật văn phong: xưng 'Hỉ' thay 'mình'. Nội dung thực dụng, có giá trị lợi ích, rõ ràng logic, liên hệ thực tế đời sống."
+    },
+    {
+      "tag": "🎨",
+      "type": "update",
+      "text": "Ảnh AI theo loại nội dung: 4 prompt riêng cho tips/review/mindset/course thay vì 1 prompt chung."
     }
   ]
 }
