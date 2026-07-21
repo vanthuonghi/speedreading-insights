@@ -28,18 +28,28 @@
     },
     {
       "time": "08:00",
-      "task": "📢 Đăng bài FB sáng (sp-online)",
-      "detail": "sp_ad hoặc sp_hook — random từ 15 biến thể"
+      "task": "📝 Đăng bài FB #1 — Kiến thức mới + Mẹo đọc",
+      "detail": "tips content: chia sẻ mẹo đọc nhanh, kỹ thuật học tập, kinh nghiệm thực tế"
     },
     {
       "time": "12:00",
-      "task": "☀️ Đăng bài FB trưa (sp-online)",
-      "detail": "sp_video_script hoặc sp_ad — random 15 biến thể"
+      "task": "📚 Đăng bài FB #2 — Review sách + Bài học",
+      "detail": "review content: giới thiệu sách hay, bài học tâm đắc, khuyến khích đọc sách"
+    },
+    {
+      "time": "15:00",
+      "task": "🧠 Đăng bài FB #3 — Nghiên cứu + Não bộ",
+      "detail": "mindset content: khoa học não bộ, sự thật thú vị, nghiên cứu về đọc và học tập"
     },
     {
       "time": "18:00",
-      "task": "🌆 Đăng bài FB tối (sp-online)",
-      "detail": "sp_hook (câu chuyện/cảm xúc) hoặc sp_ad (chốt sale)"
+      "task": "🎯 Đăng bài FB #4 — Giới thiệu SR + Course",
+      "detail": "course content: giới thiệu khóa học, webinar, kêu gọi đăng ký"
+    },
+    {
+      "time": "20:00",
+      "task": "💪 Đăng bài FB #5 — Động lực + Group content",
+      "detail": "mindset content: động lực đọc sách, thói quen thành công, câu chuyện truyền cảm hứng"
     },
     {
       "time": "19:00",
@@ -61,10 +71,10 @@
     "group_posts": 25,
     "membership_pages": 1,
     "total_html": 187,
-    "fb_posts_per_day": 3,
+    "fb_posts_per_day": 5,
     "workshop_pages": 1,
     "email_sequences": 5,
-    "cron_jobs": 14,
+    "cron_jobs": 16,
     "tabs_on_dashboard": 10
   },
   "roles": [
@@ -121,10 +131,10 @@
     {
       "icon": "📱",
       "title": "Facebook Page Manager",
-      "desc": "Đăng 3 bài/ngày lên Speed Reading HCM (ID: 701172629741862). Dùng nội dung từ Quảng cáo + Group content. Cron job tự động 8h/12h/18h. Tự động strip URL, xuống hàng dễ đọc.",
+      "desc": "Đăng 5 bài/ngày lên Speed Reading HCM (ID: 701172629741862). Nội dung đa dạng: Mẹo đọc (8h) → Review sách (12h) → Nghiên cứu não bộ (15h) → Giới thiệu khóa học (18h) → Động lực (20h). Cron job tự động, ảnh AI Gemini/GPT-5 chất lượng cao.",
       "skills": [
         "Viết content tiếng Việt",
-        "Lịch đăng 3x/ngày (8h, 12h, 18h)",
+        "Lịch đăng 5x/ngày (8h, 12h, 15h, 18h, 20h)",
         "Facebook Graph API",
         "Photo upload (dev mode workaround)",
         "URL strip tự động",
@@ -306,6 +316,16 @@
       "tag": "📊",
       "type": "deploy",
       "text": "Cập nhật Agent ngày 2026-07-20 — 📚78 bài • 🎬23 kịch bản • 🤖22 videos • 📓12 notebooks • 📢15 ads"
+    },
+    {
+      "tag": "📱",
+      "type": "deploy",
+      "text": "Mở rộng đăng Facebook từ 3 lên 5 bài/ngày — 8h (Mẹo đọc), 12h (Review sách), 15h (Não bộ), 18h (Giới thiệu SR), 20h (Động lực). Ảnh dùng Gemini Imagen 3 + GPT-5 Image."
+    },
+    {
+      "tag": "🎨",
+      "type": "fix",
+      "text": "Cải thiện ảnh Facebook: thay Pollinations.ai bằng GPT-5 Image/Gemini Imagen 3 qua OpenRouter. Chất lượng ảnh tăng vượt bậc, giá chỉ $0.002-0.04/ảnh."
     }
   ]
 }
