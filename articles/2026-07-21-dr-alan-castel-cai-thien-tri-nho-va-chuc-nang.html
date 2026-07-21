@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📖 Dr. Alan Castel: Cải thiện trí nhớ và chức năng nhận thức ở mọi lứa tuổi (Huberman Lab 2026) | Speed Reading Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        /* ===== TYPOGRAPHY ENHANCEMENTS ===== */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e4e4f0;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .bg-grid {
+            position:fixed;top:0;left:0;right:0;bottom:0;
+            background-image:linear-gradient(rgba(99,102,241,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03)1px,transparent 1px);
+            background-size:60px 60px;z-index:-1
+        }
+        .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+        .article-page { padding: 40px 0 80px; }
+        
+        /* Back link */
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #6b6b8a; text-decoration: none; font-size: .88em;
+            margin-bottom: 28px; padding: 6px 14px;
+            border-radius: 8px; transition: all .2s;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .back-link:hover { color: #818cf8; background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.15); }
+
+        /* ===== COVER IMAGE ===== */
+        .article-cover {
+            border-radius: 18px; overflow: hidden; margin-bottom: 32px;
+            position: relative; background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+        .cover-img {
+            width: 100%; height: auto; max-height: 400px;
+            object-fit: cover; display: block;
+            transition: transform .5s ease;
+        }
+        .article-cover:hover .cover-img {
+            transform: scale(1.02);
+        }
+
+        /* ===== HEADER ===== */
+        .article-header {
+            margin-bottom: 36px; padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .article-meta {
+            display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 14px; font-size: .82em; color: #8b8ba7;
+        }
+        .article-meta .cat-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 14px; border-radius: 8px;
+            font-size: .78em; font-weight: 600; border: 1px solid;
+        }
+        .article-title {
+            font-size: clamp(1.5em,3.5vw,2.2em); font-weight: 800; line-height: 1.35;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg,#e0e0f0,#c4b5fd);
+            -webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;
+        }
+        .article-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid rgba(99,102,241,0.12);
+            border-radius: 12px; padding: 8px 16px; margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .toc summary {
+            font-weight: 600; font-size: .88em; color: #818cf8;
+            padding: 6px 0; cursor: pointer;
+        }
+        .toc ol {
+            margin: 8px 0 4px; padding-left: 24px;
+            font-size: .85em; color: #a0a0b8; line-height: 1.8;
+        }
+        .toc ol li { padding: 2px 0; }
+
+        /* ===== CONTENT ===== */
+        .article-content {
+            font-size: 1.05em; line-height: 1.9; color: #ddddf0;
+        }
+        .article-content p {
+            margin-bottom: 18px;
+        }
+        .article-content p:last-child { margin-bottom: 0; }
+        
+        /* Section heading (line ending with colon) */
+        .section-heading {
+            font-size: 1.1em; font-weight: 700; color: #c4b5fd;
+            margin: 24px 0 12px; padding: 0;
+            border: none;
+        }
+
+        /* ===== STYLED LIST ===== */
+        .styled-list {
+            list-style: none; padding: 0; margin: 0 0 18px 0;
+        }
+        .styled-list li {
+            padding: 8px 0 8px 28px;
+            position: relative; line-height: 1.7;
+            color: #d0d0e8;
+        }
+        .styled-list li::before {
+            content: '✦';
+            position: absolute; left: 4px; top: 8px;
+            color: #818cf8; font-size: .85em;
+        }
+        .styled-list li:nth-child(2n)::before { color: #a855f7; }
+        
+        /* ===== KEY INSIGHT / HIGHLIGHT ===== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05));
+            border-left: 3px solid #818cf8;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px; margin: 18px 0;
+        }
+        .insight-box p {
+            margin: 0; color: #c8c8e8; font-style: italic;
+            font-size: .95em;
+        }
+
+        /* ===== INLINE TYPOGRAPHY ===== */
+        strong.stat {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        strong.person {
+            color: #818cf8;
+            font-weight: 700;
+        }
+        /* ===== APPLY BOX ===== */
+        .apply-box {
+            display: flex; gap: 14px;
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(16,185,129,0.03));
+            border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 32px;
+        }
+        .apply-icon {
+            font-size: 1.8em; line-height: 1; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .apply-body { flex: 1; }
+        .apply-label {
+            font-weight: 700; font-size: .92em; color: #34d399;
+            margin-bottom: 8px;
+        }
+        .apply-body p {
+            font-size: .92em; color: #b0b0c8; line-height: 1.7; margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .article-footer {
+            margin-top: 36px; padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .footer-tag {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 6px;
+            font-size: .78em; color: #6b6b8a;
+            background: rgba(139,139,167,0.08);
+        }
+        .article-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 36px; padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .article-nav a {
+            color: #818cf8; text-decoration: none; font-weight: 500;
+            font-size: .9em; transition: color .2s;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .article-nav a:hover { color: #a78bfa; }
+
+        /* ===== READING PROGRESS ===== */
+        .reading-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px;
+            background: rgba(255,255,255,0.03); z-index: 100;
+        }
+        .reading-progress .bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #818cf8, #a855f7);
+            transition: width .1s linear;
+        }
+
+        /* ===== FOOTER (page) ===== */
+        .page-footer {
+            text-align: center; padding: 30px 20px;
+            color: #5a5a7a; font-size: .82em;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 40px;
+        }
+        .page-footer a { color: #818cf8; text-decoration: none; }
+        .page-footer a:hover { text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .reading-progress, .back-link, .article-nav { display: none !important; }
+            .article-cover { break-inside: avoid; box-shadow: none; }
+            body { background: white; color: black; }
+            .article-title { -webkit-text-fill-color: #1a1a2e; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            .article-content { font-size: 1em; }
+            .article-page { padding: 24px 0 60px; }
+            .apply-box { flex-direction: column; gap: 10px; }
+            .article-cover { border-radius: 12px; }
+        }
+        @media (max-width: 480px) {
+            .article-title { font-size: 1.3em; }
+            .article-meta { font-size: .75em; gap: 8px; }
+            .insight-box { padding: 12px 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="reading-progress"><div class="bar" id="progress-bar"></div></div>
+    <div class="bg-grid"></div>
+    <div class="container article-page">
+        <a href="../index.html" class="back-link">← Quay về Dashboard</a>
+        
+        
+    <div class="article-cover">
+        <img src="https://picsum.photos/seed/295/900/400" 
+             alt="Article cover" class="cover-img" loading="lazy"
+             onerror="this.parentElement.style.background='linear-gradient(135deg, #1a1a3e, #2d1b69)'">
+    </div>
+        
+        <article>
+            <div class="article-header">
+                <div class="article-meta">
+                    <span class="cat-badge" style="background:#34d39915;color:#34d399;border-color:#34d39930;">
+                        📚 Sách & Đọc
+                    </span>
+                    <span>🌆 Thứ Ba, 21 tháng 07/2026</span>
+                    <span class="footer-tag">🔗 <a href="https://www.hubermanlab.com/" target="_blank" rel="noopener" class="source-link">Nguồn tham khảo</a></span>
+                </div>
+                <h1 class="article-title">📖 Dr. Alan Castel: Cải thiện trí nhớ và chức năng nhận thức ở mọi lứa tuổi (Huberman Lab 2026)</h1>
+                <div class="article-tags">
+                    <span class="tag green">nghiên cứu</span><span class="tag green">não bộ</span><span class="tag green">học tập</span><span class="tag green">sách</span>
+                </div>
+            </div>
+            
+            
+            
+            <div class="article-content">
+                <p>Ngày <strong class="stat">13 tháng</strong> <strong class="stat">7 năm</strong> 2026, Dr. Alan Castel, giáo sư tâm lý học tại UCLA và là chuyên gia hàng đầu về trí nhớ và lão hóa nhận thức, đã xuất hiện trên Huberman Lab với tập phim "How to Improve Your Memory & Cognitive Function at Any Age". Những nghiên cứu của ông mang đến góc nhìn mới mẻ về khả năng học tập và ghi nhớ không bị giới hạn bởi tuổi tác.</p>
+<p>Dr. Castel đã công bố nhiều nghiên cứu cho thấy não bộ có khả năng "tái cấu trúc" (neuroplasticity) ở mọi lứa tuổi, không chỉ giới hạn ở giai đoạn phát triển. Một nghiên cứu của ông chỉ ra rằng những người trên <strong class="stat">65 tuổi</strong> tham gia chương trình học tập có cấu trúc trong 8 tuần cải thiện được <strong class="stat"><strong class="stat">40%</strong></strong> khả năng ghi nhớ so với nhóm đối chứng. Điều này cho thấy việc học tập liên tục chính là "vaccine" cho não bộ.</p>
+<p>Một phát hiện thú vị khác là hiệu ứng "desirable difficulties" - những khó khăn mong muốn. Dr. Castel giải thích rằng khi chúng ta cố gắng đọc một văn bản được in bằng font chữ khó đọc hơn (như font Sans Forgetica), não bộ phải làm việc nhiều hơn để xử lý, dẫn đến khả năng ghi nhớ sâu hơn. Nghiên cứu cho thấy việc này có thể cải thiện khả năng nhớ thông tin lên đến 15-<strong class="stat"><strong class="stat">20%</strong></strong>.</p>
+<p>Ứng dụng cho Speed Reading thật sự rất mạnh mẽ. Khi kết hợp đọc nhanh với các kỹ thuật "desirable difficulties" - như đọc trong môi trường có chút tiếng ồn trắng, hoặc sử dụng các font chữ đặc biệt trong giai đoạn luyện tập - học viên không chỉ đọc nhanh hơn mà còn nhớ lâu hơn. Đây là điểm khác biệt mà Speed Reading Việt Nam có thể đưa vào chương trình giảng dạy.</p>
+            </div>
+            
+            
+        <div class="apply-box">
+            <div class="apply-icon">💡</div>
+            <div class="apply-body">
+                <div class="apply-label">Ứng dụng cho Speed Reading</div>
+                <p>Thiết kế các bài tập đọc với độ khó tăng dần (desirable difficulties) trong chương trình Speed Reading. Sử dụng font chữ Sans Forgetica cho tài liệu luyện tập giai đoạn đầu. Tổ chức các lớp học cho người trung niên và cao tuổi với chương trình đặc biệt.</p>
+            </div>
+        </div>
+            
+            <div class="article-footer">
+                <span class="footer-tag" style="background:rgba(139,139,167,0.08)">🔗 <a href="https://www.hubermanlab.com/" target="_blank" rel="noopener" class="source-link">Nguồn tham khảo</a></span>
+                <span class="footer-tag">🌆 Tối — Thứ Ba</span>
+            </div>
+        </article>
+        
+        <div class="article-nav">
+            <a href="../index.html">← Dashboard</a>
+            <a href="#" onclick="window.print()">🖨 In / Lưu PDF</a>
+        </div>
+    </div>
+    
+    <footer class="page-footer">
+        <p>© 2026 <a href="https://speedreading.vn">Speed Reading Việt Nam</a> — Hotline: 0899.320.202</p>
+    </footer>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+    </script>
+</body>
+</html>

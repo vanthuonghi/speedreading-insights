@@ -16,5 +16,11 @@
     "email": "nguyenvana@example.com",
     "sent_at": "2026-07-20T21:30:21.290813",
     "status": "skipped"
+  },
+  "nguyenvana@example.com_upsell": {
+    "step": "upsell",
+    "email": "nguyenvana@example.com",
+    "sent_at": "2026-07-21T08:00:37.296420",
+    "status": "skipped"
   }
 }
