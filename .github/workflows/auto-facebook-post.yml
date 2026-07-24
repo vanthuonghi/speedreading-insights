@@ -1,0 +1,70 @@
+name: Auto-generate daily Speed Reading posts and publish to Facebook
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+    - cron: '0 5 * * *'
+    - cron: '0 8 * * *'
+    - cron: '0 11 * * *'
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate-and-post:
+    runs-on: ubuntu-latest
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+      FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
+      IMG_DIR: /tmp/fb_images
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Determine slot and topic
+        id: slot
+        run: |
+          HOUR_UTC=$(date -u +%H)
+          HOUR_VN=$(( (10#$HOUR_UTC + 7) % 24 ))
+          echo "hour_vn=$HOUR_VN" >> $GITHUB_OUTPUT
+          case $HOUR_VN in
+            8) echo "slot=08h" >> $GITHUB_OUTPUT; echo "kind=tips" >> $GITHUB_OUTPUT; echo "topic=Framework 3 buoc doc sach" >> $GITHUB_OUTPUT ;;
+            12) echo "slot=12h" >> "$GITHUB_OUTPUT"; echo "kind=trend" >> "$GITHUB_OUTPUT"; echo "topic=Hoc sinh dung AI lam bai tap" >> "$GITHUB_OUTPUT" ;;
+            15) echo "slot=15h" >> "$GITHUB_OUTPUT"; echo "kind=study" >> "$GITHUB_OUTPUT"; echo "topic=Mind map giup ghi nho nhanh hon" >> "$GITHUB_OUTPUT" ;;
+            18) echo "slot=18h" >> "$GITHUB_OUTPUT"; echo "kind=reality" >> "$GITHUB_OUTPUT"; echo "topic=Hoc nhieu nhung ket qua van thap" >> "$GITHUB_OUTPUT" ;;
+            20) echo "slot=20h" >> "$GITHUB_OUTPUT"; echo "kind=motivation" >> "$GITHUB_OUTPUT"; echo "topic=Hoc vien thay doi sau khoa Speed Reading" >> "$GITHUB_OUTPUT" ;;
+            *) echo "slot=08h" >> "$GITHUB_OUTPUT"; echo "kind=tips" >> "$GITHUB_OUTPUT"; echo "topic=Doc sach nhanh hon moi ngay" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Generate post with OpenRouter free model
+        id: generate
+        run: |
+          mkdir -p $IMG_DIR
+          MODEL="meta-llama/llama-3.1-8b-instruct:free"
+          TOPIC="${{ steps.slot.outputs.topic }}"
+          python3 .github/scripts/generate_openrouter_post.py "$MODEL" "$TOPIC" > /tmp/generated_post.txt
+          CONTENT=$(cat /tmp/generated_post.txt)
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          echo "$CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Download stock image
+        run: |
+          curl -sSL "https://picsum.photos/1200/630?random=$((RANDOM % 10000))" -o $IMG_DIR/${{ steps.slot.outputs.slot }}.jpg
+
+      - name: Post to Facebook
+        run: |
+          python3 .github/scripts/post_facebook.py \
+            "$FACEBOOK_PAGE_ID" \
+            "$FACEBOOK_ACCESS_TOKEN" \
+            "$IMG_DIR/${{ steps.slot.outputs.slot }}.jpg" \
+            "${{ steps.generate.outputs.content }}"
