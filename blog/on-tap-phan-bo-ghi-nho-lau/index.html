@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn tập phân bố: Bí quyết ghi nhớ lâu mà không cần học nhiều</title>
+  <meta name="description" content="Spaced repetition (ôn tập phân bố) là phương pháp ghi nhớ được khoa học chứng minh mạnh nhất. Tìm hiểu cơ chế quên Ebbinghaus, thuật toán FSRS 2024 và cách áp dụng hàng ngày.">
+  <link rel="canonical" href="https://vanthuonghi.github.io/speedreading-insights/blog/on-tap-phan-bo-ghi-nho-lau/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#fff;color:#1a1a2e;line-height:1.75;font-size:18px}
+    .wrap{max-width:740px;margin:0 auto;padding:24px 20px 80px}
+    header{border-bottom:3px solid #e63946;padding-bottom:16px;margin-bottom:32px}
+    h1{font-size:33px;line-height:1.25;color:#14213d;margin-bottom:10px}
+    .meta{color:#666;font-size:15px}
+    h2{font-size:26px;color:#14213d;margin:40px 0 14px;border-left:5px solid #e63946;padding-left:12px}
+    h3{font-size:21px;color:#1d3557;margin:26px 0 10px}
+    p{margin:14px 0}
+    ul,ol{margin:14px 0 14px 24px}
+    li{margin:8px 0}
+    a{color:#e63946;text-decoration:none;border-bottom:1px solid #e63946}
+    a:hover{opacity:.7}
+    blockquote{background:#f8f9fa;border-left:4px solid #e63946;padding:14px 18px;margin:20px 0;font-style:italic;color:#444}
+    .evidence{background:#fff3f3;border:1px solid #ffd6d6;border-radius:10px;padding:18px 20px;margin:24px 0}
+    .evidence h3{margin-top:0;color:#c1121f}
+    .cta{background:#14213d;color:#fff;border-radius:14px;padding:26px 24px;margin:40px 0;text-align:center}
+    .cta h3{color:#fff;margin-top:0}
+    .cta a{display:inline-block;background:#e63946;color:#fff;border:none;border-radius:8px;padding:12px 22px;font-weight:700;margin-top:10px}
+    .faq{background:#f1f5f9;border-radius:12px;padding:20px 24px;margin:30px 0}
+    .faq h3{margin-top:0;color:#1d3557}
+    .sources{font-size:14px;color:#666;border-top:1px solid #eee;padding-top:16px;margin-top:40px}
+    .breadcrumb{font-size:14px;color:#888;margin-bottom:18px}
+    .breadcrumb a{border:none;color:#888}
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Ôn tập phân bố: Bí quyết ghi nhớ lâu mà không cần học nhiều","description":"Spaced repetition (ôn tập phân bố) là phương pháp ghi nhớ được khoa học chứng minh mạnh nhất. Tìm hiểu cơ chế quên Ebbinghaus, thuật toán FSRS 2024 và cách áp dụng hàng ngày.","image":"https://vanthuonghi.github.io/speedreading-insights/blog/on-tap-phan-bo-ghi-nho-lau/cover.jpg","datePublished":"2026-07-25","dateModified":"2026-07-25","author":{"@type":"Person","name":"Văn Hỉ","url":"https://vanthuonghi.github.io/speedreading-insights/"},"publisher":{"@type":"Organization","name":"Speed Reading Vietnam","logo":{"@type":"ImageObject","url":"https://vanthuonghi.github.io/speedreading-insights/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://vanthuonghi.github.io/speedreading-insights/blog/on-tap-phan-bo-ghi-nho-lau/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://vanthuonghi.github.io/speedreading-insights/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://vanthuonghi.github.io/speedreading-insights/blog/"},{"@type":"ListItem","position":3,"name":"Ôn tập phân bố","item":"https://vanthuonghi.github.io/speedreading-insights/blog/on-tap-phan-bo-ghi-nho-lau/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Ôn tập phân bố là gì?","acceptedAnswer":{"@type":"Answer","text":"Là cách học chia nhỏ, nhắc lại kiến thức ở các khoảng thời gian ngày càng xa (1 ngày, 3 ngày, 1 tuần, 1 tháng) thay vì học dồn một lúc. Khoảng cách được tính toán để bạn ôn tập ngay trước khi quên."}},{"@type":"Question","name":"Tại sao ôn tập phân bố hiệu quả hơn học dồn?","acceptedAnswer":{"@type":"Answer","text":"Nghiên cứu (PMC 2017) chỉ ra ôn tập cách quãng giúp ghi nhớ lâu hơn hẳn so với học dồn (massed). Lý do: mỗi lần nhớ lại từ trí nhớ, não củng cố kết nối thần kinh mạnh hơn."}},{"@type":"Question","name":"Dùng app gì để ôn tập phân bố?","acceptedAnswer":{"@type":"Answer","text":"Anki (với thuật toán FSRS 2024) là công cụ phổ biến nhất, tự động tính khoảng nghỉ tối ưu. Nhưng bạn có thể tự làm thủ công bằng lịch: xem lại ghi chú sau 1 ngày, 1 tuần, 1 tháng."}}]}
+  </script>
+</head>
+<body>
+<div class="wrap">
+  <div class="breadcrumb"><a href="https://vanthuonghi.github.io/speedreading-insights/">Trang chủ</a> › <a href="https://vanthuonghi.github.io/speedreading-insights/blog/">Blog</a> › Ôn tập phân bố</div>
+  <header>
+    <h1>Ôn tập phân bố: Bí quyết ghi nhớ lâu mà không cần học nhiều</h1>
+    <div class="meta">Đăng ngày 25/07/2026 · bởi Văn Hỉ · 6 phút đọc</div>
+  </header>
+
+  <p>Bạn có học cả buổi tối nhưng tuần sau quên sạch? Vấn đề không phải tại bạn kém thông minh, mà tại <strong>cách học sai</strong>. Khoa học về ghi nhớ có một đáp án gần như chắc chắn: <strong>ôn tập phân bố (spaced repetition)</strong> — học ít nhưng nhắc lại đúng lúc.</p>
+
+  <h2>Đường cong quên và tại sao ta quên</h3>
+  <p>Năm 1885, Hermann Ebbinghaus phát hiện: sau khi học xong, ta quên rất nhanh (chỉ vài ngày đã mất phần lớn). Nhưng mỗi lần <em>nhắc lại đúng lúc</em>, "đường cong quên" lại dẹt hơn — ta giữ được lâu hơn.</p>
+
+  <div class="evidence">
+    <h3>Bằng chứng từ nghiên cứu</h3>
+    <ol>
+      <li><strong>Spacing effect (PMC, 2017)</strong>: Tổng hợp nhiều nghiên cứu xác nhận ôn tập cách quãng giúp ghi nhớ lâu hơn hẳn so với học dồn (massed practice), đặc biệt với bài kiểm tra nhớ lại sau thời gian dài.</li>
+      <li><strong>Cơ chế thần kinh</strong>: Mỗi lần rút thông tin ra khỏi trí nhớ (retrieval), não tăng cường kết nối thần kinh. Học dồn chỉ tạo cảm giác quen (fluency illusion) chứ không củng cố thực sự.</li>
+      <li><strong>FSRS (2024)</strong>: Thuật toán spaced repetition hiện đại (dùng trong Anki) tối ưu hóa khoảng nghỉ dựa trên xác suất quên của từng người — giúp học ít nhất mà nhớ nhiều nhất.</li>
+    </ol>
+    <p style="font-size:14px;color:#888">Nguồn: PMC5476736 (Spacing Repetitions Over Long Timescales), FSRS documentation 2024.</p>
+  </div>
+
+  <h2>Cách áp dụng ôn tập phân bố không cần app</h2>
+  <p>Bạn không cần công cụ phức tạp. Nguyên tắc thủ công:</p>
+  <ol>
+    <li><strong>Lần 1:</strong> Học mới (đọc, ghi chú).</li>
+    <li><strong>Sau 1 ngày:</strong> Xem lại 5 phút, nhắc lại ý chính.</li>
+    <li><strong>Sau 1 tuần:</strong> Xem lại 3 phút.</li>
+    <li><strong>Sau 1 tháng:</strong> Xem lại 2 phút.</li>
+  </ol>
+  <p>Mỗi lần "nhớ lại" đẩy kiến thức sâu hơn vào trí nhớ dài hạn. Tổng thời gian có khi ít hơn hẳn so với ngồi học dồn 3 tiếng rồi quên.</p>
+
+  <h2>Kết hợp với đọc</h2>
+  <p>Ôn tập phân bố đặc biệt mạnh khi đi đôi với <a href="https://vanthuonghi.github.io/speedreading-insights/blog/ky-thuat-sq3r-doc-hieu-sau/">SQ3R</a>: bạn đọc hiểu bằng SQ3R, rồi dùng ôn tập phân bố để giữ nó lại. Một combo đọc-nhớ khoa học.</p>
+
+  <blockquote>"Học ít nhưng đúng lúc còn hiệu quả hơn học nhiều nhưng sai cách."</blockquote>
+
+  <div class="faq">
+    <h3>Câu hỏi thường gặp</h3>
+    <p><strong>Ôn tập phân bố là gì?</strong><br>Chia nhỏ việc học, nhắc lại ở khoảng cách ngày càng xa (1 ngày, 1 tuần, 1 tháng) thay vì học dồn.</p>
+    <p><strong>Tại sao hiệu quả hơn học dồn?</strong><br>Nghiên cứu (PMC 2017) xác nhận ghi nhớ lâu hơn; mỗi lần nhớ lại củng cố kết nối thần kinh.</p>
+    <p><strong>Dùng app gì?</strong><br>Anki (thuật toán FSRS 2024) phổ biến nhất; hoặc tự làm thủ công theo lịch 1 ngày–1 tuần–1 tháng.</p>
+  </div>
+
+  <div class="cta">
+    <h3>Xây dựng thói quen ghi nhớ bền vững</h3>
+    <p>Khóa học Speed Reading Vietnam tích hợp ôn tập phân bố và kỹ thuật đọc chủ động vào lộ trình học mỗi ngày của bạn.</p>
+    <a href="https://vanthuonghi.github.io/speedreading-insights/sp-online.html">Xem khóa học →</a>
+  </div>
+
+  <div class="sources">
+    <p><strong>Nguồn tham khảo:</strong></p>
+    <ul>
+      <li>Spacing Repetitions Over Long Timescales: A Review — PMCID: PMC5476736</li>
+      <li>FSRS: A modern, efficient spaced repetition algorithm (2024)</li>
+      <li>Ebbinghaus, H. (1885). Über das Gedächtnis</li>
+    </ul>
+    <p>Đọc thêm: <a href="https://vanthuonghi.github.io/speedreading-insights/blog/doc-nhanh-co-that-su-hieu-qua/">Đọc nhanh có thật sự hiệu quả?</a> · <a href="https://vanthuonghi.github.io/speedreading-insights/blog/ky-thuat-sq3r-doc-hieu-sau/">Kỹ thuật SQ3R</a></p>
+  </div>
+</div>
+</body>
+</html>

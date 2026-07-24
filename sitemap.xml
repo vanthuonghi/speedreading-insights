@@ -29,4 +29,16 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://vanthuonghi.github.io/speedreading-insights/blog/ky-thuat-sq3r-doc-hieu-sau/</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vanthuonghi.github.io/speedreading-insights/blog/on-tap-phan-bo-ghi-nho-lau/</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
