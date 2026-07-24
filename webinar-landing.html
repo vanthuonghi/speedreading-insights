@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinar Miễn Phí - Bí Mật Đọc Nhanh 1000 Từ/Phút | Speed Reading Việt Nam</title>
+    <meta name="description" content="Tham gia webinar miễn phí để học bí mật đọc nhanh 1000 từ/phút. Chỉ 60-90 phút, bạn sẽ biết cách đọc hiểu sách gấp 3 lần nhanh hơn.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-brand { background-color: #990100; }
+        .text-brand { color: #990100; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        @keyframes pulse-urgent {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(153, 1, 0, 0.7); }
+            50% { box-shadow: 0 0 0 20px rgba(153, 1, 0, 0); }
+        }
+        .pulse-urgent { animation: pulse-urgent 2s infinite; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Scarcity Banner -->
+    <div class="bg-red-600 text-white text-center py-3 px-4 font-bold text-sm md:text-base">
+        ⚠️ CẢNH BÁO: Chỉ còn <span id="spots-left">12</span> chỗ cho buổi webinar này!
+    </div>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16 md:py-24">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left: Content -->
+                <div class="animate-fade-in-up">
+                    <div class="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold mb-6">
+                        <span class="text-lg">🎥</span> WEBINAR MIỄN PHÍ
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight">
+                        BÍ MẬT ĐỌC NHANH<br>
+                        <span class="text-red-500">1000 TỪ/PHÚT</span><br>
+                        Chỉ Sau 60 Phút
+                    </h1>
+                    
+                    <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                        Khám phá bí mật não bộ đang giới hạn tốc độ đọc của bạn ở 250 từ/phút, và cách phá vỡ giới hạn đó để đọc hiểu gấp 3-4 lần nhanh hơn.
+                    </p>
+
+                    <!-- Benefits -->
+                    <div className="space-y-4 mb-8">
+                        <div className="flex items-start gap-3">
+                            <div className="bg-green-500 p-2 rounded-full flex-shrink-0">
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <p className="text-gray-200"><strong>3 sát thủ đọc chậm</strong> đang giết tốc độ của bạn</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <div className="bg-blue-500 p-2 rounded-full flex-shrink-0">
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <p className="text-gray-200"><strong>Kỹ thuật con trỏ thần kỳ</strong> tăng tốc độ 3 lần</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <div className="bg-purple-500 p-2 rounded-full flex-shrink-0">
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <p className="text-gray-200"><strong>Framework 3 bước</strong> đọc sách hiệu quả</p>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <button onclick="scrollToForm()" class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 text-gray-900 font-black text-xl px-10 py-5 rounded-full shadow-2xl transform transition hover:scale-105 pulse-urgent">
+                        ĐĂNG KÝ MIỄN PHÍ NGAY
+                    </button>
+                    
+                    <p className="text-sm text-gray-400 mt-4">
+                        ⏰ Thời gian: 60-90 phút | 💯 Hoàn toàn miễn phí
+                    </p>
+                </div>
+
+                <!-- Right: Image/Video -->
+                <div className="animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div className="bg-gray-800 p-4 rounded-3xl shadow-2xl border border-gray-700">
+                        <div className="aspect-video bg-gray-900 rounded-2xl flex items-center justify-center">
+                            <div className="text-center">
+                                <div className="text-6xl mb-4">📚</div>
+                                <p className="text-gray-400 text-lg">Video giới thiệu khóa học</p>
+                                <p className="text-gray-500 text-sm mt-2">(Sẽ cập nhật sau)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Bạn Có Đang Gặp Phải...
+                </h2>
+                <p className="text-gray-600 text-lg">Những vấn đề này có thể bạn đang trải qua mỗi ngày</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+                <div className="bg-red-50 p-8 rounded-2xl border border-red-100">
+                    <div className="text-4xl mb-4">😫</div>
+                    <h3 className="text-xl font-bold text-red-800 mb-3">Đọc chậm, mệt mỏi</h3>
+                    <p className="text-gray-700">
+                        Đọc 1 trang sách mất 5-10 phút, đọc 20 phút đã mỏi mắt, không tập trung được.
+                    </p>
+                </div>
+                
+                <div className="bg-yellow-50 p-8 rounded-2xl border border-yellow-100">
+                    <div className="text-4xl mb-4">😓</div>
+                    <h3 className="text-xl font-bold text-yellow-800 mb-3">Đọc xong quên sạch</h3>
+                    <p className="text-gray-700">
+                        Đọc xong cuốn sách nhưng không nhớ nổi đã đọc gì, phải đọc lại điệp lặp điệp lặp.
+                    </p>
+                </div>
+                
+                <div className="bg-orange-50 p-8 rounded-2xl border border-orange-100">
+                    <div className="text-4xl mb-4">😰</div>
+                    <h3 className="text-xl font-bold text-orange-800 mb-3">Không có thời gian</h3>
+                    <p className="text-gray-700">
+                        Muốn đọc sách nhưng bận rộn công việc, gia đình, không có thời gian dành cho việc đọc.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What You'll Learn -->
+    <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Bạn Sẽ Học Được Gì?
+                </h2>
+                <p className="text-gray-600 text-lg">Nội dung webinar được thiết kế thực chiến, áp dụng được ngay</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <div className="flex items-start gap-4">
+                        <div className="bg-red-100 text-red-600 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xl">1</div>
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">3 Sát Thủ Đọc Chậm</h3>
+                            <p className="text-gray-600">Nhận diện và tiêu diệt 3 thói quen đọc đang giới hạn tốc độ của bạn ở 250 từ/phút.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <div className="flex items-start gap-4">
+                        <div className="bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xl">2</div>
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Kỹ Thuật Con Trỏ Thần Kỳ</h3>
+                            <p className="text-gray-600">Cách dùng ngón tay làm vật dẫn đường để tăng tốc độ đọc gấp 3 lần chỉ trong 7 ngày.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <div className="flex items-start gap-4">
+                        <div className="bg-green-100 text-green-600 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xl">3</div>
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Tầm Nhìn Siêu Nhân</h3>
+                            <p className="text-gray-600">Mở rộng tầm nhìn ngoại vi để đọc cụm 3-5 từ cùng lúc thay vì từng chữ đơn lẻ.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <div className="flex items-start gap-4">
+                        <div className="bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xl">4</div>
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Framework 3 Bước Đọc Sách</h3>
+                            <p className="text-gray-600">Đọc tổng quan → Đọc chi tiết → Ghi chép. Phương pháp đọc sách khoa học nhất.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form -->
+    <section id="registration-form" className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Đăng Ký Ngay
+                </h2>
+                <p className="text-gray-600 text-lg">Chỉ cần điền thông tin, bạn sẽ nhận link Zoom qua email/Zalo</p>
+            </div>
+
+            <div className="bg-gray-50 p-8 md:p-12 rounded-3xl border-2 border-gray-200 shadow-xl">
+                <form id="webinarForm" class="space-y-6">
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Họ và tên *</label>
+                        <input type="text" id="name" required class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition" placeholder="Ví dụ: Nguyễn Văn A">
+                    </div>
+                    
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Email *</label>
+                        <input type="email" id="email" required class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition" placeholder="email@example.com">
+                    </div>
+                    
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Số điện thoại (Zalo) *</label>
+                        <input type="tel" id="phone" required class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition" placeholder="090...">
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Lớp/Nghề nghiệp</label>
+                        <input type="text" id="class" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition" placeholder="Ví dụ: Lớp 10 / Sinh viên / Người đi làm">
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-xl py-5 rounded-full shadow-2xl transform transition hover:scale-105">
+                        ĐĂNG KÝ WEBINAR MIỄN PHÍ
+                    </button>
+                </form>
+
+                <div id="successMessage" class="hidden text-center py-12">
+                    <div className="text-6xl mb-4">✅</div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Đăng Ký Thành Công!</h3>
+                    <p className="text-gray-600">Chúng tôi sẽ gửi link Zoom qua email/Zalo trong vòng 24h.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    127 Học Viên Đã Thay Đổi
+                </h2>
+                <p className="text-gray-600 text-lg">Hàng ngàn học viên đã áp dụng thành công</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+                    <div className="text-4xl font-black text-red-600 mb-2">850</div>
+                    <div className="text-gray-600">Từ/phút (tốc độ trung bình sau khóa học)</div>
+                </div>
+                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+                    <div className="text-4xl font-black text-blue-600 mb-2">+2.5</div>
+                    <div className="text-gray-600">Điểm trung bình tăng sau khóa học</div>
+                </div>
+                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+                    <div className="text-4xl font-black text-green-600 mb-2">10h</div>
+                    <div className="text-gray-600">Tiết kiệm mỗi tuần nhờ đọc nhanh</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+            <div className="text-2xl font-bold mb-4">Speed Reading Việt Nam</div>
+            <p className="text-gray-400 mb-6">Hệ thống đào tạo đọc hiểu nhanh số 1 Việt Nam</p>
+            <div className="flex justify-center gap-6 text-sm text-gray-500">
+                <span>Hotline: 0899.320.202</span>
+                <span>Email: admin@speedreading.vn</span>
+            </div>
+            <div className="mt-8 pt-8 border-t border-gray-800 text-sm text-gray-600">
+                © 2024 Speed Reading Việt Nam. Tất cả quyền được bảo lưu.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToForm() {
+            document.getElementById('registration-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('webinarForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = '<span class="animate-spin">⏳</span> Đang xử lý...';
+            btn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                document.getElementById('webinarForm').classList.add('hidden');
+                document.getElementById('successMessage').classList.remove('hidden');
+            }, 1500);
+        });
+
+        // Countdown timer effect (optional)
+        function updateSpots() {
+            const spotsElement = document.getElementById('spots-left');
+            const currentSpots = parseInt(spotsElement.textContent);
+            if (currentSpots > 5) {
+                spotsElement.textContent = currentSpots - 1;
+            }
+        }
+        setInterval(updateSpots, 30000); // Decrease every 30 seconds
+    </script>
+</body>
+</html>
