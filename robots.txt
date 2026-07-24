@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vanthuonghi.github.io/speedreading-insights/sitemap.xml
