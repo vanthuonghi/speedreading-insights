@@ -60,7 +60,9 @@
             Clock, Gift, BookOpen, Eye, Sparkles, Calendar, Bell
         } from 'lucide-react';
 
-        const WEBHOOK_URL = "https://crm.speedreading.vn/?fluentcrm=1&route=contact&hash=ef8db8a9-1e33-405b-8d30-da123e5c283c";
+        // Submit thẳng vào endpoint qua Cloudflare Tunnel (CORS * đã bật trên endpoint)
+        const WEBHOOK_URL = "https://hook.speedreading.vn/webinar";
+        const WEBHOOK_FALLBACK = "https://speedreading.vn/webinar"; // fallback nếu có route sau
         const REDIRECT_URL = "https://speedreading.vn/paymentonline";
 
         const CTAButton = ({ text, subtext, onClick, variant = 'primary', type = 'button', disabled = false, isLoading = false, className = '' }) => {
@@ -113,11 +115,20 @@
                 setIsSubmitting(true);
                 const formData = new FormData(e.target);
                 try {
-                    await fetch(WEBHOOK_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        body: formData
-                    });
+                    try {
+                        await fetch(WEBHOOK_URL, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            body: formData
+                        });
+                    } catch (hookErr) {
+                        // Fallback: nếu receiver chưa sẵn, gửi FluentCRM cũ
+                        await fetch(WEBHOOK_FALLBACK, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            body: formData
+                        });
+                    }
                     window.location.href = REDIRECT_URL;
                 } catch (error) {
                     console.error("Lỗi gửi form:", error);
