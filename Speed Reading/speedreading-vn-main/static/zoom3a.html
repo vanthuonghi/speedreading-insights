@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading - Skimming Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Merriweather', 'serif'] },
+                    colors: { brand: { red: '#ef4444', darkRed: '#b91c1c', lightRed: '#fecaca', text: '#1e293b' } }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { background-color: #f8fafc; color: #1e293b; user-select: none; }
+        
+        .panel-3d {
+            background: #ffffff; border: 4px solid #ef4444; border-radius: 1.5rem;
+            box-shadow: 6px 8px 0px #b91c1c; 
+        }
+
+        .btn-3d {
+            background: white; color: #1e293b; border: 3px solid #e2e8f0;
+            border-bottom: 5px solid #cbd5e1; border-radius: 1rem; font-weight: 800;
+            transition: all 0.1s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-3d:active { transform: translateY(5px); border-bottom-width: 0px; margin-bottom: 5px; }
+        .btn-3d.active { background: #ef4444; color: white; border-color: #b91c1c; border-bottom-color: #7f1d1d; }
+
+        /* =========================================
+           CÁC CHẾ ĐỘ HIỂU ỨNG THỊ GIÁC (SKIMMING MODES)
+           ========================================= */
+        #reader-container { transition: all 0.5s ease; }
+        .book-title, .book-subtitle, .sentence-first, .sentence-mid, .sentence-last, .keyword {
+            transition: all 0.5s ease;
+        }
+
+        /* 1. CHẾ ĐỘ: BỘ XƯƠNG TIÊU ĐỀ (Title Power) */
+        /* Toàn bộ chữ mờ đi, chỉ Tiêu đề chính và phụ rực sáng, to lên */
+        .mode-title .book-para { opacity: 0.15; filter: blur(3px); }
+        .mode-title .book-title { color: #b91c1c; transform: scale(1.05); transform-origin: center; text-shadow: 0 4px 10px rgba(239,68,68,0.2); }
+        .mode-title .book-subtitle { color: #ef4444; transform: scale(1.02); transform-origin: left; background: #fee2e2; padding: 2px 10px; border-radius: 8px; border-left: 4px solid #b91c1c;}
+
+        /* 2. CHẾ ĐỘ: ĐẦU ĐUÔI (Head & Tail) */
+        /* Giữa đoạn bị mờ, Câu đầu và Câu cuối đậm lên */
+        .mode-headtail .sentence-mid { opacity: 0.15; filter: blur(3px); }
+        .mode-headtail .sentence-first { font-weight: 900; color: #b91c1c; background: linear-gradient(transparent 70%, #fecaca 30%); }
+        .mode-headtail .sentence-last { font-weight: 900; color: #0369a1; background: linear-gradient(transparent 70%, #bae6fd 30%); }
+        .mode-headtail .book-subtitle { opacity: 0.5; }
+
+        /* 3. CHẾ ĐỘ: BỘ LỌC TỪ KHÓA (Keyword Hunter) */
+        /* Toàn bộ văn bản thành màu xám nhạt (kể cả từ nối), chỉ Từ khóa đỏ rực */
+        .mode-keyword { color: #cbd5e1; }
+        .mode-keyword .book-title, .mode-keyword .book-subtitle { color: #94a3b8; }
+        .mode-keyword .keyword { 
+            color: #ef4444; font-weight: 900; 
+            background: #fee2e2; padding: 2px 4px; border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(239,68,68,0.2);
+        }
+
+        /* 4. CHẾ ĐỘ: TIA SÉT CHỮ Z (Z-Pattern) */
+        /* Tạo một đốm sáng chạy theo hình chữ Z bao trùm văn bản */
+        .z-scanner-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 50; display: none; overflow: hidden;
+            border-radius: 1rem;
+        }
+        .mode-zscan .z-scanner-container { display: block; }
+        
+        .z-dot {
+            position: absolute; width: 40px; height: 40px; background: #ef4444;
+            border-radius: 50%; filter: blur(8px);
+            box-shadow: 0 0 40px 20px rgba(239,68,68,0.6);
+            animation: scanZ 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        
+        .z-line {
+            position: absolute; width: 100%; height: 6px; background: linear-gradient(90deg, transparent, rgba(239,68,68,0.8), transparent);
+            box-shadow: 0 0 20px rgba(239,68,68,0.5); top: -10px;
+            animation: scanZLine 3s linear infinite;
+        }
+
+        @keyframes scanZ {
+            0% { top: 10%; left: 0%; }
+            30% { top: 10%; left: 90%; }
+            70% { top: 90%; left: 0%; }
+            100% { top: 90%; left: 90%; }
+        }
+        @keyframes scanZLine {
+            0% { top: 10%; }
+            30% { top: 10%; }
+            70% { top: 90%; }
+            100% { top: 90%; }
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col p-4 md:p-8 gap-6">
+
+    <!-- HEADER & CHỌN VĂN BẢN -->
+    <header class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <h1 class="text-3xl font-black text-brand-darkRed uppercase tracking-tighter">
+            <i class="fa-solid fa-eye text-brand-red"></i> Skimming <span class="text-brand-red">X-Ray</span>
+        </h1>
+        
+        <div class="panel-3d py-2 px-4 flex items-center gap-3 bg-white w-full md:w-auto">
+            <i class="fa-solid fa-file-alt text-brand-red text-xl"></i>
+            <select id="text-selector" class="bg-transparent text-lg font-bold text-gray-800 outline-none w-full md:w-64 cursor-pointer" onchange="loadText()">
+                <option value="0">1. Bí Mật Đáy Đại Dương</option>
+                <option value="1">2. Sức Mạnh Của Sự Tập Trung</option>
+                <option value="2">3. Trí Tuệ Nhân Tạo (AI)</option>
+                <option value="3">4. Dinh Dưỡng Cho Não Bộ</option>
+                <option value="4">5. Bí Quyết Giao Tiếp Đỉnh Cao</option>
+            </select>
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col lg:flex-row gap-6">
+        
+        <!-- BẢNG ĐIỀU KHIỂN CHẾ ĐỘ (CÁC Ý TƯỞNG) -->
+        <aside class="panel-3d p-4 flex flex-col gap-3 shrink-0 lg:w-72 bg-gray-50 h-fit">
+            <h2 class="text-sm font-black text-gray-500 uppercase tracking-widest mb-2 text-center">Bộ Lọc Thị Giác</h2>
+            
+            <button onclick="setMode('normal', this)" class="btn-3d active py-3">
+                <i class="fa-solid fa-glasses"></i> Đọc Bình Thường
+            </button>
+            <button onclick="setMode('title', this)" class="btn-3d py-3 text-left">
+                <i class="fa-solid fa-heading text-red-500"></i> X-Ray Tiêu Đề
+            </button>
+            <button onclick="setMode('headtail', this)" class="btn-3d py-3 text-left">
+                <i class="fa-solid fa-arrows-up-down text-blue-500"></i> X-Ray Đầu Đuôi
+            </button>
+            <button onclick="setMode('keyword', this)" class="btn-3d py-3 text-left">
+                <i class="fa-solid fa-filter text-orange-500"></i> Bộ Lọc Từ Khóa
+            </button>
+            <button onclick="setMode('zscan', this)" class="btn-3d py-3 text-left">
+                <i class="fa-solid fa-bolt text-yellow-500"></i> Quét Chữ Z
+            </button>
+
+            <!-- Hộp giải thích Lợi ích (Insight) -->
+            <div class="mt-4 p-4 bg-red-50 rounded-xl border border-red-200">
+                <h3 class="font-bold text-brand-darkRed text-sm mb-1" id="insight-title"><i class="fa-solid fa-lightbulb text-yellow-500"></i> Mục tiêu</h3>
+                <p class="text-xs text-gray-700 leading-relaxed" id="insight-desc">
+                    Hãy trải nghiệm văn bản ở góc nhìn tự nhiên nhất trước khi áp dụng các kỹ thuật tăng tốc độ quét.
+                </p>
+            </div>
+        </aside>
+
+        <!-- KHUNG HIỂN THỊ VĂN BẢN (TRANG SÁCH) -->
+        <section class="panel-3d flex-grow relative bg-[#fefce8] p-8 md:p-12 overflow-y-auto max-h-[75vh]">
+            
+            <!-- Hiệu ứng Z-Scan -->
+            <div class="z-scanner-container">
+                <div class="z-dot"></div>
+                <div class="z-line"></div>
+            </div>
+
+            <!-- Nội dung văn bản được Render bằng JS -->
+            <div id="reader-container" class="max-w-3xl mx-auto font-serif text-lg md:text-xl leading-relaxed text-gray-800">
+                <!-- Chữ sẽ xuất hiện ở đây -->
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        // DATA: 5 Văn bản cấu trúc cực chuẩn (Tiêu đề chính -> Tiêu đề phụ -> Đầu/Giữa/Đuôi -> Từ khóa)
+        const textsData = [
+            {
+                id: 0,
+                content: `
+                    <h1 class="book-title text-3xl md:text-4xl font-black text-center mb-8 uppercase">Bí Mật Dưới Đáy Đại Dương</h1>
+                    
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Kho Tàng Bị Lãng Quên</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first"><span class="keyword">Hàng thế kỷ</span> qua, <span class="keyword">đại dương</span> luôn <span class="keyword">che giấu</span> những <span class="keyword">kho báu</span> vĩ đại nhất của <span class="keyword">nhân loại</span>.</span>
+                        <span class="sentence-mid"> Rất nhiều con <span class="keyword">tàu đắm</span> mang theo <span class="keyword">vàng bạc</span>, <span class="keyword">châu báu</span> và <span class="keyword">cổ vật</span> vô giá đã <span class="keyword">chìm sâu</span> dưới lớp <span class="keyword">cát biển</span> do <span class="keyword">bão tố</span>. Các nhà <span class="keyword">sử học</span> tin rằng tổng <span class="keyword">giá trị</span> có thể lên tới hàng tỷ <span class="keyword">đô la</span>.</span>
+                        <span class="sentence-last"> Vì vậy, <span class="keyword">đáy biển</span> chính là một <span class="keyword">bảo tàng</span> khổng lồ đang chờ được <span class="keyword">khám phá</span>.</span>
+                    </p>
+
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Công Nghệ Dò Tìm Siêu Âm</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first"><span class="keyword">Hành trình</span> giải mã đòi hỏi sự <span class="keyword">đầu tư</span> khổng lồ về mặt <span class="keyword">công nghệ</span> hiện đại.</span>
+                        <span class="sentence-mid"> Tàu ngầm không người lái có thể <span class="keyword">lặn sâu</span> hàng ngàn mét, chịu được <span class="keyword">áp suất</span> cực lớn để <span class="keyword">quét</span> sóng siêu âm. Những <span class="keyword">dữ liệu</span> này sẽ được <span class="keyword">phân tích</span> bởi <span class="keyword">trí tuệ nhân tạo</span> nhằm <span class="keyword">tái tạo</span> bản đồ 3D.</span>
+                        <span class="sentence-last"> Nhờ đó, <span class="keyword">con người</span> không cần <span class="keyword">mạo hiểm</span> tính mạng mà vẫn <span class="keyword">nhìn thấu</span> mọi <span class="keyword">vật thể</span> dưới vực sâu.</span>
+                    </p>
+                `
+            },
+            {
+                id: 1,
+                content: `
+                    <h1 class="book-title text-3xl md:text-4xl font-black text-center mb-8 uppercase">Sức Mạnh Của Sự Tập Trung</h1>
+                    
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Kẻ Thù Của Năng Suất</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first">Trong thời đại <span class="keyword">số hóa</span>, sự <span class="keyword">phân tâm</span> chính là <span class="keyword">kẻ thù</span> lớn nhất của <span class="keyword">não bộ</span> con người.</span>
+                        <span class="sentence-mid"> Mỗi tiếng <span class="keyword">ting thông báo</span> từ <span class="keyword">điện thoại</span>, mỗi dòng <span class="keyword">tin tức</span> lướt qua trên <span class="keyword">mạng xã hội</span> đều <span class="keyword">đánh cắp</span> hàng chục phút <span class="keyword">chú ý</span> của bạn. Các <span class="keyword">nghiên cứu</span> chỉ ra rằng ta phải mất tới 23 phút để <span class="keyword">lấy lại</span> dòng <span class="keyword">suy nghĩ</span> ban đầu sau khi bị <span class="keyword">cắt ngang</span>.</span>
+                        <span class="sentence-last"> Hậu quả là, chúng ta <span class="keyword">làm việc</span> liên tục nhưng <span class="keyword">kết quả</span> đạt được lại vô cùng <span class="keyword">thấp kém</span>.</span>
+                    </p>
+
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Quy Tắc Quả Cà Chua (Pomodoro)</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first">Để <span class="keyword">chiến thắng</span> sự xao nhãng, <span class="keyword">phương pháp</span> Pomodoro là một <span class="keyword">vũ khí</span> cực kỳ <span class="keyword">bén nhọn</span>.</span>
+                        <span class="sentence-mid"> Kỹ thuật này yêu cầu bạn <span class="keyword">cài đặt</span> đồng hồ đúng 25 phút và <span class="keyword">cống hiến</span> 100% năng lượng cho một <span class="keyword">nhiệm vụ</span> duy nhất. Sau đó, bạn được quyền <span class="keyword">nghỉ ngơi</span> ngắn 5 phút để <span class="keyword">phục hồi</span> tâm trí.</span>
+                        <span class="sentence-last"> Việc <span class="keyword">chia nhỏ</span> thời gian giúp <span class="keyword">não bộ</span> duy trì <span class="keyword">sức bền</span> mà không bị <span class="keyword">kiệt sức</span>.</span>
+                    </p>
+                `
+            },
+            {
+                id: 2,
+                content: `
+                    <h1 class="book-title text-3xl md:text-4xl font-black text-center mb-8 uppercase">Trí Tuệ Nhân Tạo: Bình Minh Kỷ Nguyên Mới</h1>
+                    
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Tốc Độ Tiến Hóa Đáng Kinh Ngạc</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first">Chỉ trong vòng một <span class="keyword">thập kỷ</span> ngắn ngủi, <span class="keyword">AI</span> đã <span class="keyword">tiến hóa</span> với <span class="keyword">tốc độ</span> vượt ngoài sức <span class="keyword">tưởng tượng</span> của chúng ta.</span>
+                        <span class="sentence-mid"> Từ những <span class="keyword">cỗ máy</span> chỉ biết <span class="keyword">chơi cờ</span>, giờ đây AI có thể <span class="keyword">vẽ tranh</span>, <span class="keyword">sáng tác</span> nhạc, và <span class="keyword">viết mã lập trình</span> điêu luyện như <span class="keyword">chuyên gia</span>. Các <span class="keyword">tập đoàn</span> công nghệ lớn đang <span class="keyword">bơm</span> hàng chục tỷ USD để <span class="keyword">huấn luyện</span> các siêu mô hình ngôn ngữ.</span>
+                        <span class="sentence-last"> Sự <span class="keyword">bùng nổ</span> này đánh dấu một <span class="keyword">bước ngoặt</span> không thể <span class="keyword">đảo ngược</span> trong lịch sử.</span>
+                    </p>
+
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Máy Móc Có Thay Thế Con Người?</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first">Sự <span class="keyword">thông minh</span> của AI dấy lên <span class="keyword">nỗi sợ hãi</span> về nguy cơ <span class="keyword">thất nghiệp</span> hàng loạt trên toàn <span class="keyword">cầu</span>.</span>
+                        <span class="sentence-mid"> Những <span class="keyword">công việc</span> lặp đi lặp lại như <span class="keyword">nhập liệu</span>, <span class="keyword">thu ngân</span> hay thậm chí <span class="keyword">thiết kế</span> cơ bản rất dễ bị <span class="keyword">thay thế</span> bởi phần mềm. Tuy nhiên, AI lại không có <span class="keyword">cảm xúc</span>, sự <span class="keyword">thấu cảm</span> và tư duy <span class="keyword">sáng tạo</span> đột phá vô hạn như con người.</span>
+                        <span class="sentence-last"> Do đó, <span class="keyword">AI</span> sẽ không <span class="keyword">thay thế</span> bạn, mà <span class="keyword">người</span> biết dùng AI sẽ <span class="keyword">thay thế</span> bạn.</span>
+                    </p>
+                `
+            },
+            {
+                id: 3,
+                content: `
+                    <h1 class="book-title text-3xl md:text-4xl font-black text-center mb-8 uppercase">Dinh Dưỡng Nuôi Dưỡng Bộ Não</h1>
+                    
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Bộ Não - Động Cơ Ngốn Năng Lượng</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first">Dù chỉ chiếm 2% <span class="keyword">trọng lượng</span> cơ thể, <span class="keyword">não bộ</span> lại <span class="keyword">tiêu thụ</span> tới 20% tổng lượng <span class="keyword">calo</span> mỗi ngày.</span>
+                        <span class="sentence-mid"> Cơ quan cực kỳ <span class="keyword">phức tạp</span> này hoạt động liên tục 24/7 để <span class="keyword">điều khiển</span> nhịp tim, <span class="keyword">hơi thở</span> và <span class="keyword">xử lý</span> hàng tỷ xung <span class="keyword">thần kinh</span>. Nếu bạn <span class="keyword">bỏ bữa</span> sáng, lượng đường huyết sẽ <span class="keyword">sụt giảm</span> khiến não <span class="keyword">đói khát</span> và rơi vào trạng thái <span class="keyword">cạn kiệt</span>.</span>
+                        <span class="sentence-last"> Một <span class="keyword">chế độ ăn</span> nghèo nàn chính là <span class="keyword">thủ phạm</span> gây suy giảm <span class="keyword">trí nhớ</span> nhanh nhất.</span>
+                    </p>
+
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Siêu Thực Phẩm Omega-3</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first">Để <span class="keyword">tối ưu hóa</span> hiệu suất tư duy, axit béo <span class="keyword">Omega-3</span> là <span class="keyword">nguyên liệu</span> không thể <span class="keyword">thiếu hụt</span>.</span>
+                        <span class="sentence-mid"> Hợp chất này có nhiều trong <span class="keyword">cá hồi</span>, <span class="keyword">hạt óc chó</span> và <span class="keyword">dầu oliu</span>, giúp <span class="keyword">xây dựng</span> màng tế bào thần kinh vững chắc. Nó còn đóng vai trò <span class="keyword">bôi trơn</span> các khớp nối giúp tín hiệu não <span class="keyword">truyền đi</span> cực kỳ <span class="keyword">nhanh chóng</span>.</span>
+                        <span class="sentence-last"> Hãy <span class="keyword">bổ sung</span> chất béo tốt này để não bộ luôn <span class="keyword">sắc bén</span> dù ở bất kỳ <span class="keyword">độ tuổi</span> nào.</span>
+                    </p>
+                `
+            },
+            {
+                id: 4,
+                content: `
+                    <h1 class="book-title text-3xl md:text-4xl font-black text-center mb-8 uppercase">Nghệ Thuật Lắng Nghe Sâu</h1>
+                    
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Sai Lầm Phổ Biến Khi Giao Tiếp</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first">Hầu hết chúng ta đều <span class="keyword">nghe</span> để <span class="keyword">trả lời</span>, chứ không phải <span class="keyword">nghe</span> để <span class="keyword">thấu hiểu</span> người đối diện.</span>
+                        <span class="sentence-mid"> Khi đối tác đang <span class="keyword">nói chuyện</span>, não bộ ta thường bận rộn <span class="keyword">chuẩn bị</span> câu phản biện thay vì thực sự <span class="keyword">tiếp thu</span> thông tin. Điều này tạo ra những bức tường <span class="keyword">phòng thủ</span> vô hình, khiến cuộc <span class="keyword">tranh luận</span> trở nên <span class="keyword">căng thẳng</span> và bế tắc.</span>
+                        <span class="sentence-last"> Khả năng <span class="keyword">giao tiếp</span> thất bại ngay từ giây phút ta mất đi sự <span class="keyword">tập trung</span> vào đối phương.</span>
+                    </p>
+
+                    <h2 class="book-subtitle text-xl font-bold mt-6 mb-3">Sức Mạnh Của Sự Chú Tâm</h2>
+                    <p class="book-para mb-6">
+                        <span class="sentence-first"><span class="keyword">Lắng nghe sâu</span> là một <span class="keyword">món quà</span> quý giá nhất bạn có thể <span class="keyword">trao tặng</span> cho bất kỳ ai.</span>
+                        <span class="sentence-mid"> Khi bạn <span class="keyword">nhìn thẳng</span> vào mắt họ, <span class="keyword">gật đầu</span> nhẹ nhàng và duy trì sự <span class="keyword">im lặng</span> tuyệt đối, đối phương sẽ cảm thấy được <span class="keyword">tôn trọng</span>. Lúc đó, họ sẽ tự động <span class="keyword">mở lòng</span> và <span class="keyword">chia sẻ</span> những <span class="keyword">vấn đề</span> cốt lõi nhất giấu kín bên trong.</span>
+                        <span class="sentence-last"> Bậc thầy <span class="keyword">thuyết phục</span> không phải người nói nhiều, mà là người biết <span class="keyword">im lặng</span> đúng lúc.</span>
+                    </p>
+                `
+            }
+        ];
+
+        const insights = {
+            'normal': { t: 'Đọc tự nhiên', d: 'Trạng thái bình thường để kiểm tra tốc độ ban đầu trước khi dùng màng lọc.' },
+            'title': { t: 'Nhìn Xương Sống (Outline)', d: 'Phép màu của Skimming! Não bộ lập tức phớt lờ các chữ mờ ảo để thấy rõ "Cấu trúc ý chính" của bài viết thông qua các Tiêu đề rực sáng. Học viên hiểu ngay: Đọc Tiêu đề = Nắm dàn bài!' },
+            'headtail': { t: 'Bật Đèn Câu Chốt', d: 'Mô phỏng chính xác thói quen của cao thủ Skimming. Mắt chỉ dừng lại ở Câu Mở (Màu Đỏ) và Câu Kết (Màu Xanh), tự động bỏ qua phần kể lể ở giữa. Nhanh và nắm trọn vẹn ý!' },
+            'keyword': { t: 'Gạt Bỏ Từ Rác', d: 'Các từ "và, thì, là, ở, của..." bị tắt điện. Mắt chỉ còn bám vào các viên kim cương màu đỏ (Danh từ & Động từ mạnh). Rèn luyện mắt nhảy cóc không đọc nhẩm từng chữ.' },
+            'zscan': { t: 'Ép Quỹ Đạo Mắt', d: 'Thay vì đọc từ trái sang phải như rùa bò, tia năng lượng ép mắt học viên phải quét chéo góc trang sách trong 3 giây để chụp hình từ khóa.' }
+        };
+
+        const readerContainer = document.getElementById('reader-container');
+
+        // Hàm Tải Văn Bản
+        function loadText() {
+            const index = document.getElementById('text-selector').value;
+            readerContainer.innerHTML = textsData[index].content;
+        }
+
+        // Hàm Đổi Chế Độ Skimming
+        function setMode(mode, btnElement) {
+            // Đổi màu nút
+            document.querySelectorAll('.btn-3d').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Cập nhật Insight Box
+            document.getElementById('insight-title').innerHTML = `<i class="fa-solid fa-lightbulb text-yellow-500"></i> ${insights[mode].t}`;
+            document.getElementById('insight-desc').innerText = insights[mode].d;
+
+            // Xóa class cũ, thêm class mới
+            readerContainer.className = `max-w-3xl mx-auto font-serif text-lg md:text-xl leading-relaxed text-gray-800 transition-all duration-500 mode-${mode}`;
+        }
+
+        // Khởi tạo lần đầu
+        window.onload = () => {
+            loadText();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGK Speed Reading Lớp 8 - Bài 1 Tiết 1</title>
+    <style>
+        /* Cấu hình trang A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 20mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.5;
+            color: #222;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        
+        /* Header và Tiêu đề */
+        .header {
+            text-align: right;
+            font-size: 13px;
+            color: #1a4a38;
+            border-bottom: 2px solid #1a4a38;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .lesson-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d35400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lesson-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #1a4a38;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+        .sub-title {
+            font-size: 16px;
+            color: #555;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        /* Định dạng các khối nội dung (Boxes) */
+        .box {
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .box-title {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .box-title span {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        /* Khối Mục tiêu */
+        .box-muc-tieu { background-color: #f0f7f4; border-left: 6px solid #1a4a38; }
+        .box-muc-tieu .box-title { color: #1a4a38; }
+        
+        /* Khối Khởi động (Pha 1) */
+        .box-khoi-dong { background-color: #fff9f5; border: 2px dashed #d35400; }
+        .box-khoi-dong .box-title { color: #d35400; }
+
+        /* Khối Lý thuyết (Pha 2) */
+        .box-ly-thuyet { background-color: #f4f6f9; border-left: 6px solid #2c3e50; }
+        .box-ly-thuyet .box-title { color: #2c3e50; }
+
+        /* Khối Thực hành (Pha 3) */
+        .box-thuc-hanh { background-color: #fdf5f5; border: 1px solid #c0392b; }
+        .box-thuc-hanh .box-title { color: #c0392b; }
+
+        /* Khối Vận dụng (Pha 4) */
+        .box-van-dung { background-color: #f4fdf8; border-left: 6px solid #27ae60; }
+        .box-van-dung .box-title { color: #27ae60; }
+
+        /* Typography & Đặc biệt */
+        .highlight-green { color: #1a4a38; font-weight: bold; }
+        .highlight-orange { color: #d35400; font-weight: bold; }
+        
+        .formula-box {
+            background-color: #1a4a38;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            margin: 15px 0;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+        .formula-box span { color: #f1c40f; font-weight: bold; font-size: 20px; }
+
+        /* Khối Văn bản đọc thử */
+        .reading-text {
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            padding: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .word-count-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #d35400;
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-bottom-left-radius: 8px;
+        }
+        .reading-text p { text-indent: 20px; margin-bottom: 10px; text-align: justify; }
+
+        /* Form điền kết quả */
+        .result-form {
+            display: flex;
+            justify-content: space-between;
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .result-item span { color: #c0392b; }
+
+        /* Lists */
+        ul { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        ol { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        p { margin-top: 5px; margin-bottom: 10px; text-align: justify; }
+
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        CHỦ ĐỀ I: NÂNG CẤP HỆ THỐNG VÀ BỨT PHÁ GIỚI HẠN TỐC ĐỘ
+    </div>
+
+    <div class="title-container">
+        <div class="lesson-number">Bài 1: Khảo sát và nâng cấp phần cứng</div>
+        <div class="lesson-title">Tiết 1: Đánh giá sức mạnh xử lý văn bản nghị luận</div>
+        <div class="sub-title">"Không phải mọi văn bản đều có thể đọc với cùng một tốc độ"</div>
+    </div>
+
+    <div class="box box-muc-tieu">
+        <h3 class="box-title"><span>🎯</span> Yêu cầu cần đạt</h3>
+        <ul>
+            <li>Tự đo lường chính xác các chỉ số đọc hiểu đầu năm: Tốc độ (WPM) và Tỉ lệ hiểu (CR).</li>
+            <li>Nhận thức được hiện tượng "sụt giảm tốc độ" khi não bộ phải xử lý các văn bản có cấu trúc lập luận phức tạp (Văn nghị luận/Chính luận).</li>
+            <li>Thiết lập mục tiêu ERR (Hiệu suất đọc thực tế) cần đạt trong Học kỳ 1 của lớp 8.</li>
+        </ul>
+    </div>
+
+    <div class="box box-khoi-dong">
+        <h3 class="box-title"><span>🔍</span> PHA 1: NHẬN DIỆN MỤC TIÊU (5 Phút)</h3>
+        <p>Chúc mừng các em đã bước sang Lớp 8! Ở năm học này, các em sẽ tiếp xúc rất nhiều với <strong>Văn bản nghị luận</strong> (những bài viết đưa ra quan điểm, lý lẽ, bằng chứng để thuyết phục người đọc) thay vì chỉ là văn bản tự sự hay miêu tả.</p>
+        <p><strong>Thử thách tư duy:</strong> Theo em, khi đọc một câu chuyện cổ tích và khi đọc một bài báo tranh luận về "Tác hại của mạng xã hội", tốc độ đọc của đôi mắt em có giống nhau không? Tại sao?</p>
+        <p><em>Đáp án nằm ở chỗ:</em> Não bộ cần nhiều thời gian hơn để xử lý "logic" (đúng/sai) so với việc xử lý "hình ảnh" (diễn biến câu chuyện). Hôm nay, chúng ta sẽ test xem não bộ của em xử lý logic nhanh đến mức nào!</p>
+    </div>
+
+    <div class="box box-ly-thuyet">
+        <h3 class="box-title"><span>💡</span> PHA 2: GIẢI MÃ TRI THỨC (5 Phút)</h3>
+        <p>Trước khi bước vào đường đua, hãy khởi động lại "phần mềm" tính điểm của chúng ta. Hệ thống đo lường vẫn sử dụng 3 chỉ số cốt lõi:</p>
+        <ul>
+            <li><span class="highlight-green">WPM (Words Per Minute):</span> Số từ em đọc được trong 1 phút.</li>
+            <li><span class="highlight-orange">CR (Comprehension Rate):</span> Tỉ lệ % số câu hỏi em trả lời đúng sau khi đọc.</li>
+        </ul>
+        <div class="formula-box">
+            CHỈ SỐ SỨC MẠNH LÕI:<br>
+            <span>ERR (Hiệu suất) = WPM × CR</span>
+        </div>
+    </div>
+
+    <div class="box box-thuc-hanh">
+        <h3 class="box-title"><span>⚙️</span> PHA 3: THỰC CHIẾN XỬ LÝ (25 Phút)</h3>
+        <p><strong>Luật chơi:</strong> Em hãy chuẩn bị đồng hồ bấm giờ. Bấm "Bắt đầu" ngay khi đọc từ đầu tiên và bấm "Dừng" ngay khi đọc xong từ cuối cùng. Sau đó gấp sách lại và trả lời câu hỏi trắc nghiệm bên dưới.</p>
+        
+        <div class="reading-text">
+            <div class="word-count-tag">ĐỘ DÀI: 275 TỪ</div>
+            <p>Sống trong thời đại bùng nổ thông tin, chúng ta dường như đang bị "ngạt thở" giữa biển dữ liệu khổng lồ. Hàng ngày, hàng giờ, từ mạng xã hội, tin tức cho đến các diễn đàn, lượng thông tin tiếp nhận là vô tận. Tuy nhiên, nhiều thông tin không đồng nghĩa với nhiều tri thức. Nếu không có bộ lọc tư duy, con người rất dễ trở thành nạn nhân của tin giả và những định kiến sai lệch.</p>
+            <p>Đó là lý do tại sao tư duy phản biện (Critical Thinking) trở thành "vũ khí" sinh tồn quan trọng nhất của thế kỷ 21. Tư duy phản biện không phải là việc thích tranh cãi hay bác bỏ ý kiến của người khác một cách cực đoan. Thực chất, đó là khả năng phân tích thông tin một cách khách quan, biết đặt câu hỏi đúng, và tự rút ra kết luận dựa trên bằng chứng và logic.</p>
+            <p>Khi đọc một bài báo hay một bài viết trên mạng, thay vì tin tưởng ngay lập tức, người có tư duy phản biện sẽ dừng lại và tự hỏi: "Tác giả của bài viết này là ai? Họ có mục đích gì khi viết bài này? Những dẫn chứng họ đưa ra có đáng tin cậy không?". Chính quá trình "nghi ngờ khoa học" này giúp não bộ sàng lọc những giá trị thực sự.</p>
+            <p>Tóm lại, trong thế giới mà ai cũng có thể tạo ra thông tin, năng lực đọc không chỉ là hiểu bề mặt con chữ. Đọc là để đánh giá, để phản biện và để bảo vệ sự độc lập trong tư duy của chính mình.</p>
+        </div>
+
+        <p><strong>Thời gian đọc của em:</strong> ....... Giây.</p>
+        <p><em>Công thức tính WPM:</em> (275 ÷ Số giây) × 60 = <strong>....... WPM.</strong></p>
+
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+
+        <p><strong>BÀI TEST MỨC ĐỘ HIỂU BÀI (Không nhìn lại văn bản)</strong></p>
+        <ol>
+            <li><strong>Đoạn văn trên khẳng định điều gì về việc tiếp nhận "nhiều thông tin"?</strong><br>
+                A. Giúp con người thông minh hơn.<br>
+                B. Nhiều thông tin không đồng nghĩa với nhiều tri thức.<br>
+                C. Khiến mạng xã hội phát triển mạnh.
+            </li>
+            <li><strong>Tác giả định nghĩa "Tư duy phản biện" thực chất là gì?</strong><br>
+                A. Thích tranh cãi và bác bỏ người khác.<br>
+                B. Tin tưởng tuyệt đối vào các nhà khoa học.<br>
+                C. Phân tích khách quan và rút ra kết luận dựa trên bằng chứng.
+            </li>
+            <li><strong>Theo bài viết, mục đích lớn nhất của việc đọc trong thời đại số là gì?</strong><br>
+                A. Hiểu bề mặt con chữ.<br>
+                B. Đánh giá, phản biện để bảo vệ sự độc lập tư duy.<br>
+                C. Tìm ra ai là người viết bài báo đó.
+            </li>
+        </ol>
+        <p><em>(Giáo viên công bố đáp án: 1-B, 2-C, 3-B. Đúng 1 câu = 33%, 2 câu = 66%, 3 câu = 100%)</em></p>
+    </div>
+
+    <div class="box box-van-dung">
+        <h3 class="box-title"><span>🔗</span> PHA 4: TỔNG HỢP & LƯU TRỮ (10 Phút)</h3>
+        <p>Em hãy tổng hợp toàn bộ dữ liệu của bản thân vào Bảng hồ sơ dưới đây:</p>
+        
+        <div class="result-form">
+            <div class="result-item">WPM: <span>..........</span></div>
+            <div class="result-item">CR: <span>......%</span></div>
+            <div class="result-item">ERR TỔNG: <span>..........</span></div>
+        </div>
+
+        <p><strong>Nhật ký tự ngẫm:</strong> Điểm ERR của em với văn bản nghị luận này cao hay thấp hơn so với khi em đọc truyện ở lớp 6, lớp 7? Hãy đặt ra mục tiêu ERR em muốn đạt được sau khi kết thúc Bài số 2 của chương trình này.</p>
+    </div>
+
+    <div class="footer">
+        Sách giáo khoa Speed Reading 8 - Làm chủ thông tin, Khai phóng tư duy | Trang 6
+    </div>
+
+</body>
+</html>

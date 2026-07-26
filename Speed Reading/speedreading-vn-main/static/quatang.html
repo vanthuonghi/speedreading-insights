@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebook Siêu Tốc Đọc Sách - SpeedReading.vn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* Đảm bảo không có scroll ngang */
+        html, body {
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Modern Red Gradient Background - Changed for Ebook Color */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%); /* Red gradient */
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #DC2626, #EF4444); /* Red text gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(220, 38, 38, 0.15); /* Red shadow */
+        }
+
+        /* NEW 2D Ebook Cover Style with Hover Effect */
+        .ebook-cover-2d {
+            width: 240px; /* Adjusted width for better proportions */
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.4s ease-in-out;
+            transform-origin: center bottom;
+        }
+        .ebook-cover-2d:hover {
+            transform: scale(1.05) rotate(2deg) translateY(-10px);
+            box-shadow: 0 20px 35px rgba(220, 38, 38, 0.3); /* Reddish shadow on hover */
+        }
+        
+        /* Custom Button Animation */
+        .btn-pulse {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } /* Red pulse */
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #DC2626; /* Red loader */
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <i class="fas fa-book-reader text-red-600 text-2xl"></i> <!-- Red icon -->
+                    <span class="font-heading font-bold text-xl text-gray-800 tracking-tight">Speed<span class="text-red-600">Reading</span>.vn</span> <!-- Red text -->
+                </div>
+                <div class="hidden md:block">
+                    <a href="#register" class="bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 transition shadow-lg transform hover:-translate-y-0.5"> <!-- Red button -->
+                        Tải Ebook Miễn Phí
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
+        <!-- Background Blobs - Changed to Red/Orange -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-red-100 opacity-50 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-orange-100 opacity-50 blur-3xl"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Copy -->
+                <div data-aos="fade-right" data-aos-duration="1000">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-red-50 border border-red-100 text-red-700 text-sm font-semibold mb-6"> <!-- Red badge -->
+                        🎁 Quà tặng độc quyền trị giá 500.000đ
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+                        Đọc Nhanh Hơn <br>
+                        <span class="text-gradient">Hiểu Sâu Hơn</span> <br>
+                        Chỉ Sau 7 Ngày
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Bạn có cảm thấy quá tải vì lượng kiến thức khổng lồ cần nạp mỗi ngày? Ebook <strong>"Siêu Tốc Đọc Sách"</strong> sẽ trang bị cho bạn kỹ thuật để tăng tốc độ đọc gấp 3 lần mà vẫn nắm vững 100% nội dung.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#register" class="btn-pulse flex justify-center items-center gap-2 bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-red-700 transition transform hover:-translate-y-1 w-full sm:w-auto text-center"> <!-- Red button -->
+                            <i class="fas fa-download"></i> Tải Ebook Ngay
+                        </a>
+                        <div class="flex items-center justify-center gap-2 text-gray-500 text-sm px-4">
+                            <i class="fas fa-check-circle text-green-500"></i> Hơn 5.000 người đã tải
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Mockup & Form Combined -->
+                <div class="relative" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="glass-card p-8 rounded-2xl relative z-20">
+                        <div class="flex flex-col items-center mb-8">
+                             <!-- NEW 2D Book Cover with Hover Effect -->
+                            <img src="Bìa Ebook.jpg" alt="Bìa Ebook Siêu Tốc Đọc Sách" class="ebook-cover-2d mb-4">
+                        </div>
+
+                        <!-- Mini Form in Hero -->
+                        <div class="text-center mb-4">
+                            <p class="text-gray-700 font-semibold">Điền thông tin để nhận sách qua Email</p>
+                        </div>
+                        
+                        <!-- Form Hero - UPDATED HASH KEY -->
+                        <form 
+                            action="https://speedreading.vn/mail/?fluentcrm=1&route=contact&hash=e0880762-a68e-4e8e-a23c-e75cb981be09" 
+                            method="POST" 
+                            target="hidden_upload" 
+                            onsubmit="handleSubmitUI(event, 'hero-form')" 
+                            id="hero-form" 
+                            class="space-y-4">
+                            
+                            <!-- Hidden inputs to map fields if FluentCRM needs specific keys -->
+                            <input type="hidden" name="status" value="subscribed">
+                            
+                            <div>
+                                <input type="text" name="first_name" placeholder="Họ và tên của bạn" required 
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition bg-white/50"> <!-- Red focus -->
+                            </div>
+                            <div>
+                                <input type="email" name="email" placeholder="Địa chỉ Email tốt nhất" required 
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition bg-white/50"> <!-- Red focus -->
+                            </div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-red-700 text-white font-bold py-3 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2"> <!-- Red gradient button -->
+                                <span class="loader"></span>
+                                <span>Gửi Ebook Cho Tôi</span>
+                            </button>
+                        </form>
+                        <p class="text-xs text-center text-gray-500 mt-3"><i class="fas fa-lock"></i> Thông tin của bạn được bảo mật tuyệt đối.</p>
+                    </div>
+                    
+                    <!-- Decor elements behind card - Changed to Red/Orange -->
+                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-red-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                    <div class="absolute -bottom-8 -left-4 w-24 h-24 bg-orange-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Problem Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-12 font-heading">Bạn có đang gặp phải những vấn đề này?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 rounded-xl bg-red-50 hover:bg-red-100 transition" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-red-200 text-red-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Đọc quá chậm</h3>
+                    <p class="text-gray-600 text-sm">Mất cả tháng mới đọc xong một cuốn sách, khiến kiến thức bị trôi tuột.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-orange-50 hover:bg-orange-100 transition" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-orange-200 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Mất tập trung</h3>
+                    <p class="text-gray-600 text-sm">Đọc được vài trang là buồn ngủ hoặc tâm trí "treo ngược cành cây".</p>
+                </div>
+                <div class="p-6 rounded-xl bg-red-50 hover:bg-red-100 transition" data-aos="fade-up" data-aos-delay="300"> <!-- Changed blue to red/orange theme -->
+                    <div class="w-16 h-16 bg-red-200 text-red-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                        <i class="fas fa-eraser"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Đọc xong quên ngay</h3>
+                    <p class="text-gray-600 text-sm">Không đọng lại được gì sau khi gấp sách lại, lãng phí thời gian.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits / What's Inside -->
+    <section class="py-20 bg-gray-50 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-heading">Cuốn Ebook Này Sẽ Giúp Bạn</h2>
+                <div class="w-24 h-1 bg-red-600 mx-auto rounded-full"></div> <!-- Red divider -->
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Benefit 1 -->
+                <div class="flex gap-4" data-aos="fade-right">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-red-600 text-white flex items-center justify-center text-xl font-bold shadow-lg"> <!-- Red icon bg -->
+                        1
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Tăng tốc độ đọc gấp 2-3 lần</h3>
+                        <p class="text-gray-600">Khám phá kỹ thuật "Chỉ tay dẫn đường" và loại bỏ thói quen đọc thầm, giúp mắt lướt trên trang sách như tia laser.</p>
+                    </div>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="flex gap-4" data-aos="fade-left">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-orange-500 text-white flex items-center justify-center text-xl font-bold shadow-lg"> <!-- Orange icon bg -->
+                        2
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Hiểu sâu và nhớ lâu</h3>
+                        <p class="text-gray-600">Kết hợp kỹ thuật Skimming & Scanning cùng sơ đồ tư duy (Mindmap) để khóa chặt kiến thức vào trí nhớ dài hạn.</p>
+                    </div>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="flex gap-4" data-aos="fade-right">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-red-500 text-white flex items-center justify-center text-xl font-bold shadow-lg"> <!-- Red icon bg -->
+                        3
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Khai mở tiềm năng não bộ</h3>
+                        <p class="text-gray-600">Luyện tập Mở rộng tầm nhìn (Peripheral Vision) giúp não bộ xử lý thông tin nhanh nhạy hơn trong mọi lĩnh vực.</p>
+                    </div>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div class="flex gap-4" data-aos="fade-left">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-orange-500 text-white flex items-center justify-center text-xl font-bold shadow-lg"> <!-- Orange icon bg -->
+                        4
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Yêu lại việc đọc sách</h3>
+                        <p class="text-gray-600">Biến việc đọc từ "cực hình" thành niềm vui mỗi ngày, giúp bạn tự tin chinh phục hàng chục cuốn sách mỗi năm.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main CTA Section -->
+    <section id="register" class="py-20 bg-gradient-primary relative text-white"> <!-- Gradient primary is now red -->
+        <!-- Overlay pattern -->
+        <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'0 0 2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        
+        <!-- CHANGED: Added max-w-5xl to container for better text wrapping -->
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+            <!-- XÓA class whitespace-nowrap để cho phép xuống dòng, và tối ưu font size trên mobile -->
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-heading">Đừng để sách "ngủ yên" trên kệ!</h2>
+            <p class="text-xl text-red-100 mb-10"> <!-- Light red text -->
+                Hãy bắt đầu hành trình trở thành người đọc siêu tốc ngay hôm nay. Ebook hoàn toàn miễn phí trong thời gian có hạn.
+            </p>
+
+            <div class="bg-white rounded-2xl p-8 shadow-2xl text-gray-800 max-w-xl mx-auto">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Đăng Ký Nhận Ebook</h3>
+                
+                <!-- Form Hero - UPDATED HASH KEY AND ACTION URL -->
+                <form 
+                    action="https://speedreading.vn/mail/?fluentcrm=1&route=contact&hash=e0880762-a68e-4e8e-a23c-e75cb981be09" 
+                    method="POST" 
+                    target="hidden_upload" 
+                    onsubmit="handleSubmitUI(event, 'footer-form')" 
+                    id="footer-form" 
+                    class="space-y-4">
+                    
+                    <!-- Hidden inputs for mapping -->
+                    <input type="hidden" name="status" value="subscribed">
+
+                    <div class="text-left">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Họ và tên</label>
+                        <input type="text" name="first_name" placeholder="Ví dụ: Nguyễn Văn A" required 
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"> <!-- Red focus -->
+                    </div>
+                    <div class="text-left">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email của bạn</label>
+                        <input type="email" name="email" placeholder="email@example.com" required 
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"> <!-- Red focus -->
+                    </div>
+                    <button type="submit" class="w-full btn-pulse bg-red-600 text-white font-bold text-lg py-4 rounded-lg shadow-lg hover:bg-red-700 transition flex justify-center items-center gap-2"> <!-- Red button -->
+                         <span class="loader"></span>
+                         <span>NHẬN EBOOK NGAY MIỄN PHÍ</span>
+                    </button>
+                    <p class="text-xs text-gray-500 mt-2">*Link tải sẽ được gửi tự động qua email trong vòng 30 giây.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-book-reader text-red-600 text-2xl"></i> <!-- Red icon -->
+                <span class="text-white font-bold text-xl">SpeedReading.vn</span>
+            </div>
+            <div class="text-sm">
+                &copy; 2025 SpeedReading.vn. All rights reserved.
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white transition"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-youtube fa-lg"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-tiktok fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 text-center shadow-2xl transform scale-100 transition-transform">
+            <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Đăng ký thành công!</h3>
+            <p class="text-gray-600 mb-6">
+                Ebook "Siêu Tốc Đọc Sách" đã được gửi đến email của bạn.<br>
+                <span class="font-semibold text-red-600 block mt-3">Và bạn sắp được đón nhận thêm 1 món quà đặc biệt từ Speed Reading...</span>
+            </p>
+            
+            <!-- Message while waiting -->
+            <div id="wait-msg" class="text-gray-500 italic mb-4">
+                <i class="fas fa-circle-notch fa-spin mr-2"></i>Đang mở quà trong 7 giây...
+            </div>
+
+            <!-- Button shown after 7 seconds -->
+            <a id="bonus-btn" href="https://speedreading.vn" class="hidden w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition animate-bounce flex items-center justify-center gap-2 shadow-lg hover:shadow-red-500/50">
+                Truy cập (Nhận thêm) <i class="fas fa-gift"></i>
+            </a>
+            
+            <button onclick="closeModal()" class="mt-4 text-sm text-gray-400 hover:text-gray-600 underline decoration-dotted">
+                Đóng thông báo
+            </button>
+        </div>
+    </div>
+
+    <!-- 
+      THE SECRET WEAPON: Hidden Iframe 
+      This allows form submission to happen "in the background" without page reload, 
+      and bypasses CORS restrictions because it's a standard form post, not AJAX.
+    -->
+    <iframe id="hidden_upload" name="hidden_upload" style="display:none"></iframe>
+    
+    <script>
+        // Init Animate On Scroll
+        AOS.init({
+            once: true,
+            offset: 100,
+            duration: 800,
+        });
+
+        const NEW_WEBHOOK_URL = "https://speedreading.vn/mail/?fluentcrm=1&route=contact&hash=e0880762-a68e-4e8e-a23c-e75cb981be09";
+        
+        // REVISED HANDLER WITH CACHE BUSTING
+        function handleSubmitUI(event, formId) {
+            
+            const form = document.getElementById(formId);
+            const button = form.querySelector('button[type="submit"]');
+            const loader = button.querySelector('.loader');
+            const btnText = button.querySelector('span:not(.loader)');
+            
+            // 1. ADD CACHE BUSTER TO URL (using the new Webhook URL)
+            // This forces LiteSpeed to treat it as a new request every time
+            const baseUrl = NEW_WEBHOOK_URL.split('&_t=')[0]; // Ensure we start clean
+            const cacheBusterUrl = baseUrl + '&_t=' + Date.now();
+            
+            // Set the action URL for the form submission (Critical)
+            form.setAttribute('action', cacheBusterUrl);
+
+            // 2. Show loading UI
+            button.disabled = true;
+            loader.style.display = 'block';
+            if(btnText) btnText.style.opacity = '0.5';
+
+            // 3. Since it submits to iframe target, we assume success after delay
+            setTimeout(() => {
+                showSuccess();
+                form.reset();
+                
+                // Reset UI
+                button.disabled = false;
+                loader.style.display = 'none';
+                if(btnText) btnText.style.opacity = '1';
+            }, 2000); 
+        }
+
+        function showSuccess() {
+            const modal = document.getElementById('success-modal');
+            const bonusBtn = document.getElementById('bonus-btn');
+            const waitMsg = document.getElementById('wait-msg');
+
+            // Reset state
+            bonusBtn.classList.add('hidden');
+            waitMsg.classList.remove('hidden');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // Logic 7 seconds delay
+            setTimeout(() => {
+                waitMsg.classList.add('hidden');
+                bonusBtn.classList.remove('hidden');
+            }, 7000);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    </script>
+</body>
+</html>

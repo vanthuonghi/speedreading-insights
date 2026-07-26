@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading.vn - Thư Viện Liên Kết</title>
+    <meta name="description" content="Cổng thông tin tổng hợp các liên kết quan trọng của SpeedReading.vn">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Marked.js để hiển thị Markdown trong chat (đậm, nghiêng, list) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Cấu hình màu sắc thương hiệu -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            500: '#f43f5e', // Màu đỏ hồng chủ đạo
+                            600: '#e11d48',
+                            700: '#be123c',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff1f2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f43f5e;
+            border-radius: 4px;
+        }
+
+        /* Typing indicator animation */
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-100 via-white to-white min-h-screen text-gray-800 antialiased selection:bg-brand-500 selection:text-white flex flex-col relative">
+
+    <!-- Header Section -->
+    <header class="w-full pt-10 pb-6 px-4 text-center">
+        <div class="animate-fade-in">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-2">
+                Speed<span class="text-brand-600">Reading</span>.vn
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Cổng thông tin luyện đọc hiểu nhanh & Hỗ trợ học viên Speed Reading
+            </p>
+            <div class="h-1 w-20 bg-brand-500 mx-auto mt-6 rounded-full"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 pb-32 max-w-6xl space-y-12">
+
+        <!-- NHÓM 1: HƯỚNG DẪN & THÔNG BÁO -->
+        <section class="animate-fade-in delay-100">
+            <div class="flex items-center mb-6">
+                <div class="w-1 h-8 bg-brand-600 rounded mr-3 shadow-sm"></div>
+                <h2 class="text-2xl font-bold text-gray-800">1. Thông Báo & Hướng Dẫn</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Bảng Thông Báo -->
+                <div class="sm:col-span-2 group block h-full">
+                    <div class="bg-gradient-to-br from-white to-brand-50 rounded-2xl p-6 shadow-sm border border-brand-100 h-full flex flex-col relative overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="flex items-start mb-4">
+                            <div class="w-12 h-12 bg-white border border-brand-100 rounded-full flex-shrink-0 flex items-center justify-center mr-4 shadow-sm text-brand-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-1">Bảng Tin Mới Nhất</h3>
+                                <p class="text-brand-600 text-sm font-medium">Cập nhật lúc: Hôm nay</p>
+                            </div>
+                        </div>
+                        <div class="text-gray-700 space-y-2 flex-grow pl-1 border-l-2 border-brand-200 ml-5">
+                            <p>👋 <span class="font-semibold">Chào mừng bạn đến với thư viện SpeedReading.vn!</span></p>
+                            <p>- Lịch học Zoom tuần này sẽ được thông báo <span class="font-bold text-brand-600">Trên nhóm Zalo</span>.</p>
+                            <p>- Đừng quên hoàn thành học trọn bộ video trước khi vào thực hành trên Zoom.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card: Hướng dẫn học -->
+                <a href="https://speedreading.vn/huongdan" target="_blank" class="group block h-full">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Hướng Dẫn Học</h3>
+                        <p class="text-gray-500 text-sm">Cách học tập hiệu quả</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- NHÓM 2: TÀI NGUYÊN HỌC -->
+        <section class="animate-fade-in delay-200">
+            <div class="flex items-center mb-6">
+                <div class="w-1 h-8 bg-brand-600 rounded mr-3 shadow-sm"></div>
+                <h2 class="text-2xl font-bold text-gray-800">2. Tài Nguyên Học Tập</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card: Công cụ luyện tập -->
+                <a href="https://speedreading.vn/Tool" target="_blank" class="group block h-full sm:col-span-2 lg:col-span-1">
+                    <div class="bg-white rounded-2xl p-6 shadow-md border-l-4 border-brand-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center">
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Công Cụ Luyện Tập</h3>
+                        <p class="text-gray-500 text-sm mb-2">Phần mềm đo lường & cải thiện tốc độ đọc.</p>
+                        <span class="inline-block px-2 py-0.5 bg-brand-100 text-brand-700 text-xs font-semibold rounded-full">Top Truy Cập</span>
+                    </div>
+                </a>
+
+                <!-- Card: Kho Tài nguyên -->
+                <a href="https://speedreading.vn/tainguyen" target="_blank" class="group block h-full">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Kho Tài Nguyên</h3>
+                        <p class="text-gray-500 text-sm">Sách & tài liệu bổ trợ</p>
+                    </div>
+                </a>
+
+                <!-- Card: Huấn luyện 14 Kỹ năng -->
+                <a href="https://speedreading.vn/huanluyen" target="_blank" class="group block h-full">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Huấn Luyện 14 Kỹ Năng</h3>
+                        <p class="text-gray-500 text-sm">Video huấn luyện chuyên sâu</p>
+                    </div>
+                </a>
+
+                <!-- Card: Video Giáo dục -->
+                <a href="https://speedreading.vn/video" target="_blank" class="group block h-full">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.818v6.364a1 1 0 01-.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Video Giáo Dục</h3>
+                        <p class="text-gray-500 text-sm">Thư viện bài giảng</p>
+                    </div>
+                </a>
+
+                <!-- Card: Khoá học Speed Reading (Unica) -->
+                <a href="https://unica.vn/phuong-phap-doc-hieu-nhanh-speed-reading-ban-quyen-tu-hoa-ky" target="_blank" class="group block h-full sm:col-span-2 lg:col-span-2">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Khoá Học Speed Reading (Unica)</h3>
+                        <p class="text-gray-500 text-sm">Phương pháp đọc hiểu nhanh bản quyền từ Hoa Kỳ.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- NHÓM 3: KẾT NỐI SÂU -->
+        <section class="animate-fade-in delay-300">
+            <div class="flex items-center mb-6">
+                <div class="w-1 h-8 bg-brand-600 rounded mr-3 shadow-sm"></div>
+                <h2 class="text-2xl font-bold text-gray-800">3. Kết Nối Sâu</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card: Cộng đồng học viên -->
+                <a href="https://www.facebook.com/groups/SpeedReadingVietNam" target="_blank" class="group block h-full">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Cộng Đồng Học Viên</h3>
+                        <p class="text-gray-500 text-sm">Giao lưu & chia sẻ kinh nghiệm</p>
+                    </div>
+                </a>
+
+                <!-- Card: Quà tặng Ebook -->
+                <a href="https://speedreading.vn/book" target="_blank" class="group block h-full">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Quà Tặng 6 Ebook</h3>
+                        <p class="text-gray-500 text-sm">Bộ quà tặng đặc biệt</p>
+                    </div>
+                </a>
+
+                <!-- Card: Cảm nhận học viên -->
+                <a href="https://speedreading.vn/camnhan" target="_blank" class="group block h-full">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-200 transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-400 to-brand-600"></div>
+                        <div class="w-14 h-14 bg-brand-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-brand-500 transition-colors duration-300">
+                            <svg class="w-7 h-7 text-brand-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">Cảm Nhận Học Viên</h3>
+                        <p class="text-gray-500 text-sm">Câu chuyện thành công</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CUSTOM CHAT WIDGET (Ẩn mặc định) -->
+    <div id="chat-widget" class="fixed bottom-24 right-6 z-50 w-96 max-w-[90vw] bg-white rounded-2xl shadow-2xl border border-brand-100 flex flex-col hidden animate-slide-up h-[500px] max-h-[70vh] overflow-hidden">
+        <!-- Header Chat -->
+        <div class="bg-gradient-to-r from-brand-600 to-brand-500 text-white p-4 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-2">
+                <div class="bg-white/20 p-1 rounded-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Trợ Lý Học Tập AI</h3>
+                    <p class="text-xs text-brand-100 flex items-center"><span class="w-2 h-2 bg-green-400 rounded-full mr-1"></span>Sẵn sàng hỗ trợ</p>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="text-white/80 hover:text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Body Chat (Messages) -->
+        <div id="chat-messages" class="flex-grow p-4 overflow-y-auto bg-gray-50 text-sm space-y-3">
+            <!-- Welcome Message -->
+            <div class="flex gap-2">
+                <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 flex-shrink-0 border border-brand-200">AI</div>
+                <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 max-w-[85%]">
+                    <p>Chào bạn! Tôi là trợ lý ảo SpeedReading.vn (được huấn luyện đặc biệt). Tôi có thể giúp gì cho bạn?</p>
+                </div>
+            </div>
+            <!-- Suggestions Chips -->
+            <div class="flex flex-wrap gap-2 mt-2 pl-10">
+                <button onclick="sendSuggestion('Phương pháp đọc nhanh là gì?')" class="px-3 py-1 bg-white border border-brand-200 text-brand-600 rounded-full text-xs hover:bg-brand-50 transition-colors">Phương pháp đọc nhanh?</button>
+                <button onclick="sendSuggestion('Các khóa học hiện có?')" class="px-3 py-1 bg-white border border-brand-200 text-brand-600 rounded-full text-xs hover:bg-brand-50 transition-colors">Khóa học hiện có?</button>
+                <button onclick="sendSuggestion('Làm sao cải thiện sự tập trung?')" class="px-3 py-1 bg-white border border-brand-200 text-brand-600 rounded-full text-xs hover:bg-brand-50 transition-colors">Cải thiện tập trung?</button>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-3 bg-white border-t border-gray-100 flex-shrink-0">
+            <form id="chat-form" class="flex gap-2" onsubmit="handleChatSubmit(event)">
+                <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." class="flex-grow px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
+                <button type="submit" class="w-10 h-10 bg-brand-600 text-white rounded-full flex items-center justify-center hover:bg-brand-700 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg class="w-5 h-5 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SUPPORT BUTTONS GROUP -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-end">
+        <!-- Toggle Chat Button -->
+        <button onclick="toggleChat()" class="animate-bounce-slow group focus:outline-none">
+            <div class="bg-white hover:bg-brand-50 text-brand-600 rounded-full p-3 pl-4 shadow-lg shadow-brand-200/50 flex items-center gap-2 transition-all duration-300 pr-5 border border-brand-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                <div class="flex flex-col items-start">
+                    <span class="text-xs font-normal text-gray-500 leading-none">Trợ lý AI</span>
+                    <span class="font-bold text-base leading-tight">Trợ Lý Học Tập</span>
+                </div>
+            </div>
+        </button>
+
+        <!-- Zalo Widget Button -->
+        <a href="https://zalo.me/0899320202" target="_blank" class="animate-bounce-slow group">
+            <div class="bg-brand-600 hover:bg-brand-700 text-white rounded-full p-3 pl-4 shadow-lg shadow-brand-200/50 flex items-center gap-2 transition-all duration-300 pr-5 border border-white/20">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                <div class="flex flex-col items-start">
+                    <span class="text-xs font-normal text-brand-100 leading-none">Hỗ trợ Zalo</span>
+                    <span class="font-bold text-base leading-tight">0899.320.202</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-6 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm">
+                &copy; <script>document.write(new Date().getFullYear())</script> SpeedReading.vn. All rights reserved.
+            </p>
+            <div class="mt-2 space-x-4">
+                <a href="#" class="text-gray-400 hover:text-brand-500 text-sm transition-colors">Điều khoản</a>
+                <span class="text-gray-300">|</span>
+                <a href="#" class="text-gray-400 hover:text-brand-500 text-sm transition-colors">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC XỬ LÝ CHAT -->
+    <script>
+        // --- CẤU HÌNH API KEY ---
+        let GEMINI_API_KEY = "AIzaSyCEMXCpOXPLoafLcjUerC77OgGu7ADjrHo";
+        GEMINI_API_KEY = GEMINI_API_KEY.trim(); 
+
+        let chatHistory = []; 
+
+        function toggleChat() {
+            const chatWidget = document.getElementById('chat-widget');
+            chatWidget.classList.toggle('hidden');
+            if (!chatWidget.classList.contains('hidden')) {
+                document.getElementById('chat-input').focus();
+            }
+        }
+
+        function sendSuggestion(text) {
+            document.getElementById('chat-input').value = text;
+            handleChatSubmit({ preventDefault: () => {} });
+        }
+
+        async function handleChatSubmit(e) {
+            if (e.preventDefault) e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            const submitBtn = document.querySelector('#chat-form button');
+            
+            if (!message) return;
+            if (!GEMINI_API_KEY) {
+                appendMessage('ai', '⚠️ Vui lòng cấu hình API Key trong mã nguồn.');
+                return;
+            }
+
+            input.value = '';
+            input.disabled = true;
+            submitBtn.disabled = true;
+            
+            appendMessage('user', message);
+            const loadingId = appendLoading();
+
+            try {
+                const response = await callGeminiAPI(message);
+                removeMessage(loadingId);
+                appendMessage('ai', response);
+            } catch (error) {
+                removeMessage(loadingId);
+                console.error("Chat Critical Error:", error);
+                
+                let displayError = error.message;
+                
+                if (displayError.toLowerCase().includes("key not valid") || displayError.toLowerCase().includes("api key")) {
+                    displayError = "Lỗi: API Key không hợp lệ. Vui lòng kiểm tra lại.";
+                } else if (displayError.toLowerCase().includes("quota")) {
+                    displayError = "Hệ thống đang quá tải, vui lòng thử lại sau ít phút.";
+                } else if (displayError.toLowerCase().includes("fetch failed")) {
+                    displayError = "Lỗi kết nối mạng.";
+                } else if (displayError === "Failed to fetch") {
+                    displayError = "Lỗi kết nối. Vui lòng kiểm tra mạng.";
+                }
+                
+                appendMessage('ai', `⚠️ ${displayError}`);
+            } finally {
+                input.disabled = false;
+                submitBtn.disabled = false;
+                input.focus();
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `flex gap-2 ${sender === 'user' ? 'flex-row-reverse' : ''}`;
+            
+            const avatar = sender === 'ai' 
+                ? `<div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 flex-shrink-0 border border-brand-200">AI</div>`
+                : `<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 flex-shrink-0">Tôi</div>`;
+
+            const contentClass = sender === 'ai' 
+                ? 'bg-white text-gray-800 border border-gray-100' 
+                : 'bg-brand-600 text-white';
+            
+            const processedText = sender === 'ai' ? marked.parse(text) : text;
+
+            div.innerHTML = `
+                ${avatar}
+                <div class="p-3 rounded-2xl shadow-sm max-w-[85%] text-sm ${contentClass} ${sender === 'ai' ? 'rounded-tl-none prose prose-sm prose-red' : 'rounded-tr-none'}">
+                    ${processedText}
+                </div>
+            `;
+            
+            messagesContainer.appendChild(div);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return div.id = 'msg-' + Date.now();
+        }
+
+        function appendLoading() {
+            const messagesContainer = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.id = 'loading-' + Date.now();
+            div.className = 'flex gap-2';
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 flex-shrink-0 border border-brand-200">AI</div>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 flex items-center gap-1">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                </div>
+            `;
+            messagesContainer.appendChild(div);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return div.id;
+        }
+
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        // --- HÀM GỌI API THÔNG MINH ---
+        async function callGeminiAPI(userMessage) {
+            // ********************************************************************
+            // BỘ NÃO CỦA CHATBOT - DỮ LIỆU ĐƯỢC CẬP NHẬT TỪ BẠN
+            // ********************************************************************
+            const baseInstructions = `
+            Bạn là Trợ lý AI chuyên nghiệp SpeedReading.vn. Nhiệm vụ của bạn là tư vấn bán hàng cho khách mới và hỗ trợ học tập cho học viên cũ về khóa học Đọc Hiểu Nhanh (Speed Reading).
+
+            **VAI TRÒ CỦA BẠN (ROLE):**
+            Phong cách giao tiếp: Thân thiện, kiên nhẫn, chuyên gia, ngắn gọn và tập trung vào lợi ích người dùng.
+
+            ---
+            **DỮ LIỆU KIẾN THỨC (KNOWLEDGE BASE) - HÃY HỌC THUỘC:**
+            1. **Thông tin Khóa học:**
+               - **Tên khóa:** Đọc Hiểu Nhanh Speed Reading
+               - **Đối tượng:** Người đi làm bận rộn, học sinh lớp 6 trở lên, sinh viên cần đọc tài liệu, người muốn phát triển bản thân, người khó khăn trong học tập, thi cử, ngoại ngữ...
+               - **Lợi ích cốt lõi:** Tăng tốc độ đọc gấp 3-5 lần, Tăng khả năng hiểu lên gấp 3 lần, Tăng khả năng ghi nhớ 3 lần, Tiết kiệm thời gian...
+               - **Hình thức học:** Video quay sẵn trọn đời, Học qua Zoom 7 buổi, mỗi tháng sẽ tổ chức lại 7 buổi
+               - **Giá bán:** 4.500.000 - **Giá ưu đãi hiện tại:** 200.000
+               - **Cam kết:** Hoàn tiền trong 30 ngày nếu không hài lòng, Hỗ trợ trọn đời
+
+            2. **Nội dung chương trình (Syllabus):**
+               - Phần 1: Trọn bộ 17 video khoá học bài bản từ bản quyền hoa kỳ Excuread
+               - Phần 2: 14 kỹ thuật chuyên sâu Speed Reading sẽ học qua 7 buổi Zoom
+
+            3. **Thông tin liên hệ & Đăng ký:**
+               - Link đăng ký: speedreading.vn
+               - Hotline/Zalo hỗ trợ: 0899320202
+               - Số tài khoản thanh toán: MBBANK Văn Thượng Hỉ 0899320202
+
+            4. **KHO TÀI LIỆU & EBOOK (Dùng để gửi cho học viên khi được hỏi):**
+               *Hãy chọn đúng tài liệu phù hợp với câu hỏi của khách hàng:*
+               - **Tổng hợp Kết quả & Lợi ích cam kết:** [Xem file PDF](https://speedreading.vn/wp-content/uploads/2025/12/TONG-HOP-CAC-KET-QUA-VA-LOI-ICH-DUOC-CAM-KET-DU-LIEU-CHATBOT.pdf) (Dùng để chứng minh hiệu quả)
+               - **Nội dung hướng dẫn chi tiết:** [Xem file PDF](https://speedreading.vn/wp-content/uploads/2025/12/noi-dung-huong-dan.pdf)
+               - **Ebook 14 Kỹ Thuật Speed Reading:** [Tải Ebook](https://speedreading.vn/wp-content/uploads/2025/12/Ebook-14-Ky-Thuat-Speed-Reading.pdf) (Tài liệu chuyên sâu về kỹ thuật)
+               - **Ebook Siêu Tốc Đọc Sách:** [Tải Ebook](https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Sieu-Toc-Doc-Sach.pdf)
+               - **Ebook Chinh Phục Mọi Môn Học:** [Tải Ebook](https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Chinh-Phuc-Moi-Mon-Hoc-1.pdf) (Dành cho học sinh/sinh viên)
+               - **Ebook Thuộc Bài Tại Lớp:** [Tải Ebook](https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Thuoc-Bai-Tai-Lop.pdf)
+               - **Ebook Lộ Trình Học Tập 1 Năm:** [Tải Ebook](https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Lo-Trinh-Hoc-Tap-1-Nam.pdf)
+               - **Ebook Vốn Sinh Tồn:** [Tải Ebook](https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Von-Sinh-Ton.pdf)
+               - **Tài liệu bổ trợ khác:** [Xem file PDF](https://speedreading.vn/wp-content/uploads/2025/12/Tai-lieu-khong-co-tieu-de.pdf)
+
+            ---
+            **QUY TẮC ỨNG XỬ (GUIDELINES):**
+
+            **A. Đối với Khách hàng chưa mua (Mục tiêu: Bán hàng):**
+            1. **Luôn hỏi nhu cầu trước:** Trước khi báo giá, hãy hỏi khách hàng về khó khăn hiện tại của họ (Ví dụ: "Bạn đang gặp khó khăn gì trong việc đọc sách hay xử lý tài liệu công việc?").
+            2. **Tư vấn giải pháp:** Dựa vào câu trả lời của khách, hãy chỉ ra khóa học giúp họ giải quyết vấn đề đó như thế nào. Nếu khách cần bằng chứng, hãy gửi link PDF "Tổng hợp Kết quả & Lợi ích".
+            3. **Xử lý từ chối:**
+               - Nếu khách chê đắt: Hãy so sánh giá khóa học với giá trị thời gian họ tiết kiệm được trong 1 năm. Nhấn mạnh vào cam kết hoàn tiền.
+               - Nếu khách sợ không học được: Nhấn mạnh phương pháp đơn giản, ai cũng học được.
+            4. **Chốt sale (Call to Action):** Luôn kết thúc tư vấn bằng một lời mời hành động nhẹ nhàng.
+
+            **B. Đối với Học viên cũ (Mục tiêu: Chăm sóc & Hỗ trợ):**
+            1. **Tặng quà:** Nếu học viên hỏi xin tài liệu học thêm, hãy gửi các link Ebook tương ứng (14 kỹ thuật, Chinh phục môn học, v.v.).
+            2. **Giải đáp kỹ thuật:** Hướng dẫn tận tình cách đăng nhập, cách xem video nếu họ gặp lỗi.
+            3. **Động viên:** Nếu học viên nản chí, hãy nhắc họ về biểu đồ tiến bộ.
+
+            ---
+            **QUY ĐỊNH BẮT BUỘC (CONSTRAINTS):**
+            1. Không được bịa đặt thông tin không có trong phần Dữ liệu kiến thức. Nếu không biết câu trả lời, hãy xin lỗi và cung cấp số Hotline/Zalo để khách liên hệ người thật.
+            2. Trả lời ngắn gọn, tách đoạn rõ ràng.
+            3. Khi đưa link tài liệu, hãy nói rõ tên tài liệu là gì.
+            4. Sử dụng tiếng Việt chuẩn mực, xưng hô là "mình" và "bạn" (hoặc xưng tên thương hiệu).
+            `;
+            // ********************************************************************
+
+            const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-pro'];
+            
+            let lastError = null;
+
+            for (const modelName of modelsToTry) {
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+                    
+                    const contents = [
+                        {
+                            role: "user",
+                            parts: [{ text: baseInstructions + "\n\nCâu hỏi của người dùng: " + userMessage }]
+                        }
+                    ];
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            contents: contents,
+                            safetySettings: [
+                                { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                                { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                                { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                                { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+                            ]
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.error.message || JSON.stringify(data.error));
+                    }
+
+                    if (data.promptFeedback && data.promptFeedback.blockReason) {
+                        throw new Error("Câu trả lời bị chặn bởi bộ lọc an toàn.");
+                    }
+
+                    if (!data.candidates || data.candidates.length === 0) {
+                         throw new Error("Không nhận được câu trả lời từ AI.");
+                    }
+
+                    return data.candidates[0].content.parts[0].text;
+
+                } catch (error) {
+                    console.warn(`Model ${modelName} thất bại:`, error.message);
+                    lastError = error;
+                }
+            }
+
+            throw new Error(lastError ? lastError.message : "Không thể kết nối với bất kỳ model AI nào.");
+        }
+    </script>
+</body>
+</html>

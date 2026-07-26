@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading.vn - Đánh Thức Tiềm Năng Đọc Hiểu</title>
+    <meta name="description" content="Luyện tập kỹ năng đọc nhanh, ghi nhớ sâu và tối ưu hóa thời gian học tập cùng SpeedReading.vn">
+    
+    <!-- Google Fonts: Be Vietnam Pro (Tối ưu cho tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Cấu hình màu sắc thương hiệu -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9', // Xanh da trời chủ đạo
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#f59e0b', // Màu cam tạo điểm nhấn
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Animation nhẹ cho các phần tử */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="font-sans text-slate-800 bg-white overflow-x-hidden">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <svg class="h-8 w-8 text-brand-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <span class="font-bold text-2xl text-brand-900 tracking-tight">SpeedReading<span class="text-accent-500">.vn</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#loi-ich" class="text-slate-600 hover:text-brand-600 font-medium transition">Lợi ích</a>
+                    <a href="#phuong-phap" class="text-slate-600 hover:text-brand-600 font-medium transition">Phương pháp</a>
+                    <a href="#khoa-hoc" class="text-slate-600 hover:text-brand-600 font-medium transition">Khóa học</a>
+                    <a href="#dang-ky" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-full font-semibold shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5">
+                        Kiểm tra tốc độ đọc
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-brand-600 focus:outline-none">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#loi-ich" class="block px-3 py-3 text-slate-600 hover:text-brand-600 font-medium hover:bg-slate-50 rounded-lg">Lợi ích</a>
+                <a href="#phuong-phap" class="block px-3 py-3 text-slate-600 hover:text-brand-600 font-medium hover:bg-slate-50 rounded-lg">Phương pháp</a>
+                <a href="#khoa-hoc" class="block px-3 py-3 text-slate-600 hover:text-brand-600 font-medium hover:bg-slate-50 rounded-lg">Khóa học</a>
+                <a href="#dang-ky" class="block w-full text-center mt-4 bg-brand-600 text-white px-3 py-3 rounded-lg font-bold">Kiểm tra ngay</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-b from-brand-50 to-white">
+        <!-- Background Decoration -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-brand-200 rounded-full blur-3xl opacity-30"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-accent-200 rounded-full blur-3xl opacity-30"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                <!-- Text Content -->
+                <div class="fade-in-up">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-sm font-semibold mb-6">
+                        <span class="mr-2">🚀</span> Cách mạng hóa việc học tập của bạn
+                    </div>
+                    <h1 class="text-4xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+                        Đọc nhanh hơn.<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-accent-500">Hiểu sâu hơn.</span><br>
+                        Nhớ lâu hơn.
+                    </h1>
+                    <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed">
+                        SpeedReading.vn cung cấp các công cụ và phương pháp khoa học giúp bạn tăng tốc độ đọc lên gấp 3-5 lần mà vẫn đảm bảo khả năng ghi nhớ thông tin.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#dang-ky" class="inline-flex justify-center items-center px-8 py-4 text-base font-bold text-white bg-brand-600 rounded-full shadow-lg shadow-brand-500/40 hover:bg-brand-700 transition transform hover:-translate-y-1">
+                            Bắt đầu miễn phí
+                            <svg class="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                        <a href="#phuong-phap" class="inline-flex justify-center items-center px-8 py-4 text-base font-bold text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-slate-50 hover:border-slate-300 transition">
+                            Tìm hiểu phương pháp
+                        </a>
+                    </div>
+                    
+                    <div class="mt-10 flex items-center space-x-6 text-sm text-slate-500 font-medium">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            10,000+ Học viên
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Cam kết hoàn tiền
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Image / SVG -->
+                <div class="relative lg:ml-10 fade-in-up delay-200">
+                    <div class="relative rounded-2xl bg-white shadow-2xl border border-slate-100 p-6 z-10">
+                        <!-- Simulated App Interface using SVG elements -->
+                        <div class="flex items-center space-x-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="h-32 bg-brand-50 rounded-lg flex items-center justify-center p-4">
+                                <!-- Speed Reading Eye Movement Simulation -->
+                                <svg width="100%" height="100%" viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="20" y="20" width="360" height="10" rx="5" fill="#E2E8F0"/>
+                                    <rect x="20" y="50" width="360" height="10" rx="5" fill="#E2E8F0"/>
+                                    <rect x="20" y="80" width="320" height="10" rx="5" fill="#E2E8F0"/>
+                                    <rect x="20" y="110" width="340" height="10" rx="5" fill="#E2E8F0"/>
+                                    
+                                    <!-- Eye Path -->
+                                    <path d="M20 25 H380 M20 55 H380 M20 85 H340" stroke="#0EA5E9" stroke-width="2" stroke-dasharray="10 10" class="animate-pulse"/>
+                                    <circle cx="200" cy="55" r="8" fill="#F59E0B">
+                                        <animate attributeName="cx" values="20;380;20;380" dur="4s" repeatCount="indefinite" />
+                                        <animate attributeName="cy" values="25;25;55;55" dur="4s" repeatCount="indefinite" />
+                                    </circle>
+                                </svg>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-4 rounded-lg">
+                                    <p class="text-xs text-slate-500 uppercase font-bold">Tốc độ hiện tại</p>
+                                    <p class="text-3xl font-bold text-brand-600 mt-1">450 <span class="text-sm text-slate-400 font-normal">từ/phút</span></p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg">
+                                    <p class="text-xs text-slate-500 uppercase font-bold">Hiểu văn bản</p>
+                                    <p class="text-3xl font-bold text-green-600 mt-1">92%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decorative blurry element behind -->
+                    <div class="absolute inset-0 bg-brand-600 transform translate-x-4 translate-y-4 rounded-2xl -z-10 opacity-20"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS SECTION -->
+    <section class="py-12 bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-extrabold text-brand-600 mb-2">3x</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Tăng tốc độ đọc</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-extrabold text-brand-600 mb-2">20h</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Tiết kiệm mỗi tuần</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-extrabold text-brand-600 mb-2">50+</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Bài tập thực hành</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-extrabold text-brand-600 mb-2">24/7</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Hỗ trợ trực tuyến</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+    <section id="loi-ich" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-base font-bold text-accent-500 uppercase tracking-widest mb-2">Tại sao cần đọc nhanh?</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-slate-900">Kiến thức là sức mạnh,<br>nhưng thời gian là vàng</h3>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- Benefit 1 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition duration-300 group">
+                    <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Tiết kiệm 50% thời gian</h4>
+                    <p class="text-slate-600 leading-relaxed">Thay vì mất 4 tiếng để đọc một cuốn sách, bạn chỉ cần 1-2 tiếng để nắm bắt toàn bộ nội dung cốt lõi.</p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition duration-300 group">
+                    <div class="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+                        <svg class="w-8 h-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Tăng khả năng tập trung</h4>
+                    <p class="text-slate-600 leading-relaxed">Đọc nhanh buộc não bộ phải hoạt động liên tục, loại bỏ sự xao nhãng và tạp niệm khi đọc.</p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition duration-300 group">
+                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition">
+                        <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Kích hoạt não phải</h4>
+                    <p class="text-slate-600 leading-relaxed">Kết hợp giữa tư duy logic (trái) và tư duy hình ảnh (phải) giúp ghi nhớ thông tin lâu dài hơn.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METHODOLOGY / HOW IT WORKS -->
+    <section id="phuong-phap" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="order-2 lg:order-1">
+                    <div class="relative">
+                        <!-- Abstract illustration for methodology -->
+                         <div class="bg-white rounded-2xl shadow-xl p-8 border border-slate-100">
+                             <h4 class="font-bold text-slate-800 mb-4 border-b pb-2">Lộ trình 3 bước tại SpeedReading.vn</h4>
+                             <ul class="space-y-6">
+                                 <li class="flex">
+                                     <div class="flex-shrink-0 w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 font-bold mr-4">1</div>
+                                     <div>
+                                         <h5 class="font-bold text-slate-900">Loại bỏ thói quen đọc thầm</h5>
+                                         <p class="text-sm text-slate-600 mt-1">Học cách nhìn và chụp thông tin thay vì phát âm từng từ trong đầu.</p>
+                                     </div>
+                                 </li>
+                                 <li class="flex">
+                                     <div class="flex-shrink-0 w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 font-bold mr-4">2</div>
+                                     <div>
+                                         <h5 class="font-bold text-slate-900">Mở rộng vùng mắt (Peripheral Vision)</h5>
+                                         <p class="text-sm text-slate-600 mt-1">Kỹ thuật giúp mắt bao quát cả dòng chữ hoặc đoạn văn trong một lần nhìn.</p>
+                                     </div>
+                                 </li>
+                                 <li class="flex">
+                                     <div class="flex-shrink-0 w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 font-bold mr-4">3</div>
+                                     <div>
+                                         <h5 class="font-bold text-slate-900">Kỹ thuật Skimming & Scanning</h5>
+                                         <p class="text-sm text-slate-600 mt-1">Tìm kiếm từ khóa và ý chính siêu tốc để nắm bắt nội dung quan trọng.</p>
+                                     </div>
+                                 </li>
+                             </ul>
+                         </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Phương pháp độc quyền <br><span class="text-brand-600">Smart-Eye Tracking™</span></h2>
+                    <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                        Hệ thống của chúng tôi không chỉ là lý thuyết. SpeedReading.vn cung cấp phần mềm luyện tập trực quan, tự động điều chỉnh tốc độ chạy chữ dựa trên khả năng của bạn.
+                    </p>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                        Bạn sẽ được luyện tập với các bài văn mẫu đa dạng từ văn học, kinh tế đến khoa học kỹ thuật, giúp não bộ thích nghi với mọi loại văn bản.
+                    </p>
+                    <a href="#" class="text-brand-600 font-bold hover:text-brand-800 flex items-center group">
+                        Xem demo bài tập
+                        <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Học viên nói gì về chúng tôi?</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="bg-slate-50 p-8 rounded-2xl relative">
+                    <div class="text-yellow-400 flex mb-4">★★★★★</div>
+                    <p class="text-slate-700 italic mb-6">"Trước đây mình mất cả tuần để đọc xong một cuốn sách 300 trang. Sau khóa học tại SpeedReading.vn, mình chỉ mất đúng 1 buổi tối. Thật không thể tin được!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-bold text-gray-600">MA</div>
+                        <div class="ml-3">
+                            <p class="text-sm font-bold text-slate-900">Minh Anh</p>
+                            <p class="text-xs text-slate-500">Sinh viên ĐH Ngoại Thương</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-slate-50 p-8 rounded-2xl relative">
+                    <div class="text-yellow-400 flex mb-4">★★★★★</div>
+                    <p class="text-slate-700 italic mb-6">"Là giám đốc, tôi phải đọc hàng tá báo cáo mỗi ngày. Kỹ thuật đọc nhanh giúp tôi xử lý công việc hiệu quả hơn gấp đôi. Rất đáng tiền."</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-bold text-gray-600">TH</div>
+                        <div class="ml-3">
+                            <p class="text-sm font-bold text-slate-900">Trần Hùng</p>
+                            <p class="text-xs text-slate-500">CEO Startup Công nghệ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-slate-50 p-8 rounded-2xl relative">
+                    <div class="text-yellow-400 flex mb-4">★★★★★</div>
+                    <p class="text-slate-700 italic mb-6">"Giao diện dễ sử dụng, bài tập thiết thực. Mình thích nhất là tính năng theo dõi tiến độ qua biểu đồ, nhìn rõ sự tiến bộ từng ngày."</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-bold text-gray-600">LN</div>
+                        <div class="ml-3">
+                            <p class="text-sm font-bold text-slate-900">Lan Ngọc</p>
+                            <p class="text-xs text-slate-500">Freelancer Writer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section id="dang-ky" class="py-20 relative bg-brand-900 overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full text-brand-500 fill-current">
+                <path d="M0 100 C 20 0 50 0 100 100 Z"></path>
+            </svg>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 relative text-center z-10">
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Sẵn sàng bứt phá giới hạn bản thân?</h2>
+            <p class="text-brand-100 text-lg mb-10">Đừng để việc đọc chậm kìm hãm sự nghiệp và tri thức của bạn. Tham gia cộng đồng SpeedReading.vn ngay hôm nay.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#" class="px-8 py-4 bg-accent-500 hover:bg-accent-600 text-white font-bold rounded-full text-lg shadow-lg transition transform hover:-translate-y-1">
+                    Đăng ký khóa học ngay
+                </a>
+                <a href="#" class="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full text-lg hover:bg-white hover:text-brand-900 transition">
+                    Tư vấn lộ trình
+                </a>
+            </div>
+            <p class="mt-6 text-sm text-brand-300">Hoàn tiền 100% nếu không cải thiện sau 30 ngày.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-1">
+                    <span class="font-bold text-2xl text-white tracking-tight">SpeedReading<span class="text-accent-500">.vn</span></span>
+                    <p class="mt-4 text-sm text-slate-400">Nền tảng luyện đọc nhanh và ghi nhớ số 1 Việt Nam.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Liên kết</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Về chúng tôi</a></li>
+                        <li><a href="#" class="hover:text-white transition">Khóa học</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog kiến thức</a></li>
+                        <li><a href="#" class="hover:text-white transition">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Hỗ trợ</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Trung tâm trợ giúp</a></li>
+                        <li><a href="#" class="hover:text-white transition">Điều khoản sử dụng</a></li>
+                        <li><a href="#" class="hover:text-white transition">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Liên hệ</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <span class="mr-2">📍</span> Tòa nhà Tech, Quận 1, TP.HCM
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">📧</span> hotro@speedreading.vn
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">📞</span> 1900 123 456
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-center text-sm text-slate-500">
+                <p>&copy; 2024 SpeedReading.vn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu & Interactions -->
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Sticky Navbar Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+
+        // Simple Animation Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Add 'fade-in-up' class dynamically to sections for animation trigger
+        // Note: In a production build, you might want to add these classes in HTML initially hidden
+    </script>
+</body>
+</html>
+

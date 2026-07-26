@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán Ưu Đãi - Speed Reading Việt Nam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .glass-header { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .bg-gradient-brand { background: linear-gradient(135deg, #fff1f2 0%, #fff 100%); }
+        .btn-primary { background: linear-gradient(to right, #dc2626, #ef4444); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.5); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+        .modern-card { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border: 1px solid #f1f5f9; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .modern-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        .zalo-float { animation: float 3s ease-in-out infinite; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body class="antialiased bg-gray-50 pb-24">
+
+    <header class="glass-header fixed w-full top-0 z-40 border-b border-gray-100 shadow-sm transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='/'">
+                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">S</div>
+                <span class="text-xl font-bold tracking-tight text-gray-900">SpeedReading<span class="text-red-600">.vn</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-sm font-medium text-gray-600">
+                <span class="material-icons-round text-green-500 text-base">verified_user</span> Bảo mật SSL 100%
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-24 max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-7 space-y-6">
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5 flex items-start gap-4 shadow-sm">
+                <div class="p-2 bg-yellow-100 rounded-full text-yellow-700 shrink-0">
+                    <span class="material-icons-round">local_fire_department</span>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-yellow-800">Ưu Đãi Đặc Biệt: Đăng Ký Khoá Học</h2>
+                    <p class="text-sm text-yellow-700 mt-1">
+                        Hoàn thành biểu mẫu bên dưới để nhận mã kích hoạt học tập tự động.
+                    </p>
+                </div>
+            </div>
+
+            <section class="modern-card p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                    <span class="material-icons-round text-blue-600 text-3xl">inventory_2</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">Chi Tiết Gói Khóa Học Video</h3>
+                        <p class="text-sm text-gray-500">Học mọi lúc mọi nơi - Trọn đời</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex justify-between items-start group border-b border-dashed border-gray-100 pb-4">
+                        <div class="flex items-start gap-3">
+                            <span class="material-icons-round text-green-500 mt-0.5">check_circle</span>
+                            <div>
+                                <p class="font-bold text-gray-800 text-lg">Khoá Video Online (Trọn đời)</p>
+                                <p class="text-sm text-gray-600 mt-1">17 bài học kỹ thuật chuyên sâu.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start group pb-4 bg-red-50 p-3 rounded-lg -mx-3">
+                        <div class="flex items-start gap-3">
+                            <span class="material-icons-round text-red-600 mt-0.5">stars</span>
+                            <div>
+                                <p class="font-bold text-red-700 text-lg">Hỗ Trợ Giải Đáp</p>
+                                <p class="text-sm text-red-600 mt-1">Hỗ trợ nhanh chóng qua nhóm Zalo kín.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="modern-card p-6 sm:p-8 relative overflow-hidden">
+                
+                <div id="step-form">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="material-icons-round text-red-600 text-3xl">edit_document</span>
+                        <h3 class="text-xl font-bold text-gray-900">Thông Tin Đăng Ký</h3>
+                    </div>
+                    <form id="orderForm" class="space-y-4">
+                        <input type="text" id="name" placeholder="Họ và tên" required class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition">
+                        <input type="email" id="email" placeholder="Email (để nhận mã khóa học)" required class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition">
+                        <input type="tel" id="phone" placeholder="Số điện thoại (dùng làm ID mã đơn)" required class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition">
+                        <button type="submit" id="btnSubmit" class="btn-primary w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg flex items-center justify-center gap-2 group mt-4">
+                            LẤY MÃ QR THANH TOÁN
+                            <span class="material-icons-round group-hover:translate-x-1 transition">arrow_forward</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div id="step-qr" class="hidden">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="material-icons-round text-red-600 text-3xl">qr_code_scanner</span>
+                        <h3 class="text-xl font-bold text-gray-900">Quét Mã QR Thanh Toán Nhanh</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-white p-3 rounded-xl border-2 border-red-100 shadow-lg relative group transition-transform hover:scale-105">
+                                <img id="qr-img" src="" alt="Mã QR Chuyển Khoản" class="w-full max-w-[240px] rounded-lg md:max-w-[200px]" loading="lazy">
+                            </div>
+                            <p class="text-xs text-gray-400 mt-3 text-center italic">Sử dụng App Ngân hàng hoặc Camera để quét</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-900 to-slate-800 rounded-2xl p-6 text-white shadow-xl relative h-full flex flex-col justify-center overflow-hidden">
+                             <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-blue-500 rounded-full opacity-10 blur-2xl"></div>
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="font-black text-2xl tracking-wider italic text-blue-400">MB<span class="text-white">BANK</span></div>
+                                <span class="bg-white/10 px-3 py-1 rounded text-xs backdrop-blur-sm border border-white/10">Quân Đội</span>
+                            </div>
+
+                            <div class="space-y-5 relative z-10">
+                                <div>
+                                    <p class="text-blue-200 text-[10px] uppercase tracking-wider mb-1">Số Tài Khoản</p>
+                                    <div class="flex items-center gap-2">
+                                        <span id="account-number" class="text-2xl md:text-3xl font-mono font-bold tracking-widest text-white drop-shadow-sm">0899320202</span>
+                                        <button onclick="copyAccount()" class="p-1.5 bg-white/20 hover:bg-white/30 rounded-lg transition cursor-pointer" title="Sao chép">
+                                            <span class="material-icons-round text-sm">content_copy</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-blue-200 text-[10px] uppercase tracking-wider mb-1">Chủ Tài Khoản</p>
+                                        <p class="text-sm md:text-base font-bold uppercase truncate">VAN THUONG HI</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-blue-200 text-[10px] uppercase tracking-wider mb-1">Số Tiền</p>
+                                        <p class="text-xl md:text-2xl font-bold text-yellow-400">200.000đ</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <div class="inline-block bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 max-w-lg mx-auto w-full">
+                            <p class="text-sm text-yellow-800 flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2">
+                                <span><span class="font-bold">Nội dung CK:</span> <span class="text-red-600 font-bold">KHOA200 <span id="show-phone">[SĐT]</span></span></span>
+                                <span class="hidden sm:inline text-yellow-300">|</span>
+                                <span class="text-xs sm:text-sm italic text-gray-500">(Mã QR đã tự động điền)</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="lg:col-span-5 relative">
+            <div class="sticky top-24 space-y-6">
+                <div class="modern-card p-6 border-t-4 border-t-red-600">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 flex justify-between">
+                        Đơn hàng của bạn
+                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full flex items-center gap-1">
+                            <span class="material-icons-round text-[14px]">timer</span> Chờ xử lý
+                        </span>
+                    </h3>
+
+                    <div class="flex gap-4 mb-6">
+                        <div class="w-16 h-16 bg-gray-200 rounded-lg shrink-0 flex items-center justify-center text-gray-400">
+                            <span class="material-icons-round text-3xl">play_circle</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 line-clamp-2">Khóa học Video Speed Reading Online</h4>
+                            <p class="text-xs text-gray-500 mt-1">Truy cập trọn đời</p>
+                        </div>
+                    </div>
+
+                    <div class="py-6 flex justify-between items-center border-t border-gray-100">
+                        <span class="font-bold text-gray-700">Thành tiền:</span>
+                        <div class="text-right">
+                            <span class="block text-3xl font-black text-red-600 tracking-tight">200.000đ</span>
+                        </div>
+                    </div>
+
+                    <button onclick="confirmTransfer()" class="btn-primary w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg flex items-center justify-center gap-2 group">
+                        <span>XÁC NHẬN ĐÃ CHUYỂN KHOẢN</span>
+                        <span class="material-icons-round group-hover:translate-x-1 transition">arrow_forward</span>
+                    </button>
+                    
+                    <p class="text-xs text-center text-gray-400 mt-4">
+                        Mã khóa học sẽ được gửi qua Email tự động ngay khi thanh toán.
+                    </p>
+                </div>
+
+                <div class="modern-card p-4 flex items-center gap-4 bg-blue-50 border-blue-100">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                        <span class="material-icons-round">headset_mic</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-800">Cần hỗ trợ gấp?</p>
+                        <p class="text-xs text-gray-600">Hotline/Zalo: <a href="tel:0899320202" class="text-blue-600 font-bold">0899 320 202</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // === LINK WEBHOOK CỦA BẠN ĐÃ ĐƯỢC GẮN ===
+        const n8n_webhook = "https://agqiom.ezn8n.com/webhook-test/tao-don-hang-v2"; 
+        
+        // Cấu hình ngân hàng
+        const bank_name = "MB"; 
+        const bank_acc = "0899320202";
+        const amount = "200000";
+
+        // Xử lý gửi Form
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> Đang xử lý...';
+            btn.disabled = true;
+
+            const data = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+
+            // Gửi dữ liệu qua Webhook n8n
+            fetch(n8n_webhook, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(response => {
+                
+                // Nếu n8n nhận thành công -> Sinh mã QR động
+                const content = `KHOA200 ${data.phone}`;
+                const qrUrl = `https://qr.sepay.vn/img?bank=${bank_name}&acc=${bank_acc}&template=compact&amount=${amount}&des=${encodeURIComponent(content)}`;
+                
+                document.getElementById('qr-img').src = qrUrl;
+                document.getElementById('show-phone').innerText = data.phone;
+                
+                // Chuyển đổi giao diện (Ẩn Form -> Hiện QR)
+                document.getElementById('step-form').classList.add('hidden');
+                document.getElementById('step-qr').classList.remove('hidden');
+
+            }).catch(err => {
+                alert("Lỗi kết nối máy chủ. Vui lòng thử lại!");
+                btn.innerHTML = 'LẤY MÃ QR THANH TOÁN <span class="material-icons-round group-hover:translate-x-1 transition">arrow_forward</span>';
+                btn.disabled = false;
+            });
+        });
+
+        // Copy số tài khoản
+        function copyAccount() {
+            const accNum = document.getElementById('account-number').innerText;
+            navigator.clipboard.writeText(accNum).then(() => {
+                alert('Đã sao chép số tài khoản: ' + accNum);
+            });
+        }
+
+        // Nút Xác nhận CK (Zalo)
+        function confirmTransfer() {
+            const btn = document.querySelector('.btn-primary');
+            btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> Đang kiểm tra...';
+            setTimeout(() => {
+                window.location.href = "https://zalo.me/0899320202";
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

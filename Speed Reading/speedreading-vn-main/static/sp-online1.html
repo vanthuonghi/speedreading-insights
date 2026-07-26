@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading Việt Nam - 7 Buổi Zoom Làm Chủ Kỹ Năng Đọc Hiểu</title>
+    <meta name="description" content="Chương trình 7 buổi Zoom thực chiến giúp quý anh chị tăng tốc độ đọc hiểu gấp 3 lần và nhận hỗ trợ sát sao qua Zalo.">
+    
+    <!-- 1. Cài đặt Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Cấu hình Import Map chuẩn hóa để nạp React và JSX Runtime -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0"
+        }
+    }
+    </script>
+
+    <!-- 3. Cài đặt Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Font chữ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-dots {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out; }
+        @keyframes pulse-red {
+            0%, 100% { background-color: #fee2e2; color: #991b1b; }
+            50% { background-color: #ef4444; color: white; }
+        }
+        .animate-pulse-urgent { animation: pulse-red 2s infinite; }
+        
+        /* Ẩn thanh cuộn cho danh sách hình ảnh vuốt ngang */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { 
+            Video, Users, MessageCircle, ArrowRight, CheckCircle, 
+            ShieldCheck, Star, AlertTriangle, Clock, Target, 
+            Trophy, User, Mail, Phone, Loader, ChevronDown, 
+            Brain, Zap, Gift, BookOpen, ChevronLeft, ChevronRight, X, ZoomIn,
+            Eye, Compass, Share2, Search, Sparkles
+        } from 'lucide-react';
+
+        const ZOOM_SESSIONS = [
+            { 
+                day: "Buổi 1", 
+                title: "Kích hoạt đôi mắt thiên tài", 
+                desc: "Làm quen kỹ thuật luyện mắt 3-2-1 (chỉ tay 1 dòng, 2 dòng, Lazy) giúp tăng tốc độ xử lý thông tin một cách bị động.",
+                tag: "Kỹ thuật mắt 3-2-1",
+                color: "from-purple-500 to-indigo-500",
+                lightBg: "bg-purple-50 text-purple-700",
+                icon: "Eye"
+            },
+            { 
+                day: "Buổi 2", 
+                title: "Bí thuật đọc cụm từ", 
+                desc: "Phá bỏ thói quen đọc thầm, chuyển sang cơ chế Tai - Mắt - Não để nhìn cụm 3-5 từ cùng lúc, giúp tăng tốc độ lên 1000 từ/phút mà vẫn hiểu sâu.",
+                tag: "Tai - Mắt - Não",
+                color: "from-amber-500 to-orange-500",
+                lightBg: "bg-amber-50 text-amber-700",
+                icon: "Zap"
+            },
+            { 
+                day: "Buổi 3", 
+                title: "Thấu thị toàn bộ cuốn sách", 
+                desc: "Làm chủ kỹ thuật Skimming chuyên sâu, giúp bạn nắm trọn cấu trúc và thông điệp của cuốn sách 300 trang chỉ trong 15 phút.",
+                tag: "Skimming 15 phút",
+                color: "from-blue-500 to-cyan-500",
+                lightBg: "bg-blue-50 text-blue-700",
+                icon: "Search"
+            },
+            { 
+                day: "Buổi 4", 
+                title: "Ghi chép thông minh (Smart Note)", 
+                desc: "Cách sử dụng sơ đồ tư duy (Mind Map) và hệ thống ghi chép 3 ô (Từ khóa - Nội dung - Tâm đắc) để kiến thức tự \"khắc sâu\" vào bộ não.",
+                tag: "Smart Note & Mind Map",
+                color: "from-emerald-500 to-teal-500",
+                lightBg: "bg-emerald-50 text-emerald-700",
+                icon: "Brain"
+            },
+            { 
+                day: "Buổi 5", 
+                title: "Tư duy chọn sách đúng", 
+                desc: "Học cách chọn sách \"đúng người, đúng thời điểm\" dựa trên giá trị thực tế và trải nghiệm của tác giả thay vì mua theo cảm tính.",
+                tag: "Tư duy phễu chọn lọc",
+                color: "from-rose-500 to-red-500",
+                lightBg: "bg-rose-50 text-rose-700",
+                icon: "Compass"
+            },
+            { 
+                day: "Buổi 6", 
+                title: "Công thức truyền tin 4 bước", 
+                desc: "Bí quyết chia sẻ kiến thức súc tích, tự tin từ giá trị cá nhân đến hành động thực tế.",
+                tag: "Kỹ năng truyền đạt",
+                color: "from-indigo-500 to-blue-500",
+                lightBg: "bg-indigo-50 text-indigo-700",
+                icon: "Share2"
+            },
+            { 
+                day: "Buổi 7", 
+                title: "Tổng kết & Ôn tập để thuộc vĩnh viễn", 
+                desc: "Nắm vững phương pháp Record (Ghi nhớ chủ động) bằng cách viết ra ý chính và ý phụ để làm chủ tri thức trọn đời.",
+                tag: "Record (Chủ động)",
+                color: "from-yellow-500 to-amber-500",
+                lightBg: "bg-yellow-50 text-yellow-800",
+                icon: "Trophy"
+            }
+        ];
+
+        const RESULT_IMAGES = [
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading2.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading3.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading4.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading5.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading6.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading7.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading8.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading9.webp",
+            "https://img.speedreading.vn/cam-nhan-sau-khoa-hoc-speed-reading10.webp"
+        ];
+
+        const VIDEOS = [
+            "h5M0FO8MTA4",
+            "Hau0zMDqjM0",
+            "a9hR51MSl1E",
+            "V6F7T7_fqew",
+            "o1ut7g1mwzk",
+            "uCqp1lY3FRM",
+            "kvgcJuxUom4",
+            "EDN8sVGUoys"
+        ];
+
+        const CTAButton = ({ text, subtext, onClick, variant = 'primary', type = 'button', disabled = false, isLoading = false, className = '' }) => {
+            const baseClasses = `w-full md:w-auto font-bold uppercase tracking-wide py-4 px-8 rounded-full shadow-xl transform transition-all hover:scale-105 active:scale-95 flex flex-col items-center justify-center text-center ${className}`;
+            const variants = {
+                primary: "bg-gradient-to-r from-yellow-400 to-yellow-500 text-red-900 border-b-4 border-yellow-700",
+                secondary: "bg-red-600 text-white border-b-4 border-red-900",
+            };
+            return (
+                <button onClick={onClick} type={type} disabled={disabled} className={`${baseClasses} ${variants[variant]}`}>
+                    {isLoading ? <Loader className="animate-spin" size={24} /> : (
+                        <React.Fragment>
+                            <span className="text-xl md:text-2xl flex items-center gap-2">{text} <ArrowRight size={24} /></span>
+                            {subtext && <span className="text-xs md:text-sm font-normal mt-1 opacity-90">{subtext}</span>}
+                        </React.Fragment>
+                    )}
+                </button>
+            );
+        };
+
+        const Section = ({ children, className = "", id = "" }) => (
+            <section id={id} className={`py-12 md:py-16 px-4 md:px-0 ${className}`}>
+                <div className="max-w-5xl mx-auto">{children}</div>
+            </section>
+        );
+
+        const PainAndBenefits = () => {
+            return (
+                <Section className="bg-white border-b border-gray-100">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight uppercase">
+                            Bứt phá giới hạn đọc hiểu <br className="hidden md:block" />
+                            <span className="text-red-600">Làm chủ tri thức với 7 buổi luyện Speed Reading</span>
+                        </h2>
+                        <p className="text-gray-600 max-w-3xl mx-auto text-lg px-2">
+                            Khóa học Speed Reading Online được thiết kế để giúp bạn phá bỏ mọi giới hạn của đôi mắt và bộ não, chuyển đổi từ cách đọc bản năng sang quy trình đọc khoa học của những thiên tài.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-stretch">
+                        {/* Cột Vấn đề */}
+                        <div className="bg-red-50 p-6 md:p-8 rounded-3xl border border-red-100 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <AlertTriangle size={100} className="text-red-600" />
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-bold text-red-800 mb-6 flex items-center gap-2 relative z-10">
+                                <span className="bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">?</span>
+                                Bạn có đang gặp phải...
+                            </h3>
+                            <ul className="space-y-6 relative z-10">
+                                <li className="flex items-start gap-3 text-gray-700">
+                                    <X className="text-red-500 shrink-0 mt-1" size={20} />
+                                    <span>Dành <strong>hàng giờ đồng hồ</strong> để đọc một chương sách nhưng vừa đóng lại là quên sạch?</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-700">
+                                    <X className="text-red-500 shrink-0 mt-1" size={20} />
+                                    <span>Cảm thấy mệt mỏi, áp lực với đống <strong>tài liệu dày cộp</strong> cần xử lý mỗi ngày?</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-700">
+                                    <X className="text-red-500 shrink-0 mt-1" size={20} />
+                                    <span>Vẫn giữ thói quen <strong>đọc chậm, đọc thầm từng chữ</strong> từ thời tiểu học khiến tốc độ tiếp thu bị đình trệ?</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Cột Giải pháp */}
+                        <div className="bg-gradient-to-br from-blue-900 to-indigo-900 p-6 md:p-8 rounded-3xl border border-blue-800 relative overflow-hidden text-white shadow-xl">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <Zap size={100} className="text-yellow-400" />
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-bold text-yellow-400 mb-6 flex items-center gap-2 relative z-10">
+                                <Star size={24} className="fill-current text-yellow-400" />
+                                Lợi ích vượt trội sau khóa học
+                            </h3>
+                            <ul className="space-y-6 relative z-10">
+                                <li className="flex items-start gap-4">
+                                    <div className="bg-blue-800 p-2 rounded-lg shrink-0"><Zap size={20} className="text-yellow-400" /></div>
+                                    <div>
+                                        <strong className="block text-blue-200 mb-1">Tốc độ đọc</strong>
+                                        <span className="text-sm md:text-base opacity-90">Tăng từ 300 từ/phút lên trung bình <strong>1000 từ/phút</strong>.</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start gap-4">
+                                    <div className="bg-blue-800 p-2 rounded-lg shrink-0"><Brain size={20} className="text-yellow-400" /></div>
+                                    <div>
+                                        <strong className="block text-blue-200 mb-1">Độ hiểu</strong>
+                                        <span className="text-sm md:text-base opacity-90">Hiểu toàn cảnh và logic giữa các chương thay vì bị rối vào chi tiết nhỏ.</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start gap-4">
+                                    <div className="bg-blue-800 p-2 rounded-lg shrink-0"><BookOpen size={20} className="text-yellow-400" /></div>
+                                    <div>
+                                        <strong className="block text-blue-200 mb-1">Ghi nhớ</strong>
+                                        <span className="text-sm md:text-base opacity-90">Chuyển từ nhớ máy móc sang sử dụng từ khóa và ghi chép khoa học để khơi gợi trí nhớ vĩnh viễn.</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start gap-4">
+                                    <div className="bg-blue-800 p-2 rounded-lg shrink-0"><Target size={20} className="text-yellow-400" /></div>
+                                    <div>
+                                        <strong className="block text-blue-200 mb-1">Tâm thế</strong>
+                                        <span className="text-sm md:text-base opacity-90">Trở nên chủ động, tự lực và đam mê đọc sách hơn bao giờ hết.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div className="mt-12 text-center">
+                        <p className="text-lg md:text-xl font-bold text-gray-800 mb-6 px-4">
+                            👉 Đừng để kiến thức trôi qua lãng phí! Hãy bắt đầu hành trình bứt phá của bạn ngay hôm nay.
+                        </p>
+                        <CTAButton 
+                            text="ĐĂNG KÝ BỨT PHÁ NGAY" 
+                            subtext="Số lượng ưu đãi có hạn" 
+                            onClick={() => document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' })} 
+                        />
+                    </div>
+                </Section>
+            );
+        };
+
+        const StudentResults = () => {
+            const [lightboxIndex, setLightboxIndex] = useState(null);
+            const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+
+            const openLightbox = (index) => setLightboxIndex(index);
+            const closeLightbox = () => setLightboxIndex(null);
+            const nextImage = (e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev + 1) % RESULT_IMAGES.length);
+            };
+            const prevImage = (e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev === 0 ? RESULT_IMAGES.length - 1 : prev - 1));
+            };
+
+            // Ngăn cuộn trang khi mở lightbox
+            useEffect(() => {
+                if (lightboxIndex !== null) document.body.style.overflow = 'hidden';
+                else document.body.style.overflow = 'unset';
+                return () => { document.body.style.overflow = 'unset'; }
+            }, [lightboxIndex]);
+
+            return (
+                <section className="py-12 md:py-20 px-4 bg-white relative overflow-hidden">
+                    <div className="max-w-6xl mx-auto w-full">
+                        <div className="text-center mb-10">
+                            <div className="inline-flex items-center gap-2 text-red-600 font-bold bg-red-50 px-4 py-2 rounded-full mb-4 text-sm">
+                                <Star size={16} className="fill-current" /> Hành Trình Thay Đổi
+                            </div>
+                            <h2 className="text-2xl md:text-5xl font-extrabold text-gray-900 mb-4 uppercase leading-tight px-2">
+                                Kết Quả Sau 7 Buổi Học <br className="hidden md:block" /> 
+                                <span className="text-blue-600">Speed Reading Online</span>
+                            </h2>
+                            <p className="text-gray-500 max-w-2xl mx-auto text-sm md:text-lg px-2">
+                                Trăm nghe không bằng một thấy. Dưới đây là cảm nhận và kết quả thực tế của các anh chị học viên đã áp dụng thành công phương pháp.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-stretch w-full overflow-hidden">
+                            {/* Cột Video */}
+                            <div className="lg:col-span-5 flex flex-col justify-center w-full overflow-hidden">
+                                <div className="bg-gray-900 p-2 md:p-4 rounded-2xl md:rounded-3xl shadow-xl relative overflow-hidden group mb-4">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-purple-600/20 z-0"></div>
+                                    <div className="relative z-10 w-full rounded-xl md:rounded-2xl overflow-hidden aspect-video bg-black shadow-inner">
+                                        <iframe 
+                                            className="w-full h-full"
+                                            src={`https://www.youtube.com/embed/${VIDEOS[activeVideoIndex]}?si=1fW-PWe17e-9tN7i`} 
+                                            title="Cảm nhận học viên Speed Reading" 
+                                            frameBorder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                            referrerPolicy="strict-origin-when-cross-origin" 
+                                            allowFullScreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+                                
+                                {/* Danh sách Video Thumbnails */}
+                                <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-2 pt-1 mb-4 snap-x scroll-smooth">
+                                    {VIDEOS.map((vid, idx) => (
+                                        <button 
+                                            key={idx} 
+                                            onClick={() => setActiveVideoIndex(idx)}
+                                            className={`snap-start shrink-0 relative rounded-lg overflow-hidden border-2 transition-all ${activeVideoIndex === idx ? 'border-red-500 scale-100 opacity-100' : 'border-transparent scale-95 opacity-60 hover:opacity-100'}`}
+                                            title={`Xem video ${idx + 1}`}
+                                        >
+                                            <img 
+                                                src={`https://img.youtube.com/vi/${vid}/mqdefault.jpg`} 
+                                                alt={`Thumbnail ${idx + 1}`} 
+                                                className="w-20 h-14 md:w-24 md:h-16 object-cover"
+                                            />
+                                            {activeVideoIndex === idx && (
+                                                <div className="absolute inset-0 bg-red-600/20 flex items-center justify-center">
+                                                    <div className="w-5 h-5 bg-red-600 rounded-full flex items-center justify-center opacity-80 shadow-lg">
+                                                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="mt-2 text-center lg:text-left px-2">
+                                    <h3 className="text-lg md:text-xl font-bold text-gray-900 flex items-center justify-center lg:justify-start gap-2">
+                                        <Video className="text-red-600" size={20} /> Xem Chia Sẻ Trực Tiếp ({activeVideoIndex + 1}/{VIDEOS.length})
+                                    </h3>
+                                    <p className="text-gray-600 text-sm mt-1">Hành trình bứt phá giới hạn đọc hiểu từ các anh chị học viên.</p>
+                                </div>
+                            </div>
+
+                            {/* Cột Gallery (Scroll ngang) */}
+                            <div className="lg:col-span-7 flex flex-col w-full overflow-hidden">
+                                <div className="flex justify-between items-end mb-4 px-2">
+                                    <h3 className="text-lg md:text-xl font-bold text-gray-900 flex items-center gap-2">
+                                        <MessageCircle className="text-blue-600" size={20} /> Phản Hồi Từ Nhóm Zalo
+                                    </h3>
+                                    <span className="text-xs md:text-sm text-gray-400 italic">Vuốt để xem thêm →</span>
+                                </div>
+                                
+                                <div className="relative w-full bg-gray-50 rounded-2xl md:rounded-3xl p-3 md:p-6 border border-gray-100 shadow-inner overflow-hidden">
+                                    {/* Nút chỉ dẫn vuốt trên mobile */}
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow-md z-10 md:hidden pointer-events-none animate-pulse">
+                                        <ChevronRight size={20} className="text-gray-600" />
+                                    </div>
+
+                                    <div className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-3 pt-1 scroll-smooth">
+                                        {RESULT_IMAGES.map((src, idx) => (
+                                            <div 
+                                                key={idx} 
+                                                onClick={() => openLightbox(idx)}
+                                                className="snap-center shrink-0 w-[200px] sm:w-[250px] md:w-[280px] h-[300px] sm:h-[360px] md:h-[400px] relative rounded-xl md:rounded-2xl overflow-hidden cursor-pointer group shadow-md hover:shadow-xl border border-gray-200 transition-transform hover:-translate-y-1 bg-white"
+                                            >
+                                                <img 
+                                                    src={src} 
+                                                    alt={`Kết quả học viên ${idx + 1}`} 
+                                                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                                    loading="lazy"
+                                                />
+                                                {/* Lớp phủ khi hover */}
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                                    <div className="bg-white text-gray-900 p-2 md:p-3 rounded-full flex items-center gap-2 font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform text-sm">
+                                                        <ZoomIn size={16} /> Phóng to
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Lightbox Modal */}
+                    {lightboxIndex !== null && (
+                        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center" onClick={closeLightbox}>
+                            {/* Nút Đóng */}
+                            <button className="absolute top-4 right-4 text-white/70 hover:text-white bg-black/50 p-2 rounded-full transition-colors z-[110]" onClick={closeLightbox}>
+                                <X size={28} />
+                            </button>
+
+                            {/* Nút Previous */}
+                            <button className="absolute left-2 md:left-8 text-white/50 hover:text-white bg-black/50 p-2.5 md:p-3 rounded-full transition-colors z-[110]" onClick={prevImage}>
+                                <ChevronLeft className="w-6 h-6 md:w-9 md:h-9" />
+                            </button>
+
+                            {/* Hình ảnh */}
+                            <div className="w-full h-full max-w-4xl max-h-[85vh] p-4 flex flex-col items-center justify-center relative" onClick={(e) => e.stopPropagation()}>
+                                <img 
+                                    src={RESULT_IMAGES[lightboxIndex]} 
+                                    alt="Phóng to kết quả" 
+                                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-fade-in-up"
+                                />
+                                <div className="text-white/60 text-sm tracking-widest mt-4">
+                                    {lightboxIndex + 1} / {RESULT_IMAGES.length}
+                                </div>
+                            </div>
+
+                            {/* Nút Next */}
+                            <button className="absolute right-2 md:right-8 text-white/50 hover:text-white bg-black/50 p-2.5 md:p-3 rounded-full transition-colors z-[110]" onClick={nextImage}>
+                                <ChevronRight className="w-6 h-6 md:w-9 md:h-9" />
+                            </button>
+                        </div>
+                    )}
+                </section>
+            );
+        };
+
+        function App() {
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [isSuccess, setIsSuccess] = useState(false);
+
+            const WEBHOOK_URL = "https://crm.speedreading.vn/?fluentcrm=1&route=contact&hash=ef8db8a9-1e33-405b-8d30-da123e5c283c";
+            const REDIRECT_URL = "https://speedreading.vn/paymentonline";
+
+            const scrollToCheckout = () => {
+                document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
+            };
+
+            const handleFormSubmit = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                const formData = new FormData(e.target);
+                
+                try {
+                    await fetch(WEBHOOK_URL, { 
+                        method: 'POST', 
+                        mode: 'no-cors', 
+                        body: formData 
+                    });
+                    window.location.href = REDIRECT_URL; 
+                } catch (error) {
+                    console.error("Lỗi gửi form:", error);
+                    alert("Có lỗi xảy ra trong quá trình gửi thông tin. Quý anh chị vui lòng thử lại hoặc liên hệ hotline.");
+                    setIsSubmitting(false);
+                }
+            };
+
+            const getSessionIcon = (iconName) => {
+                switch(iconName) {
+                    case "Eye": return <Eye className="text-white" size={22} />;
+                    case "Zap": return <Zap className="text-white" size={22} />;
+                    case "Search": return <Search className="text-white" size={22} />;
+                    case "Brain": return <Brain className="text-white" size={22} />;
+                    case "Compass": return <Compass className="text-white" size={22} />;
+                    case "Share2": return <Share2 className="text-white" size={22} />;
+                    case "Trophy": return <Trophy className="text-white" size={22} />;
+                    default: return <BookOpen className="text-white" size={22} />;
+                }
+            };
+
+            return (
+                <div className="bg-dots min-h-screen">
+                    {/* Header Urgency */}
+                    <div className="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2.5 z-50 font-bold text-xs md:text-sm shadow-md flex justify-center items-center gap-2 px-4">
+                        <AlertTriangle size={16} className="text-yellow-300 animate-pulse"/>
+                        <span className="uppercase">THÔNG BÁO: CHỈ CÒN 5 SUẤT CUỐI CÙNG NHẬN QUÀ TẶNG KÈM CẶP ZALO 1:1</span>
+                    </div>
+
+                    {/* Hero Section */}
+                    <div className="relative pt-32 pb-20 bg-gray-900 text-white overflow-hidden">
+                        <div className="absolute inset-0 opacity-20">
+                            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=80" alt="Zoom Class" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="relative z-10 max-w-5xl mx-auto text-center px-4">
+                            <div className="inline-flex items-center gap-2 bg-yellow-500 text-red-900 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+                                <Video size={14} /> Học trực tuyến qua Zoom
+                            </div>
+                            <h1 className="text-3xl md:text-6xl font-extrabold mb-6 leading-tight">
+                                X3 TỐC ĐỘ ĐỌC HIỂU <br/>
+                                <span className="text-yellow-400">SAU 7 BUỔI ZOOM THỰC CHIẾN</span>
+                            </h1>
+                            <p className="text-base md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                                Quý anh chị sẽ được cầm tay chỉ việc, sửa từng lỗi nhỏ ngay trong buổi học. <br className="hidden md:block"/> 
+                                Tiết kiệm hàng năm trời tự mò mẫm và nắm trọn kiến thức chỉ trong 15 phút.
+                            </p>
+                            <CTAButton text="ĐĂNG KÝ GIỮ CHỖ NGAY" subtext="Học phí ưu đãi chỉ 980.000đ" onClick={scrollToCheckout} />
+                            
+                            <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-10 text-xs md:text-sm text-gray-400">
+                                <span className="flex items-center gap-1.5"><Users size={18} className="text-blue-400"/> Kèm cặp trực tiếp</span>
+                                <span className="flex items-center gap-1.5"><MessageCircle size={18} className="text-green-400"/> Hỗ trợ Zalo 24/7</span>
+                                <span className="flex items-center gap-1.5"><ShieldCheck size={18} className="text-yellow-400"/> Hoàn phí nếu không hiệu quả</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Vấn Đề & Lợi Ích Khóa Học */}
+                    <PainAndBenefits />
+
+                    {/* Khu vực Kết Quả Học Viên - Nằm ngay dưới Hero */}
+                    <StudentResults />
+
+                    {/* The Program (Roadmap) */}
+                    <Section className="bg-slate-50 border-t border-gray-100">
+                        <div className="text-center mb-12">
+                            <div className="inline-flex items-center gap-2 text-red-600 font-bold bg-red-50 px-4 py-1.5 rounded-full mb-3 text-sm">
+                                <Sparkles size={16} className="fill-current text-red-500" /> Hệ Thống Bài Học Quy Chuẩn
+                            </div>
+                            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4 uppercase px-2">Lộ Trình 7 Buổi Zoom Chuyên Sâu</h2>
+                            <p className="text-gray-500 max-w-2xl mx-auto text-sm md:text-base px-2">Chương trình thực chiến 100%, đồng hành giải quyết từng vấn đề nhỏ nhất của bộ não ngay trong lớp học.</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                            {ZOOM_SESSIONS.map((item, idx) => {
+                                const isLast = idx === ZOOM_SESSIONS.length - 1;
+                                return (
+                                    <div 
+                                        key={idx} 
+                                        className={`bg-white rounded-3xl p-6 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden group flex flex-col justify-between hover:-translate-y-1 ${
+                                            isLast ? 'md:col-span-2 lg:col-span-3 bg-gradient-to-br from-amber-50/60 via-white to-yellow-50/40 border-amber-200' : ''
+                                        }`}
+                                    >
+                                        {/* Thanh chỉ dải màu trên đỉnh card */}
+                                        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${item.color}`}></div>
+                                        
+                                        <div>
+                                            {/* Phần tiêu đề thẻ: Số buổi & Icon */}
+                                            <div className="flex justify-between items-center mb-5">
+                                                <span className="text-xs font-bold uppercase tracking-widest text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
+                                                    {item.day}
+                                                </span>
+                                                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-md transform group-hover:scale-110 transition-transform duration-300`}>
+                                                    {getSessionIcon(item.icon)}
+                                                </div>
+                                            </div>
+
+                                            {/* Tiêu đề & Nhãn Phụ */}
+                                            <div className="mb-4">
+                                                <h3 className="text-lg md:text-xl font-extrabold text-gray-900 group-hover:text-red-600 transition-colors mb-2 leading-tight">
+                                                    {item.title}
+                                                </h3>
+                                                <span className={`inline-block text-xs font-bold px-2.5 py-1 rounded-full ${item.lightBg}`}>
+                                                    {item.tag}
+                                                </span>
+                                            </div>
+
+                                            {/* Nội dung chi tiết */}
+                                            <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
+                                                {item.desc}
+                                            </p>
+                                        </div>
+
+                                        {/* Chân thẻ */}
+                                        <div className="pt-4 border-t border-gray-50 flex items-center justify-between text-xs text-gray-400 font-semibold mt-auto">
+                                            <span className="flex items-center gap-1"><Clock size={12}/> Zoom 90 phút</span>
+                                            <span className="text-green-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Thực hành trực tiếp →</span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </Section>
+
+                    {/* Zalo Support Section */}
+                    <Section className="bg-blue-900 text-white rounded-none md:rounded-[3rem] my-10 py-16 md:py-20 overflow-hidden relative">
+                        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                            <img src="https://www.transparenttextures.com/patterns/cubes.png" alt="bg" />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center relative z-10 w-full overflow-hidden">
+                            <div className="px-2">
+                                <h2 className="text-2xl md:text-4xl font-extrabold mb-6 leading-tight">
+                                    Đồng Hành Sát Sao <br/> Qua Nhóm Zalo Kín
+                                </h2>
+                                <p className="text-blue-100 text-base md:text-lg mb-8 leading-relaxed">
+                                    Học trên Zoom là khởi đầu, rèn luyện hàng ngày mới tạo nên kỹ năng. Quý anh chị sẽ được tham gia cộng đồng Zalo để:
+                                </p>
+                                <ul className="space-y-4">
+                                    {[
+                                        "Gửi bài tập và được giảng viên sửa lỗi mỗi ngày.",
+                                        "Giải đáp thắc mắc ngay lập tức trong quá trình đọc sách thực tế.",
+                                        "Nhận tài liệu, ebook và công cụ hỗ trợ đọc nhanh độc quyền.",
+                                        "Kết nối cùng cộng đồng những người ham học hỏi và thăng tiến."
+                                    ].map((text, i) => (
+                                        <li key={i} className="flex items-start gap-3">
+                                            <div className="bg-blue-500 rounded-full p-1 mt-1 shrink-0"><CheckCircle size={14} /></div>
+                                            <span className="text-sm md:text-base">{text}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="bg-white p-3 rounded-3xl shadow-2xl rotate-0 md:rotate-2 max-w-md mx-auto md:max-w-none">
+                                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="Zalo Group Support" className="rounded-2xl w-full" />
+                            </div>
+                        </div>
+                    </Section>
+
+                    {/* Value Stack & Price */}
+                    <Section id="pricing">
+                        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
+                            <div className="bg-red-700 text-white p-6 md:p-8 text-center">
+                                <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest mb-2">Ưu Đãi Đặc Biệt Cho Khoá Zoom</h3>
+                                <p className="text-xs md:text-sm opacity-80">Đầu tư một lần - Sử dụng kỹ năng trọn đời</p>
+                            </div>
+                            <div className="p-6 md:p-8">
+                                <div className="space-y-4 mb-8 text-sm md:text-base">
+                                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                        <span className="flex items-center gap-2"><Video className="text-blue-600 shrink-0" size={18}/> 7 Buổi Zoom Coaching Trực Tiếp</span>
+                                        <span className="font-bold text-gray-400 line-through shrink-0">2.500.000đ</span>
+                                    </div>
+                                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                        <span className="flex items-center gap-2"><MessageCircle className="text-green-600 shrink-0" size={18}/> Hỗ trợ rèn luyện qua Zalo</span>
+                                        <span className="font-bold text-gray-400 line-through shrink-0">1.000.000đ</span>
+                                    </div>
+                                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                                        <span className="flex items-center gap-2"><Gift className="text-purple-600 shrink-0" size={18}/> Bộ tài liệu rèn luyện & Ebook</span>
+                                        <span className="font-bold text-gray-400 line-through shrink-0">500.000đ</span>
+                                    </div>
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 text-red-600 font-bold bg-red-50 px-4 rounded-lg gap-1">
+                                        <span className="flex items-center gap-2"><Trophy className="shrink-0" size={18}/> Quà tặng: Sửa lỗi 1:1 cho 5 khách hàng đầu tiên</span>
+                                        <span className="shrink-0">VÔ GIÁ</span>
+                                    </div>
+                                </div>
+                                
+                                <div className="text-center">
+                                    <p className="text-gray-500 mb-1 text-sm">Tổng giá trị chương trình: <span className="line-through">4.000.000đ</span></p>
+                                    <div className="text-4xl md:text-5xl font-black text-red-600 mb-6 tracking-tight">980.000đ</div>
+                                    
+                                    <div className="animate-pulse-urgent py-2 px-4 rounded-lg inline-block font-bold mb-6 text-sm">
+                                        CHỈ CÒN 5 SUẤT ƯU ĐÃI CUỐI CÙNG
+                                    </div>
+                                    
+                                    <button onClick={scrollToCheckout} className="w-full bg-yellow-400 hover:bg-yellow-300 text-red-900 font-bold py-5 rounded-full shadow-xl border-b-4 border-yellow-600 text-lg md:text-xl uppercase transition-transform hover:scale-105 active:scale-95">
+                                        ĐĂNG KÝ NGAY HÔM NAY
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </Section>
+
+                    {/* Checkout Section */}
+                    <div id="checkout-section" className="py-16 md:py-20 px-4 bg-gray-900 text-white border-t-8 border-yellow-500">
+                        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                            <div className="px-2">
+                                <h2 className="text-3xl md:text-5xl font-extrabold text-yellow-400 mb-6 uppercase leading-tight">Bắt Đầu <br/> Hành Trình Ngay</h2>
+                                <p className="text-gray-300 text-base md:text-lg mb-8">Quý anh chị vui lòng điền chính xác thông tin để chúng tôi gửi lời mời vào nhóm Zoom và Zalo hỗ trợ.</p>
+                                <div className="space-y-4 text-sm md:text-base">
+                                    <div className="flex items-center gap-3"><CheckCircle className="text-green-500 shrink-0" /> <span>Hoàn tiền nếu không hài lòng sau buổi 1.</span></div>
+                                    <div className="flex items-center gap-3"><CheckCircle className="text-green-500 shrink-0" /> <span>Hỗ trợ trọn đời ngay cả khi kết thúc khóa học.</span></div>
+                                </div>
+                            </div>
+
+                            <div className="bg-white text-gray-900 p-6 md:p-8 rounded-3xl shadow-2xl">
+                                {isSuccess ? (
+                                    <div className="text-center py-10">
+                                        <CheckCircle className="mx-auto text-green-500 mb-4" size={64} />
+                                        <h3 className="text-2xl font-bold mb-2">Đăng Ký Thành Công!</h3>
+                                        <p>Đang chuyển hướng quý anh chị đến trang thanh toán...</p>
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleFormSubmit} className="space-y-4">
+                                        <div className="text-center mb-6 text-red-700">
+                                            <h3 className="text-lg md:text-xl font-bold uppercase">Form Đăng Ký Giữ Chỗ</h3>
+                                            <p className="text-xs font-medium">Lớp Zoom giới hạn số lượng học viên</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <label className="text-xs font-bold uppercase text-gray-500 ml-1">Họ và tên quý anh chị</label>
+                                            <div className="relative mt-1">
+                                                <User className="absolute left-3 top-3.5 text-gray-400" size={18} />
+                                                <input type="text" name="first_name" required placeholder="Ví dụ: Nguyễn Văn A" className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-yellow-400 outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-xs font-bold uppercase text-gray-500 ml-1">Địa chỉ Email</label>
+                                            <div className="relative mt-1">
+                                                <Mail className="absolute left-3 top-3.5 text-gray-400" size={18} />
+                                                <input type="email" name="email" required placeholder="email@gmail.com" className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-yellow-400 outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-xs font-bold uppercase text-gray-500 ml-1">Số điện thoại (Zalo)</label>
+                                            <div className="relative mt-1">
+                                                <Phone className="absolute left-3 top-3.5 text-gray-400" size={18} />
+                                                <input type="tel" name="phone" required placeholder="09xx xxx xxx" className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-yellow-400 outline-none" />
+                                            </div>
+                                        </div>
+
+                                        <button disabled={isSubmitting} className="w-full bg-red-600 text-white font-bold py-4 rounded-xl shadow-lg mt-4 flex items-center justify-center gap-2 hover:bg-red-700 transition-colors">
+                                            {isSubmitting ? <Loader className="animate-spin" /> : "XÁC NHẬN ĐĂNG KÝ & THANH TOÁN"}
+                                        </button>
+                                        
+                                        <p className="text-[10px] text-gray-400 text-center mt-4">Thông tin của quý khách được bảo mật tuyệt đối theo quy định.</p>
+                                    </form>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Phần nội dung mới: LỘ TRÌNH HÀNH TRÌNH CHINH PHỤC SPEED READING ONLINE */}
+                    <section className="py-20 px-4 bg-slate-100 text-gray-900 border-t border-slate-200">
+                        <div className="max-w-4xl mx-auto">
+                            <div className="text-center mb-12">
+                                <div className="inline-flex items-center gap-2 text-blue-600 font-bold bg-blue-50 px-4 py-1.5 rounded-full mb-3 text-xs md:text-sm">
+                                    <Target size={16} /> Lộ Trình Chinh Phục
+                                </div>
+                                <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 uppercase leading-tight mb-4">
+                                    LỘ TRÌNH HÀNH TRÌNH CHINH PHỤC SPEED READING ONLINE
+                                </h2>
+                                <p className="text-gray-600 text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
+                                    Khóa học được thiết kế khoa học với 2 giai đoạn trọng tâm, giúp bạn đi từ một người đọc bản năng trở thành một chuyên gia làm chủ tri thức siêu tốc.
+                                </p>
+                            </div>
+
+                            <div className="space-y-8 mb-12">
+                                {/* Giai đoạn 1 */}
+                                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-md">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4 border-b border-gray-100 pb-4">
+                                        <span className="bg-blue-600 text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-xl self-start sm:self-auto">
+                                            Giai đoạn 1
+                                        </span>
+                                        <h3 className="text-lg md:text-xl font-bold text-gray-900">
+                                            Khởi đầu nan – Làm chủ kiến thức nền tảng
+                                        </h3>
+                                    </div>
+                                    <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-4">
+                                        Đây là bước đệm quan trọng nhất giúp bạn thay đổi tư duy đọc sách cũ kỹ để tiếp nhận phương pháp hiện đại hàng đầu thế giới.
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl text-sm">
+                                        <div>
+                                            <strong className="block text-gray-900 mb-1">⏱️ Thời lượng:</strong>
+                                            <span className="text-gray-600">01 buổi học chuyên sâu (120 phút).</span>
+                                        </div>
+                                        <div>
+                                            <strong className="block text-gray-900 mb-1">🎯 Mục tiêu:</strong>
+                                            <span className="text-gray-600">Giúp bạn hiểu rõ bản chất của Speed Reading, nắm vững các quy tắc vận hành của bộ não và đôi mắt. Bạn sẽ được hướng dẫn toàn bộ hệ thống bài tập luyện tập chuyên sâu để chuẩn bị cho chuỗi ngày thực chiến phía trước.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Giai đoạn 2 */}
+                                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-md">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4 border-b border-gray-100 pb-4">
+                                        <span className="bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-xl self-start sm:self-auto">
+                                            Giai đoạn 2
+                                        </span>
+                                        <h3 className="text-lg md:text-xl font-bold text-gray-900">
+                                            Bứt phá thực chiến – Chuỗi 07 buổi luyện tập liên tục
+                                        </h3>
+                                    </div>
+                                    <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-4">
+                                        Sau khi đã có nền tảng, bạn sẽ bước vào chuỗi ngày rèn luyện cường độ cao để hình thành phản xạ tự nhiên và tối ưu hóa tốc độ đọc thực tế.
+                                    </p>
+                                    <div className="bg-slate-50 p-4 rounded-2xl text-sm mb-6">
+                                        <strong className="block text-gray-900 mb-1">⏱️ Thời lượng:</strong>
+                                        <span className="text-gray-600">07 buổi học liên tiếp (60 phút mỗi tối). Sẽ nghỉ thứ 7 và chủ nhật.</span>
+                                    </div>
+
+                                    <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm md:text-base">
+                                        <CheckCircle size={18} className="text-green-600" /> Lộ trình chi tiết từng bước:
+                                    </h4>
+                                    
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {[
+                                            { step: "1", title: "Khai phá tiềm năng", desc: "Luyện tập kỹ thuật chỉ tay 3-2-1 và mở rộng tầm nhìn để tăng tốc độ xử lý thông tin của đôi mắt." },
+                                            { step: "2", title: "Bí thuật đọc cụm từ", desc: "Loại bỏ thói quen đọc thầm, chuyển sang cơ chế nhìn cụm từ giúp não hiểu thông tin trực tiếp." },
+                                            { step: "3", title: "Kỹ thuật thấu thị (Skimming)", desc: "Bí quyết nắm trọn cấu trúc và thông điệp của một cuốn sách 300 trang chỉ trong 15-20 phút." },
+                                            { step: "4", title: "Hệ thống hóa", desc: "Cách ghi chép khoa học để kiến thức tự \"khắc sâu\" vào bộ não mà không cần học vẹt (Smart Note & Mind Map)." },
+                                            { step: "5", title: "Tư duy & Chia sẻ", desc: "Cách chọn sách đúng giá trị và công thức 4 bước để chia sẻ tri thức một cách tự tin, chuyên nghiệp." },
+                                            { step: "6", title: "Về đích", desc: "Tổng kết lộ trình, hệ thống hóa kỹ năng và chuyển giao quy trình ứng dụng vĩnh viễn vào cuộc sống." }
+                                        ].map((item, i) => (
+                                            <div key={i} className="flex gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+                                                <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 font-bold text-xs rounded-full flex items-center justify-center">
+                                                    {item.step}
+                                                </span>
+                                                <div>
+                                                    <h5 className="font-bold text-gray-900 text-xs md:text-sm mb-1">{item.title}</h5>
+                                                    <p className="text-gray-600 text-xs leading-relaxed">{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Những điều bạn cần chuẩn bị */}
+                            <div className="bg-gradient-to-br from-gray-900 to-slate-900 text-white p-6 md:p-8 rounded-3xl shadow-xl mb-12">
+                                <h3 className="text-lg md:text-xl font-bold text-yellow-400 mb-6 flex items-center gap-2">
+                                    <AlertTriangle size={24} className="text-yellow-400 shrink-0" />
+                                    📌 Những điều bạn cần chuẩn bị:
+                                </h3>
+                                <p className="text-gray-300 text-sm md:text-base mb-6 leading-relaxed">
+                                    Để đạt được kết quả vượt mong đợi (tăng tốc độ đọc lên 3-5 lần), bạn chỉ cần chuẩn bị:
+                                </p>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    {[
+                                        { title: "Sự tập trung", desc: "Có mặt đúng giờ và tham gia đầy đủ các buổi luyện tập." },
+                                        { title: "Dụng cụ học tập", desc: "Một cuốn sách yêu thích, sổ tay Smart Note và bút để thực hành ngay tại lớp." },
+                                        { title: "Tâm thế sẵn sàng", desc: "Sẵn sàng phá bỏ giới hạn cũ để đón nhận một khả năng phi thường của chính mình." }
+                                    ].map((item, i) => (
+                                        <div key={i} className="bg-gray-800/60 p-4.5 rounded-2xl border border-gray-700 flex flex-col justify-between">
+                                            <div>
+                                                <h4 className="font-bold text-white mb-2 flex items-center gap-2 text-sm md:text-base">
+                                                    <CheckCircle size={16} className="text-green-400 shrink-0" /> {item.title}
+                                                </h4>
+                                                <p className="text-gray-400 text-xs md:text-sm leading-relaxed">{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Khối Đăng ký cuối cùng */}
+                            <div className="text-center bg-white p-6 md:p-8 rounded-3xl border border-gray-200 shadow-md">
+                                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3">
+                                    Bạn đã sẵn sàng để bứt phá cùng Speed Reading?
+                                </h3>
+                                <p className="text-gray-500 text-sm md:text-base mb-6">
+                                    Đăng ký ngay để bắt đầu hành trình của bạn!
+                                </p>
+                                <button 
+                                    onClick={scrollToCheckout} 
+                                    className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 px-8 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all text-sm md:text-base uppercase"
+                                >
+                                    Đăng Ký Ngay <ArrowRight size={18} />
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <footer className="bg-gray-950 text-gray-600 py-12 text-center text-sm border-t border-gray-900">
+                        <p className="mb-2">© 2026 Speed Reading Academy Việt Nam.</p>
+                        <p>Hotline: 0899.320.202 | support@speedreading.vn</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

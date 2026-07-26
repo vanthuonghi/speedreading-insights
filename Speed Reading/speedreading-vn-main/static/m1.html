@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sách Giáo Khoa Speed Reading - Bài 1 (Tiết 2 & 3)</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 20mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        .header {
+            text-align: right;
+            font-size: 14px;
+            color: #555;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+        .lesson-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #003366;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        
+        /* Box Style */
+        .box {
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .box-title {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+        .box-title span {
+            font-size: 22px;
+            margin-right: 10px;
+        }
+
+        /* Specific Boxes */
+        .box-muc-tieu { background-color: #eef2fa; border-left: 6px solid #0056b3; }
+        .box-muc-tieu .box-title { color: #0056b3; }
+        
+        .box-khoi-dong { background-color: #fff8e1; border: 2px dashed #ffc107; }
+        .box-khoi-dong .box-title { color: #d39e00; }
+
+        .box-thuc-hanh { background-color: #fdf4f5; border: 1px solid #d9534f; }
+        .box-thuc-hanh .box-title { color: #c9302c; }
+
+        .box-van-dung { background-color: #f4fdf8; border-left: 6px solid #28a745; }
+        .box-van-dung .box-title { color: #218838; }
+
+        /* RPG Status Board Style */
+        .rpg-board {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: 4px solid #f1c40f;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .rpg-title {
+            text-align: center;
+            color: #f1c40f;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #ecf0f1;
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        .rpg-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 5px;
+        }
+        .rpg-stat-name { font-weight: bold; color: #3498db; }
+        .rpg-stat-value { font-weight: bold; color: #e74c3c; }
+        
+        /* Highlight Text */
+        .highlight-blue { color: #0056b3; font-weight: bold; }
+        .highlight-red { color: #d9534f; font-weight: bold; }
+        
+        ul, ol { margin-top: 5px; margin-bottom: 10px; }
+        p { margin-top: 5px; margin-bottom: 10px; text-align: justify; }
+        .page-break { page-break-after: always; }
+        
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">CHỦ ĐỀ I: CƠ CHẾ CỦA ĐÔI MẮT VÀ PHƯƠNG PHÁP ĐO LƯỜNG TỐC ĐỘ</div>
+
+    <div class="title-container">
+        <div class="lesson-title">Tiết 2: THỰC HÀNH ĐO LƯỜNG CHỈ SỐ ĐẦU NĂM</div>
+    </div>
+
+    <div class="box box-muc-tieu">
+        <h3 class="box-title"><span>🎯</span> Yêu cầu cần đạt</h3>
+        <ul>
+            <li>Tự thao tác thành thạo quy trình đo lường tốc độ đọc bằng đồng hồ bấm giờ.</li>
+            <li>Xác định được các chỉ số WPM, CR và ERR khởi điểm của bản thân trên văn bản thực tế.</li>
+            <li>Trung thực trong việc đánh giá mức độ hiểu bài (CR) để có kế hoạch rèn luyện đúng đắn.</li>
+        </ul>
+    </div>
+
+    <div class="box box-khoi-dong">
+        <h3 class="box-title"><span>⚙️</span> A. Chuẩn bị "Vũ khí" (5 Phút)</h3>
+        <p>Để bước vào đường đua đánh giá năng lực, em cần trang bị sẵn sàng:</p>
+        <ul>
+            <li><strong>Vũ khí 1:</strong> Sách giáo khoa Ngữ văn 6 (Mở sẵn bài <em>"Tôi và các bạn"</em> hoặc một truyện truyền thuyết).</li>
+            <li><strong>Vũ khí 2:</strong> Đồng hồ bấm giờ (Điện thoại hoặc đồng hồ điện tử).</li>
+            <li><strong>Vũ khí 3:</strong> Bút chì để làm "người dẫn đường" hỗ trợ mắt không bị lạc dòng.</li>
+        </ul>
+        <p><em>Luật chơi:</em> Đọc văn bản với tốc độ tự nhiên nhất của em (đừng cố đọc lướt quá nhanh nếu không hiểu gì, cũng đừng đọc quá chậm rãi). Đọc để lấy thông tin!</p>
+    </div>
+
+    <div class="box box-thuc-hanh">
+        <h3 class="box-title"><span>⚔️</span> B. Đường đua thực chiến (25 Phút)</h3>
+        <p><strong>Bước 1: Bấm giờ và Đọc (Tính WPM)</strong></p>
+        <p>Giáo viên sẽ chọn một đoạn văn bản có độ dài khoảng 400 từ. Khi có hiệu lệnh <strong>"BẮT ĐẦU"</strong>, em hãy bấm giờ và đọc. Đọc đến chữ cuối cùng, bấm <strong>"DỪNG"</strong> và ghi lại số giây.</p>
+        <ul>
+            <li><em>Cách tính WPM:</em> (400 từ ÷ Số giây em vừa đọc) × 60 = <span class="highlight-blue">WPM của em.</span></li>
+        </ul>
+
+        <p><strong>Bước 2: Trắc nghiệm kiểm tra (Tính CR)</strong></p>
+        <p>Đóng sách lại! Giáo viên sẽ chiếu 5 câu hỏi trắc nghiệm liên quan đến đoạn văn vừa đọc. Mỗi câu đúng được 20%.</p>
+        <ul>
+            <li><em>Ví dụ:</em> Đúng 3/5 câu ➔ CR = <span class="highlight-red">60%</span>.</li>
+        </ul>
+
+        <p><strong>Bước 3: Định vị sức mạnh thực tế (Tính ERR)</strong></p>
+        <p>Sử dụng công thức ở Tiết 1 để tính điểm số tổng hợp: <strong>ERR = WPM × CR.</strong></p>
+    </div>
+
+    <div class="box box-van-dung">
+        <h3 class="box-title"><span>📊</span> C. Vận dụng & Suy ngẫm (15 Phút)</h3>
+        <p>Ghi lại kết quả của em vào góc vở: <strong>WPM: .... | CR: ....% | ERR: ....</strong></p>
+        <p>Trả lời câu hỏi tự luận ngắn: <em>"Trong quá trình đọc vừa rồi, em thấy mắt mình có hay bị mỏi không? Có đoạn nào em phải đọc lùi lại vì lỡ quên mất từ trước đó không?"</em></p>
+    </div>
+
+    <div class="footer">Sách giáo khoa Speed Reading - Kỹ năng Đọc hiểu Tốc độ cao | Trang 10</div>
+
+    <div class="page-break"></div>
+
+    <div class="header">CHỦ ĐỀ I: CƠ CHẾ CỦA ĐÔI MẮT VÀ PHƯƠNG PHÁP ĐO LƯỜNG TỐC ĐỘ</div>
+
+    <div class="title-container">
+        <div class="lesson-title">Tiết 3: THIẾT LẬP BẢNG TRẠNG THÁI NHÂN VẬT</div>
+    </div>
+
+    <div class="box box-muc-tieu">
+        <h3 class="box-title"><span>🎯</span> Yêu cầu cần đạt</h3>
+        <ul>
+            <li>Hiểu được tầm quan trọng của việc theo dõi tiến độ luyện tập hàng ngày.</li>
+            <li>Biết cách tự thiết kế "Bảng trạng thái nhân vật" và Nhật ký EXP (Điểm kinh nghiệm).</li>
+            <li>Thiết lập mục tiêu WPM cần đạt vào cuối học kì 1.</li>
+        </ul>
+    </div>
+
+    <div class="box box-khoi-dong">
+        <h3 class="box-title"><span>🍞</span> A. Khởi động: Bảo bối ngoài đời thực (10 Phút)</h3>
+        <p>Hẳn các em đều biết "Bánh mì ghi nhớ" của Doraemon – chỉ cần ốp vào trang sách rồi ăn là thuộc lòng mọi thứ. Dù ngoài đời thực không có loại bánh mì đó, nhưng năng lực Đọc Siêu Tốc (Speed Reading) chính là một <span class="highlight-blue">"bảo bối"</span> tương tự, giúp bộ não quét và nạp dữ liệu siêu nhanh.</p>
+        <p>Tuy nhiên, bảo bối này không tự nhiên mà có. Giống như chơi một tựa game nhập vai, các em cần luyện tập hàng ngày để tích lũy <strong>Điểm kinh nghiệm (EXP)</strong> và thăng cấp (Level Up) cho đôi mắt của mình!</p>
+    </div>
+
+    <div class="box box-thuc-hanh">
+        <h3 class="box-title"><span>🛡️</span> B. Thiết kế Bảng trạng thái nhân vật (20 Phút)</h3>
+        <p>Em hãy dùng thước kẻ và bút màu để vẽ "Bảng trạng thái nhân vật" (Status Board) của chính mình vào trang đầu tiên của vở ghi Speed Reading. Dưới đây là bảng mẫu:</p>
+
+        <div class="rpg-board">
+            <div class="rpg-title">BẢNG TRẠNG THÁI (STATUS BOARD)</div>
+            <div class="rpg-stat">
+                <span class="rpg-stat-name">TÊN NGƯỜI CHƠI:</span>
+                <span>....................................</span>
+            </div>
+            <div class="rpg-stat">
+                <span class="rpg-stat-name">LEVEL HIỆN TẠI:</span>
+                <span>LV.1 (Khởi động)</span>
+            </div>
+            <div class="rpg-stat">
+                <span class="rpg-stat-name">CHỈ SỐ SỨC MẠNH (ERR đầu năm):</span>
+                <span class="rpg-stat-value">[Ghi điểm ERR của tiết 2 vào đây]</span>
+            </div>
+            <div class="rpg-stat">
+                <span class="rpg-stat-name">MỤC TIÊU LEVEL 10 (Cuối HK1):</span>
+                <span class="rpg-stat-value">ERR Đạt: 300+</span>
+            </div>
+            <div class="rpg-stat">
+                <span class="rpg-stat-name">VŨ KHÍ TRANG BỊ:</span>
+                <span>Bảng Schulte, Kĩ thuật Pacer, Đồng hồ</span>
+            </div>
+        </div>
+
+        <p><strong>Cơ chế tính điểm EXP (Kinh nghiệm):</strong></p>
+        <ul>
+            <li>Hoàn thành 1 bài tập luyện mắt trên lớp: <strong>+10 EXP</strong></li>
+            <li>Tự luyện Bảng Schulte 5 phút ở nhà: <strong>+20 EXP</strong></li>
+            <li>Ứng dụng đọc nhanh 1 bài Lịch Sử/Địa Lý: <strong>+50 EXP</strong></li>
+            <li><em>Tích đủ 100 EXP ➔ Thăng 1 Level. Báo cáo giáo viên để nhận huy hiệu!</em></li>
+        </ul>
+    </div>
+
+    <div class="box box-van-dung">
+        <h3 class="box-title"><span>✍️</span> C. Vận dụng: Lời thề Hiệp sĩ (15 Phút)</h3>
+        <p>Để chinh phục được Level 10, sự kiên trì là yếu tố quyết định. Em hãy viết đoạn cam kết sau vào dưới bảng trạng thái và kí tên:</p>
+        <p style="font-style: italic; background-color: #f9f9f9; padding: 10px; border-left: 4px solid #333;">
+            "Tôi cam kết sẽ dành ra <strong>tối thiểu 10 phút mỗi ngày</strong> để rèn luyện nhãn lực và phá vỡ giới hạn tốc độ đọc của bản thân. Tôi sẽ không bỏ cuộc cho đến khi đạt được mục tiêu Level 10!"
+        </p>
+        <p><em>Chữ kí của em:</em> ..................................................</p>
+    </div>
+
+    <div class="footer">Sách giáo khoa Speed Reading - Kỹ năng Đọc hiểu Tốc độ cao | Trang 14</div>
+
+</body>
+</html>

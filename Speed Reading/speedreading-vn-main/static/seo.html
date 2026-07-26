@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading Workflow - Pro Creator V2.4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .step-card { transition: all 0.3s ease; }
+        .step-done { opacity: 0.5; filter: grayscale(0.8); border-left-color: #10b981 !important; }
+        .post-card-done { border-color: #10b981 !important; background-color: #f8fafc !important; }
+        .post-card-done .content-box { opacity: 0.4; }
+        .script-view { font-size: 1.1rem; line-height: 1.6; color: #1e293b; background: #fff; border: 1px solid #e2e8f0; padding: 1.5rem; border-radius: 1rem; }
+        .social-box { line-height: 1.5; white-space: pre-wrap; font-size: 0.95rem; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-20">
+
+    <div class="sticky top-0 z-50 bg-white border-b border-slate-200 px-4 py-3 shadow-sm">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-lg font-extrabold text-slate-800 flex items-center gap-2 uppercase tracking-tighter">
+                <i class="fas fa-video text-rose-500"></i> SpeedReading Creator
+            </h1>
+            <div class="flex items-center gap-4 bg-slate-900 px-5 py-1.5 rounded-full border border-slate-700 shadow-lg">
+                <span id="timerDisplay" class="text-xl font-mono font-bold text-blue-400">00:00</span>
+                <div class="flex gap-2 border-l border-slate-700 pl-3 text-white">
+                    <button id="startBtn" onclick="startWorkflow()"><i class="fas fa-play"></i></button>
+                    <button id="resetBtn" onclick="resetWorkflow()"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 mt-8">
+        
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-6">
+            <label class="block text-[10px] font-black text-slate-400 uppercase mb-2">Đang thực hiện cuốn:</label>
+            <input type="text" id="currentBookName" placeholder="Tên sách..." 
+                class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-rose-500 outline-none text-xl font-bold text-slate-800">
+        </div>
+
+        <div class="space-y-4 mb-12">
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+                <a href="https://speedreading.vn/tool" target="_blank" class="bg-slate-800 text-white p-3 rounded-xl text-[9px] font-bold text-center flex flex-col items-center justify-center gap-1"><span>1.</span><span>MỞ TOOL</span></a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScu3spdM5lToW_sYKj0ZK62bOX3CGJM58YzvUrctUU4rHOO-g/viewform" target="_blank" onclick="startWorkflow()" class="bg-blue-600 text-white p-3 rounded-xl text-[9px] font-bold text-center flex flex-col items-center justify-center gap-1"><span>2.</span><span>NHẬP FORM</span></a>
+                <a href="https://mail.google.com" target="_blank" class="bg-slate-200 text-slate-600 p-3 rounded-xl text-[9px] font-bold text-center flex flex-col items-center justify-center gap-1"><span>3.</span><span>GMAIL</span></a>
+                <a href="https://github.com/vanthuonghi/speedreading-vn/tree/main/content/posts" target="_blank" class="bg-slate-400 text-white p-3 rounded-xl text-[9px] font-bold text-center flex flex-col items-center justify-center gap-1"><span>4.</span><span>GITHUB</span></a>
+                <a href="https://gemini.google.com/gem/d8fb8e17a0c5" target="_blank" class="bg-indigo-500 text-white p-3 rounded-xl text-[9px] font-bold text-center flex flex-col items-center justify-center gap-1"><span>5.</span><span>AI SEO</span></a>
+                <a href="https://gemini.google.com/gem/cefac0ebd1bd" target="_blank" class="bg-rose-500 text-white p-3 rounded-xl text-[9px] font-bold text-center flex flex-col items-center justify-center gap-1"><span>6.</span><span>ĐĂNG HÌNH</span></a>
+                <a href="https://gemini.google.com/gem/b7c835336515" target="_blank" class="bg-indigo-800 text-white p-3 rounded-xl text-[9px] font-bold text-center flex flex-col items-center justify-center gap-1"><span>7.</span><span>K.BẢN LÒNG TIẾNG</span></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="step-6-input" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 border-l-4 border-l-rose-500">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800 text-xs uppercase">Nhập 6 bản Social Content</h3>
+                        <button onclick="copyPrompt('social')" class="text-[9px] bg-rose-50 text-rose-600 px-3 py-1 rounded-full font-bold border border-rose-100">COPY PROMPT</button>
+                    </div>
+                    <textarea id="input-social" placeholder="Dán nội dung từ bước 6 vào đây..." class="w-full h-40 bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs outline-none focus:border-rose-400 custom-scrollbar"></textarea>
+                </div>
+
+                <div id="step-7-input" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 border-l-4 border-l-indigo-500">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800 text-xs uppercase">Nhập kịch bản lồng tiếng</h3>
+                        <button onclick="copyPrompt('video')" class="text-[9px] bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-bold border border-indigo-100">COPY PROMPT</button>
+                    </div>
+                    <textarea id="input-video" placeholder="Dán nội dung từ bước 7 vào đây..." class="w-full h-40 bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs outline-none focus:border-indigo-400 custom-scrollbar"></textarea>
+                </div>
+            </div>
+
+            <button onclick="saveToLocalDb()" class="w-full bg-slate-900 text-white py-5 rounded-3xl font-black text-xl shadow-xl active:scale-95 transition-all uppercase tracking-widest">
+                Lưu vào kho để quay video hàng loạt
+            </button>
+        </div>
+
+        <div class="mt-20">
+            <div class="flex justify-between items-center mb-8 px-2">
+                <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter italic">📦 Trạm thực thi video</h2>
+                <button onclick="clearLocalDb()" class="text-xs font-bold text-red-500 hover:underline">Xóa sạch kho</button>
+            </div>
+            <div id="localDbContainer" class="space-y-12"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full text-xs font-bold shadow-2xl opacity-0 transition-all pointer-events-none z-[100]">
+        Đã sao chép!
+    </div>
+
+    <script>
+        let startTime, timerInterval, isRunning = false;
+        let localPosts = JSON.parse(localStorage.getItem('hỉ_pro_creator_db')) || [];
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startTime;
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            document.getElementById('timerDisplay').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startWorkflow() { if (!isRunning) { startTime = new Date(); timerInterval = setInterval(updateTimer, 1000); isRunning = true; } }
+        function resetWorkflow() { clearInterval(timerInterval); isRunning = false; document.getElementById('timerDisplay').innerText = "00:00"; }
+
+        function renderLocalDb() {
+            const container = document.getElementById('localDbContainer');
+            if (localPosts.length === 0) {
+                container.innerHTML = `<div class="bg-white border-2 border-dashed border-slate-200 rounded-3xl p-16 text-center text-slate-400 font-bold uppercase tracking-widest">Kho đang trống</div>`;
+                return;
+            }
+
+            container.innerHTML = localPosts.map((post, idx) => `
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-2xl border-2 ${post.isDone ? 'post-card-done border-green-500' : 'border-slate-100'} transition-all">
+                    <div class="flex justify-between items-start mb-8">
+                        <div class="flex items-center gap-4">
+                            <button onclick="togglePostStatus(${idx})" class="w-10 h-10 rounded-full border-4 flex items-center justify-center transition-all ${post.isDone ? 'bg-green-500 border-green-500 text-white' : 'border-slate-200 text-slate-200'}">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <h3 class="font-black text-slate-800 uppercase tracking-tighter text-3xl italic">${post.bookName}</h3>
+                        </div>
+                        <button onclick="deletePost(${idx})" class="text-xs font-bold text-red-300 hover:text-red-500 uppercase">Gỡ bài</button>
+                    </div>
+
+                    <div class="space-y-10 content-box">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <label class="text-xs font-black text-rose-500 uppercase tracking-widest">📱 6 Phiên bản Social (Duyệt nhanh)</label>
+                                <button onclick="copyDirectly(${idx}, 'social')" class="text-[10px] font-bold bg-rose-100 text-rose-600 px-3 py-1 rounded-full border border-rose-200">Copy toàn bộ</button>
+                            </div>
+                            <div class="social-box bg-slate-50 border border-slate-100 rounded-2xl p-6 text-slate-700 h-64 overflow-y-auto custom-scrollbar italic">
+                                ${post.socialContent || 'Chưa có nội dung'}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-black text-indigo-500 uppercase tracking-widest mb-3 block">🎬 Kịch bản Video (Máy nhắc chữ)</label>
+                            <div class="script-view shadow-inner italic">
+                                ${post.videoContent ? post.videoContent.replace(/\n/g, '<br>') : 'Chưa có kịch bản'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveToLocalDb() {
+            const bookName = document.getElementById('currentBookName').value.trim();
+            const social = document.getElementById('input-social').value.trim();
+            const video = document.getElementById('input-video').value.trim();
+            if (!bookName) { alert("Hỉ hãy nhập tên sách trước nhé!"); return; }
+            localPosts.unshift({ bookName, socialContent: social, videoContent: video, isDone: false });
+            localStorage.setItem('hỉ_pro_creator_db', JSON.stringify(localPosts));
+            document.getElementById('currentBookName').value = '';
+            document.getElementById('input-social').value = '';
+            document.getElementById('input-video').value = '';
+            resetWorkflow();
+            renderLocalDb();
+            showToast("Đã cất vào kho!");
+        }
+
+        function togglePostStatus(idx) {
+            localPosts[idx].isDone = !localPosts[idx].isDone;
+            localStorage.setItem('hỉ_pro_creator_db', JSON.stringify(localPosts));
+            renderLocalDb();
+        }
+
+        function deletePost(idx) { if (confirm("Gỡ cuốn này khỏi kho?")) { localPosts.splice(idx, 1); localStorage.setItem('hỉ_pro_creator_db', JSON.stringify(localPosts)); renderLocalDb(); } }
+        function clearLocalDb() { if (confirm("Xóa sạch toàn bộ kho dữ liệu?")) { localPosts = []; localStorage.removeItem('hỉ_pro_creator_db'); renderLocalDb(); } }
+
+        function copyDirectly(idx, type) {
+            let text = type === 'social' ? localPosts[idx].socialContent : localPosts[idx].videoContent;
+            navigator.clipboard.writeText(text).then(() => showToast("Đã copy xong!"));
+        }
+
+        function copyPrompt(type) {
+            let prompt = "";
+            const book = document.getElementById('currentBookName').value || "[Tên Sách]";
+            if (type === 'social') {
+                prompt = `Viết 6 phiên bản content Facebook cho sách "${book}".\nQuy tắc:\n- Không chứa link/mã sản phẩm.\n- Xưng hô Hỉ và Bạn.\n- Mỗi bản 1 insight khác nhau.\n- Cực ngắn gọn, tránh từ cam kết 100%.`;
+            } else if (type === 'video') {
+                prompt = `Viết kịch bản video short cho sách "${book}".\n- Hook 5s hút insight.\n- Lời bình ngắn để lồng tiếng.\n- Xưng hô Hỉ và Bạn.`;
+            }
+            navigator.clipboard.writeText(prompt).then(() => showToast("Đã copy Prompt!"));
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        }
+
+        window.onload = renderLocalDb;
+    </script>
+</body>
+</html>

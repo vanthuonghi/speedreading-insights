@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HIIT & Breath">
+    
+    <title>HIIT Pro & Breath Coach</title>
+    
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' style='background-color: %23111827;'%3E%3Crect width='512' height='512' fill='%231f2937'/%3E%3Cpath d='M256 96L96 256h320L256 96z' fill='%23ef4444'/%3E%3Cpath d='M256 416L416 256H96l160 160z' fill='%23eab308'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='120' font-family='sans-serif' font-weight='bold' dy='10'%3EAI%3C/text%3E%3C/svg%3E">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes pump { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .animate-pump { animation: pump 0.46s infinite; }
+        
+        /* Breathing Animations */
+        @keyframes inhale { 0% { transform: scale(1); } 100% { transform: scale(1.25); } }
+        .animate-inhale { animation: inhale linear forwards; }
+        
+        @keyframes hold { 0%, 100% { transform: scale(1.25); } 50% { transform: scale(1.27); } }
+        .animate-hold { animation: hold 2s infinite ease-in-out; }
+        
+        @keyframes exhale { 0% { transform: scale(1.25); } 100% { transform: scale(1); } }
+        .animate-exhale { animation: exhale linear forwards; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes zoomSlow { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+        .bg-zoom { animation: zoomSlow 20s linear infinite alternate; }
+        
+        * { -webkit-tap-highlight-color: transparent; }
+        body { user-select: none; -webkit-user-select: none; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ffffff; cursor: pointer; margin-top: -8px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white h-screen overflow-hidden relative">
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="app-root" class="h-full flex flex-col justify-between py-safe px-6 relative overflow-hidden">
+        
+        <!-- Background Layer -->
+        <div class="absolute inset-0 z-0">
+            <img id="bg-image" src="" class="w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-0" alt="Background" />
+            <div id="bg-overlay" class="absolute inset-0 bg-gray-900 transition-colors duration-500"></div>
+        </div>
+
+        <!-- HEADER ZONE -->
+        <div class="w-full flex justify-between items-center pt-4 z-10">
+            <div class="flex items-center space-x-2 bg-black/40 px-4 py-2 rounded-full backdrop-blur-md border border-white/10 shadow-lg">
+                <span id="header-timer-icon"></span>
+                <span id="total-time-left" class="font-mono text-lg font-bold">15:00</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="btn-settings-open" class="p-3 bg-white/10 rounded-full active:bg-white/20 transition backdrop-blur-md border border-white/10 shadow-lg relative">
+                    <span id="header-settings-icon"></span>
+                    <span id="api-key-indicator" class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full hidden"></span>
+                </button>
+                <button id="btn-mute-toggle" class="p-3 bg-black/40 rounded-full active:bg-black/50 transition backdrop-blur-md border border-white/10 shadow-lg">
+                    <span id="header-mute-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CIRCLE COUNTDOWN ZONE -->
+        <div class="flex-1 flex items-center justify-center w-full z-10">
+            <div class="relative w-full max-w-[300px] aspect-square flex items-center justify-center">
+                <div id="circle-glow" class="absolute inset-0 bg-white rounded-full blur-3xl opacity-0 transition-opacity duration-300"></div>
+                <svg id="countdown-svg" class="absolute top-0 left-0 w-full h-full transform -rotate-90 drop-shadow-2xl" viewBox="0 0 288 288">
+                    <circle cx="144" cy="144" r="130" stroke="rgba(255,255,255,0.1)" stroke-width="12" fill="transparent" />
+                    <circle id="progress-bar" cx="144" cy="144" r="130" stroke="white" stroke-width="12" fill="transparent" stroke-dasharray="816" stroke-dashoffset="0" class="transition-all duration-1000 ease-linear" stroke-linecap="round" />
+                </svg>
+                <div id="countdown-content" class="z-10 flex flex-col items-center text-center drop-shadow-2xl px-4 transition-transform duration-300">
+                    <span id="current-action-icon" class="mb-2"></span>
+                    <div id="interval-time-left" class="text-8xl font-bold font-mono tracking-tighter leading-none text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">45</div>
+                    <div id="current-label" class="text-lg uppercase font-bold mt-4 tracking-widest text-white drop-shadow-md break-words w-full">CHUẨN BỊ</div>
+                    <div id="current-msg" class="text-xs bg-black/30 px-2 py-1 rounded mt-1 hidden">Hãy sẵn sàng!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTROLS & TIMELINE ZONE -->
+        <div class="w-full pb-8 z-10 space-y-6">
+            <!-- Timeline Preview -->
+            <div class="w-full bg-black/40 rounded-2xl p-4 backdrop-blur-md shadow-lg border border-white/10">
+                <div id="timeline-container" class="flex space-x-3 overflow-hidden opacity-90">
+                    <!-- Dynamic timeline items go here -->
+                </div>
+            </div>
+
+            <!-- Play & Reset Buttons -->
+            <div class="grid grid-cols-2 gap-4">
+                <button id="btn-start-pause" class="col-span-1 py-6 rounded-3xl flex items-center justify-center space-x-2 text-2xl font-bold shadow-2xl transform active:scale-95 transition duration-100 bg-green-500 text-white">
+                    <span id="control-play-icon" class="flex items-center"></span>
+                    <span id="control-play-text">Bắt đầu</span>
+                </button>
+                <button id="btn-reset" class="col-span-1 bg-gray-700/80 text-white py-6 rounded-3xl flex items-center justify-center space-x-2 text-2xl font-bold active:scale-95 transition backdrop-blur-md shadow-xl">
+                    <span id="control-reset-icon" class="flex items-center"></span>
+                    <span>Đặt lại</span>
+                </button>
+            </div>
+            
+            <div id="mode-badge" class="text-center text-xs text-white/50 font-bold uppercase tracking-wider flex justify-center items-center gap-2">Chế độ: Đang tải...</div>
+        </div>
+    </div>
+
+    <!-- FINISHED SCREEN OVERLAY -->
+    <div id="finished-screen" class="fixed inset-0 z-40 bg-gray-900 flex-col items-center justify-center p-4 space-y-6 text-center hidden animate-fade-in">
+        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center animate-bounce shadow-lg shadow-green-500/50">
+            <span id="finished-badge-icon"></span>
+        </div>
+        <h1 class="text-4xl font-bold text-green-400">HOÀN THÀNH!</h1>
+        <div class="w-full max-w-sm bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20 shadow-xl min-h-[100px] flex flex-col items-center justify-center">
+            <div id="advice-loading" class="flex items-center gap-2 text-yellow-300 animate-pulse hidden">
+                <span id="advice-loading-icon"></span>
+                <span>HLV đang phân tích kết quả...</span>
+            </div>
+            <div id="advice-container" class="text-left w-full hidden">
+                <h3 class="text-yellow-300 font-bold flex items-center gap-2 mb-2">
+                    <span id="advice-sparkle-icon"></span> Lời khuyên HLV:
+                </h3>
+                <div id="advice-text" class="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+        </div>
+        <div class="flex flex-col w-full max-w-xs gap-4">
+            <button id="btn-finished-reset" class="bg-white text-gray-900 px-8 py-4 rounded-full font-bold text-xl active:scale-95 transition shadow-xl w-full">Tập Lại</button>
+            <a href="https://www.facebook.com/share/g/1BwJU8wCBM/" target="_blank" class="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg active:scale-95 transition shadow-xl w-full">
+                <span id="facebook-icon"></span> Tham gia Cộng đồng
+            </a>
+        </div>
+    </div>
+
+    <!-- CONFIGURATION SETTINGS MODAL -->
+    <div id="settings-modal" class="fixed inset-0 z-50 bg-gray-900/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-gray-800 w-full max-w-md rounded-2xl border border-white/10 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-5 border-b border-white/10 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span id="settings-header-icon" class="text-blue-400"></span> Cấu Hình
+                </h2>
+                <button id="btn-settings-close" class="p-2 bg-white/10 rounded-full hover:bg-white/20">
+                    <span id="settings-close-icon"></span>
+                </button>
+            </div>
+            <div class="p-5 overflow-y-auto space-y-6">
+                <!-- Chế độ Selector -->
+                <div>
+                    <label class="text-gray-400 text-sm font-bold uppercase mb-2 block">Chọn Chế Độ</label>
+                    <div id="presets-container" class="grid grid-cols-1 gap-2">
+                        <!-- Dynamic preset buttons -->
+                    </div>
+                </div>
+
+                <!-- Sliders -->
+                <div id="sliders-container" class="space-y-5 transition-opacity duration-300">
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <div class="flex justify-between mb-2">
+                            <span id="slider-label-high" class="font-bold flex items-center gap-1 text-red-400">Nặng (Giây)</span>
+                            <span id="val-high" class="text-white font-mono font-bold">45s</span>
+                        </div>
+                        <input id="slide-high" type="range" min="1" max="120" step="1" value="45">
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <div class="flex justify-between mb-2">
+                            <span id="slider-label-low" class="font-bold flex items-center gap-1 text-yellow-400">Nhẹ (Giây)</span>
+                            <span id="val-low" class="text-white font-mono font-bold">15s</span>
+                        </div>
+                        <input id="slide-low" type="range" min="0" max="120" step="1" value="15">
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <div class="flex justify-between mb-2">
+                            <span id="slider-label-rest" class="font-bold flex items-center gap-1 text-blue-400">Nghỉ (Giây)</span>
+                            <span id="val-rest" class="text-white font-mono font-bold">15s</span>
+                        </div>
+                        <input id="slide-rest" type="range" min="0" max="60" step="1" value="15">
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-white/60 font-bold">Tổng Thời Gian (Phút)</span>
+                            <span id="val-total" class="text-white font-mono font-bold">15'</span>
+                        </div>
+                        <input id="slide-total" type="range" min="1" max="60" step="1" value="15">
+                    </div>
+                </div>
+                
+                <!-- AI Section -->
+                <div id="ai-section" class="pt-4 border-t border-white/10">
+                     <div class="bg-blue-900/30 p-4 rounded-xl border border-blue-500/30 mb-4">
+                        <input id="api-key-input" type="password" placeholder="Gemini API Key (Tùy chọn)" class="w-full bg-black/30 border border-white/10 rounded-lg p-2 text-sm text-white outline-none">
+                    </div>
+                    <div class="bg-gradient-to-r from-indigo-900 to-purple-900 p-4 rounded-xl border border-white/10">
+                        <input id="ai-prompt-input" type="text" class="w-full bg-black/30 border border-white/10 rounded-lg p-2 text-sm text-white mb-3 outline-none" value="Giảm mỡ bụng dưới" placeholder="VD: Tập chân, Cardio nhẹ...">
+                        <button id="btn-generate-ai" class="w-full py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg shadow-lg active:scale-95 transition flex justify-center items-center gap-2">
+                            <span id="ai-btn-sparkle"></span>
+                            <span id="ai-btn-text">Thiết kế Bài tập</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-white/10 bg-gray-800 rounded-b-2xl">
+                <button id="btn-save-settings" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg active:scale-95 transition">Lưu & Bắt Đầu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP VANILLA SCRIPT -->
+    <script>
+        // --- SVG STORAGE ---
+        const SVGS = {
+            play: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`,
+            pause: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`,
+            rotateCcw: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>`,
+            volume2: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`,
+            volumeX: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`,
+            timer: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+            zap: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+            activity: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>`,
+            coffee: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>`,
+            settings: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
+            x: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+            wind: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>`,
+            lock: `<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`,
+            sparkles: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></svg>`,
+            facebook: `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>`
+        };
+
+        const PROGRAMS = {
+            FAT_BURN: { name: "Đốt Mỡ (Chuẩn)", high: 45, low: 15, rest: 15, desc: "Tỉ lệ vàng 3:1.", totalMinutes: 15 },
+            TABATA: { name: "Tabata (Siêu Tốc)", high: 20, low: 0, rest: 10, desc: "Cực nặng, cực nhanh.", totalMinutes: 4 },
+            BREATHING: { name: "Hít Thở 1-4-2", high: 4, low: 16, rest: 8, desc: "Năng lượng (Ngày 1).", totalMinutes: 5 },
+            ENDURANCE: { name: "Sức Bền", high: 60, low: 30, rest: 0, desc: "Duy trì nhịp tim.", totalMinutes: 20 },
+            CUSTOM: { name: "Tùy Chỉnh", desc: "Thiết lập theo ý bạn." },
+            AI_GEN: { name: "✨ AI Thiết Kế", desc: "Bài tập thông minh." }
+        };
+
+        const MOCK_WORKOUTS = {
+            ABS: [{"high": "Gập bụng đạp xe", "highDesc": "Xoay người chạm khuỷu tay", "low": "Plank tĩnh", "lowDesc": "Siết chặt cơ bụng"}, {"high": "Leo núi chéo chân", "highDesc": "Kéo gối về phía tay đối diện", "low": "Gập bụng cơ bản", "lowDesc": "Tập trung cơ bụng trên"}],
+            CARDIO: [{"high": "Chạy nâng cao đùi", "highDesc": "Tốc độ tối đa!", "low": "Bước sang ngang", "lowDesc": "Hít thở sâu"}, {"high": "Burpees", "highDesc": "Bật nhảy hết sức", "low": "Đi bộ tại chỗ", "lowDesc": "Thả lỏng tay chân"}],
+            LEGS: [{"high": "Squat bật nhảy", "highDesc": "Tiếp đất nhẹ nhàng", "low": "Squat thường", "lowDesc": "Xuống chậm lên nhanh"}, {"high": "Lunge đổi chân", "highDesc": "Giữ thăng bằng", "low": "Đứng kiễng chân", "lowDesc": "Tập bắp chân"}]
+        };
+
+        // --- APP STATE ---
+        const state = {
+            apiKey: localStorage.getItem('gemini_api_key') || "",
+            settings: { mode: 'FAT_BURN', high: 45, low: 15, rest: 15, totalMinutes: 15 },
+            isRunning: false,
+            isFinished: false,
+            isMuted: false,
+            totalTimeLeft: 15 * 60,
+            cycleIndex: 0,
+            intervalTimeLeft: 45,
+            currentAiPairIndex: 0,
+            aiExercises: null,
+            aiAdvice: null,
+            loadingAdvice: false
+        };
+
+        // --- AUDIO ENGINE ---
+        const AudioEngine = () => {
+            let audioCtx = null;
+            let nextNoteTime = 0;
+            let timerID = null;
+            let isPlaying = false;
+            let intensity = 'high';
+            let beatCount = 0;
+
+            const init = () => {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            };
+
+            const playSoundSynth = (time, type, freq, attack, decay, vol, isKick = false) => {
+                if (!audioCtx) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, time);
+                    gain.gain.setValueAtTime(0, time);
+                    gain.gain.linearRampToValueAtTime(vol, time + attack);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + attack + decay);
+                    if (isKick) {
+                        osc.frequency.setValueAtTime(freq * 1.5, time);
+                        osc.frequency.exponentialRampToValueAtTime(freq, time + attack);
+                    }
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(time);
+                    osc.stop(time + attack + decay + 0.1);
+                } catch (e) {
+                    console.error("Audio error: ", e);
+                }
+            };
+
+            const playCountdown = (isFinal) => {
+                init();
+                const t = audioCtx.currentTime;
+                if (isFinal) playSoundSynth(t, 'square', 880, 0.01, 0.8, 0.4);
+                else playSoundSynth(t, 'triangle', 660, 0.01, 0.1, 0.4);
+            };
+
+            const scheduleNote = (beatNumber, time) => {
+                const beat16 = beatCount % 16;
+                if (intensity === 'low') {
+                    if (beat16 % 8 === 0) playSoundSynth(time, 'sine', 150, 0.2, 1.5, 0.2);
+                    if (beat16 % 16 === 0) playSoundSynth(time + 0.1, 'triangle', 220, 0.2, 1.5, 0.05);
+                } else {
+                    if (beat16 % 4 === 0) playSoundSynth(time, 'sine', 50, 0.005, 0.25, 0.8, true);
+                    if (beat16 === 4 || beat16 === 12) playSoundSynth(time, 'square', 1200, 0.001, 0.08, 0.15);
+                    if (beat16 % 4 === 2) playSoundSynth(time, 'sawtooth', 5000, 0.005, 0.15, 0.08);
+                    const bassFreq = (beatCount < 32 ? 55 : 65.4) * (beat16 % 2 === 0 ? 1 : 2);
+                    playSoundSynth(time + 0.02, 'sawtooth', bassFreq, 0.01, 0.1, 0.2);
+                }
+                beatCount++;
+            };
+
+            const scheduler = () => {
+                if (!isPlaying || !audioCtx) return;
+                const tempo = intensity === 'high' ? 132 : 60; 
+                const secondsPerBeat = 15.0 / tempo; 
+                while (nextNoteTime < audioCtx.currentTime + 0.1) {
+                    scheduleNote(beatCount, nextNoteTime);
+                    nextNoteTime += secondsPerBeat;
+                }
+                timerID = window.setTimeout(scheduler, 25);
+            };
+
+            const startMusic = (mode) => {
+                init();
+                isPlaying = true;
+                intensity = mode;
+                if(mode !== 'high') intensity = 'low'; 
+                beatCount = 0;
+                if (!timerID) {
+                    nextNoteTime = audioCtx.currentTime + 0.05;
+                    scheduler();
+                }
+            };
+
+            const stopMusic = () => {
+                isPlaying = false;
+                if (timerID) { window.clearTimeout(timerID); timerID = null; }
+            };
+
+            return { init, playCountdown, startMusic, stopMusic };
+        };
+
+        const audio = AudioEngine();
+
+        // --- GEMINI INTEG ---
+        const callGemini = async (prompt, apiKey) => {
+            if (!apiKey) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        let category = 'CARDIO';
+                        const p = prompt.toLowerCase();
+                        if (p.includes('bụng') || p.includes('eo')) category = 'ABS';
+                        else if (p.includes('chân') || p.includes('đùi')) category = 'LEGS';
+                        const source = MOCK_WORKOUTS[category];
+                        const exercises = Array(4).fill(0).map(() => source[Math.floor(Math.random() * source.length)]);
+                        resolve(JSON.stringify(exercises));
+                    }, 1500);
+                });
+            }
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const response = await fetch(url, { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify({ 
+                    contents: [{ parts: [{ text: prompt }] }] 
+                }) 
+            });
+            if (!response.ok) throw new Error(`Lỗi API: ${response.status}`);
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text;
+        };
+
+        // --- CORE LOGIC FLOW ---
+        function getCycleConfig() {
+            const settings = state.settings;
+            if (settings.mode === 'BREATHING') {
+                return [
+                    { id: 0, type: 'inhale', color: 'bg-gradient-to-br from-cyan-400 to-blue-600', icon: 'wind', label: 'HÍT VÀO', msg: 'Hít sâu bằng mũi...', duration: settings.high },
+                    { id: 1, type: 'hold', color: 'bg-gradient-to-br from-yellow-400 to-orange-500', icon: 'lock', label: 'GIỮ HƠI', msg: 'Giữ chặt trong phổi...', duration: settings.low },
+                    { id: 2, type: 'exhale', color: 'bg-gradient-to-br from-emerald-400 to-green-600', icon: 'wind', label: 'THỞ RA', msg: 'Thở mạnh bằng miệng...', duration: settings.rest }
+                ];
+            }
+
+            let baseConfig = [
+                { id: 0, type: 'high', color: 'bg-gradient-to-br from-red-600 to-orange-800', icon: 'zap' },
+                { id: 1, type: 'low', color: 'bg-gradient-to-br from-yellow-500 to-orange-500', icon: 'activity' },
+                { id: 2, type: 'high', color: 'bg-gradient-to-br from-orange-600 to-red-700', icon: 'zap' },
+                { id: 3, type: 'rest', color: 'bg-gradient-to-br from-blue-500 to-cyan-500', icon: 'coffee', label: 'Nghỉ Ngơi', msg: 'Thở sâu...' }
+            ];
+
+            if (state.settings.mode === 'AI_GEN' && state.aiExercises && state.aiExercises.length > 0) {
+                const ex = state.aiExercises[state.currentAiPairIndex % state.aiExercises.length];
+                baseConfig[0].label = ex.high; baseConfig[0].msg = ex.highDesc;
+                baseConfig[1].label = ex.low; baseConfig[1].msg = ex.lowDesc;
+                baseConfig[2].label = ex.high; baseConfig[2].msg = ex.highDesc;
+            } else {
+                baseConfig[0].label = 'Tập Nặng'; baseConfig[0].msg = 'Bùng nổ hết sức!';
+                baseConfig[1].label = 'Tập Nhẹ'; baseConfig[1].msg = 'Hạ nhiệt chủ động';
+                baseConfig[2].label = 'Tập Tiếp'; baseConfig[2].msg = 'Không bỏ cuộc!';
+            }
+            baseConfig[0].duration = settings.high;
+            baseConfig[1].duration = settings.low;
+            baseConfig[2].duration = settings.high;
+            baseConfig[3].duration = settings.rest;
+            return baseConfig;
+        }
+
+        function getCurrentDisplayConfig() {
+            const cycleConfig = getCycleConfig();
+            return cycleConfig[state.cycleIndex];
+        }
+
+        // --- DOM RENDERERS ---
+        function renderIcons() {
+            document.getElementById('header-timer-icon').innerHTML = SVGS.timer;
+            document.getElementById('header-settings-icon').innerHTML = SVGS.settings;
+            document.getElementById('header-mute-icon').innerHTML = state.isMuted ? SVGS.volumeX : SVGS.volume2;
+            document.getElementById('control-reset-icon').innerHTML = SVGS.rotateCcw;
+            document.getElementById('settings-header-icon').innerHTML = SVGS.settings;
+            document.getElementById('settings-close-icon').innerHTML = SVGS.x;
+            document.getElementById('ai-btn-sparkle').innerHTML = SVGS.sparkles;
+            document.getElementById('finished-badge-icon').innerHTML = SVGS.activity;
+            document.getElementById('advice-loading-icon').innerHTML = SVGS.sparkles;
+            document.getElementById('advice-sparkle-icon').innerHTML = SVGS.sparkles;
+            document.getElementById('facebook-icon').innerHTML = SVGS.facebook;
+        }
+
+        function updateUI() {
+            // Update timers
+            const min = Math.floor(state.totalTimeLeft / 60).toString().padStart(2, '0');
+            const sec = (state.totalTimeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('total-time-left').textContent = `${min}:${sec}`;
+            document.getElementById('interval-time-left').textContent = state.intervalTimeLeft;
+
+            const current = getCurrentDisplayConfig();
+            document.getElementById('current-label').textContent = current.label;
+            document.getElementById('current-msg').textContent = current.msg || "";
+            if (current.msg) {
+                document.getElementById('current-msg').classList.remove('hidden');
+            } else {
+                document.getElementById('current-msg').classList.add('hidden');
+            }
+
+            // Icons dynamic update
+            document.getElementById('current-action-icon').innerHTML = SVGS[current.icon];
+
+            // Progress Ring
+            const progressPercent = ((current.duration - state.intervalTimeLeft) / current.duration) * 100;
+            const dashOffset = 816 - (816 * (progressPercent || 0)) / 100;
+            document.getElementById('progress-bar').setAttribute('stroke-dashoffset', dashOffset);
+
+            // Play/Pause button state
+            const playText = state.isRunning ? "Dừng" : "Bắt đầu";
+            const playIcon = state.isRunning ? SVGS.pause : SVGS.play;
+            document.getElementById('control-play-text').textContent = playText;
+            document.getElementById('control-play-icon').innerHTML = playIcon;
+
+            const btnPlay = document.getElementById('btn-start-pause');
+            if (state.isRunning) {
+                btnPlay.className = "col-span-1 py-6 rounded-3xl flex items-center justify-center space-x-2 text-2xl font-bold shadow-2xl transform active:scale-95 transition duration-100 bg-white text-gray-900";
+            } else {
+                btnPlay.className = "col-span-1 py-6 rounded-3xl flex items-center justify-center space-x-2 text-2xl font-bold shadow-2xl transform active:scale-95 transition duration-100 bg-green-500 text-white";
+            }
+
+            // Animation classes based on state
+            const glow = document.getElementById('circle-glow');
+            const actionIcon = document.getElementById('current-action-icon');
+            const countdownSvg = document.getElementById('countdown-svg');
+
+            countdownSvg.className = "absolute top-0 left-0 w-full h-full transform -rotate-90 drop-shadow-2xl";
+            actionIcon.className = "mb-2";
+
+            if (state.isRunning) {
+                if (current.type === 'inhale') actionIcon.classList.add('animate-inhale');
+                else if (current.type === 'hold') actionIcon.classList.add('animate-hold');
+                else if (current.type === 'exhale') actionIcon.classList.add('animate-exhale');
+                else if (current.type === 'high') {
+                    countdownSvg.classList.add('animate-pump');
+                    glow.classList.remove('opacity-0');
+                    glow.classList.add('opacity-20');
+                } else {
+                    actionIcon.classList.add('animate-bounce');
+                    glow.classList.add('opacity-0');
+                    glow.classList.remove('opacity-20');
+                }
+            } else {
+                glow.classList.add('opacity-0');
+                glow.classList.remove('opacity-20');
+            }
+
+            // Background dynamic set
+            const bgImg = document.getElementById('bg-image');
+            const bgOverlay = document.getElementById('bg-overlay');
+            let bgUrl = "";
+            if(current.type === 'inhale') bgUrl = "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1200&auto=format&fit=crop"; 
+            else if(current.type === 'high') bgUrl = "https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=1200&auto=format&fit=crop";
+            else bgUrl = "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=1200&auto=format&fit=crop"; 
+
+            bgImg.src = bgUrl;
+            if (state.isRunning) {
+                bgImg.classList.add('bg-zoom');
+                bgImg.classList.remove('opacity-0');
+                bgImg.classList.add('opacity-100');
+                bgOverlay.className = "absolute inset-0 transition-colors duration-500 bg-black/70";
+            } else {
+                bgImg.classList.remove('bg-zoom');
+                bgImg.classList.remove('opacity-100');
+                bgImg.classList.add('opacity-0');
+                bgOverlay.className = "absolute inset-0 transition-colors duration-500 " + current.color;
+            }
+
+            // Mode Badge
+            document.getElementById('mode-badge').innerHTML = (state.settings.mode === 'AI_GEN' ? SVGS.sparkles + ' ' : '') + `Chế độ: ${PROGRAMS[state.settings.mode]?.name || 'Tùy Chỉnh'}`;
+
+            // API indicator
+            if (state.apiKey) {
+                document.getElementById('api-key-indicator').classList.remove('hidden');
+            } else {
+                document.getElementById('api-key-indicator').classList.add('hidden');
+            }
+
+            renderTimeline();
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = "";
+            const cycleConfig = getCycleConfig();
+
+            for (let offset = 1; offset <= 3; offset++) {
+                const idx = (state.cycleIndex + offset) % cycleConfig.length;
+                let item = cycleConfig[idx];
+
+                if (state.settings.mode === 'AI_GEN' && state.aiExercises) {
+                    const previewPairIndex = (state.cycleIndex === 3 && idx === 0) ? (state.currentAiPairIndex + 1) : state.currentAiPairIndex;
+                    const pair = state.aiExercises[previewPairIndex % state.aiExercises.length];
+                    if (item.type === 'high') item = { ...item, label: pair.high };
+                    if (item.type === 'low') item = { ...item, label: pair.low };
+                }
+
+                if (item.duration === 0) continue;
+
+                let colorCircle = 'bg-blue-400';
+                if (item.type === 'high') colorCircle = 'bg-red-500';
+                else if (item.type === 'low') colorCircle = 'bg-yellow-400';
+                else if (item.type === 'inhale') colorCircle = 'bg-cyan-400';
+                else if (item.type === 'hold') colorCircle = 'bg-orange-400';
+                else if (item.type === 'exhale') colorCircle = 'bg-green-400';
+
+                const div = document.createElement('div');
+                div.className = "flex-1 bg-white/5 rounded-xl p-3 flex flex-col items-center text-xs border border-white/10 overflow-hidden";
+                div.innerHTML = `
+                    <span class="w-3 h-3 rounded-full mb-2 shadow-lg ${colorCircle}"></span>
+                    <span class="font-bold text-lg">${item.duration}</span>
+                    <span class="truncate w-full text-center opacity-75 font-semibold">${item.label}</span>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        // --- TIMER HANDLER ---
+        let mainInterval = null;
+
+        const handleNextPhaseInternal = () => {
+            const cycleConfig = getCycleConfig();
+            let nextIndex = (state.cycleIndex + 1) % cycleConfig.length;
+            let nextConfig = cycleConfig[nextIndex];
+            
+            if (state.cycleIndex === 3 && nextIndex === 0 && state.settings.mode === 'AI_GEN' && state.aiExercises) {
+                state.currentAiPairIndex = (state.currentAiPairIndex + 1) % state.aiExercises.length;
+            }
+
+            let attempts = 0;
+            while (nextConfig.duration === 0 && attempts < 4) {
+                nextIndex = (nextIndex + 1) % cycleConfig.length;
+                nextConfig = cycleConfig[nextIndex];
+                attempts++;
+            }
+            state.cycleIndex = nextIndex;
+            state.intervalTimeLeft = nextConfig.duration;
+
+            if (!state.isMuted && state.isRunning) {
+                audio.stopMusic();
+                setTimeout(() => audio.startMusic(nextConfig.type === 'inhale' ? 'low' : nextConfig.type), 50);
+            }
+        };
+
+        function startTimer() {
+            if (mainInterval) clearInterval(mainInterval);
+            mainInterval = setInterval(() => {
+                if (state.isRunning && state.totalTimeLeft > 0) {
+                    state.totalTimeLeft--;
+                    if (state.intervalTimeLeft <= 4 && state.intervalTimeLeft > 1 && !state.isMuted) {
+                        audio.playCountdown(false);
+                    }
+                    if (state.intervalTimeLeft === 1 && !state.isMuted) {
+                        audio.playCountdown(true);
+                    }
+
+                    if (state.intervalTimeLeft <= 1) {
+                        handleNextPhaseInternal();
+                    } else {
+                        state.intervalTimeLeft--;
+                    }
+                    updateUI();
+                } else if (state.totalTimeLeft === 0 && state.isRunning) {
+                    finishWorkout();
+                }
+            }, 1000);
+        }
+
+        function finishWorkout() {
+            state.isFinished = true;
+            state.isRunning = false;
+            audio.stopMusic();
+            if (!state.isMuted) audio.playCountdown(true);
+            clearInterval(mainInterval);
+
+            document.getElementById('finished-screen').classList.remove('hidden');
+            document.getElementById('finished-screen').classList.add('flex');
+
+            // Render advice
+            getAiAdvice();
+        }
+
+        const getAiAdvice = async () => {
+            document.getElementById('advice-loading').classList.remove('hidden');
+            document.getElementById('advice-container').classList.add('hidden');
+            try {
+                if (!state.apiKey) {
+                    setTimeout(() => { 
+                        displayAdvice("🎉 Hoàn thành xuất sắc! Hãy bổ sung nước lọc ngay và nghỉ ngơi nhẹ nhàng nhé."); 
+                    }, 1000);
+                } else {
+                    const prompt = `User just finished a ${state.settings.totalMinutes} min workout (${state.settings.mode}). Tone: Funny, energetic, Vietnamese. Output: 1 congratulation + 1 nutrition tip in plain text.`;
+                    const text = await callGemini(prompt, state.apiKey);
+                    displayAdvice(text);
+                }
+            } catch (e) { 
+                console.error(e); 
+                displayAdvice("Lỗi khi kết nối HLV ảo, bạn đã tập cực tốt rồi!");
+            }
+        };
+
+        function displayAdvice(text) {
+            document.getElementById('advice-loading').classList.add('hidden');
+            document.getElementById('advice-container').classList.remove('hidden');
+            document.getElementById('advice-text').textContent = text;
+        }
+
+        function handleStartPause() {
+            if (!state.isRunning) {
+                audio.init();
+                const current = getCurrentDisplayConfig();
+                if (!state.isMuted) {
+                    audio.startMusic(current.type === 'inhale' ? 'low' : current.type);
+                }
+                state.isRunning = true;
+                startTimer();
+            } else {
+                audio.stopMusic();
+                state.isRunning = false;
+            }
+            updateUI();
+        }
+
+        function handleReset() {
+            state.isRunning = false;
+            state.isFinished = false;
+            state.totalTimeLeft = state.settings.totalMinutes * 60;
+            state.cycleIndex = 0;
+            state.currentAiPairIndex = 0;
+            const cycleConfig = getCycleConfig();
+            state.intervalTimeLeft = cycleConfig[0].duration;
+            audio.stopMusic();
+            if (mainInterval) clearInterval(mainInterval);
+
+            document.getElementById('finished-screen').classList.add('hidden');
+            document.getElementById('finished-screen').classList.remove('flex');
+
+            updateUI();
+        }
+
+        // --- PRESETS MODAL ACTIONS ---
+        function openSettings() {
+            // Populate active fields
+            document.getElementById('api-key-input').value = state.apiKey;
+            document.getElementById('slide-high').value = state.settings.high;
+            document.getElementById('slide-low').value = state.settings.low;
+            document.getElementById('slide-rest').value = state.settings.rest;
+            document.getElementById('slide-total').value = state.settings.totalMinutes;
+
+            updateSliderValuesDisplay();
+            renderPresetButtons();
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function updateSliderValuesDisplay() {
+            const isBreathing = state.settings.mode === 'BREATHING';
+            
+            document.getElementById('slider-label-high').textContent = isBreathing ? "Hít vào (s)" : "Nặng (Giây)";
+            document.getElementById('slider-label-low').textContent = isBreathing ? "Giữ hơi (s)" : "Nhẹ (Giây)";
+            document.getElementById('slider-label-rest').textContent = isBreathing ? "Thở ra (s)" : "Nghỉ (Giây)";
+
+            document.getElementById('val-high').textContent = document.getElementById('slide-high').value + 's';
+            document.getElementById('val-low').textContent = document.getElementById('slide-low').value + 's';
+            document.getElementById('val-rest').textContent = document.getElementById('slide-rest').value + 's';
+            document.getElementById('val-total').textContent = document.getElementById('slide-total').value + "'";
+
+            // Disable sliders if pre-set modes
+            const slidersContainer = document.getElementById('sliders-container');
+            if (state.settings.mode !== 'CUSTOM' && state.settings.mode !== 'AI_GEN' && state.settings.mode !== 'BREATHING') {
+                slidersContainer.classList.add('opacity-50', 'pointer-events-none', 'grayscale');
+            } else {
+                slidersContainer.classList.remove('opacity-50', 'pointer-events-none', 'grayscale');
+            }
+
+            const aiSection = document.getElementById('ai-section');
+            if (isBreathing) {
+                aiSection.classList.add('hidden');
+            } else {
+                aiSection.classList.remove('hidden');
+            }
+        }
+
+        function selectPreset(key) {
+            if (key === 'CUSTOM' || key === 'AI_GEN') {
+                state.settings.mode = key;
+            } else {
+                const prog = PROGRAMS[key];
+                state.settings.mode = key;
+                state.settings.high = prog.high;
+                state.settings.low = prog.low;
+                state.settings.rest = prog.rest;
+                state.settings.totalMinutes = prog.totalMinutes || 5;
+
+                document.getElementById('slide-high').value = prog.high;
+                document.getElementById('slide-low').value = prog.low;
+                document.getElementById('slide-rest').value = prog.rest;
+                document.getElementById('slide-total').value = prog.totalMinutes || 5;
+            }
+            renderPresetButtons();
+            updateSliderValuesDisplay();
+        }
+
+        function renderPresetButtons() {
+            const container = document.getElementById('presets-container');
+            container.innerHTML = "";
+            Object.keys(PROGRAMS).forEach(key => {
+                const isActive = state.settings.mode === key;
+                const button = document.createElement('button');
+                button.className = `p-3 rounded-xl border text-left transition-all ${isActive ? 'bg-blue-600 border-blue-400 shadow-lg scale-[1.02]' : 'bg-white/5 border-white/10 hover:bg-white/10'}`;
+                button.innerHTML = `
+                    <div class="font-bold text-white flex justify-between">
+                        <span>${PROGRAMS[key].name}</span>
+                        ${key === 'BREATHING' ? SVGS.wind : ''}
+                    </div>
+                    <div class="text-xs text-white/60">${PROGRAMS[key].desc}</div>
+                `;
+                button.onclick = () => selectPreset(key);
+                container.appendChild(button);
+            });
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            renderIcons();
+
+            // Mute Button Handler
+            document.getElementById('btn-mute-toggle').onclick = () => {
+                state.isMuted = !state.isMuted;
+                document.getElementById('header-mute-icon').innerHTML = state.isMuted ? SVGS.volumeX : SVGS.volume2;
+                if (state.isMuted) audio.stopMusic();
+                else if (state.isRunning) {
+                    const current = getCurrentDisplayConfig();
+                    audio.startMusic(current.type === 'inhale' ? 'low' : current.type);
+                }
+            };
+
+            // Start & Pause click
+            document.getElementById('btn-start-pause').onclick = handleStartPause;
+
+            // Reset click
+            document.getElementById('btn-reset').onclick = handleReset;
+            document.getElementById('btn-finished-reset').onclick = handleReset;
+
+            // Settings modal toggles
+            document.getElementById('btn-settings-open').onclick = openSettings;
+            document.getElementById('btn-settings-close').onclick = closeSettings;
+
+            // Slider input updates
+            ['high', 'low', 'rest', 'total'].forEach(id => {
+                const slider = document.getElementById(`slide-${id}`);
+                slider.oninput = () => {
+                    updateSliderValuesDisplay();
+                };
+            });
+
+            // Save Settings Click
+            document.getElementById('btn-save-settings').onclick = () => {
+                const highVal = parseInt(document.getElementById('slide-high').value);
+                const lowVal = parseInt(document.getElementById('slide-low').value);
+                const restVal = parseInt(document.getElementById('slide-rest').value);
+                const totalVal = parseInt(document.getElementById('slide-total').value);
+
+                state.settings.high = highVal;
+                state.settings.low = lowVal;
+                state.settings.rest = restVal;
+                state.settings.totalMinutes = totalVal;
+
+                state.apiKey = document.getElementById('api-key-input').value.trim();
+                localStorage.setItem('gemini_api_key', state.apiKey);
+
+                closeSettings();
+                handleReset();
+            };
+
+            // AI Generator Click
+            document.getElementById('btn-generate-ai').onclick = async () => {
+                const goal = document.getElementById('ai-prompt-input').value.trim() || "Giảm mỡ toàn thân";
+                const apiKey = document.getElementById('api-key-input').value.trim();
+                
+                document.getElementById('ai-btn-text').textContent = "Đang thiết kế...";
+                document.getElementById('btn-generate-ai').disabled = true;
+
+                try {
+                    let exercises;
+                    if (!apiKey) {
+                        const text = await callGemini(goal, null);
+                        exercises = JSON.parse(text);
+                    } else {
+                        const prompt = `You are a HIIT coach. Goal: '${goal}'. Generate 4 pairs of exercises. Return ONLY raw JSON array: [{"high": "Name", "highDesc": "Desc", "low": "Name", "lowDesc": "Desc"}]`;
+                        const text = await callGemini(prompt, apiKey);
+                        exercises = JSON.parse(text.replace(/```json|```/g, '').trim());
+                    }
+                    state.aiExercises = exercises;
+                    state.settings.mode = 'AI_GEN';
+                    renderPresetButtons();
+                    updateSliderValuesDisplay();
+                    alert(!apiKey ? "Đã tạo bài tập giả lập thành công!" : "Đã tạo bài tập từ HLV Gemini AI!");
+                } catch (e) {
+                    alert("Lỗi tạo bài tập AI: " + e.message);
+                } finally {
+                    document.getElementById('ai-btn-text').textContent = "Thiết kế Bài tập";
+                    document.getElementById('btn-generate-ai').disabled = false;
+                }
+            };
+
+            // Set initial UI state
+            updateUI();
+        };
+    </script>
+</body>
+</html>

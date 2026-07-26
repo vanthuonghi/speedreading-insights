@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doraemon - Thợ Săn Bảo Bối</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #87CEEB; /* Bầu trời xanh */
+            background-image: radial-gradient(circle at 50% 50%, #ffffff 2px, transparent 2px);
+            background-size: 40px 40px;
+            overflow-x: hidden;
+        }
+
+        /* Doraemon Colors */
+        .bg-dora-blue { background-color: #0096d6; }
+        .text-dora-blue { color: #0096d6; }
+        .bg-dora-red { background-color: #e50020; }
+        .bg-dora-yellow { background-color: #fbd304; }
+        .border-dora-blue { border-color: #0096d6; }
+
+        /* Animations */
+        @keyframes bounce-soft {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-soft {
+            animation: bounce-soft 2s infinite ease-in-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop {
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .btn-option {
+            transition: all 0.2s ease;
+            transform-origin: center;
+        }
+        .btn-option:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-option:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Confetti Canvas */
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 4px solid #0096d6;
+            border-radius: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <canvas id="confetti"></canvas>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="app" class="w-full max-w-4xl">
+        
+        <!-- START SCREEN -->
+        <div id="start-screen" class="glass-card p-8 text-center animate-pop">
+            <div class="relative inline-block animate-bounce-soft mb-6">
+                <!-- Fallback to emoji if image fails -->
+                <img src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png" alt="Doraemon" class="h-48 mx-auto" onerror="this.style.display='none'; document.getElementById('dora-emoji-start').style.display='block';">
+                <div id="dora-emoji-start" class="text-8xl hidden">🐱🚁</div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-dora-blue mb-4 drop-shadow-md">SĂN BẢO BỐI<br><span class="text-dora-red">CÙNG DORAEMON!</span></h1>
+            <p class="text-xl text-gray-700 mb-8 font-bold">195 Chiến binh trường Nguyễn Đình Chính đã sẵn sàng chưa?</p>
+            <button onclick="startGame()" class="bg-dora-yellow hover:bg-yellow-400 text-red-600 font-black text-2xl py-4 px-10 rounded-full border-4 border-dora-red shadow-[0_6px_0_#b30019] active:shadow-[0_0px_0_#b30019] active:translate-y-1 transition-all">
+                BẮT ĐẦU NGAY! 🚀
+            </button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="hidden animate-pop">
+            <!-- Header: Score & Progress -->
+            <div class="flex justify-between items-center mb-6">
+                <div class="glass-card px-6 py-2 border-2 rounded-full font-bold text-lg text-dora-blue flex items-center gap-2">
+                    <span>🎒 Túi thần kỳ:</span>
+                    <span id="score" class="text-dora-red font-black text-2xl">0</span>
+                    <span>bảo bối</span>
+                </div>
+                <div class="glass-card px-6 py-2 border-2 rounded-full font-bold text-lg text-dora-blue">
+                    Câu: <span id="question-counter" class="text-dora-red font-black">1/20</span>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="glass-card p-6 md:p-10 relative overflow-hidden">
+                <!-- Decorative Doraemon peeking -->
+                <div class="absolute -top-10 -right-10 opacity-20 transform rotate-12">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png" class="h-48">
+                </div>
+
+                <div class="relative z-10">
+                    <h2 id="question-text" class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 leading-relaxed">
+                        Đang tải câu hỏi...
+                    </h2>
+                    
+                    <div id="options-container" class="space-y-4">
+                        <!-- Options will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div id="end-screen" class="hidden glass-card p-8 text-center animate-pop">
+            <div class="text-8xl mb-6 animate-bounce-soft">🏆🥞</div>
+            <h1 class="text-4xl md:text-5xl font-black text-dora-blue mb-4">CHÚC MỪNG!</h1>
+            <p class="text-2xl text-gray-700 mb-6 font-bold">Bạn đã thu thập được <span id="final-score" class="text-dora-red text-4xl">0</span> bảo bối!</p>
+            <p class="text-xl text-gray-600 mb-8">Bạn chính thức trở thành "Thợ Săn Bảo Bối" xịn sò nhất Ngày Hội Sách!</p>
+            <button onclick="location.reload()" class="bg-dora-blue hover:bg-blue-500 text-white font-black text-xl py-4 px-10 rounded-full border-4 border-blue-700 shadow-[0_6px_0_#005b82] active:shadow-[0_0px_0_#005b82] active:translate-y-1 transition-all">
+                CHƠI LẠI TỪ ĐẦU 🔄
+            </button>
+        </div>
+
+    </div>
+
+    <!-- FEEDBACK MODAL (Overlay) -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div id="feedback-card" class="bg-white border-4 rounded-3xl p-8 max-w-lg w-full text-center transform transition-all scale-90 opacity-0">
+            <div id="feedback-icon" class="text-6xl mb-4 animate-bounce-soft">🔔</div>
+            <h2 id="feedback-title" class="text-3xl font-black mb-4">Chính xác!</h2>
+            <p id="feedback-explanation" class="text-lg text-gray-700 font-semibold mb-8 bg-blue-50 p-4 rounded-xl border-2 border-blue-100">
+                Giải thích ở đây...
+            </p>
+            <button onclick="nextQuestion()" class="bg-dora-yellow hover:bg-yellow-400 text-red-600 font-black text-xl py-3 px-8 rounded-full border-4 border-dora-red shadow-[0_4px_0_#b30019] active:translate-y-1 active:shadow-none transition-all w-full">
+                TIẾP TỤC HÀNH TRÌNH 🏃‍♂️
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DATA: 20 CÂU HỎI ---
+        const questions = [
+            {
+                q: 'Tuyệt chiêu "Camera Mắt" khi đọc sách nghĩa là gì?',
+                options: [
+                    { text: 'A. Lấy điện thoại ra chụp lại trang sách.', correct: false },
+                    { text: 'B. Đọc nhẩm từng chữ một thật chậm rãi.', correct: false },
+                    { text: 'C. Dùng mắt quét nhanh qua các chữ như máy ảnh.', correct: true }
+                ],
+                exp: 'Mắt quét nhanh giúp não "chụp" từ khóa, không phải đánh vần từng chữ rùa bò đâu nhé!'
+            },
+            {
+                q: 'Hành động đúng của đôi tay khi dùng "Camera Mắt" là gì?',
+                options: [
+                    { text: 'A. Khoanh tay trên bàn thật ngoan.', correct: false },
+                    { text: 'B. Dùng ngón tay lướt nhanh dưới dòng chữ để dẫn đường.', correct: true },
+                    { text: 'C. Cầm bút gạch dưới mọi chữ trong sách.', correct: false }
+                ],
+                exp: 'Mắt luôn đi theo tay. Tay lướt tới đâu, mắt chụp hình tới đó giúp tăng tốc độ tối đa!'
+            },
+            {
+                q: 'Lợi ích "đỉnh" nhất của tuyệt chiêu "Camera Mắt" là gì?',
+                options: [
+                    { text: 'A. Trở thành học sinh ngoan nhất lớp.', correct: false },
+                    { text: 'B. Học xong trong 15 phút, dư thời gian đi chơi.', correct: true },
+                    { text: 'C. Mắt sẽ sáng hơn và không bị cận thị.', correct: false }
+                ],
+                exp: 'Đọc nhanh để rảnh rỗi làm việc mình thích (đá bóng, chơi game) mới là số 1!'
+            },
+            {
+                q: 'Thái độ sai lầm nhất khiến chúng ta ghét đọc sách là gì?',
+                options: [
+                    { text: 'A. Coi sách như một cỗ máy thời gian thú vị.', correct: false },
+                    { text: 'B. Coi sách như bài tập về nhà bắt buộc hay thuốc ngủ.', correct: true },
+                    { text: 'C. Coi sách như một món đồ chơi xịn sò.', correct: false }
+                ],
+                exp: 'Hãy bỏ áp lực "phải học" đi, cầm sách lên như đang khám phá một món đồ chơi mới vậy!'
+            },
+            {
+                q: 'Cuốn sách nào đại diện cho bảo bối "Kính Lúp Gỡ Điểm"?',
+                options: [
+                    { text: 'A. Chuyện con mèo dạy hải âu bay.', correct: false },
+                    { text: 'B. Sách giáo khoa Toán lớp 5.', correct: false },
+                    { text: 'C. 10 vạn câu hỏi vì sao / Bách khoa thư.', correct: true }
+                ],
+                exp: 'Sách khoa học vui cung cấp kiến thức độc lạ để giải đáp mọi thắc mắc trên đời.'
+            },
+            {
+                q: '"Kính Lúp Gỡ Điểm" giúp bạn trở thành ai lúc ra chơi?',
+                options: [
+                    { text: 'A. Trùm cuối siêu ngầu, biết giải thích mọi thứ.', correct: true },
+                    { text: 'B. Người chạy nhanh nhất sân trường.', correct: false },
+                    { text: 'C. Người ngồi im một chỗ không nói chuyện.', correct: false }
+                ],
+                exp: 'Có kiến thức, bạn sẽ giải thích được những hiện tượng kỳ lạ làm đám bạn phải lác mắt ngưỡng mộ!'
+            },
+            {
+                q: 'Tại sao gọi là bảo bối "Gỡ Điểm"?',
+                options: [
+                    { text: 'A. Vì nó có sẵn đáp án bài kiểm tra ngày mai.', correct: false },
+                    { text: 'B. Vì nó giúp trả lời trúng câu hỏi khó của cô giáo.', correct: true },
+                    { text: 'C. Vì tự động sửa điểm trong sổ liên lạc.', correct: false }
+                ],
+                exp: 'Kiến thức ngoài luồng giúp bạn ghi điểm miệng bất ngờ với giáo viên đó!'
+            },
+            {
+                q: 'Tình huống nào NÊN xài "Kính Lúp Gỡ Điểm"?',
+                options: [
+                    { text: 'A. Khi đang buồn ngủ sụp mí.', correct: false },
+                    { text: 'B. Khi đám bạn cãi nhau xem tại sao ngủ hay giật mình.', correct: true },
+                    { text: 'C. Khi bị mẹ la vì lười dọn phòng.', correct: false }
+                ],
+                exp: 'Sách khoa học chuyên trị những thắc mắc rắc rối và hài hước nhất của tụi bạn.'
+            },
+            {
+                q: '"Bình Thuốc Cười" là tên bí mật của cuốn sách nào?',
+                options: [
+                    { text: 'A. Nhật ký chú bé nhút nhát.', correct: true },
+                    { text: 'B. 10 vạn câu hỏi vì sao.', correct: false },
+                    { text: 'C. Truyện cổ tích Việt Nam.', correct: false }
+                ],
+                exp: 'Cuốn truyện siêu hài hước với cậu bé Greg lầy lội chính là công cụ xả stress số 1.'
+            },
+            {
+                q: '"Bình Thuốc Cười" chuyên trị căn bệnh gì của học sinh?',
+                options: [
+                    { text: 'A. Bệnh lười ăn rau.', correct: false },
+                    { text: 'B. Bệnh tức giận, xui xẻo, buồn bực.', correct: true },
+                    { text: 'C. Bệnh nói chuyện riêng trong lớp.', correct: false }
+                ],
+                exp: 'Đang bực mình mà đọc truyện cười thì cục tức sẽ bay sạch sành sanh!'
+            },
+            {
+                q: 'Nhân vật Greg trong "Bình Thuốc Cười" giống các bạn ở điểm nào?',
+                options: [
+                    { text: 'A. Có siêu năng lực bay lượn.', correct: false },
+                    { text: 'B. Lúc nào cũng được 10 điểm Toán.', correct: false },
+                    { text: 'C. Lười dọn phòng bị mẹ mắng, thích tấu hài.', correct: true }
+                ],
+                exp: 'Đọc truyện thích nhất là thấy nhân vật cũng có những lúc "hậu đậu" y hệt như mình.'
+            },
+            {
+                q: 'Cảm giác sau khi uống "Bình Thuốc Cười" là gì?',
+                options: [
+                    { text: 'A. Buồn ngủ sụp mí mắt.', correct: false },
+                    { text: 'B. Sợ hãi toát mồ hôi.', correct: false },
+                    { text: 'C. Cười vỡ bụng, bay sạch mọi cục tức.', correct: true }
+                ],
+                exp: 'Tiếng cười chính là phép thuật tuyệt vời nhất để nạp lại năng lượng.'
+            },
+            {
+                q: 'Cuốn "Chuyện con mèo dạy hải âu bay" được gọi là bảo bối gì?',
+                options: [
+                    { text: 'A. Phép thuật gia đình.', correct: true },
+                    { text: 'B. Kính lúp gỡ điểm.', correct: false },
+                    { text: 'C. Bình thuốc cười.', correct: false }
+                ],
+                exp: 'Đây là bảo bối chứa đầy thông điệp về tình yêu thương và sự thấu hiểu.'
+            },
+            {
+                q: 'Khi nào bạn cần dùng đến "Phép Thuật Gia Đình" nhất?',
+                options: [
+                    { text: 'A. Khi làm rơi cục tẩy xuống gầm bàn.', correct: false },
+                    { text: 'B. Khi xin đi chơi bị mẹ cấm, đang rất ấm ức.', correct: true },
+                    { text: 'C. Khi không biết giải bài tập Toán.', correct: false }
+                ],
+                exp: 'Cuốn sách này giúp gỡ rối những lúc bạn giận dỗi ba mẹ vô cớ.'
+            },
+            {
+                q: 'Chú mèo mập toát mồ hôi ấp trứng giúp chúng ta nhận ra điều gì?',
+                options: [
+                    { text: 'A. Nuôi hải âu rất tốn tiền mua cá.', correct: false },
+                    { text: 'B. Mèo không bao giờ biết bay.', correct: false },
+                    { text: 'C. Ba mẹ đi làm kiếm tiền nuôi mình còn mệt gấp trăm lần.', correct: true }
+                ],
+                exp: 'Hiểu được nỗi vất vả của ba mẹ, chúng ta sẽ không còn hay giận hờn nữa.'
+            },
+            {
+                q: '"Phép thuật" xảy ra sau khi đọc xong cuốn sách này là gì?',
+                options: [
+                    { text: 'A. Tự nhiên hết giận, chạy ra ôm mẹ làm hòa.', correct: true },
+                    { text: 'B. Biến thành chú mèo bay được.', correct: false },
+                    { text: 'C. Tự động dọn phòng sạch sẽ trong 1 giây.', correct: false }
+                ],
+                exp: 'Hành động nhỏ (ôm mẹ) tạo ra kết quả lớn (mẹ vui và cho đi chơi!).'
+            },
+            {
+                q: 'Thực chất 3 món bảo bối trong balo của anh Hỉ là gì?',
+                options: [
+                    { text: 'A. Bài tập về nhà cô giáo giao thêm.', correct: false },
+                    { text: 'B. Bí kíp luyện công phu.', correct: false },
+                    { text: 'C. Đồ chơi siêu xịn để chữa chán, gỡ điểm và xả stress.', correct: true }
+                ],
+                exp: 'Sách chính là những món đồ chơi đẳng cấp nhất mà không cần cắm pin!'
+            },
+            {
+                q: 'Thử thách cuối cùng anh Hỉ giao tại Đường sách là gì?',
+                options: [
+                    { text: 'A. Ùa vào tìm MỘT cuốn sách về chủ đề mình thích nhất.', correct: true },
+                    { text: 'B. Chạy ngay về nhà ngủ trưa.', correct: false },
+                    { text: 'C. Mua thật nhiều sách bài tập.', correct: false }
+                ],
+                exp: 'Đừng tìm sách học, hãy tìm sách về đá bóng, siêu anh hùng, vẽ tranh... thứ mà bạn đam mê!'
+            },
+            {
+                q: 'Để kiểm tra xem cuốn sách có hợp không, anh Hỉ khuyên làm gì?',
+                options: [
+                    { text: 'A. Đọc hết từ đầu đến cuối ngay tại chỗ.', correct: false },
+                    { text: 'B. Đếm xem sách có bao nhiêu hình vẽ.', correct: false },
+                    { text: 'C. Dùng "Camera Mắt" lướt thử 5 trang xem có thích không.', correct: true }
+                ],
+                exp: 'Chỉ cần lướt thử vài trang, nếu không thích thì đổi cuốn khác, không cần áp lực!'
+            },
+            {
+                q: 'Tiêu chí quan trọng nhất để chọn "bảo bối" xịn là gì?',
+                options: [
+                    { text: 'A. Sách phải thật dày và đắt tiền.', correct: false },
+                    { text: 'B. Sách nói về đúng sở thích của mình.', correct: true },
+                    { text: 'C. Sách do ba mẹ ép mua.', correct: false }
+                ],
+                exp: 'Chỉ khi được đọc về sở thích của mình, bạn mới thấy sách là một người bạn tuyệt vời.'
+            }
+        ];
+
+        // --- STATE VARIABLES ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // --- AUDIO SYNTHESIS (No external files needed) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        function playTone(freq, type, duration, vol=0.1) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        function playCorrectSound() {
+            // Ding ding! (Mario coin style)
+            playTone(987.77, 'sine', 0.1, 0.1); // B5
+            setTimeout(() => playTone(1318.51, 'sine', 0.3, 0.1), 100); // E6
+        }
+
+        function playWrongSound() {
+            // Buzz!
+            playTone(150, 'sawtooth', 0.3, 0.1);
+            setTimeout(() => playTone(100, 'sawtooth', 0.4, 0.1), 150);
+        }
+
+        // --- GAME LOGIC ---
+        function startGame() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            score = 0;
+            updateScore();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('question-counter').innerText = `${currentQuestionIndex + 1}/${questions.length}`;
+            document.getElementById('question-text').innerText = q.q;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = ''; // Clear old
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option w-full text-left bg-white border-4 border-blue-200 hover:border-dora-blue rounded-2xl p-4 md:p-5 text-lg md:text-xl font-bold text-gray-700 flex items-center gap-4 group';
+                
+                // Trích xuất chữ cái (A, B, C) để làm icon tròn
+                const letter = opt.text.charAt(0);
+                const textWithoutLetter = opt.text.substring(2);
+
+                btn.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-blue-100 group-hover:bg-dora-yellow group-hover:text-red-600 flex items-center justify-center font-black transition-colors shrink-0">
+                        ${letter}
+                    </div>
+                    <span>${textWithoutLetter}</span>
+                `;
+                
+                btn.onclick = () => checkAnswer(opt.correct, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(isCorrect, btnElement) {
+            // Disable all buttons
+            const buttons = document.querySelectorAll('.btn-option');
+            buttons.forEach(b => b.disabled = true);
+
+            const q = questions[currentQuestionIndex];
+            
+            if (isCorrect) {
+                btnElement.classList.remove('border-blue-200');
+                btnElement.classList.add('border-green-500', 'bg-green-50');
+                score++;
+                updateScore();
+                playCorrectSound();
+                showFeedback(true, q.exp);
+            } else {
+                btnElement.classList.remove('border-blue-200');
+                btnElement.classList.add('border-red-500', 'bg-red-50', 'animate-shake');
+                playWrongSound();
+                
+                // Highlight correct answer
+                buttons.forEach((b, i) => {
+                    if (q.options[i].correct) {
+                        b.classList.remove('border-blue-200');
+                        b.classList.add('border-green-500', 'bg-green-50');
+                    }
+                });
+                showFeedback(false, q.exp);
+            }
+        }
+
+        function showFeedback(isCorrect, explanation) {
+            const modal = document.getElementById('feedback-modal');
+            const card = document.getElementById('feedback-card');
+            const icon = document.getElementById('feedback-icon');
+            const title = document.getElementById('feedback-title');
+            const exp = document.getElementById('feedback-explanation');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger animation
+            setTimeout(() => {
+                card.classList.remove('scale-90', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            if (isCorrect) {
+                icon.innerText = '🛎️ BING BOONG!';
+                title.innerText = 'Xuất sắc!';
+                title.className = 'text-3xl font-black mb-4 text-green-600';
+                card.style.borderColor = '#22c55e';
+            } else {
+                icon.innerText = '😵‍💫 ÔI SAI RỒI!';
+                title.innerText = 'Chưa đúng nha!';
+                title.className = 'text-3xl font-black mb-4 text-dora-red';
+                card.style.borderColor = '#e50020';
+            }
+
+            exp.innerText = explanation;
+        }
+
+        function nextQuestion() {
+            // Hide modal
+            const modal = document.getElementById('feedback-modal');
+            const card = document.getElementById('feedback-card');
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-90', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    loadQuestion();
+                } else {
+                    endGame();
+                }
+            }, 200);
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = score;
+        }
+
+        function endGame() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+            fireConfetti();
+        }
+
+        // --- SIMPLE JS CONFETTI ---
+        function fireConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const pieces = [];
+            const colors = ['#0096d6', '#e50020', '#fbd304', '#ffffff', '#4ade80'];
+
+            for (let i = 0; i < 150; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vy: Math.random() * 3 + 2,
+                    vx: Math.random() * 2 - 1,
+                    rot: Math.random() * 360,
+                    rotSpeed: Math.random() * 5 - 2.5
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let active = false;
+                pieces.forEach(p => {
+                    p.y += p.vy;
+                    p.x += p.vx;
+                    p.rot += p.rotSpeed;
+                    if (p.y < canvas.height) active = true;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rot * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                });
+
+                if (active) requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>

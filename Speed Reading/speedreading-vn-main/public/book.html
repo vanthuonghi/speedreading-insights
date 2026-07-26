@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư Viện Ebook Speed Reading</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        :root {
+            /* Gradient Vàng Đỏ theo yêu cầu */
+            --main-gradient: linear-gradient(135deg, #FF416C 0%, #FF4B2B 50%, #FFD15C 100%);
+            --hover-gradient: linear-gradient(135deg, #FFD15C 0%, #FF4B2B 50%, #FF416C 100%);
+            --bg-color: #f8f9fa;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-hover: 0 20px 40px rgba(255, 75, 43, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER SECTION --- */
+        header {
+            background: var(--main-gradient);
+            color: white;
+            padding: 80px 20px 100px; /* Padding bottom lớn để tạo hiệu ứng đè card */
+            text-align: center;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hiệu ứng nền trang trí header */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        /* --- NAVIGATION MENU (MỚI THÊM) --- */
+        .top-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-link:hover {
+            background: white;
+            color: #FF4B2B;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+            margin-top: 20px; /* Thêm khoảng cách để không dính menu trên mobile */
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            max-width: 1200px;
+            margin: -60px auto 40px; /* Margin âm để đẩy lên đè header */
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* --- CARD STYLE --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Icon khu vực trên cùng của Card */
+        .card-visual {
+            height: 160px;
+            background: #fff5eb; /* Màu nền nhẹ cho icon */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card-visual i {
+            font-size: 4rem;
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 6px rgba(255, 75, 43, 0.2));
+        }
+
+        .card-visual::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--main-gradient);
+        }
+
+        /* Body của Card */
+        .card-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            min-height: 54px; /* Giữ đều dòng tiêu đề */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        /* Nút Download */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--main-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--hover-gradient);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 75, 43, 0.5);
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Nhãn "Mới" hoặc "Hot" (Optional) */
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #FFD15C;
+            color: #d35400;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 30px;
+            background: #fff;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+                margin-top: 50px; /* Đẩy tiêu đề xuống để tránh nút menu trên mobile */
+            }
+            
+            .top-nav {
+                width: 100%;
+                left: 0;
+                top: 15px;
+                display: flex;
+                justify-content: center; /* Căn giữa nút trên mobile */
+            }
+            
+            .container {
+                margin-top: -40px;
+            }
+            .card-title {
+                min-height: auto;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <!-- Menu Navigation -->
+        <nav class="top-nav">
+            <a href="https://speedreading.vn/links" class="nav-link">
+                <i class="fa-solid fa-layer-group"></i> Thư Viện Tổng Hợp
+            </a>
+        </nav>
+
+        <h1>QUÀ TẶNG ĐẶC BIỆT</h1>
+        <p>Bộ tài liệu "Vũ Khí Học Tập" độc quyền dành cho học viên Speed Reading. <br>Tải về ngay để bứt phá giới hạn bản thân!</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="grid-layout">
+
+            <!-- Item 1 -->
+            <div class="card">
+                <div class="card-visual">
+                    <span class="badge">HOT</span>
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Chinh Phục Mọi Môn Học</h3>
+                    <p class="card-desc">Phương pháp tối ưu hoá tư duy để nắm bắt kiến thức của bất kỳ môn học nào một cách dễ dàng.</p>
+                    <a href="https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Chinh-Phuc-Moi-Mon-Hoc-1.pdf" class="btn" target="_blank">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Tải Ebook
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="card">
+                <div class="card-visual">
+                    <span class="badge">BEST SELLER</span>
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Siêu Tốc Đọc Sách</h3>
+                    <p class="card-desc">Kỹ thuật đọc nhanh giúp bạn tiết kiệm hàng ngàn giờ học tập và nghiên cứu mỗi năm.</p>
+                    <a href="https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Sieu-Toc-Doc-Sach.pdf" class="btn" target="_blank">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Tải Ebook
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="card">
+                <div class="card-visual">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Lộ Trình Học Tập 1 Năm</h3>
+                    <p class="card-desc">Bản đồ chi tiết giúp bạn duy trì động lực và kỷ luật trong suốt hành trình 12 tháng tới.</p>
+                    <a href="https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Lo-Trinh-Hoc-Tap-1-Nam.pdf" class="btn" target="_blank">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Tải Ebook
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="card">
+                <div class="card-visual">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Vốn Sinh Tồn</h3>
+                    <p class="card-desc">Trang bị những kỹ năng mềm thiết yếu để bạn vững vàng trước mọi thay đổi của cuộc sống.</p>
+                    <a href="https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Von-Sinh-Ton.pdf" class="btn" target="_blank">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Tải Ebook
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="card">
+                <div class="card-visual">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Thuộc Bài Tại Lớp</h3>
+                    <p class="card-desc">Bí quyết ghi nhớ thông tin ngay lập tức, giảm thiểu tối đa thời gian ôn bài tại nhà.</p>
+                    <a href="https://speedreading.vn/wp-content/uploads/2025/12/Ebook-Thuoc-Bai-Tai-Lop.pdf" class="btn" target="_blank">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Tải Ebook
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="card">
+                <div class="card-visual">
+                    <span class="badge">MUST HAVE</span>
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">14 Kỹ Thuật Speed Reading</h3>
+                    <p class="card-desc">Bộ công cụ thực chiến 14 kỹ thuật nâng cao dành cho những ai muốn trở thành bậc thầy đọc sách.</p>
+                    <a href="https://speedreading.vn/wp-content/uploads/2025/12/Ebook-14-Ky-Thuat-Speed-Reading.pdf" class="btn" target="_blank">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Tải Ebook
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 SpeedReading.vn. Hệ thống đào tạo đọc hiểu nhanh hàng đầu.</p>
+    </footer>
+
+</body>
+</html>

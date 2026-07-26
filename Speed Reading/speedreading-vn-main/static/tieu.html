@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiệm Nhà Tiểu Tiểu - Đặt Món Nhanh Chóng, Ngon Miệng</title>
+    <style>
+        /* CSS reset & base styles */
+        :root {
+            --primary-color: #00B14F; /* GrabFood Green */
+            --secondary-color: #FF7A00;
+            --text-dark: #2c3e50;
+            --bg-light: #f9f9f9;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; scroll-behavior: smooth; }
+        
+        /* Header/Hero */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80') center/cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .hero h1 { font-size: 4rem; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;}
+        .hero p { font-size: 1.6rem; margin-bottom: 40px; max-width: 700px; font-weight: 300;}
+        .btn {
+            padding: 15px 40px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 177, 79, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn:hover { background-color: #008f3f; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 177, 79, 0.6);}
+        
+        /* Features */
+        .features { display: flex; justify-content: center; gap: 50px; padding: 80px 20px; flex-wrap: wrap; background: white;}
+        .feature-box { text-align: center; max-width: 320px; padding: 30px; border-radius: 20px; background: var(--bg-light); box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s;}
+        .feature-box:hover { transform: translateY(-10px); }
+        .feature-box h3 { color: var(--primary-color); font-size: 1.6rem; margin-bottom: 15px; }
+        .feature-box p { font-size: 1.1rem; color: #555; }
+        
+        /* Menu Highlight */
+        .menu { padding: 80px 20px; text-align: center; background: var(--bg-light); }
+        .menu h2 { font-size: 2.8rem; margin-bottom: 50px; color: var(--text-dark); }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; max-width: 1100px; margin: 0 auto; }
+        .menu-item { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.08); transition: all 0.3s; }
+        .menu-item:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.12); }
+        .menu-item img { width: 100%; height: 250px; object-fit: cover; }
+        .menu-info { padding: 25px; }
+        .menu-info h4 { font-size: 1.5rem; margin-bottom: 10px; color: var(--primary-color); }
+        .menu-info p { font-size: 1.1rem; color: #666; }
+        
+        /* Footer */
+        footer { background: var(--text-dark); color: white; text-align: center; padding: 40px 20px; }
+        footer p { font-size: 1.1rem; opacity: 0.8; }
+        footer a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>Tiệm Nhà Tiểu Tiểu</h1>
+        <p>Đói bụng? Hỉ nấu xong rồi, bạn chỉ việc thưởng thức. Ngon miệng, nóng hổi, giao ngay!</p>
+        <a href="https://food.grab.com/vn/vi/restaurant/ti%E1%BB%87m-nh%C3%A0-ti%E1%BB%83u-ti%E1%BB%83u-delivery/5-C8AAPETUC2XZSA" class="btn" target="_blank">Đặt Món Ngay</a>
+    </header>
+
+    <section class="features">
+        <div class="feature-box">
+            <h3>Ngon Như Nhà Làm</h3>
+            <p>Hương vị đậm đà, sạch sẽ. Hỉ chăm chút từng món, bạn ăn là ghiền.</p>
+        </div>
+        <div class="feature-box">
+            <h3>Giao Hàng Tốc Độ</h3>
+            <p>Không đợi lâu. Đặt là có, nóng hổi đến tay.</p>
+        </div>
+        <div class="feature-box">
+            <h3>Khỏe Re, Tiện Lợi</h3>
+            <p>Bạn bận rộn? Để Hỉ lo bữa ăn. Tiết kiệm thời gian, trọn vẹn dinh dưỡng.</p>
+        </div>
+    </section>
+
+    <section class="menu">
+        <h2>Món Ngon Mời Bạn</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1569058242253-1df34b084b64?auto=format&fit=crop&w=600&q=80" alt="Cơm Ngon">
+                <div class="menu-info">
+                    <h4>Cơm Ngon Tròn Vị</h4>
+                    <p>Đầy đặn, đậm vị. Nạp năng lượng tức thì.</p>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=600&q=80" alt="Ăn Vặt">
+                <div class="menu-info">
+                    <h4>Ăn Vặt Lôi Cuốn</h4>
+                    <p>Nhâm nhi cực dính, thỏa cơn thèm ngay lập tức.</p>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=600&q=80" alt="Thức Uống">
+                <div class="menu-info">
+                    <h4>Thức Uống Mát Lạnh</h4>
+                    <p>Giải nhiệt, bừng tỉnh sảng khoái.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Tiệm Nhà Tiểu Tiểu. Nhanh chóng, tiện lợi qua <a href="https://food.grab.com/vn/vi/restaurant/ti%E1%BB%87m-nh%C3%A0-ti%E1%BB%83u-ti%E1%BB%83u-delivery/5-C8AAPETUC2XZSA" target="_blank">GrabFood</a>.</p>
+    </footer>
+
+</body>
+</html>

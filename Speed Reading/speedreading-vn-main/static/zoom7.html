@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Đọc Siêu Tốc & Chia Sẻ Trí Tuệ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        game: {
+                            white: '#ffffff',
+                            bg: '#fff5f5',
+                            red: '#e11d48',
+                            darkRed: '#9f1239',
+                            yellow: '#facc15',
+                            dark: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fff5f5;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        
+        .game-card {
+            background: #ffffff;
+            border: 4px solid #e11d48;
+            box-shadow: 6px 6px 0px #9f1239;
+            border-radius: 20px;
+        }
+
+        .game-btn-red {
+            background: #e11d48;
+            border: 3px solid #1e293b;
+            box-shadow: 0px 6px 0px #9f1239;
+            transform: translateY(-2px);
+            transition: all 0.1s ease;
+        }
+        .game-btn-red:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px #9f1239;
+        }
+
+        .game-btn-yellow {
+            background: #facc15;
+            border: 3px solid #1e293b;
+            box-shadow: 0px 6px 0px #ca8a04;
+            transform: translateY(-2px);
+            transition: all 0.1s ease;
+        }
+        .game-btn-yellow:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px #ca8a04;
+        }
+
+        .reader-display {
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #ffffff;
+            border: 4px dashed #e11d48;
+        }
+
+        .focus-guide {
+            position: absolute;
+            height: 100%;
+            width: 3px;
+            background-color: rgba(225, 29, 72, 0.15);
+            top: 0;
+            z-index: 1;
+        }
+        
+        .word-chunk {
+            position: relative;
+            z-index: 10;
+            font-weight: 900;
+            letter-spacing: -0.01em;
+        }
+
+        .highlight-scroll-container {
+            scroll-behavior: smooth;
+        }
+
+        #rpm-bar {
+            transition: width 0.3s ease-out, background-color 0.3s ease;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            border-radius: 8px;
+            background: #e11d48;
+            border: 3px solid #1e293b;
+            cursor: pointer;
+            margin-top: -10px; 
+            box-shadow: 0px 3px 0px #9f1239;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 12px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border: 3px solid #1e293b;
+            border-radius: 6px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Floating Game Music Control -->
+    <div class="fixed bottom-4 right-4 z-[100] flex items-center gap-2">
+        <button id="bgm-toggle" onclick="toggleBackgroundMusic()" class="game-btn-yellow text-gray-950 font-black rounded-xl px-5 py-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+            <i class="fa-solid fa-gamepad text-lg animate-bounce"></i>
+            <span id="bgm-text">Nhạc trò chơi: TẮT</span>
+        </button>
+    </div>
+
+    <!-- Background Confetti Canvas -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-[90] hidden"></canvas>
+
+    <!-- Header Arcade Style -->
+    <header class="bg-gradient-to-r from-red-600 to-rose-500 border-b-8 border-gray-900 py-5 px-6 flex justify-center items-center shadow-xl shrink-0 relative">
+        <div class="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:40px_40px]"></div>
+        <div class="flex items-center gap-4 relative z-10">
+            <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_4px_0_#9f1239] text-center uppercase">
+                🎯 ĐẤU TRƯỜNG CHIA SẺ TRÍ TUỆ VẠN NĂNG 🎯
+            </h1>
+        </div>
+    </header>
+
+    <main class="flex-grow relative flex flex-col items-center justify-start p-4 md:p-6 overflow-y-auto w-full">
+        
+        <section class="w-full max-w-5xl mx-auto flex flex-col py-2">
+            
+            <!-- Setup & Selection (Game UI) -->
+            <div class="game-card p-5 mb-6 flex flex-col md:flex-row gap-6 items-center justify-between z-20">
+                <div class="flex-grow w-full md:w-auto">
+                    <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">🔥 CHỌN CHƯƠNG TRÌNH LUYỆN ĐỌC</label>
+                    <select id="text-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold focus:ring-4 focus:ring-rose-300 outline-none cursor-pointer" onchange="loadSelectedText()">
+                        <option value="0">Bài 1: Bí Kíp Luyện Mắt Của Các "Siêu Độc Giả"</option>
+                        <option value="1">Bài 2: Nghệ Thuật Skimming - "Lướt" Sóng Săn Tìm Tri Thức</option>
+                        <option value="2">Bài 3: Mind Map - Vẽ Bản Đồ Tư Duy Để Khai Phá Não Bộ</option>
+                        <option value="3">Bài 4: Bí Quyết Ôn Tập Để Thuộc - Kích Hoạt Nút "Record"</option>
+                        <option value="4">Bài 5: Quy Trình 5 Bước "Đọc Sách Vô Địch" Trọn Đời</option>
+                    </select>
+                </div>
+                
+                <div class="w-full md:w-auto flex gap-4">
+                    <div class="flex-1 min-w-[180px]">
+                        <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">🛡️ CHẾ ĐỘ CHƠI</label>
+                        <select id="mode-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold outline-none cursor-pointer" onchange="loadSelectedText()">
+                            <option value="rsvp" selected>Chớp Chữ Trung Tâm (RSVP)</option>
+                            <option value="highlight">Quét Sáng Cụm Từ (Highlight)</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[130px]">
+                        <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">⭐ SỐ TỪ/NHỊP</label>
+                        <select id="chunk-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold outline-none cursor-pointer" onchange="loadSelectedText()">
+                            <option value="1">1 Từ</option>
+                            <option value="2" selected>2 Từ</option>
+                            <option value="3">3 Từ</option>
+                            <option value="4">4 Từ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard / RPM Meter -->
+            <div class="game-card p-6 mb-6 flex-grow flex flex-col relative overflow-hidden">
+                <div class="flex justify-between items-end mb-3 relative z-10">
+                    <div class="uppercase tracking-wider text-base font-black text-rose-600 flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-high animate-pulse"></i> TỐC ĐỘ LUYỆN ĐỌC (RPM)
+                    </div>
+                    <div class="text-5xl font-black tabular-nums text-gray-900 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.1)]" id="wpm-display">250 <span class="text-lg text-gray-500 font-bold">WPM</span></div>
+                </div>
+                
+                <div class="w-full bg-gray-100 h-7 rounded-xl border-4 border-gray-900 mb-6 relative z-10 overflow-hidden shadow-inner">
+                    <div id="rpm-bar" class="h-full bg-rose-500 rounded-l-lg w-[20%] border-r-4 border-gray-900 transition-all duration-300"></div>
+                </div>
+
+                <!-- MAIN READER DISPLAY SCREEN -->
+                <div class="flex-grow reader-display rounded-2xl shadow-inner overflow-hidden relative z-10 p-4">
+                    <div class="focus-guide left-1/3" id="guide-left"></div>
+                    <div class="focus-guide right-1/3" id="guide-right"></div>
+                    
+                    <div id="reader-word" class="word-chunk text-4xl md:text-5xl text-center px-4 w-full break-words text-rose-600 font-black drop-shadow-[2px_2px_0px_rgba(0,0,0,0.05)] highlight-scroll-container">
+                        BẤM KHỞI ĐỘNG THỬ THÁCH!
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 h-3 bg-gray-200 w-full border-t-2 border-gray-900">
+                        <div id="reading-progress" class="h-full bg-gradient-to-r from-rose-500 to-yellow-400 w-0 transition-all duration-100 border-r-2 border-gray-900"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Layout -->
+            <div class="game-card p-6 flex flex-col md:flex-row items-center gap-8 z-20">
+                <div class="flex gap-4 shrink-0 justify-center w-full md:w-auto">
+                    <button id="btn-play" onclick="togglePlay()" class="w-24 h-24 rounded-2xl game-btn-red text-white flex flex-col items-center justify-center gap-1 shadow-lg transition-all border-4 border-gray-900">
+                        <i class="fa-solid fa-play text-3xl" id="icon-play"></i>
+                        <span class="text-xs font-black uppercase" id="text-play">CHƠI</span>
+                    </button>
+                    <button onclick="resetReader()" class="w-16 h-16 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-900 border-4 border-gray-900 flex items-center justify-center text-xl transition-all shadow-[0_4px_0_#1e293b] active:translate-y-1 active:shadow-none my-auto">
+                        <i class="fa-solid fa-rotate-right font-bold"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-grow w-full flex flex-col gap-3">
+                    <div class="flex justify-between text-sm font-black text-gray-700 px-1">
+                        <span>🐢 Tập sự (250)</span>
+                        <span class="text-rose-600">⚡ Cao thủ (550) 🔥</span>
+                    </div>
+                    <input type="range" id="wpm-slider" min="250" max="550" step="100" value="250" oninput="updateWPM(this.value)" class="w-full mb-2">
+                    
+                    <div class="flex justify-between gap-3">
+                        <button onclick="document.getElementById('wpm-slider').value=250; updateWPM(250)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.1 (250)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=350; updateWPM(350)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.2 (350)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=450; updateWPM(450)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.3 (450)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=550; updateWPM(550)" class="flex-1 bg-rose-100 hover:bg-rose-200 py-2.5 rounded-xl text-sm font-black text-rose-700 transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none">MAX (550)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MULTI-STEP QUIZ MODAL (Game-style Pop-up) -->
+        <div id="question-modal" class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300 overflow-y-auto py-10">
+            <div class="bg-white border-4 border-gray-900 rounded-3xl p-6 md:p-8 max-w-3xl w-full mx-4 shadow-[8px_8px_0px_#1e293b] transform scale-95 transition-transform duration-300 relative my-auto" id="modal-content-box"></div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- NỘI DUNG 5 BÀI ĐỌC ĐÃ ĐƯỢC ĐIỀU CHỈNH CHÍNH XÁC ---
+        const texts = [
+            "Ngày trước, mình luôn đọc sách từng từ một một cách chậm chạp khiến mắt nhanh mỏi và rất dễ buồn ngủ. Nhưng từ khi bẻ khóa được bí kíp luyện mắt nhập môn và các kỹ thuật nâng cao như đọc cụm từ, Skimming và Mind Map, mọi thứ đã thay đổi hoàn toàn. Tầm nhìn ngoại vi được mở rộng giúp đôi mắt mình quét thông tin cực nhanh như một bộ cảm biến siêu tốc. Hệ thống hóa kiến thức trực quan này không chỉ tiết kiệm thời gian mà còn biến hành trình học hỏi trở nên đầy hào hứng, tự tin khai phá mọi kho tàng tri thức quý giá.",
+            
+            "Nhiều bạn có thói quen đọc sách thụ động, lướt qua hàng trăm trang rồi để kiến thức trôi đi mất. Cho đến khi mình áp dụng kỹ thuật Skimming (đọc lướt), hiệu quả học tập đã bứt phá hoàn hảo. Mình không đọc mù quáng từng câu chữ nữa, mà chủ động săn tìm cấu trúc, mục lục, các tiêu đề lớn và câu chốt của mỗi đoạn để thâu tóm khung xương ý niệm chỉ trong năm phút. Chiến thuật này giúp định vị chính xác vị trí chứa kim cương tri thức để sẵn sàng đào sâu, giảm tối đa sự quá tải thông tin cho bộ não.",
+            
+            "Ghi chép kiểu cũ dày đặc chữ đen luôn khiến trí óc mình nhanh chóng mệt mỏi và rơi vào lối mòn thụ động. Khi chuyển sang phương pháp hệ thống hóa kiến thức bằng Mind Map (Sơ đồ tư duy), mình đã thực sự lột xác tư duy. Bằng cách sử dụng từ khóa trung tâm kết hợp các nhánh ý chính, nhánh ý phụ cùng màu sắc trực quan, mình dễ dàng xâu chuỗi toàn cảnh bức tranh thông tin và mối liên hệ logic giữa các chương sách. Đây chính là ngôn ngữ tự nhiên giúp bộ não tự do liên tưởng và sáng tạo không giới hạn.",
+            
+            "Ôn tập bằng cách đọc đi đọc lại thụ động để học vẹt là sai lầm phổ biến nhất khiến kiến thức bốc hơi sạch sẽ sau vài ngày. Bí quyết thuộc lòng vĩnh viễn của mình là phương pháp viết ra các ý chính và ý phụ một cách độc lập để kích hoạt khả năng tự ghi nhớ (Record) của bộ não. Sau khi đọc xong một chương, mình gập sách lại, tự truy xuất thông tin từ bộ nhớ và ghi nhanh các ý chính, rồi tỉa thêm các nhánh ý phụ tương ứng. Quá trình tự viết và tái cấu trúc này giúp khắc sâu tri thức vào trí nhớ dài hạn.",
+            
+            "Để tri thức không nằm lại trên giấy mà biến thành sức mạnh thực tế, mình đã đúc kết quy trình năm bước khoa học ứng dụng vĩnh viễn. Bước một là Chọn sách phù hợp mục tiêu. Bước hai là Skimming chớp nhoáng nắm bắt khung xương. Bước ba là Đọc chi tiết từng khía cạnh cốt lõi. Bước bốn là Lưu trữ thông minh bằng hệ thống Smart Note súc tích. Cuối cùng, Bước năm là Chủ động chia sẻ tri thức cho mọi người. Quy trình khép kín này giúp mình không chỉ thấu hiểu sâu sắc mà còn kiến tạo giá trị thực tế trọn đời."
+        ];
+
+        // --- HỆ THỐNG TRẮC NGHIỆM PHÂN TẦNG ĐỦ TRỌN VẸN 4 BƯỚC ĐIỀU CHỈNH THEO CHỦ ĐỀ MỚI ---
+        const questionsData = [
+            {
+                // Bài 1: Luyện mắt
+                subQuestions: [
+                    {
+                        step: "BƯỚC 1: GIÁ TRỊ CÁ NHÂN", title: "Sức Hút Từ Sự Thay Đổi", icon: "fa-user-astronaut", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Để tạo sức hút khi chia sẻ (Bước 1), câu chuyện của nhân vật đã trải qua sự chuyển biến ngoạn mục nào từ thói quen cũ sang mới?",
+                        options: ["Từ thói quen đọc từng từ một chậm chạp, mỏi mắt sang làm chủ kỹ thuật luyện mắt, đọc cụm từ, Skimming và vẽ Mind Map.", "Từ việc chỉ thích đọc truyện tranh ngắn sang thích đọc bách khoa toàn thư dày cộp.", "Từ việc đọc sách trong bóng tối chuyển sang đọc sách dưới ánh sáng mặt trời."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 1", actionText: "Để lôi cuốn người nghe, hãy bắt đầu bằng việc thật thà chia sẻ điểm yếu cũ (mệt mỏi, đọc chậm) và sự lột xác vượt trội nhờ các kỹ thuật luyện mắt và hệ thống hóa."
+                    },
+                    {
+                        step: "BƯỚC 2: NỘI DUNG CỤ THỂ", title: "Bộ Công Cụ Luyện Mắt", icon: "fa-list-check", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Nếu em muốn chia sẻ 'Nội dung cụ thể' (Bước 2) của kỹ thuật đọc cụm từ cho bạn học, ý nào mô tả đúng bản chất phương pháp này?",
+                        options: ["Đọc lướt thật nhanh không cần quan tâm đến nghĩa của từ.", "Mở rộng tầm mắt ra hai bên để gộp và tiếp nhận đồng thời nhóm 3-4 từ cùng lúc thay vì dừng lại ở từng từ đơn lẻ.", "Dùng thước kẻ chắn tất cả các dòng xung quanh để tập trung duy nhất một từ."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 2", actionText: "Khi chia sẻ, hãy giải thích rõ ràng cơ chế khoa học (mở rộng tầm nhìn ngoại vi, đọc theo cụm 3-4 từ) để người nghe dễ hình dung và làm theo."
+                    },
+                    {
+                        step: "BƯỚC 3: THÔNG ĐIỆP CỐT LÕI", title: "Sự Khai Phá Tư Duy", icon: "fa-lightbulb", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "'Thông điệp cốt lõi' (Bước 3) sâu sắc nhất mà bài viết muốn truyền tải đến các độc giả trẻ tuổi là gì?",
+                        options: ["Đôi mắt là công cụ sinh học tự nhiên không cần rèn luyện.", "Đọc sách nhanh là khả năng bẩm sinh chỉ dành cho các thiên tài.", "Đôi mắt và bộ não đều có thể được huấn luyện; thay đổi phương pháp đọc cũ giúp khai phá tiềm năng vô tận của bản thân."], correctOption: 2,
+                        actionTitle: "Cách chia sẻ Bước 3", actionText: "Luôn đúc kết ý nghĩa triết lý hoặc tư duy cốt lõi (khả năng phát triển của bộ não và đôi mắt) để tạo nguồn cảm hứng mạnh mẽ cho người nghe."
+                    },
+                    {
+                        step: "BƯỚC 4: HÀNH ĐỘNG THỰC TẾ", title: "Khởi Động Đôi Mắt", icon: "fa-bolt", iconColor: "text-rose-500", actionBg: "bg-rose-50", actionColor: "text-rose-600", actionBorder: "border-rose-500",
+                        question: "Để chuyển hóa kiến thức này thành 'Hành động thực tế' (Bước 4) ngay hôm nay, em nên làm gì trước khi đọc bất kỳ tài liệu nào?",
+                        options: ["Lên mạng xem các video giải trí để giải tỏa mệt mỏi cho mắt.", "Dành ra đúng 2-3 phút luyện tập chuyển động mắt (hình số 8 hoặc quét nhanh) và chủ động gộp cụm từ khi đọc.", "Đọc thật chậm và dùng đầu ngón tay chỉ từng chữ."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 4", actionText: "Hành động thực tế tốt nhất là bài tập khởi động mắt ngắn từ 2-3 phút và chủ động áp dụng kỹ năng gộp cụm từ ngay khi tiếp cận trang sách mới."
+                    }
+                ]
+            },
+            {
+                // Bài 2: Skimming
+                subQuestions: [
+                    {
+                        step: "BƯỚC 1: GIÁ TRỊ CÁ NHÂN", title: "Thoát Khỏi Sự Mơ Hồ", icon: "fa-user-astronaut", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Sự lột xác về 'Giá trị cá nhân' (Bước 1) mà phương pháp đọc lướt (Skimming) mang lại cho nhân vật là gì?",
+                        options: ["Từ thói quen đọc mù quáng, quá tải thông tin và dễ bỏ cuộc sang chủ động thấu tóm khung xương cuốn sách chỉ trong 5 phút.", "Từ việc không thích mua sách chuyển sang mua thật nhiều sách trưng bày trên kệ.", "Từ một người đọc sách rất chậm chuyển sang một người chỉ thích đọc phần tóm tắt ở trang cuối."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 1", actionText: "Hãy chỉ ra nỗi đau chung (quá tải thông tin, dễ nản chí) và vẽ ra viễn cảnh làm chủ thông tin cực nhanh nhờ Skimming để thu hút người nghe."
+                    },
+                    {
+                        step: "BƯỚC 2: NỘI DUNG CỤ THỂ", title: "Chiến Thuật Quét Sóng", icon: "fa-list-check", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "'Nội dung cụ thể' (Bước 2) của kỹ năng Skimming thông minh gồm những thao tác nào?",
+                        options: ["Đọc lướt qua một cách ngẫu nhiên, bỏ qua hoàn toàn các bảng biểu đồ thị.", "Tập trung quét nhanh qua mục lục, lời giới thiệu, các tiêu đề lớn, từ in đậm và câu mở đầu/kết thúc của mỗi đoạn văn.", "Đọc kỹ từng chú thích ở cuối trang từ đầu đến cuối cuốn sách."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 2", actionText: "Chia sẻ rõ các điểm neo thông tin (tiêu đề, câu chủ đề đoạn văn) giúp người nghe biết chính xác mắt họ cần tập trung vào đâu khi lướt."
+                    },
+                    {
+                        step: "BƯỚC 3: THÔNG ĐIỆP CỐT LÕI", title: "Bản Đồ Chỉ Đường", icon: "fa-lightbulb", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "'Thông điệp cốt lõi' (Bước 3) sâu sắc về bản chất của kỹ thuật Skimming là gì?",
+                        options: ["Skimming là đọc ẩu, đọc đối phó để báo cáo thành tích.", "Skimming không phải là đọc hời hợt, mà là tạo lập tấm bản đồ định vị tư duy trước khi quyết định đào sâu vào chương sách chứa giá trị.", "Skimming là kỹ thuật thay thế hoàn toàn cho việc đọc chi tiết sách."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 3", actionText: "Giúp người nghe hiểu rõ Skimming đóng vai trò như một chiếc 'la bàn định hướng' chứ không phải hành động đọc hời hợt qua loa."
+                    },
+                    {
+                        step: "BƯỚC 4: HÀNH ĐỘNG THỰC TẾ", title: "Truy Tìm Kim Cương", icon: "fa-bolt", iconColor: "text-rose-500", actionBg: "bg-rose-50", actionColor: "text-rose-600", actionBorder: "border-rose-500",
+                        question: "Em sẽ thực hiện 'Hành động thực tế' (Bước 4) nào tiếp theo để áp dụng Skimming vào việc học tập?",
+                        options: ["Khi nhận một bài học mới vào ngày mai, dành đúng 3 phút quét qua tiêu đề và câu đầu các đoạn để thấu tóm ý chính trước khi học.", "Đọc thật chi tiết từng bài viết ngay từ dòng đầu tiên mà không cần xem mục lục.", "Bỏ qua toàn bộ sách giáo khoa và chỉ đọc phần tóm tắt chương."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 4", actionText: "Thực thi ngay bằng việc tạo thói quen quét nhanh tiêu đề bài học mới trước khi nghe giảng sẽ giúp tăng độ tập trung và tiếp thu bài vượt trội."
+                    }
+                ]
+            },
+            {
+                // Bài 3: Mind Map
+                subQuestions: [
+                    {
+                        step: "BƯỚC 1: GIÁ TRỊ CÁ NHÂN", title: "Khai Phá Tư Duy Trực Quan", icon: "fa-user-astronaut", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "'Giá trị cá nhân' (Bước 1) nổi bật nhất mà Sơ đồ tư duy (Mind Map) đem đến cho học sinh là gì?",
+                        options: ["Thay đổi thói quen ghi chép dòng chữ đen nhàm chán bằng cách hệ thống hóa kiến thức trực quan sinh động, khơi dậy cảm hứng học tập.", "Giúp các em trở thành một họa sĩ chuyên nghiệp vẽ phong cảnh.", "Giúp viết nhanh hơn mà không cần hiểu bản chất kiến thức."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 1", actionText: "Chia sẻ về sự giải phóng cảm xúc học tập, giảm bớt áp lực bài học khô khan nhờ Mind Map sẽ dễ dàng tạo đồng cảm cho người nghe."
+                    },
+                    {
+                        step: "BƯỚC 2: NỘI DUNG CỤ THỂ", title: "Kiến Trúc Một Bản Đồ", icon: "fa-list-check", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "'Nội dung cụ thể' (Bước 2) để kiến tạo một Mind Map chuẩn khoa học gồm các thành phần cốt lõi nào?",
+                        options: ["Viết các đoạn văn dài ngoằn ngoèo thành một danh sách gạch đầu dòng dài vô tận.", "Một từ khóa/hình ảnh trung tâm, tỏa ra các nhánh lớn đại diện cho ý chính, kết nối các nhánh nhỏ đại diện cho ý phụ bằng màu sắc sinh động.", "Chỉ dùng một màu mực duy nhất vẽ các vòng tròn khép kín chồng lên nhau."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 2", actionText: "Mô tả rõ cấu trúc phân tầng (Trung tâm -> Nhánh chính -> Nhánh phụ) đi kèm từ khóa và màu sắc trực quan giúp người nghe dễ dàng tự thực hành vẽ."
+                    },
+                    {
+                        step: "BƯỚC 3: THÔNG ĐIỆP CỐT LÕI", title: "Tư Duy Phi Tuyến Tính", icon: "fa-lightbulb", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "'Thông điệp cốt lõi' (Bước 3) về sự tương thích của Mind Map đối với não bộ là gì?",
+                        options: ["Não bộ của chúng ta tư duy bằng cách liên tưởng phi tuyến tính; Mind Map chính là ngôn ngữ tự nhiên, sinh động nhất của tế bào thần kinh.", "Mind Map chỉ hữu ích đối với các môn học xã hội, hoàn toàn không áp dụng được cho môn tự nhiên.", "Mind Map chỉ là công cụ trang trí cho đẹp mắt, không có tác dụng ghi nhớ lâu bền."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 3", actionText: "Chỉ ra tính 'tự nhiên' và tương thích với cách hoạt động của não bộ giúp Mind Map được trân trọng như một công cụ tư duy đỉnh cao."
+                    },
+                    {
+                        step: "BƯỚC 4: HÀNH ĐỘNG THỰC TẾ", title: "Bản Đồ Đầu Tay", icon: "fa-bolt", iconColor: "text-rose-500", actionBg: "bg-rose-50", actionColor: "text-rose-600", actionBorder: "border-rose-500",
+                        question: "Em sẽ thực hiện 'Hành động thực tế' (Bước 4) nào để bắt đầu sử dụng Mind Map ngay hôm nay?",
+                        options: ["Chuẩn bị một tờ giấy trắng khổ ngang, vẽ một sơ đồ tư duy ngắn tóm tắt lại các kỹ năng đọc (luyện mắt, skimming, mind map) vừa học.", "Đợi đến khi kỳ thi học kỳ diễn ra mới bắt đầu tập vẽ sơ đồ.", "Sao chép nguyên văn Mind Map của một bạn khác về dán vào vở."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 4", actionText: "Cách tốt nhất để làm chủ Mind Map là thực hành ngay trên một tờ giấy trắng, tự tay phác thảo kiến thức vừa học theo cách hiểu riêng."
+                    }
+                ]
+            },
+            {
+                // Bài 4: Ôn tập để thuộc
+                subQuestions: [
+                    {
+                        step: "BƯỚC 1: GIÁ TRỊ CÁ NHÂN", title: "Chinh Phục Trí Nhớ Dài Hạn", icon: "fa-user-astronaut", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Sự thay đổi quan trọng ở Bước 1 giúp tăng sức hút khi nói về bí quyết ôn tập để thuộc lòng là gì?",
+                        options: ["Thay đổi từ thói quen học vẹt, đọc đi đọc lại thụ động dễ quên sang phương pháp viết ra các ý chính/ý phụ kích hoạt khả năng ghi nhớ Record sâu sắc.", "Thay đổi từ việc tự học sang học nhóm cùng các bạn học sinh giỏi nhất lớp.", "Thay đổi từ việc viết nhật ký sang học các mẹo ghi nhớ bằng mẹo."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 1", actionText: "Nhấn mạnh sự giải thoát khỏi nỗi ám ảnh 'học trước quên sau' nhờ chuyển sang cơ chế kích hoạt chủ động trí nhớ sẽ tạo niềm tin rất lớn."
+                    },
+                    {
+                        step: "BƯỚC 2: NỘI DUNG CỤ THỂ", title: "Kích Hoạt Nút Record", icon: "fa-list-check", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Ý nào dưới đây mô tả chính xác 'Nội dung cụ thể' (Bước 2) của phương pháp ôn tập chủ động?",
+                        options: ["Mở sách liên tục và đọc to toàn bộ đoạn văn nhiều lần liên tiếp.", "Sau khi đọc xong, gập sách lại, tự viết ra các ý chính (từ khóa chính) rồi phát triển thêm các ý phụ liên quan từ trí nhớ của bộ não.", "Chép lại nguyên văn từng câu chữ trong tài liệu ra một cuốn sổ tay nhỏ."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 2", actionText: "Tập trung giải thích kỹ năng 'gập sách lại' và 'tự viết ra ý chính, ý phụ' để kích thích bộ não hoạt động truy xuất thông tin độc lập."
+                    },
+                    {
+                        step: "BƯỚC 3: THÔNG ĐIỆP CỐT LÕI", title: "Nỗ Lực Truy Xuất", icon: "fa-lightbulb", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "'Thông điệp cốt lõi' (Bước 3) sâu sắc về bản chất của khả năng ghi nhớ bền vững là gì?",
+                        options: ["Trí nhớ được củng cố tốt nhất khi bộ não phải nỗ lực truy xuất, tự viết và tự giải trình cấu trúc kiến thức thay vì lặp lại thụ động.", "Ghi nhớ là quá trình tự nhiên, chỉ cần tập trung nghe giảng là đủ, không cần ghi chép.", "Học vẹt vẫn là giải pháp hiệu quả nhất để ghi điểm cao trong phòng thi."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 3", actionText: "Giúp người nghe ngộ ra chân lý: ghi nhớ là một quá trình 'truy xuất chủ động' đầy nỗ lực của các liên kết thần kinh."
+                    },
+                    {
+                        step: "BƯỚC 4: HÀNH ĐỘNG THỰC TẾ", title: "Thực Hành Ghi Nhớ", icon: "fa-bolt", iconColor: "text-rose-500", actionBg: "bg-rose-50", actionColor: "text-rose-600", actionBorder: "border-rose-500",
+                        question: "Em sẽ thực hiện 'Hành động thực tế' (Bước 4) nào vào tối nay để kích hoạt nút Record của bộ não?",
+                        options: ["Học thuộc lòng một đoạn thơ bằng cách đọc đi đọc lại 20 lần.", "Sau khi ôn xong một môn học, gập vở lại và dành 3-5 phút tự viết ra giấy nháp các ý chính và ý phụ theo trí nhớ.", "Đi ngủ sớm và không cần ôn tập lại bài cũ vừa học trên lớp."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 4", actionText: "Hành động thực tế cụ thể: dành ra 3-5 phút 'gập vở tự viết nháp ý chính, ý phụ' ngay sau buổi học sẽ tạo thói quen học sâu nhớ lâu bền bỉ."
+                    }
+                ]
+            },
+            {
+                // Bài 5: Quy trình 5 bước đọc sách
+                subQuestions: [
+                    {
+                        step: "BƯỚC 1: GIÁ TRỊ CÁ NHÂN", title: "Hành Trình Tri Thức Trọn Đời", icon: "fa-user-astronaut", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "'Giá trị cá nhân' (Bước 1) to lớn nhất khi chuyển từ đọc sách ngẫu hứng sang quy trình 5 bước khoa học là gì?",
+                        options: ["Chuyển từ việc đọc sách ngẫu hứng, nhanh quên sang sở hữu quy trình ứng dụng vĩnh viễn giúp chuyển hóa tri thức thành hành động thực tế cuộc đời.", "Trở thành người sở hữu nhiều sách nhất trong gia đình và trường học.", "Giúp bản thân đọc hết một cuốn sách trong vòng 10 phút mà không cần suy ngẫm."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 1", actionText: "Khi chia sẻ, hãy tập trung vào giá trị chuyển hóa tri thức thành hành động thực tế lâu dài để người nghe thấy rõ tính ứng dụng vượt trội."
+                    },
+                    {
+                        step: "BƯỚC 2: NỘI DUNG CỤ THỂ", title: "Quy Trình 5 Bước Vàng", icon: "fa-list-check", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Em hãy xác định chuỗi liên kết 5 bước khoa học đầy đủ nhất ở 'Nội dung cụ thể' (Bước 2) trong bài viết?",
+                        options: ["Mua sách ➔ Đọc lướt ➔ Học thuộc lòng ➔ Làm bài kiểm tra ➔ Nhận phần thưởng.", "Chọn sách ➔ Skimming ➔ Đọc chi tiết ➔ Lưu trữ (Smart Note) ➔ Chia sẻ tri thức.", "Chọn sách ngẫu nhiên ➔ Đọc mục lục ➔ Đóng sách lại ➔ Đi thảo luận ➔ Quên kiến thức."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 2", actionText: "Trình bày mạch lạc sơ đồ 5 bước khoa học rõ ràng (Chọn sách ➔ Skimming ➔ Đọc chi tiết ➔ Smart Note ➔ Chia sẻ) để người nghe dễ áp dụng trọn vẹn."
+                    },
+                    {
+                        step: "BƯỚC 3: THÔNG ĐIỆP CỐT LÕI", title: "Vòng Lặp Chuyển Hóa", icon: "fa-lightbulb", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "'Thông điệp cốt lõi' (Bước 3) sâu sắc của quy trình đọc sách 5 bước khoa học là gì?",
+                        options: ["Đọc sách chỉ là để tích lũy dữ liệu thô trong đầu.", "Quy trình đọc sách khép kín từ tiếp nhận, chắt lọc, lưu trữ đến chia sẻ chính là con đường tối ưu để chuyển hóa tri thức thành sức mạnh thực tiễn.", "Bước quan trọng duy nhất là mua sách, các bước còn lại có thể bỏ qua."], correctOption: 1,
+                        actionTitle: "Cách chia sẻ Bước 3", actionText: "Nhấn mạnh bản chất của việc đọc sách là một 'vòng lặp chuyển hóa' toàn diện từ lý thuyết thô thành hành động thực tế có ích."
+                    },
+                    {
+                        step: "BƯỚC 4: HÀNH ĐỘNG THỰC TẾ", title: "Khởi Đầu Hành Trình", icon: "fa-bolt", iconColor: "text-rose-500", actionBg: "bg-rose-50", actionColor: "text-rose-600", actionBorder: "border-rose-500",
+                        question: "Em sẽ chọn 'Hành động thực tế' (Bước 4) nào vào ngày mai để bắt đầu vận hành quy trình 5 bước tuyệt vời này?",
+                        options: ["Chọn một cuốn sách hay phù hợp mục tiêu, áp dụng Skimming 5 phút trước khi tiến hành đọc chi tiết và ghi lại Smart Note.", "Lên thư viện mượn thật nhiều sách về bày trên bàn học.", "Chỉ chia sẻ sách lên mạng xã hội mà không cần đọc nội dung."], correctOption: 0,
+                        actionTitle: "Cách chia sẻ Bước 4", actionText: "Bắt đầu ngay bằng việc thực thi quy trình 5 bước khép kín này trên chính cuốn sách mà em đang đọc để biến việc đọc thành trải nghiệm siêu hiệu quả."
+                    }
+                ]
+            }
+        ];
+
+        // --- AUDIO ENGINE ---
+        class WebAudioEngine {
+            constructor() {
+                this.ctx = null; this.bgmPlaying = false; this.schedulerTimer = null; this.currentStep = 0;
+                this.chords = [[130.81, 164.81, 196.00], [174.61, 220.00, 261.63], [196.00, 246.94, 293.66], [130.81, 164.81, 196.00]];
+            }
+            init() { if (!this.ctx) { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } }
+            playTick() {
+                this.init(); if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime; const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(880, now); gain.gain.setValueAtTime(0.02, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.06);
+            }
+            playSFX(type) {
+                this.init(); if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime;
+                if (type === 'correct') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.08, now + idx * 0.06); gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.15);
+                        osc.connect(gain); gain.connect(this.ctx.destination); osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.2);
+                    });
+                } else if (type === 'incorrect') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'square'; osc.frequency.setValueAtTime(280.00, now); osc.frequency.linearRampToValueAtTime(140.00, now + 0.25);
+                    gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(1000.00, now); gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.05);
+                }
+            }
+            startBGM() { this.init(); if (this.ctx.state === 'suspended') this.ctx.resume(); this.bgmPlaying = true; this.currentStep = 0; this.runBgmLoop(); }
+            stopBGM() { this.bgmPlaying = false; clearTimeout(this.schedulerTimer); }
+            runBgmLoop() {
+                if (!this.bgmPlaying) return;
+                const chordIndex = Math.floor(this.currentStep / 4) % this.chords.length; const noteIndex = this.currentStep % 3; const baseFreq = this.chords[chordIndex][noteIndex] * 2.0;
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain(); const filter = this.ctx.createBiquadFilter();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(baseFreq, this.ctx.currentTime);
+                filter.type = 'lowpass'; filter.frequency.setValueAtTime(1400, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.015, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.4);
+                osc.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.5);
+                this.currentStep++; this.schedulerTimer = setTimeout(() => this.runBgmLoop(), 280);
+            }
+        }
+        const audio = new WebAudioEngine();
+        
+        function toggleBackgroundMusic() {
+            const toggleBtn = document.getElementById('bgm-toggle'); const toggleText = document.getElementById('bgm-text');
+            if (!audio.bgmPlaying) {
+                audio.startBGM(); toggleText.innerText = "Nhạc trò chơi: BẬT"; toggleBtn.classList.replace('game-btn-yellow', 'game-btn-red'); toggleBtn.classList.add('text-white'); audio.playSFX('click');
+            } else {
+                audio.stopBGM(); toggleText.innerText = "Nhạc trò chơi: TẮT"; toggleBtn.classList.replace('game-btn-red', 'game-btn-yellow'); toggleBtn.classList.remove('text-white');
+            }
+        }
+
+        // --- CONFETTI EFFECT ---
+        const canvas = document.getElementById('confetti-canvas'); const ctx = canvas.getContext('2d');
+        let confettiParticles = []; let confettiAnimationId = null;
+        function resizeConfettiCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeConfettiCanvas);
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = canvas.height + 20; this.size = Math.random() * 12 + 6;
+                this.speedX = Math.random() * 10 - 5; this.speedY = -Math.random() * 20 - 10; this.gravity = 0.45;
+                this.color = `hsl(${Math.random() * 360}, 100%, 55%)`; this.rotation = Math.random() * 360; this.rotationSpeed = Math.random() * 20 - 10;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.speedY += this.gravity; this.rotation += this.rotationSpeed; }
+            draw() {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color; ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size); ctx.restore();
+            }
+        }
+        function spawnConfetti() {
+            canvas.classList.remove('hidden'); resizeConfettiCanvas(); confettiParticles = [];
+            for (let i = 0; i < 100; i++) { confettiParticles.push(new ConfettiParticle()); }
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId); animateConfetti();
+        }
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles.forEach((p, idx) => { p.update(); p.draw(); if (p.y > canvas.height + 50) { confettiParticles.splice(idx, 1); } });
+            if (confettiParticles.length > 0) { confettiAnimationId = requestAnimationFrame(animateConfetti); } else { canvas.classList.add('hidden'); }
+        }
+
+        // --- GAME CONTROL ENGINE ---
+        let currentWPM = 250; let isPlaying = false; let wordsArray = []; let rawWordsArray = []; let currentChunkIndex = 0; let playInterval = null; let readingMode = 'rsvp'; let currentSubIdx = 0;
+        const domWord = document.getElementById('reader-word'); const domProgress = document.getElementById('reading-progress'); const domPlayBtn = document.getElementById('btn-play'); const domPlayIcon = document.getElementById('icon-play'); const domPlayText = document.getElementById('text-play'); const domWpmDisplay = document.getElementById('wpm-display'); const domRpmBar = document.getElementById('rpm-bar');
+
+        function getChunkSize() { return parseInt(document.getElementById('chunk-selector').value); }
+
+        function loadSelectedText() {
+            const textIndex = document.getElementById('text-selector').value;
+            rawWordsArray = texts[textIndex].trim().split(/\s+/);
+            readingMode = document.getElementById('mode-selector').value;
+            
+            const guideLeft = document.getElementById('guide-left'); const guideRight = document.getElementById('guide-right');
+            if (readingMode === 'highlight') { guideLeft.style.display = 'none'; guideRight.style.display = 'none'; } 
+            else { guideLeft.style.display = 'block'; guideRight.style.display = 'block'; }
+            resetReader();
+        }
+
+        function updateWPM(value) {
+            currentWPM = parseInt(value);
+            domWpmDisplay.innerHTML = `${currentWPM} <span class="text-lg text-gray-500 font-bold">WPM</span>`;
+            const percentage = ((currentWPM - 250) / 300) * 100; domRpmBar.style.width = `${percentage}%`;
+            domRpmBar.style.backgroundColor = currentWPM >= 450 ? '#e11d48' : '#facc15';
+            if (isPlaying) { clearInterval(playInterval); startInterval(); }
+        }
+
+        function resetReader() {
+            if (isPlaying) togglePlay();
+            currentChunkIndex = 0; domProgress.style.width = '0%'; const chunkSize = getChunkSize();
+
+            if (readingMode === 'rsvp') {
+                wordsArray = [];
+                for (let i = 0; i < rawWordsArray.length; i += chunkSize) { wordsArray.push(rawWordsArray.slice(i, i + chunkSize).join(' ')); }
+                domWord.className = "word-chunk text-3xl md:text-5xl text-center px-4 w-full break-words text-rose-600 font-black highlight-scroll-container";
+                domWord.innerHTML = "SẴN SÀNG CHIẾN ĐẤU!";
+            } else {
+                wordsArray = rawWordsArray;
+                domWord.className = "text-xl md:text-2xl text-left px-6 py-6 w-full text-gray-400 font-bold leading-relaxed overflow-y-auto max-h-[350px] highlight-scroll-container bg-gray-50 rounded-xl border-2 border-gray-300";
+                domWord.innerHTML = rawWordsArray.map((w, idx) => `<span id="word-${idx}" class="transition-colors duration-100">${w}</span>`).join(' ');
+            }
+        }
+
+        function togglePlay() {
+            audio.playSFX('click'); if (wordsArray.length === 0) loadSelectedText();
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                domPlayIcon.className = "fa-solid fa-pause text-3xl"; domPlayText.innerText = "DỪNG";
+                domPlayBtn.className = "w-24 h-24 rounded-2xl game-btn-yellow text-gray-950 flex flex-col items-center justify-center gap-1 shadow-lg border-4 border-gray-900";
+                if (currentChunkIndex >= wordsArray.length) currentChunkIndex = 0;
+                startInterval();
+            } else {
+                domPlayIcon.className = "fa-solid fa-play text-3xl"; domPlayText.innerText = "CHƠI";
+                domPlayBtn.className = "w-24 h-24 rounded-2xl game-btn-red text-white flex flex-col items-center justify-center gap-1 shadow-lg border-4 border-gray-900";
+                clearInterval(playInterval);
+            }
+        }
+
+        function startInterval() {
+            const chunkSize = getChunkSize(); const delay = (60000 / currentWPM) * chunkSize; 
+            playInterval = setInterval(() => {
+                if (readingMode === 'rsvp') {
+                    if (currentChunkIndex < wordsArray.length) {
+                        audio.playTick(); domWord.innerText = wordsArray[currentChunkIndex];
+                        domProgress.style.width = `${((currentChunkIndex + 1) / wordsArray.length) * 100}%`; currentChunkIndex++;
+                    } else { showCompletionScreen(); }
+                } else {
+                    if (currentChunkIndex < wordsArray.length) {
+                        audio.playTick(); domWord.querySelectorAll('.bg-rose-600').forEach(el => { el.className = "transition-colors duration-100 text-gray-400 font-semibold"; });
+                        let lastSpan = null;
+                        for (let i = 0; i < chunkSize; i++) {
+                            const targetIdx = currentChunkIndex + i;
+                            if (targetIdx < wordsArray.length) {
+                                const span = document.getElementById(`word-${targetIdx}`);
+                                if (span) { span.className = "text-white font-black bg-rose-600 rounded-md px-1.5 py-0.5 shadow-sm"; lastSpan = span; }
+                            }
+                        }
+                        if (lastSpan) lastSpan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        domProgress.style.width = `${(Math.min(currentChunkIndex + chunkSize, wordsArray.length) / wordsArray.length) * 100}%`; currentChunkIndex += chunkSize;
+                    } else { showCompletionScreen(); }
+                }
+            }, delay);
+        }
+
+        function showCompletionScreen() {
+            togglePlay(); domWord.className = "word-chunk text-center px-4 w-full text-rose-600 flex items-center justify-center";
+            domWord.innerHTML = `
+                <div class='flex flex-col items-center justify-center gap-6 py-6'>
+                    <span class='text-3xl md:text-5xl text-rose-600 font-black tracking-wider animate-pulse'>🎉 ĐỌC XONG VĂN BẢN! 🎉</span>
+                    <p class='text-gray-600 font-bold text-base max-w-md text-center'>Chúc mừng em! Bây giờ hãy bắt đầu giải mã thử thách trắc nghiệm trọn vẹn <b>4 Bước Quy Trình Chia Sẻ Kiến Thức</b>.</p>
+                    <button onclick='showQuestion(0)' class='game-btn-yellow text-gray-950 font-black text-xl md:text-2xl px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition-all transform animate-bounce border-4 border-gray-900 uppercase'>
+                        🔑 Kích Hoạt Thử Thách 4 Bước
+                    </button>
+                </div>`;
+        }
+
+        // --- MULTI-STEP QUIZ ENGINE SYSTEM (4 STEPS COHERENT) ---
+        function showQuestion(subIdx = 0) {
+            audio.playSFX('click');
+            const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            const textIndex = document.getElementById('text-selector').value;
+            
+            currentSubIdx = subIdx;
+            const data = questionsData[textIndex].subQuestions[subIdx];
+            
+            let optionsHtml = ''; const letters = ['💥 A', '⚡ B', '🔥 C'];
+            data.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="checkAnswer(this, ${idx}, ${data.correctOption})" class="w-full text-left bg-white hover:bg-rose-50 text-gray-900 font-black p-4 md:p-5 rounded-2xl border-3 border-gray-900 transition-all mb-4 flex items-center shadow-[0_4px_0_#1e293b] active:translate-y-1 active:shadow-none text-base md:text-lg">
+                        <span class="w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-rose-600 shrink-0 shadow-sm">${letters[idx]}</span>
+                        <span class="flex-1">${opt}</span>
+                    </button>`;
+            });
+            
+            const isLast = subIdx === 3; // Kết thúc ở bước thứ 4 (chỉ số 3)
+            const nextAction = isLast ? "closeQuestion()" : `showQuestion(${subIdx + 1})`;
+            const btnText = isLast ? "🏁 Hoàn Thành Xuất Sắc 4 Bước" : "➡️ Tiến Tới Bước Tiếp Theo";
+
+            contentBox.innerHTML = `
+                <div class="text-center">
+                    <div class="text-5xl ${data.iconColor} mb-2"><i class="fa-solid ${data.icon}"></i></div>
+                    <h2 class="text-xl font-black text-rose-600 uppercase tracking-wide mb-1">${data.step}</h2>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-900 mb-6 uppercase tracking-wide px-2">${data.title}</h3>
+                    <div class="bg-rose-50 p-4 md:p-6 rounded-2xl border-3 border-gray-900 mb-6 text-left">
+                        <p class="text-lg md:text-xl text-gray-900 mb-6 font-black leading-relaxed">❓ ${data.question}</p>
+                        <div class="flex flex-col">${optionsHtml}</div>
+                        <div id="action-section" class="hidden mt-6 ${data.actionBg} p-5 rounded-2xl border-3 border-gray-900 shadow-inner">
+                            <p class="${data.actionColor} text-base md:text-lg font-black uppercase mb-2">⭐ ${data.actionTitle}:</p>
+                            <p class="text-gray-800 font-bold text-sm md:text-base leading-relaxed">${data.actionText}</p>
+                        </div>
+                    </div>
+                    <button onclick="${nextAction}" class="game-btn-red text-white px-8 py-4 rounded-xl font-black transition-all text-lg md:text-xl w-full md:w-auto border-3 border-gray-900 uppercase tracking-wider">${btnText}</button>
+                </div>`;
+            
+            if (subIdx === 0) {
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); contentBox.classList.replace('scale-95', 'scale-100'); }, 10);
+            }
+        }
+
+        function checkAnswer(btn, optionIndex, correctIndex) {
+            const parent = btn.parentElement; 
+            parent.querySelectorAll('button').forEach(b => { 
+                b.disabled = true; b.className = "w-full text-left bg-gray-100 text-gray-400 font-bold p-4 md:p-5 rounded-xl border-3 border-gray-300 cursor-not-allowed mb-4 flex items-center text-base md:text-lg"; 
+            });
+            if (optionIndex === correctIndex) {
+                audio.playSFX('correct'); spawnConfetti();
+                btn.className = "w-full text-left bg-emerald-100 text-emerald-800 font-black p-4 md:p-5 rounded-xl border-4 border-emerald-500 mb-4 flex items-center shadow-md text-base md:text-lg";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-emerald-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-check"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+            } else {
+                audio.playSFX('incorrect');
+                const modalBox = document.getElementById('modal-content-box'); modalBox.classList.add('animate-shake'); setTimeout(() => modalBox.classList.remove('animate-shake'), 400);
+                btn.className = "w-full text-left bg-rose-100 text-rose-800 font-black p-4 md:p-5 rounded-xl border-4 border-rose-500 mb-4 flex items-center shadow-md text-base md:text-lg";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-rose-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-xmark"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+                const correctBtn = parent.querySelectorAll('button')[correctIndex];
+                correctBtn.className = "w-full text-left bg-emerald-100 text-emerald-800 font-black p-4 md:p-5 rounded-xl border-4 border-emerald-500 mb-4 flex items-center shadow-md text-base md:text-lg";
+                correctBtn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-emerald-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-check"></i></span>` + correctBtn.innerHTML.substring(correctBtn.innerHTML.indexOf('</span>') + 7);
+            }
+            document.getElementById('action-section').classList.remove('hidden'); document.getElementById('action-section').classList.add('animate-fade-in-up');
+        }
+
+        function closeQuestion() {
+            audio.playSFX('click'); const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            modal.classList.add('opacity-0'); contentBox.classList.replace('scale-100', 'scale-95'); setTimeout(() => { modal.classList.add('hidden'); resetReader(); }, 300);
+        }
+
+        window.onload = () => { loadSelectedText(); updateWPM(250); };
+    </script>
+</body>
+</html>

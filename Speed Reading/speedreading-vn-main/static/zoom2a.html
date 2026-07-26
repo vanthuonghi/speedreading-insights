@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading - Tài Liệu Chuyên Sâu Buổi 2</title>
+    <!-- Google Fonts: Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                    },
+                    colors: {
+                        brandRed: {
+                            50: '#fff5f5',
+                            100: '#ffe3e3',
+                            500: '#e53e3e',
+                            800: '#9b1c1c',
+                            950: '#4c0505',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #4c0505;
+            background-image: radial-gradient(circle at top, #7f0d0d 0%, #280202 100%);
+        }
+        /* Hiệu ứng hiển thị khi cuộn trang */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.7s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="text-white font-sans antialiased selection:bg-yellow-400 selection:text-brandRed-950">
+
+    <!-- Header / Logo Section -->
+    <header class="w-full py-5 flex justify-center items-center border-b border-white/10 backdrop-blur-md sticky top-0 z-50 bg-brandRed-950/80">
+        <div class="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading Logo" class="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300">
+            <span class="text-xs font-semibold tracking-wider text-yellow-400 border border-yellow-400/30 px-3 py-1 rounded-full uppercase bg-yellow-400/5">
+                Tài liệu học viên - Buổi 2
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="container mx-auto px-4 py-12 max-w-5xl space-y-20">
+
+        <!-- INTRO HERO -->
+        <section class="text-center space-y-4 py-6">
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-snug">
+                GIẢI THÍCH CHUYÊN SÂU <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-300">KỸ THUẬT ĐỌC NHANH</span>
+            </h1>
+            <p class="text-base md:text-lg text-red-100/90 max-w-3xl mx-auto font-light leading-relaxed">
+                Dưới đây là phần phân tích chi tiết và hình ảnh hóa các khái niệm nền tảng từ tài liệu Buổi 2, giúp bạn dễ dàng làm chủ lý thuyết và áp dụng trực tiếp vào thực tế.
+            </p>
+        </section>
+
+        <!-- SECTION 1: CÁC KHÁI NIỆM & ĐỊNH NGHĨA -->
+        <section class="reveal space-y-8">
+            <div class="border-l-4 border-yellow-400 pl-4">
+                <span class="text-xs font-bold uppercase tracking-widest text-yellow-400">Phần 01</span>
+                <h2 class="text-2xl md:text-3xl font-bold mt-1">Các khái niệm & Định nghĩa quan trọng</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Concept 1: Đọc truyền thống -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4 hover:bg-white/10 transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <span class="p-2 bg-red-500/20 text-red-400 rounded-lg text-xs font-bold">Tốc độ cũ</span>
+                        <h3 class="text-lg font-bold text-red-200">Đọc Truyền Thống</h3>
+                    </div>
+                    <p class="text-sm text-red-100/80 leading-relaxed">
+                        Thói quen từ thuở nhỏ: Mắt nhìn cố định từng chữ một, não phát âm thầm từ đó trong đầu (đọc thầm). Cách này giới hạn tốc độ xử lý thông tin tương đương với tốc độ phát âm của miệng.
+                    </p>
+                    <div class="bg-brandRed-950/60 p-3 rounded-xl border border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-red-300">Tốc độ trung bình:</span>
+                        <span class="text-sm font-bold text-red-400">~250 từ/phút (Xe Đạp)</span>
+                    </div>
+                </div>
+
+                <!-- Concept 2: Đọc cụm từ (Chunking) -->
+                <div class="bg-gradient-to-br from-emerald-950/60 to-emerald-900/40 border border-emerald-500/30 rounded-2xl p-6 space-y-4 hover:border-emerald-400/50 transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <span class="p-2 bg-emerald-400/20 text-emerald-300 rounded-lg text-xs font-bold">Bí mật thiên tài</span>
+                        <h3 class="text-lg font-bold text-emerald-300">Đọc Cụm Từ (Chunking)</h3>
+                    </div>
+                    <p class="text-sm text-emerald-100/90 leading-relaxed">
+                        Thay vì chụp ảnh từng từ đơn lẻ, mắt được luyện tập để chụp một lúc nhóm <strong>2, 3 hoặc 5 từ</strong>. Tương tự như việc nhìn một bức tranh, bạn nhìn thấy toàn cảnh chứ không phân tích từng chiếc lá.
+                    </p>
+                    <div class="bg-brandRed-950/60 p-3 rounded-xl border border-emerald-500/20 flex items-center justify-between">
+                        <span class="text-xs text-emerald-300">Tốc độ đạt được:</span>
+                        <span class="text-sm font-bold text-emerald-400">650 - 1000 từ/phút</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPARISON VISUALIZER FOR CHUNKING -->
+            <div class="bg-neutral-900/80 border border-white/10 rounded-2xl p-6 space-y-4">
+                <h4 class="text-sm font-bold text-yellow-400 uppercase tracking-wider text-center">Trực quan hóa sự khác biệt khi đọc một câu</h4>
+                
+                <div class="space-y-4 text-xs md:text-sm">
+                    <!-- Traditional Mode -->
+                    <div class="space-y-1">
+                        <span class="text-red-400 text-[11px] font-semibold">1. Đọc truyền thống (Từng từ đơn lẻ - 5 nhịp dừng):</span>
+                        <div class="flex flex-wrap gap-1 p-3 bg-red-950/20 rounded-lg border border-red-500/10">
+                            <span class="px-2 py-1 bg-red-500/10 border border-red-500/20 rounded">mắt</span>
+                            <span class="px-2 py-1 bg-red-500/10 border border-red-500/20 rounded">nhìn</span>
+                            <span class="px-2 py-1 bg-red-500/10 border border-red-500/20 rounded">vào</span>
+                            <span class="px-2 py-1 bg-red-500/10 border border-red-500/20 rounded">từng</span>
+                            <span class="px-2 py-1 bg-red-500/10 border border-red-500/20 rounded">chữ</span>
+                        </div>
+                    </div>
+
+                    <!-- Chunking Mode -->
+                    <div class="space-y-1">
+                        <span class="text-emerald-400 text-[11px] font-semibold">2. Đọc cụm từ (Chunking - Chỉ 2 nhịp chụp hình ảnh):</span>
+                        <div class="flex flex-wrap gap-3 p-3 bg-emerald-950/20 rounded-lg border border-emerald-500/10">
+                            <span class="px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/30 rounded-lg font-medium text-emerald-100">
+                                [ mắt nhìn vào ]
+                            </span>
+                            <span class="px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/30 rounded-lg font-medium text-emerald-100">
+                                [ từng chữ một cùng lúc ]
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TWO CORE CONCEPTS: MECHANISM & PERIPHERAL VISION -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Concept 3: Tai - Mắt - Não -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-yellow-300">Cơ chế Tai - Mắt - Não (Nhìn là hiểu)</h3>
+                    <p class="text-sm text-red-100/80 leading-relaxed">
+                        Loại bỏ bước trung gian "đọc thầm" trong đầu. Đôi mắt chuyển thông tin trực tiếp dạng hình ảnh lên não bộ để xử lý ý nghĩa ngay lập tức.
+                    </p>
+                    <!-- Flow diagram -->
+                    <div class="flex items-center justify-center gap-2 pt-2 text-xs">
+                        <div class="px-3 py-1.5 bg-white/5 rounded border border-white/15">Mắt chụp ảnh</div>
+                        <span class="text-yellow-400">➔</span>
+                        <div class="px-3 py-1.5 bg-emerald-500/20 rounded border border-emerald-500/30 text-emerald-300 font-bold">Não hiểu ngay</div>
+                    </div>
+                    <p class="text-[11px] text-red-200/60 text-center italic mt-1">Ví dụ: Nhìn biển "CẤM NGƯỢC CHIỀU" và hiểu ngay lập tức mà không cần đánh vần.</p>
+                </div>
+
+                <!-- Concept 4: Tầm nhìn ngoại vi -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-yellow-300">Tầm nhìn ngoại vi (Peripheral Vision)</h3>
+                    <p class="text-sm text-red-100/80 leading-relaxed">
+                        Khả năng "nhìn một được ba". Khi ánh mắt tập trung vào một từ ở tâm điểm, bạn vẫn có thể tự động nhận diện được các từ ở hai bên trái và phải mà không cần dịch chuyển mắt sang hai bên.
+                    </p>
+                    <!-- Vision indicator tool -->
+                    <div class="p-3 bg-neutral-900/60 rounded-xl text-center text-xs flex justify-center items-center gap-4 border border-white/5">
+                        <span class="text-white/40">từ bên trái</span>
+                        <span class="px-3 py-1 bg-yellow-400 text-brandRed-950 font-extrabold rounded shadow-md">[ TỪ TRỌNG TÂM ]</span>
+                        <span class="text-white/40">từ bên phải</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: NGUYÊN LÝ TĂNG TỐC ĐỘ ĐỌC HIỂU -->
+        <section class="reveal space-y-8">
+            <div class="border-l-4 border-cyan-400 pl-4">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan-400">Phần 02</span>
+                <h2 class="text-2xl md:text-3xl font-bold mt-1">Nguyên lý tăng tốc độ đọc hiểu cao nhất</h2>
+            </div>
+
+            <!-- THE 3 GOLDEN PRINCIPLES CARDS -->
+            <div class="space-y-6">
+
+                <!-- Principle A: Nhảy mắt -->
+                <div class="bg-gradient-to-r from-brandRed-950 to-brandRed-900 border border-white/10 rounded-2xl p-6 md:p-8 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyan-400/10 text-cyan-400 rounded-xl flex items-center justify-center font-bold text-lg">A</div>
+                        <h3 class="text-xl font-bold text-cyan-300">Nhảy mắt (Eye Jumping): Chuyển động thay vì lướt</h3>
+                    </div>
+                    <p class="text-sm text-red-100/80 leading-relaxed">
+                        Đôi mắt của người đọc nhanh không quét liên tục như máy scan, mà nó di chuyển theo các nhịp <strong>"nhảy và chụp"</strong>. Hãy chia một dòng chữ thành 2 hoặc 3 điểm dừng (anchor points) và điều hướng mắt nhảy nhanh qua các điểm đó.
+                    </p>
+                    <div class="bg-black/40 p-4 rounded-xl border border-white/5 space-y-3">
+                        <span class="text-[11px] font-bold text-cyan-400 block uppercase tracking-wider">Mô phỏng 3 điểm nhảy mắt trên một dòng:</span>
+                        <div class="flex justify-between text-xs md:text-sm text-neutral-400 font-mono py-2 px-4 bg-neutral-900 rounded border border-white/5">
+                            <div><span class="text-cyan-400 font-extrabold text-base">●</span> Điểm nhảy 1</div>
+                            <div><span class="text-cyan-400 font-extrabold text-base">●</span> Điểm nhảy 2</div>
+                            <div><span class="text-cyan-400 font-extrabold text-base">●</span> Điểm nhảy 3</div>
+                        </div>
+                        <p class="text-xs text-red-200/60 italic">Lợi ích: Giảm số lần dừng mắt từ 10-12 lần xuống còn 2-3 lần mỗi dòng, giúp giảm mỏi mắt và tăng tốc độ xử lý thông tin.</p>
+                    </div>
+                </div>
+
+                <!-- Principle B: Mở rộng điểm tập trung -->
+                <div class="bg-gradient-to-r from-brandRed-950 to-brandRed-900 border border-white/10 rounded-2xl p-6 md:p-8 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-yellow-400/10 text-yellow-400 rounded-xl flex items-center justify-center font-bold text-lg">B</div>
+                        <h3 class="text-xl font-bold text-yellow-300">Mở rộng điểm tập trung: Nhìn vào "tâm bão"</h3>
+                    </div>
+                    <p class="text-sm text-red-100/80 leading-relaxed">
+                        Thay vì nhìn chăm chăm vào từng từ từ lề trái sang lề phải, bạn hãy hướng tiêu điểm ánh nhìn vào <strong>khoảng giữa của các cụm từ</strong>. Tầm nhìn ngoại vi sẽ tự động "thu gom" các từ nằm lân cận bên trái và bên phải để não bộ xử lý ngay trong một tích tắc.
+                    </p>
+                </div>
+
+                <!-- Principle C: Quy tắc thụt lề -->
+                <div class="bg-gradient-to-r from-brandRed-950 to-brandRed-900 border border-white/10 rounded-2xl p-6 md:p-8 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-400/10 text-emerald-400 rounded-xl flex items-center justify-center font-bold text-lg">C</div>
+                        <h3 class="text-xl font-bold text-emerald-300">Tối ưu hóa hành trình tay: Quy tắc "Thụt lề"</h3>
+                    </div>
+                    <p class="text-sm text-red-100/80 leading-relaxed">
+                        Kỹ thuật giúp đôi mắt làm việc thông minh hơn chứ không phải vất vả hơn: Đừng đặt ngón tay dẫn đường ở chữ đầu tiên và kết thúc ở chữ cuối cùng của dòng.
+                    </p>
+                    
+                    <!-- Indentation Visual Tool -->
+                    <div class="bg-neutral-900 rounded-xl p-5 border border-white/10 space-y-3">
+                        <span class="text-[11px] font-bold text-emerald-400 block uppercase tracking-wider">Mô phỏng dòng chữ & Vùng di chuyển của ngón tay:</span>
+                        
+                        <div class="text-sm font-mono tracking-wide p-3 bg-neutral-950 rounded border border-white/5 relative">
+                            <!-- Left bracket marker -->
+                            <div class="absolute left-[15%] top-0 bottom-0 border-l-2 border-dashed border-emerald-400/60"></div>
+                            <!-- Right bracket marker -->
+                            <div class="absolute right-[15%] top-0 bottom-0 border-r-2 border-dashed border-emerald-400/60"></div>
+
+                            <p class="text-neutral-400 line-through decoration-red-500/50">
+                                [Bắt đầu dòng] <span class="text-white font-bold bg-emerald-500/20 px-1 rounded">Chữ thứ 3</span> .................. <span class="text-white font-bold bg-emerald-500/20 px-1 rounded">Chữ kế cuối</span> [Kết thúc dòng]
+                            </p>
+                        </div>
+                        <div class="flex justify-between text-xs text-neutral-400">
+                            <span>← Mắt tự nhận diện nhờ tầm nhìn ngoại vi ←</span>
+                            <span>→ Tự động quét từ lề phải →</span>
+                        </div>
+                        <p class="text-xs text-red-200/60 leading-relaxed mt-2 italic">
+                            Tại sao làm vậy? Khi bạn bắt đầu di chuyển tay từ chữ thứ 3 và dừng sớm trước lề phải 2-3 chữ, tầm nhìn ngoại vi của mắt đã tự động nhận diện các phần đầu và cuối dòng. Việc rút ngắn hành trình tay giúp bạn tiết kiệm thời gian, tăng tốc độ xuống dòng và tránh lãng phí thời gian vào khoảng trống của lề trang sách.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: LỜI KHUYÊN THỰC HÀNH -->
+        <section class="reveal space-y-8">
+            <div class="border-l-4 border-amber-400 pl-4">
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Phần 03</span>
+                <h2 class="text-2xl md:text-3xl font-bold mt-1">Lời khuyên thực hành thực tế</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Phone Reading Optimization -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <!-- Mobile Icon -->
+                        <div class="p-2 bg-amber-400/10 text-amber-300 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-amber-300">Tối ưu khi đọc trên điện thoại</h3>
+                    </div>
+                    <p class="text-sm text-red-100/80 leading-relaxed">
+                        Do độ rộng của dòng chữ trên màn hình điện thoại rất ngắn (chỉ khoảng 7-8 từ), bạn hãy tập trung nhảy mắt đúng <strong>2 điểm</strong> trên một hàng. Cách này giúp bạn nắm trọn vẹn thông tin và chuyển xuống dòng kế tiếp cực kỳ nhanh chóng.
+                    </p>
+                </div>
+
+                <!-- Roadmap -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <!-- Flag/Roadmap Icon -->
+                        <div class="p-2 bg-emerald-400/10 text-emerald-300 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-emerald-300">Lộ trình rèn luyện</h3>
+                    </div>
+                    <p class="text-sm text-red-100/80 leading-relaxed font-light">
+                        Hãy rèn luyện theo từng bước nhỏ để mắt làm quen tự nhiên:
+                    </p>
+                    <div class="flex items-center justify-between text-xs font-bold pt-1 text-center">
+                        <div class="bg-emerald-500/20 px-3 py-1.5 rounded border border-emerald-500/30">Cụm 2 từ</div>
+                        <span class="text-emerald-400">➔</span>
+                        <div class="bg-emerald-500/20 px-3 py-1.5 rounded border border-emerald-500/30">Cụm 3 từ</div>
+                        <span class="text-emerald-400">➔</span>
+                        <div class="bg-emerald-500/20 px-3 py-1.5 rounded border border-emerald-500/30">Cụm 5 từ</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUMMARY CLOSING -->
+        <section class="reveal text-center py-8 border-t border-white/10 space-y-4">
+            <h3 class="text-xl font-bold text-yellow-400">KẾT LUẬN</h3>
+            <p class="text-sm md:text-base text-red-100/90 max-w-3xl mx-auto leading-relaxed">
+                Đọc nhanh không phải là việc lướt qua một cách hời hợt, mà là quá trình tối ưu hóa các chuyển động tự nhiên của đôi mắt (nhảy mắt, mở rộng tầm nhìn, tối ưu hóa hành trình tay) để đồng hành cùng tốc độ xử lý hình ảnh vượt trội của não bộ.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-8 mt-12 bg-brandRed-950 border-t border-white/5 text-center text-xs text-red-200/50">
+        <div class="container mx-auto px-4">
+            <p>© Speed Reading VN. Bản quyền tài liệu thuộc về chương trình đào tạo Speed Reading.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Scroll Animations -->
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+
+        function revealOnScroll() {
+            for (let i = 0; i < reveals.length; i++) {
+                let windowHeight = window.innerHeight;
+                let elementTop = reveals[i].getBoundingClientRect().top;
+                let elementVisible = 100;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+    </script>
+</body>
+</html>

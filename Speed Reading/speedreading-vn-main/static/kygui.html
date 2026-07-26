@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới Thiệu Dịch Vụ Ký Gửi Nhà Đất - Thiên Khôi</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #d32f2f;
+            --primary-hover: #b71c1c;
+            --secondary-color: #1976d2;
+            --text-main: #2d3436;
+            --text-light: #636e72;
+            --bg-body: #f4f7f6;
+            --bg-card: #ffffff;
+            --success: #00b894;
+            --warning: #fdcb6e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* --- HEADER & HERO --- */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- SECTION TITLES --- */
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* --- BENEFITS GRID --- */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .benefit-card {
+            background: var(--bg-card);
+            padding: 30px 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0,0,0,0.02);
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(211, 47, 47, 0.1);
+            border-color: rgba(211, 47, 47, 0.1);
+        }
+
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(25, 118, 210, 0.1);
+            color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover .benefit-icon {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .benefit-card h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .benefit-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* --- WHY CHOOSE US --- */
+        .why-choose-us {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .feature-list li i {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 1.5rem;
+            color: var(--success);
+            background: rgba(0, 184, 148, 0.1);
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* --- REQUIREMENTS --- */
+        .requirements-box {
+            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+            padding: 40px;
+            border-radius: 20px;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        .requirements-box::after {
+            content: '\f022';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            font-size: 150px;
+            color: rgba(25, 118, 210, 0.05);
+            transform: rotate(-15deg);
+        }
+
+        .requirements-box h2 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .req-list {
+            list-style: none;
+        }
+
+        .req-list li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .req-list li::before {
+            content: '👉';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* --- CTA BUTTON --- */
+        .cta-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: linear-gradient(45deg, var(--primary-color), #ff5252);
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(211, 47, 47, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(211, 47, 47, 0.4);
+        }
+
+        .contact-btn:hover::before {
+            left: 100%;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #ddd;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* --- ANIMATIONS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .requirements-box { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="header reveal">
+        <h1>Dịch Vụ Ký Gửi Nhà Đất Chuyên Nghiệp</h1>
+        <p>Chào mừng Quý chủ nhà! Khi gửi bán nhà qua hệ thống <strong>Thiên Khôi</strong>, Quý vị sẽ được hưởng những đặc quyền ưu việt mà các đơn vị môi giới truyền thống không có được.</p>
+    </div>
+
+    <h2 class="section-title reveal">Quyền Lợi Của Chủ Nhà</h2>
+    
+    <div class="benefits-grid">
+        <div class="benefit-card reveal">
+            <div class="benefit-icon"><i class="fa-solid fa-phone-slash"></i></div>
+            <h3>Hoàn toàn không bị làm phiền</h3>
+            <p>Quý khách chỉ làm việc với duy nhất một đầu mối là Quản lý đầu chủ. Chúng tôi giúp Quý khách tránh khỏi tình trạng bị hàng trăm môi giới gọi điện quấy rối, ép giá hoặc phá giá vào những giờ nghỉ ngơi.</p>
+        </div>
+
+        <div class="benefit-card reveal" style="transition-delay: 0.1s;">
+            <div class="benefit-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <h3>Bảo mật và An toàn</h3>
+            <p>Quý khách <span class="highlight">không cần treo bảng bán nhà</span> trước cửa, tránh việc bị kẻ xấu nhắm tới. Chúng tôi bảo lãnh sự an toàn, tránh việc Quý khách bị lừa đảo hoặc dùng đòn tâm lý để hạ giá tài sản.</p>
+        </div>
+
+        <div class="benefit-card reveal" style="transition-delay: 0.2s;">
+            <div class="benefit-icon"><i class="fa-solid fa-stopwatch"></i></div>
+            <h3>Tiết kiệm thời gian</h3>
+            <p>Chỉ dẫn những khách hàng thực sự "nét", đã được sàng lọc kỹ lưỡng và sẵn sàng đàm phán chốt giá mới gặp Quý chủ nhà. Không phải mất công tiếp những đoàn khách xem nhà không hiệu quả.</p>
+        </div>
+
+        <div class="benefit-card reveal" style="transition-delay: 0.3s;">
+            <div class="benefit-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h3>Hỗ trợ pháp lý toàn diện</h3>
+            <p>Hỗ trợ thủ tục vay ngân hàng, tư vấn làm sổ hoàn công và định giá tài sản sát với thị trường để bán nhanh nhất với giá tốt nhất.</p>
+        </div>
+
+        <div class="benefit-card reveal" style="transition-delay: 0.4s;">
+            <div class="benefit-icon"><i class="fa-solid fa-feather-pointed"></i></div>
+            <h3>Tự do và Linh hoạt</h3>
+            <p>Chúng tôi <span class="highlight">không yêu cầu ký độc quyền</span>. Quý khách vẫn hoàn toàn có quyền gửi bán ở các nơi khác hoặc tự bán theo ý muốn.</p>
+        </div>
+    </div>
+
+    <div class="why-choose-us reveal">
+        <h2 class="section-title">Tại Sao Chọn Thiên Khôi?</h2>
+        <ul class="feature-list">
+            <li><i class="fa-solid fa-network-wired"></i> <strong>Mạng lưới khổng lồ:</strong> Hệ thống hơn <span class="highlight">40.000 môi giới</span> giúp thông tin nhà đất lan tỏa cực nhanh đến đúng khách hàng.</li>
+            <li><i class="fa-solid fa-bullseye"></i> <strong>Marketing chuyên nghiệp:</strong> Chúng tôi đầu tư chi phí Marketing bằng tiền mặt để tiếp cận đúng khách hàng mục tiêu, thay vì chỉ quảng bá truyền miệng.</li>
+            <li><i class="fa-solid fa-medal"></i> <strong>Uy tín thương hiệu:</strong> Chỉ nhận hàng từ <strong>Chính chủ</strong>, đảm bảo pháp lý chuẩn chỉ, tạo niềm tin vững chắc cho người mua.</li>
+        </ul>
+    </div>
+
+    <div class="requirements-box reveal">
+        <h2><i class="fa-solid fa-clipboard-list"></i> Thông Tin Cần Cung Cấp</h2>
+        <p style="margin-bottom: 15px; color: #444;">Để triển khai bán hàng nhanh chóng, Quý khách vui lòng cung cấp:</p>
+        <ul class="req-list">
+            <li><strong>Hình ảnh sổ đỏ/sổ hồng:</strong> Cung cấp đầy đủ các mặt của sổ (4 mặt với sổ cũ hoặc 2 mặt với sổ mới) để kiểm tra số Seri hệ thống.</li>
+            <li><strong>Căn cước công dân (CCCD):</strong> Của người đứng tên chính chủ trên sổ.</li>
+            <li><strong>Xác nhận hoa hồng:</strong> Một tin nhắn hoặc văn bản xác nhận đồng ý gửi bán với mức phí thỏa thuận.</li>
+            <li><strong style="color: var(--primary-color);">Lưu ý quan trọng:</strong> Chúng tôi chỉ nhận nhà từ <span class="highlight">Chính chủ</span>, không nhận qua đầu tư hoặc ký lướt để đảm bảo tính minh bạch.</li>
+        </ul>
+    </div>
+
+    <div class="cta-container reveal">
+        <a href="#" class="contact-btn">
+            GỬI THÔNG TIN NGAY <i class="fa-solid fa-paper-plane"></i>
+        </a>
+    </div>
+
+    <div class="footer reveal">
+        <p><strong>Thiên Khôi</strong> - Uy tín tạo nên thương hiệu. Rất hân hạnh được đồng hành cùng Quý khách!</p>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const reveals = document.querySelectorAll('.reveal');
+
+        function checkReveal() {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 100;
+
+            reveals.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkReveal);
+        // Trigger once on load
+        checkReveal();
+    });
+</script>
+
+</body>
+</html>

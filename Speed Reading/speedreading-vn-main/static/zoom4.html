@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Thông Minh - Luyện Tập Ghi Chép Smartnote</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        game: {
+                            white: '#ffffff',
+                            bg: '#fff5f5',
+                            red: '#e11d48',
+                            darkRed: '#9f1239',
+                            yellow: '#facc15',
+                            dark: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fff5f5;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        
+        .game-card {
+            background: #ffffff;
+            border: 4px solid #e11d48;
+            box-shadow: 6px 6px 0px #9f1239;
+            border-radius: 20px;
+        }
+
+        .game-btn-red {
+            background: #e11d48;
+            border: 3px solid #1e293b;
+            box-shadow: 0px 6px 0px #9f1239;
+            transform: translateY(-2px);
+            transition: all 0.1s ease;
+        }
+        .game-btn-red:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px #9f1239;
+        }
+
+        .game-btn-yellow {
+            background: #facc15;
+            border: 3px solid #1e293b;
+            box-shadow: 0px 6px 0px #ca8a04;
+            transform: translateY(-2px);
+            transition: all 0.1s ease;
+        }
+        .game-btn-yellow:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px #ca8a04;
+        }
+
+        .reader-display {
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #ffffff;
+            border: 4px dashed #e11d48;
+        }
+
+        .focus-guide {
+            position: absolute;
+            height: 100%;
+            width: 3px;
+            background-color: rgba(225, 29, 72, 0.15);
+            top: 0;
+            z-index: 1;
+        }
+        
+        .word-chunk {
+            position: relative;
+            z-index: 10;
+            font-weight: 900;
+            letter-spacing: -0.01em;
+        }
+
+        .highlight-scroll-container {
+            scroll-behavior: smooth;
+        }
+
+        #rpm-bar {
+            transition: width 0.3s ease-out, background-color 0.3s ease;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            border-radius: 8px;
+            background: #e11d48;
+            border: 3px solid #1e293b;
+            cursor: pointer;
+            margin-top: -10px; 
+            box-shadow: 0px 3px 0px #9f1239;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 12px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border: 3px solid #1e293b;
+            border-radius: 6px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Floating Game Music Control -->
+    <div class="fixed bottom-4 right-4 z-[100] flex items-center gap-2">
+        <button id="bgm-toggle" onclick="toggleBackgroundMusic()" class="game-btn-yellow text-gray-950 font-black rounded-xl px-5 py-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+            <i class="fa-solid fa-gamepad text-lg animate-bounce"></i>
+            <span id="bgm-text">Nhạc trò chơi: TẮT</span>
+        </button>
+    </div>
+
+    <!-- Background Confetti Canvas -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-[90] hidden"></canvas>
+
+    <!-- Header Arcade Style -->
+    <header class="bg-gradient-to-r from-red-600 to-rose-500 border-b-8 border-gray-900 py-5 px-6 flex justify-center items-center shadow-xl shrink-0 relative">
+        <div class="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:40px_40px]"></div>
+        <div class="flex items-center gap-4 relative z-10">
+            <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_4px_0_#9f1239] text-center">
+                🎯 ĐẤU TRƯỜNG LUYỆN ĐỌC & GHI CHÉP SMARTNOTE 🎯
+            </h1>
+        </div>
+    </header>
+
+    <main class="flex-grow relative flex flex-col items-center justify-start p-4 md:p-6 overflow-y-auto w-full">
+        
+        <section class="w-full max-w-5xl mx-auto flex flex-col py-2">
+            
+            <!-- Setup & Selection (Game UI) -->
+            <div class="game-card p-5 mb-6 flex flex-col md:flex-row gap-6 items-center justify-between z-20">
+                <div class="flex-grow w-full md:w-auto">
+                    <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">🔥 CHỌN BÀI LUYỆN ĐỌC</label>
+                    <select id="text-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold focus:ring-4 focus:ring-rose-300 outline-none cursor-pointer" onchange="loadSelectedText()">
+                        <option value="0">Bài 1: Sức Mạnh Của Tình Bạn Chân Thành</option>
+                        <option value="1">Bài 2: Đọc Sách - Chuyến Xe Khám Phá Tri Thức</option>
+                        <option value="2">Bài 3: Lòng Tốt Nhỏ Bé Thay Đổi Thế Giới</option>
+                        <option value="3">Bài 4: Đôi Bạn Cùng Tiến Trong Học Tập</option>
+                        <option value="4">Bài 5: Sách Là Cầu Nối Lan Tỏa Yêu Thương</option>
+                    </select>
+                </div>
+                
+                <div class="w-full md:w-auto flex gap-4">
+                    <div class="flex-1 min-w-[180px]">
+                        <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">🛡️ CHẾ ĐỘ CHƠI</label>
+                        <select id="mode-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold outline-none cursor-pointer" onchange="loadSelectedText()">
+                            <option value="rsvp" selected>Chớp Chữ Trung Tâm (RSVP)</option>
+                            <option value="highlight">Quét Sáng Cụm Từ (Highlight)</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[130px]">
+                        <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">⭐ SỐ TỪ/NHỊP</label>
+                        <select id="chunk-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold outline-none cursor-pointer" onchange="loadSelectedText()">
+                            <option value="1">1 Từ</option>
+                            <option value="2" selected>2 Từ</option>
+                            <option value="3">3 Từ</option>
+                            <option value="4">4 Từ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard / RPM Meter -->
+            <div class="game-card p-6 mb-6 flex-grow flex flex-col relative overflow-hidden">
+                <div class="flex justify-between items-end mb-3 relative z-10">
+                    <div class="uppercase tracking-wider text-base font-black text-rose-600 flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-high animate-pulse"></i> TỐC ĐỘ LUYỆN ĐỌC (RPM)
+                    </div>
+                    <div class="text-5xl font-black tabular-nums text-gray-900 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.1)]" id="wpm-display">250 <span class="text-lg text-gray-500 font-bold">WPM</span></div>
+                </div>
+                
+                <div class="w-full bg-gray-100 h-7 rounded-xl border-4 border-gray-900 mb-6 relative z-10 overflow-hidden shadow-inner">
+                    <div id="rpm-bar" class="h-full bg-rose-500 rounded-l-lg w-[20%] border-r-4 border-gray-900 transition-all duration-300"></div>
+                </div>
+
+                <!-- MAIN READER DISPLAY SCREEN -->
+                <div class="flex-grow reader-display rounded-2xl shadow-inner overflow-hidden relative z-10 p-4">
+                    <div class="focus-guide left-1/3" id="guide-left"></div>
+                    <div class="focus-guide right-1/3" id="guide-right"></div>
+                    
+                    <div id="reader-word" class="word-chunk text-4xl md:text-5xl text-center px-4 w-full break-words text-rose-600 font-black drop-shadow-[2px_2px_0px_rgba(0,0,0,0.05)] highlight-scroll-container">
+                        BẤM KHỞI ĐỘNG THỬ THÁCH!
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 h-3 bg-gray-200 w-full border-t-2 border-gray-900">
+                        <div id="reading-progress" class="h-full bg-gradient-to-r from-rose-500 to-yellow-400 w-0 transition-all duration-100 border-r-2 border-gray-900"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Layout -->
+            <div class="game-card p-6 flex flex-col md:flex-row items-center gap-8 z-20">
+                <div class="flex gap-4 shrink-0 justify-center w-full md:w-auto">
+                    <button id="btn-play" onclick="togglePlay()" class="w-24 h-24 rounded-2xl game-btn-red text-white flex flex-col items-center justify-center gap-1 shadow-lg transition-all border-4 border-gray-900">
+                        <i class="fa-solid fa-play text-3xl" id="icon-play"></i>
+                        <span class="text-xs font-black uppercase" id="text-play">CHƠI</span>
+                    </button>
+                    <button onclick="resetReader()" class="w-16 h-16 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-900 border-4 border-gray-900 flex items-center justify-center text-xl transition-all shadow-[0_4px_0_#1e293b] active:translate-y-1 active:shadow-none my-auto">
+                        <i class="fa-solid fa-rotate-right font-bold"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-grow w-full flex flex-col gap-3">
+                    <div class="flex justify-between text-sm font-black text-gray-700 px-1">
+                        <span>🐢 Tập sự (250)</span>
+                        <span class="text-rose-600">⚡ Cao thủ (550) 🔥</span>
+                    </div>
+                    <input type="range" id="wpm-slider" min="250" max="550" step="100" value="250" oninput="updateWPM(this.value)" class="w-full mb-2">
+                    
+                    <div class="flex justify-between gap-3">
+                        <button onclick="document.getElementById('wpm-slider').value=250; updateWPM(250)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.1 (250)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=350; updateWPM(350)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.2 (350)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=450; updateWPM(450)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.3 (450)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=550; updateWPM(550)" class="flex-1 bg-rose-100 hover:bg-rose-200 py-2.5 rounded-xl text-sm font-black text-rose-700 transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none">MAX (550)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MULTI-STEP QUIZ MODAL (Game-style Pop-up) -->
+        <div id="question-modal" class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300 overflow-y-auto py-10">
+            <div class="bg-white border-4 border-gray-900 rounded-3xl p-6 md:p-8 max-w-3xl w-full mx-4 shadow-[8px_8px_0px_#1e293b] transform scale-95 transition-transform duration-300 relative my-auto" id="modal-content-box"></div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- NỘI DUNG 5 BÀI ĐỌC CHI TIẾT THEO CHỦ ĐỀ YÊU CẦU ---
+        const texts = [
+            "Tình bạn chân thành là chỗ dựa tinh thần vô giá giúp học sinh vượt qua áp lực học đường. Một người bạn tốt không chỉ biết cách chia sẻ niềm vui, mà còn sẵn sàng lắng nghe, đồng cảm và đồng hành cùng bạn khi gặp khó khăn hoạn nạn. Tình bạn đẹp luôn được xây dựng dựa trên sự tôn trọng, lòng tin tưởng lẫn nhau chứ không phải dựa trên lợi ích hay số lượng bạn bè tương tác trên mạng xã hội. Hãy chủ động quan tâm, lắng nghe để thắt chặt sợi dây gắn kết bền chặt này mỗi ngày.",
+            
+            "Đọc sách là phương pháp tự học hiệu quả nhất giúp mở rộng tầm nhìn và rèn luyện tư duy sâu sắc. Mỗi cuốn sách hay giống như một người thầy vĩ đại mang đến cho chúng ta thế giới kiến thức vô tận về khoa học, lịch sử và kỹ năng sống. Duy trì thói quen đọc sách đều đặn từ 15 đến 30 phút mỗi ngày giúp tăng cường khả năng tập trung, kích thích trí tưởng tượng và làm giàu vốn từ. Đừng chỉ đọc lướt qua, hãy chủ động ghi chép lại những điều tâm đắc để biến tri thức đó thành tài sản vô giá của bản thân.",
+            
+            "Giúp đỡ mọi người xung quanh không đòi hỏi bạn phải làm những hành động vĩ đại hay tốn kém tiền bạc, vật chất. Lòng tốt thực sự thường bắt đầu từ những việc làm nhỏ bé, giản dị xuất phát từ sự chân thành trong cuộc sống hàng ngày. Đó có thể là giảng lại bài toán khó cho bạn cùng bàn, phụ giúp bác bảo vệ nhặt một món đồ bị rơi, hay giữ cửa cho người đi phía sau. Những hành động tử tế này không chỉ mang lại niềm vui cho người nhận mà còn gieo mầm bình an, hạnh phúc cho chính tâm hồn bạn.",
+            
+            "Trong môi trường học đường, mô hình đôi bạn cùng tiến là giải pháp tuyệt vời giúp học sinh cùng nhau tiến bộ vượt bậc. Học tập đôi khi sẽ có những lúc gặp áp lực và chán nản, nhưng một người bạn đồng hành tương trợ sẽ giúp mọi thử thách trở nên nhẹ nhàng hơn. Việc lập nhóm học tập, cùng nhau giải quyết bài tập khó và nhắc nhở nhau làm bài không chỉ nâng cao thành tích học tập mà còn rèn luyện kỹ năng làm việc nhóm. Hãy chủ động tìm một người bạn đồng hành để cùng đặt mục tiêu bứt phá mỗi ngày.",
+            
+            "Đọc sách và sẻ chia sách là cách tuyệt vời để kết nối tình bạn và lan tỏa giá trị tri thức đến cộng đồng. Khi trao đổi, cho bạn mượn những cuốn sách hay hoặc cùng nhau thảo luận về một nhân vật, chúng ta sẽ mở ra nhiều góc nhìn mới mẻ và sâu sắc. Ngoài ra, hành động quyên góp sách cũ cho thư viện hoặc tặng trẻ em nghèo vùng cao chính là cách gieo mầm lòng tốt thực tế nhất. Sách chính là cầu nối tuyệt vời kết hợp tri thức và tình yêu thương, giúp cuộc sống học đường thêm phần ý nghĩa."
+        ];
+
+        // --- HỆ THỐNG TRẮC NGHIỆM PHÂN TẦNG THEO 3 BƯỚC GHI CHÉP SMARTNOTE ---
+        const questionsData = [
+            {
+                // Bài 1: Bạn bè
+                subQuestions: [
+                    {
+                        step: "Bước 1: Trích lọc từ khóa", title: "Lọc Tìm Điểm Sáng", icon: "fa-filter", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Để ghi vào cột bên trái vở ghi Smartnote, nhóm từ khóa quan trọng và lặp lại nhiều nhất phản ánh nội dung văn bản trên là gì?",
+                        options: ["Mạng xã hội, áp lực học đường, số lượng.", "Tình bạn chân thành, lắng nghe, đồng cảm, tôn trọng.", "Khó khăn hoạn nạn, lợi ích, tương tác."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 1", actionText: "Cột bên trái chỉ dùng để ghi những từ khóa cốt lõi, lặp đi lặp lại hoặc định nghĩa then chốt. Không chép cả câu dài!"
+                    },
+                    {
+                        step: "Bước 2: Tổng hợp nội dung", title: "Làm Chủ Ngôn Từ", icon: "fa-pen-to-square", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Dựa vào từ khóa đã lọc, câu nào dưới đây tóm tắt đúng nhất ý chính của bài bằng ngôn ngữ của chính mình để ghi vào phần trung tâm (cột bên phải)?",
+                        options: ["Tình bạn chân thành không đo bằng số lượng trên mạng xã hội, mà dựa trên sự thấu hiểu, tôn trọng và đồng hành cùng nhau vượt qua khó khăn.", "Bạn tốt là người phải giúp chúng ta làm hết tất cả các bài tập kiểm tra trên lớp.", "Tình bạn đẹp là không bao giờ được xảy ra mâu thuẫn hay gặp áp lực học đường."], correctOption: 0,
+                        actionTitle: "Mẹo Smartnote Bước 2", actionText: "Hãy dùng sơ đồ hoặc câu tóm tắt cực kỳ ngắn gọn bằng văn phong của chính em để ghi vào phần giữa vở. Tuyệt đối không chép y nguyên văn bản gốc."
+                    },
+                    {
+                        step: "Bước 3: Chuyển hóa", title: "Kế Hoạch Thực Chiến", icon: "fa-bolt", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "Tự hỏi: 'Tác giả muốn giúp gì cho mình?'. Đâu là kế hoạch ứng dụng thực tế ngay lập tức phù hợp nhất để ghi vào phần dưới cùng của vở?",
+                        options: ["Nhận ra giá trị của bạn tốt. Kế hoạch: Tối nay nhắn tin cảm ơn một người bạn thân hoặc ngày mai chủ động lắng nghe bạn chia sẻ.", "Nhận ra mạng xã hội không tốt. Kế hoạch: Xóa toàn bộ tài khoản mạng xã hội ngay lập tức.", "Nhận ra áp lực học đường rất đáng sợ. Kế hoạch: Xin bố mẹ nghỉ học ở nhà để đi chơi với bạn."], correctOption: 0,
+                        actionTitle: "Mẹo Smartnote Bước 3", actionText: "Chuyển hóa tri thức thành hành động cụ thể bằng cách ghi lại việc cần làm, có mốc thời gian rõ ràng (ví dụ: tối nay, ngày mai) ở cuối trang vở."
+                    }
+                ]
+            },
+            {
+                // Bài 2: Đọc sách
+                subQuestions: [
+                    {
+                        step: "Bước 1: Trích lọc từ khóa", title: "Lọc Tìm Điểm Sáng", icon: "fa-filter", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Khi thực hiện trích lọc thông tin vào cột bên trái vở, nhóm từ khóa nào thể hiện đúng bản chất của bài viết?",
+                        options: ["Khoa học, lịch sử, kỹ năng sống.", "Đọc sách, tự học, thói quen, ghi chép, tài sản vô giá.", "15 đến 30 phút, đọc lướt qua, từ ngữ."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 1", actionText: "Từ khóa chuẩn phải là những từ mang tính đúc kết hành động hoặc khái niệm chủ đạo xuyên suốt của toàn bài học."
+                    },
+                    {
+                        step: "Bước 2: Tổng hợp nội dung", title: "Làm Chủ Ngôn Từ", icon: "fa-pen-to-square", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Cách tổng hợp ý chính nào dưới đây phù hợp nhất để điền vào phần trung tâm (cột bên phải) của vở Smartnote?",
+                        options: ["Đọc sách mở rộng tri thức và rèn luyện trí não, cần duy trì đều đặn mỗi ngày kết hợp ghi chép để biến tri thức thành tài sản bản thân.", "Mỗi cuốn sách hay giống như một người thầy vĩ đại mang đến cho chúng ta thế giới kiến thức vô tận.", "Duy trì thói quen đọc sách đều đặn từ 15 đến 30 phút mỗi ngày giúp tăng cường khả năng tập trung."], correctOption: 0,
+                        actionTitle: "Mẹo Smartnote Bước 2", actionText: "Tổng hợp thông tin bằng cách liên kết các từ khóa ở Bước 1 thành một thông điệp logic, ngắn gọn, dễ hiểu đối với bản thân."
+                    },
+                    {
+                        step: "Bước 3: Chuyển hóa", title: "Kế Hoạch Thực Chiến", icon: "fa-bolt", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "Hành động thực tế nào nên được ghi vào phần dưới cùng để chuyển hóa bài học đọc sách này thành kết quả?",
+                        options: ["Lên kế hoạch xin tiền bố mẹ để mua thật nhiều sách về trưng bày cho đẹp.", "Nhận ra sách giúp tự học hiệu quả. Kế hoạch: Đặt báo thức đọc sách 20 phút tối nay và dùng Smartnote ghi lại 1 từ khóa tâm đắc.", "Chỉ đọc sách khi nào đến kỳ thi hoặc khi bị thầy cô giáo bắt buộc."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 3", actionText: "Hành động ứng dụng phải vừa sức, cụ thể và có thể làm được ngay trong ngày để tạo thói quen tốt lâu dài."
+                    }
+                ]
+            },
+            {
+                // Bài 3: Giúp đỡ
+                subQuestions: [
+                    {
+                        step: "Bước 1: Trích lọc từ khóa", title: "Lọc Tìm Điểm Sáng", icon: "fa-filter", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Cụm từ nào KHÔNG NÊN ghi vào cột từ khóa bên trái (vì nó là chi tiết nhỏ, không phải từ khóa cốt lõi)?",
+                        options: ["Giúp đỡ, lòng tốt.", "Bác bảo vệ nhặt món đồ.", "Hành động nhỏ bé, chân thành."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 1", actionText: "Hãy bỏ qua các ví dụ minh họa chi tiết cụ thể khi lọc từ khóa. Chỉ giữ lại những khái niệm mang tính bao quát."
+                    },
+                    {
+                        step: "Bước 2: Tổng hợp nội dung", title: "Làm Chủ Ngôn Từ", icon: "fa-pen-to-square", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Em sẽ viết gì vào phần trung tâm vở ghi để tóm tắt ngắn gọn và trọn vẹn thông điệp của bài viết?",
+                        options: ["Lòng tốt không cần lớn lao; những sự giúp đỡ nhỏ bé, chân thành hàng ngày mang lại niềm vui cho người nhận và sự bình an cho chính mình.", "Giúp đỡ người khác bắt buộc phải bao gồm việc giảng bài toán và giữ cửa cho người đi phía sau.", "Hành động tử tế sẽ giúp chúng ta trở nên vĩ đại và được mọi người ca ngợi trên mạng xã hội."], correctOption: 0,
+                        actionTitle: "Mẹo Smartnote Bước 2", actionText: "Nội dung tổng hợp tốt là khi người khác đọc vào phần trung tâm vở của em, họ vẫn hiểu được toàn bộ nội dung cốt truyện."
+                    },
+                    {
+                        step: "Bước 3: Chuyển hóa", title: "Kế Hoạch Thực Chiến", icon: "fa-bolt", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "Để trả lời câu hỏi 'Tác giả muốn giúp gì cho mình?', kế hoạch ứng dụng nào dưới đây là thực tế nhất?",
+                        options: ["Quyết tâm sau này lớn lên đi làm kiếm thật nhiều tiền để xây dựng một quỹ từ thiện lớn.", "Nhận ra giá trị của lòng tốt nhỏ bé. Kế hoạch: Ngày mai đến trường sẽ chú ý quan sát để chủ động giúp bạn một việc nhỏ hoặc phụ dọn rác lớp học.", "Từ nay sẽ giữ im lặng và chỉ giúp đỡ khi có ai đó tha thiết cầu xin mình."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 3", actionText: "Đừng lập kế hoạch quá xa xôi ở tương lai. Hãy tập trung vào những việc nhỏ có thể thực hiện ngay trong môi trường học đường ngày mai."
+                    }
+                ]
+            },
+            {
+                // Bài 4: Đôi bạn cùng tiến
+                subQuestions: [
+                    {
+                        step: "Bước 1: Trích lọc từ khóa", title: "Lọc Tìm Điểm Sáng", icon: "fa-filter", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Nhóm từ khóa nào xứng đáng được chọn để ghi vào cột bên trái cho bài viết này?",
+                        options: ["Áp lực, chán nản, thử thách học đường.", "Đôi bạn cùng tiến, đồng hành, tương trợ, tiến bộ.", "Giải bài tập khó, thành tích, làm việc nhóm."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 1", actionText: "Từ khóa chính là những từ chìa khóa mở ra linh hồn của bài viết, thường xuất hiện ở tiêu đề hoặc được nhắc lại nhiều lần."
+                    },
+                    {
+                        step: "Bước 2: Tổng hợp nội dung", title: "Làm Chủ Ngôn Từ", icon: "fa-pen-to-square", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Lựa chọn phương án tóm tắt nội dung bằng văn phong cá nhân ngắn gọn, súc tích cho phần trung tâm:",
+                        options: ["Học tập đôi khi rất chán nản và áp lực nên bắt buộc phải tìm bạn để nói chuyện cùng cho đỡ mệt.", "Mô hình đôi bạn cùng tiến giúp giảm áp lực học tập, nâng cao kết quả và rèn luyện kỹ năng nhóm thông qua sự đồng hành, tương trợ lẫn nhau.", "Việc học nhóm chủ yếu để nhắc nhở nhau làm bài tập về nhà đúng hạn."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 2", actionText: "Hãy tinh giản lời nói ngắn nhất có thể, tập trung vào lợi ích thực tế của giải pháp thay vì liệt kê dông dài."
+                    },
+                    {
+                        step: "Bước 3: Chuyển hóa", title: "Kế Hoạch Thực Chiến", icon: "fa-bolt", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "Kế hoạch hành động nào phù hợp nhất ghi ở dưới cùng để chuyển hóa tri thức của bài viết này thành thực tế?",
+                        options: ["Tự học một mình để giữ bí mật các phương pháp giải bài tập độc đáo.", "Nhận ra sức mạnh của sự đồng hành. Kế hoạch: Tối nay gọi điện rủ một người bạn lập nhóm đôi bạn cùng tiến và hẹn khung giờ học chung.", "Tìm kiếm những người bạn học giỏi nhất khối để nhờ họ làm hộ bài tập."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 3", actionText: "Hành động thực tế chính là câu trả lời mạnh mẽ nhất cho những gì em vừa tiếp thu được từ trang sách."
+                    }
+                ]
+            },
+            {
+                // Bài 5: Kết nối qua sách
+                subQuestions: [
+                    {
+                        step: "Bước 1: Trích lọc từ khóa", title: "Lọc Tìm Điểm Sáng", icon: "fa-filter", iconColor: "text-purple-500", actionBg: "bg-purple-50", actionColor: "text-purple-600", actionBorder: "border-purple-500",
+                        question: "Từ khóa định hướng quan trọng xuất hiện xuyên suốt đoạn văn trên là gì?",
+                        options: ["Chia sẻ sách, kết nối tình bạn, lan tỏa tri thức, cầu nối yêu thương.", "Người bạn thân, nhân vật truyện, bài học chung.", "Tiết kiệm chi phí, quyên góp sách cũ, thư viện trường."], correctOption: 0,
+                        actionTitle: "Mẹo Smartnote Bước 1", actionText: "Trích lọc chính xác từ khóa giúp bộ não dễ dàng liên tưởng và tái hiện lại toàn bộ kiến thức khi ôn tập."
+                    },
+                    {
+                        step: "Bước 2: Tổng hợp nội dung", title: "Làm Chủ Ngôn Từ", icon: "fa-pen-to-square", iconColor: "text-blue-500", actionBg: "bg-blue-50", actionColor: "text-blue-600", actionBorder: "border-blue-500",
+                        question: "Nội dung tóm tắt nào thể hiện việc dùng ngôn ngữ cá nhân (ghi phần trung tâm) tối ưu nhất?",
+                        options: ["Đọc chung một tác phẩm giúp chúng ta tranh luận về nhân vật và tiết kiệm tiền mua sách mới.", "Chia sẻ và trao đổi sách là phương pháp tuyệt vời để thắt chặt tình bạn, tiếp thu nhiều góc nhìn mới và lan tỏa lòng tốt đến cộng đồng.", "Sách là cầu nối tri thức, khi tri thức được sẻ chia thì tình bạn sẽ trở nên sâu sắc và ý nghĩa."], correctOption: 1,
+                        actionTitle: "Mẹo Smartnote Bước 2", actionText: "Ghi chép phần trung tâm chất lượng là khi em biết cô đọng nội dung, gia tăng giá trị thông tin trong từng câu chữ."
+                    },
+                    {
+                        step: "Bước 3: Chuyển hóa", title: "Kế Hoạch Thực Chiến", icon: "fa-bolt", iconColor: "text-amber-500", actionBg: "bg-amber-50", actionColor: "text-amber-600", actionBorder: "border-amber-500",
+                        question: "Để hoàn thành bước 'Chuyển hóa' dưới cùng trang vở, em chọn hành động cụ thể nào ngay ngày mai?",
+                        options: ["Sắp xếp lại tủ sách ngay tối nay, chọn ra 1-2 cuốn sách hay mang đến lớp sáng mai để cho bạn mượn hoặc tặng thư viện.", "Quyết định từ nay không mua sách nữa mà chỉ đi mượn của bạn bè để tiết kiệm tiền.", "Viết một bài văn thật dài kể về lợi ích của việc đọc sách chung với bạn."], correctOption: 0,
+                        actionTitle: "Mẹo Smartnote Bước 3", actionText: "Biến tri thức thành tài sản bằng một hành động thực tế chia sẻ giá trị. Chúc mừng em đã hoàn thành trọn vẹn 3 bước Smartnote!"
+                    }
+                ]
+            }
+        ];
+
+        // --- AUDIO ENGINE ---
+        class WebAudioEngine {
+            constructor() {
+                this.ctx = null; this.bgmPlaying = false; this.schedulerTimer = null; this.currentStep = 0;
+                this.chords = [[130.81, 164.81, 196.00], [174.61, 220.00, 261.63], [196.00, 246.94, 293.66], [130.81, 164.81, 196.00]];
+            }
+            init() { if (!this.ctx) { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } }
+            playTick() {
+                this.init(); if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime; const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(880, now); gain.gain.setValueAtTime(0.02, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.06);
+            }
+            playSFX(type) {
+                this.init(); if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime;
+                if (type === 'correct') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.08, now + idx * 0.06); gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.15);
+                        osc.connect(gain); gain.connect(this.ctx.destination); osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.2);
+                    });
+                } else if (type === 'incorrect') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'square'; osc.frequency.setValueAtTime(280.00, now); osc.frequency.linearRampToValueAtTime(140.00, now + 0.25);
+                    gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(1000.00, now); gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.05);
+                }
+            }
+            startBGM() { this.init(); if (this.ctx.state === 'suspended') this.ctx.resume(); this.bgmPlaying = true; this.currentStep = 0; this.runBgmLoop(); }
+            stopBGM() { this.bgmPlaying = false; clearTimeout(this.schedulerTimer); }
+            runBgmLoop() {
+                if (!this.bgmPlaying) return;
+                const chordIndex = Math.floor(this.currentStep / 4) % this.chords.length; const noteIndex = this.currentStep % 3; const baseFreq = this.chords[chordIndex][noteIndex] * 2.0;
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain(); const filter = this.ctx.createBiquadFilter();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(baseFreq, this.ctx.currentTime);
+                filter.type = 'lowpass'; filter.frequency.setValueAtTime(1400, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.015, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.4);
+                osc.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(this.ctx.currentTime + 0.5);
+                this.currentStep++; this.schedulerTimer = setTimeout(() => this.runBgmLoop(), 280);
+            }
+        }
+        const audio = new WebAudioEngine();
+        
+        function toggleBackgroundMusic() {
+            const toggleBtn = document.getElementById('bgm-toggle'); const toggleText = document.getElementById('bgm-text');
+            if (!audio.bgmPlaying) {
+                audio.startBGM(); toggleText.innerText = "Nhạc trò chơi: BẬT"; toggleBtn.classList.replace('game-btn-yellow', 'game-btn-red'); toggleBtn.classList.add('text-white'); audio.playSFX('click');
+            } else {
+                audio.stopBGM(); toggleText.innerText = "Nhạc trò chơi: TẮT"; toggleBtn.classList.replace('game-btn-red', 'game-btn-yellow'); toggleBtn.classList.remove('text-white');
+            }
+        }
+
+        // --- CONFETTI EFFECT ---
+        const canvas = document.getElementById('confetti-canvas'); const ctx = canvas.getContext('2d');
+        let confettiParticles = []; let confettiAnimationId = null;
+        function resizeConfettiCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeConfettiCanvas);
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = canvas.height + 20; this.size = Math.random() * 12 + 6;
+                this.speedX = Math.random() * 10 - 5; this.speedY = -Math.random() * 20 - 10; this.gravity = 0.45;
+                this.color = `hsl(${Math.random() * 360}, 100%, 55%)`; this.rotation = Math.random() * 360; this.rotationSpeed = Math.random() * 20 - 10;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.speedY += this.gravity; this.rotation += this.rotationSpeed; }
+            draw() {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color; ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size); ctx.restore();
+            }
+        }
+        function spawnConfetti() {
+            canvas.classList.remove('hidden'); resizeConfettiCanvas(); confettiParticles = [];
+            for (let i = 0; i < 100; i++) { confettiParticles.push(new ConfettiParticle()); }
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId); animateConfetti();
+        }
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles.forEach((p, idx) => { p.update(); p.draw(); if (p.y > canvas.height + 50) { confettiParticles.splice(idx, 1); } });
+            if (confettiParticles.length > 0) { confettiAnimationId = requestAnimationFrame(animateConfetti); } else { canvas.classList.add('hidden'); }
+        }
+
+        // --- GAME CONTROL ENGINE ---
+        let currentWPM = 250; let isPlaying = false; let wordsArray = []; let rawWordsArray = []; let currentChunkIndex = 0; let playInterval = null; let readingMode = 'rsvp'; let currentSubIdx = 0;
+        const domWord = document.getElementById('reader-word'); const domProgress = document.getElementById('reading-progress'); const domPlayBtn = document.getElementById('btn-play'); const domPlayIcon = document.getElementById('icon-play'); const domPlayText = document.getElementById('text-play'); const domWpmDisplay = document.getElementById('wpm-display'); const domRpmBar = document.getElementById('rpm-bar');
+
+        function getChunkSize() { return parseInt(document.getElementById('chunk-selector').value); }
+
+        function loadSelectedText() {
+            const textIndex = document.getElementById('text-selector').value;
+            rawWordsArray = texts[textIndex].trim().split(/\s+/);
+            readingMode = document.getElementById('mode-selector').value;
+            
+            const guideLeft = document.getElementById('guide-left'); const guideRight = document.getElementById('guide-right');
+            if (readingMode === 'highlight') { guideLeft.style.display = 'none'; guideRight.style.display = 'none'; } 
+            else { guideLeft.style.display = 'block'; guideRight.style.display = 'block'; }
+            resetReader();
+        }
+
+        function updateWPM(value) {
+            currentWPM = parseInt(value);
+            domWpmDisplay.innerHTML = `${currentWPM} <span class="text-lg text-gray-500 font-bold">WPM</span>`;
+            const percentage = ((currentWPM - 250) / 300) * 100; domRpmBar.style.width = `${percentage}%`;
+            domRpmBar.style.backgroundColor = currentWPM >= 450 ? '#e11d48' : '#facc15';
+            if (isPlaying) { clearInterval(playInterval); startInterval(); }
+        }
+
+        function resetReader() {
+            if (isPlaying) togglePlay();
+            currentChunkIndex = 0; domProgress.style.width = '0%'; const chunkSize = getChunkSize();
+
+            if (readingMode === 'rsvp') {
+                wordsArray = [];
+                for (let i = 0; i < rawWordsArray.length; i += chunkSize) { wordsArray.push(rawWordsArray.slice(i, i + chunkSize).join(' ')); }
+                domWord.className = "word-chunk text-3xl md:text-5xl text-center px-4 w-full break-words text-rose-600 font-black highlight-scroll-container";
+                domWord.innerHTML = "SẴN SÀNG CHIẾN ĐẤU!";
+            } else {
+                wordsArray = rawWordsArray;
+                domWord.className = "text-xl md:text-2xl text-left px-6 py-6 w-full text-gray-400 font-bold leading-relaxed overflow-y-auto max-h-[350px] highlight-scroll-container bg-gray-50 rounded-xl border-2 border-gray-300";
+                domWord.innerHTML = rawWordsArray.map((w, idx) => `<span id="word-${idx}" class="transition-colors duration-100">${w}</span>`).join(' ');
+            }
+        }
+
+        function togglePlay() {
+            audio.playSFX('click'); if (wordsArray.length === 0) loadSelectedText();
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                domPlayIcon.className = "fa-solid fa-pause text-3xl"; domPlayText.innerText = "DỪNG";
+                domPlayBtn.className = "w-24 h-24 rounded-2xl game-btn-yellow text-gray-950 flex flex-col items-center justify-center gap-1 shadow-lg border-4 border-gray-900";
+                if (currentChunkIndex >= wordsArray.length) currentChunkIndex = 0;
+                startInterval();
+            } else {
+                domPlayIcon.className = "fa-solid fa-play text-3xl"; domPlayText.innerText = "CHƠI";
+                domPlayBtn.className = "w-24 h-24 rounded-2xl game-btn-red text-white flex flex-col items-center justify-center gap-1 shadow-lg border-4 border-gray-900";
+                clearInterval(playInterval);
+            }
+        }
+
+        function startInterval() {
+            const chunkSize = getChunkSize(); const delay = (60000 / currentWPM) * chunkSize; 
+            playInterval = setInterval(() => {
+                if (readingMode === 'rsvp') {
+                    if (currentChunkIndex < wordsArray.length) {
+                        audio.playTick(); domWord.innerText = wordsArray[currentChunkIndex];
+                        domProgress.style.width = `${((currentChunkIndex + 1) / wordsArray.length) * 100}%`; currentChunkIndex++;
+                    } else { showCompletionScreen(); }
+                } else {
+                    if (currentChunkIndex < wordsArray.length) {
+                        audio.playTick(); domWord.querySelectorAll('.bg-rose-600').forEach(el => { el.className = "transition-colors duration-100 text-gray-400 font-semibold"; });
+                        let lastSpan = null;
+                        for (let i = 0; i < chunkSize; i++) {
+                            const targetIdx = currentChunkIndex + i;
+                            if (targetIdx < wordsArray.length) {
+                                const span = document.getElementById(`word-${targetIdx}`);
+                                if (span) { span.className = "text-white font-black bg-rose-600 rounded-md px-1.5 py-0.5 shadow-sm"; lastSpan = span; }
+                            }
+                        }
+                        if (lastSpan) lastSpan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        domProgress.style.width = `${(Math.min(currentChunkIndex + chunkSize, wordsArray.length) / wordsArray.length) * 100}%`; currentChunkIndex += chunkSize;
+                    } else { showCompletionScreen(); }
+                }
+            }, delay);
+        }
+
+        function showCompletionScreen() {
+            togglePlay(); domWord.className = "word-chunk text-center px-4 w-full text-rose-600 flex items-center justify-center";
+            domWord.innerHTML = `
+                <div class='flex flex-col items-center justify-center gap-6 py-6'>
+                    <span class='text-3xl md:text-5xl text-rose-600 font-black tracking-wider animate-pulse'>🎉 ĐỌC XONG VĂN BẢN! 🎉</span>
+                    <p class='text-gray-600 font-bold text-base max-w-md text-center'>Chúc mừng bạn! Bây giờ hãy bắt đầu giải mã thử thách trắc nghiệm trọn vẹn <b>3 Bước Quy Trình Ghi Chép Smartnote</b>.</p>
+                    <button onclick='showQuestion(0)' class='game-btn-yellow text-gray-950 font-black text-xl md:text-2xl px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition-all transform animate-bounce border-4 border-gray-900 uppercase'>
+                        🔑 Kích Hoạt Thử Thách 3 Bước Smartnote
+                    </button>
+                </div>`;
+        }
+
+        // --- MULTI-STEP QUIZ ENGINE SYSTEM (3 STEPS COHERENT) ---
+        function showQuestion(subIdx = 0) {
+            audio.playSFX('click');
+            const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            const textIndex = document.getElementById('text-selector').value;
+            
+            currentSubIdx = subIdx;
+            const data = questionsData[textIndex].subQuestions[subIdx];
+            
+            let optionsHtml = ''; const letters = ['💥 A', '⚡ B', '🔥 C'];
+            data.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="checkAnswer(this, ${idx}, ${data.correctOption})" class="w-full text-left bg-white hover:bg-rose-50 text-gray-900 font-black p-4 md:p-5 rounded-2xl border-3 border-gray-900 transition-all mb-4 flex items-center shadow-[0_4px_0_#1e293b] active:translate-y-1 active:shadow-none text-base md:text-lg">
+                        <span class="w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-rose-600 shrink-0 shadow-sm">${letters[idx]}</span>
+                        <span class="flex-1">${opt}</span>
+                    </button>`;
+            });
+            
+            const isLast = subIdx === 2; // Kết thúc ở bước thứ 3 (chỉ số 2)
+            const nextAction = isLast ? "closeQuestion()" : `showQuestion(${subIdx + 1})`;
+            const btnText = isLast ? "🏁 Hoàn Thành Xuất Sắc 3 Bước Smartnote" : "➡️ Tiến Tới Bước Tiếp Theo";
+
+            contentBox.innerHTML = `
+                <div class="text-center">
+                    <div class="text-5xl ${data.iconColor} mb-2"><i class="fa-solid ${data.icon}"></i></div>
+                    <h2 class="text-xl font-black text-rose-600 uppercase tracking-wide mb-1">${data.step}</h2>
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-900 mb-6 uppercase tracking-wide px-2">${data.title}</h3>
+                    <div class="bg-rose-50 p-4 md:p-6 rounded-2xl border-3 border-gray-900 mb-6 text-left">
+                        <p class="text-lg md:text-xl text-gray-900 mb-6 font-black leading-relaxed">❓ ${data.question}</p>
+                        <div class="flex flex-col">${optionsHtml}</div>
+                        <div id="action-section" class="hidden mt-6 ${data.actionBg} p-5 rounded-2xl border-3 border-gray-900 shadow-inner">
+                            <p class="${data.actionColor} text-base md:text-lg font-black uppercase mb-2">⭐ ${data.actionTitle}:</p>
+                            <p class="text-gray-800 font-bold text-sm md:text-base leading-relaxed">${data.actionText}</p>
+                        </div>
+                    </div>
+                    <button onclick="${nextAction}" class="game-btn-red text-white px-8 py-4 rounded-xl font-black transition-all text-lg md:text-xl w-full md:w-auto border-3 border-gray-900 uppercase tracking-wider">${btnText}</button>
+                </div>`;
+            
+            if (subIdx === 0) {
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); contentBox.classList.replace('scale-95', 'scale-100'); }, 10);
+            }
+        }
+
+        function checkAnswer(btn, optionIndex, correctIndex) {
+            const parent = btn.parentElement; 
+            parent.querySelectorAll('button').forEach(b => { 
+                b.disabled = true; b.className = "w-full text-left bg-gray-100 text-gray-400 font-bold p-4 md:p-5 rounded-xl border-3 border-gray-300 cursor-not-allowed mb-4 flex items-center text-base md:text-lg"; 
+            });
+            if (optionIndex === correctIndex) {
+                audio.playSFX('correct'); spawnConfetti();
+                btn.className = "w-full text-left bg-emerald-100 text-emerald-800 font-black p-4 md:p-5 rounded-xl border-4 border-emerald-500 mb-4 flex items-center shadow-md text-base md:text-lg";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-emerald-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-check"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+            } else {
+                audio.playSFX('incorrect');
+                const modalBox = document.getElementById('modal-content-box'); modalBox.classList.add('animate-shake'); setTimeout(() => modalBox.classList.remove('animate-shake'), 400);
+                btn.className = "w-full text-left bg-rose-100 text-rose-800 font-black p-4 md:p-5 rounded-xl border-4 border-rose-500 mb-4 flex items-center shadow-md text-base md:text-lg";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-rose-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-xmark"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+                const correctBtn = parent.querySelectorAll('button')[correctIndex];
+                correctBtn.className = "w-full text-left bg-emerald-100 text-emerald-800 font-black p-4 md:p-5 rounded-xl border-4 border-emerald-500 mb-4 flex items-center shadow-md text-base md:text-lg";
+                correctBtn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-emerald-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-check"></i></span>` + correctBtn.innerHTML.substring(correctBtn.innerHTML.indexOf('</span>') + 7);
+            }
+            document.getElementById('action-section').classList.remove('hidden'); document.getElementById('action-section').classList.add('animate-fade-in-up');
+        }
+
+        function closeQuestion() {
+            audio.playSFX('click'); const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            modal.classList.add('opacity-0'); contentBox.classList.replace('scale-100', 'scale-95'); setTimeout(() => { modal.classList.add('hidden'); resetReader(); }, 300);
+        }
+
+        window.onload = () => { loadSelectedText(); updateWPM(250); };
+    </script>
+</body>
+</html>

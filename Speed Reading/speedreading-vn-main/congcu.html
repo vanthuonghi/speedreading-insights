@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading.vn App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden-screen { display: none !important; }
+        
+        /* Themes */
+        .theme-sepia { background-color: #f4ecd8; color: #433422; }
+        .theme-sepia .bg-white { background-color: #fdf6e3; border-color: #e6dbbf; }
+        .theme-dark { background-color: #111827; color: #e5e7eb; }
+        .theme-dark .bg-white { background-color: #1f2937; border-color: #374151; }
+        .theme-dark .text-gray-800 { color: #f3f4f6; }
+        .bg-brand { background-color: #990403; }
+        .text-brand { color: #990403; }
+        .bg-brand-light { background-color: rgba(153, 4, 3, 0.05); }
+
+        /* RSVP & Pacer */
+        .rsvp-container {
+            display: flex; align-items: center; justify-content: center; height: 320px;
+            border-left: 4px solid #e5e7eb; border-right: 4px solid #e5e7eb; position: relative;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.05) 100%);
+        }
+        .rsvp-guide-top, .rsvp-guide-bottom {
+            position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 20px; background-color: #cbd5e1;
+        }
+        .rsvp-guide-top { top: 20px; } .rsvp-guide-bottom { bottom: 20px; }
+        #pacer-line {
+            position: absolute; left: 0; width: 100%; height: 2px;
+            background-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+            pointer-events: none; z-index: 10; transition: top 0.1s linear; display: none;
+        }
+        #pacer-container { position: relative; overflow: hidden; }
+
+        /* Highlight & Schulte */
+        .phrase-chunk { padding: 2px 4px; border-radius: 4px; margin: 0 1px; display: inline-block; text-align: center; }
+        .chunk-odd { background-color: rgba(153, 4, 3, 0.08); color: #7f1d1d; font-weight: 600; }
+        .theme-dark .chunk-odd { background-color: rgba(248, 113, 113, 0.15); color: #fca5a5; }
+        
+        .schulte-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 450px; margin: 0 auto; aspect-ratio: 1/1; }
+        .schulte-cell {
+            display: flex; align-items: center; justify-content: center; background-color: white;
+            border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1.5rem; font-weight: 800;
+            color: inherit; cursor: pointer; transition: all 0.1s; user-select: none;
+        }
+        .theme-dark .schulte-cell { background-color: #374151; border-color: #4b5563; }
+        .schulte-cell:hover { border-color: #990403; color: #990403; transform: translateY(-1px); }
+        .schulte-cell.correct { background-color: #dcfce7; border-color: #22c55e; color: #15803d; }
+        .schulte-cell.wrong { animation: shake 0.3s; border-color: #ef4444; background-color: #fee2e2; }
+        .schulte-center-marker {
+            position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background-color: #990403;
+            border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 10; opacity: 0.6;
+        }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        
+        .news-badge { position: absolute; top: -8px; right: -8px; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: uppercase; }
+        .badge-live { background: #ef4444; }
+        .badge-deep { background: #3b82f6; }
+        .music-active { color: #990403; background-color: #fee2e2; border-color: #990403; }
+    </style>
+</head>
+<body id="app-body" class="bg-gray-50 font-sans text-gray-800 antialiased transition-colors duration-300">
+
+    <div id="speed-reader-app" class="min-h-screen py-6 px-4 flex flex-col max-w-5xl mx-auto">
+        
+        <!-- AUDIO ELEMENT -->
+        <audio id="bg-music" loop>
+            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- TOP BAR -->
+        <div class="flex justify-between items-center mb-8 select-none">
+            <div class="inline-flex items-center gap-2 text-[#990403] font-black text-2xl tracking-tight hover:scale-105 transition-transform cursor-pointer" onclick="app.reset()">
+                <i data-lucide="zap" class="w-8 h-8 fill-current"></i> SpeedReading.vn
+            </div>
+            <div class="flex items-center gap-2 bg-white p-1.5 rounded-full shadow-sm border border-gray-200">
+                <button onclick="app.toggleMusic()" id="btn-music" class="p-2 rounded-full hover:bg-gray-100 border border-transparent text-gray-500 transition-all" title="Bật/Tắt Nhạc">
+                    <i data-lucide="music" class="w-4 h-4"></i>
+                </button>
+                <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                <button onclick="app.adjustFontSize(-1)" class="p-2 rounded-full hover:bg-gray-100"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                <span class="text-xs font-bold w-4 text-center" id="font-size-display">L</span>
+                <button onclick="app.adjustFontSize(1)" class="p-2 rounded-full hover:bg-gray-100"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                <button onclick="app.setTheme('light')" class="w-6 h-6 rounded-full bg-gray-100 border border-gray-300 hover:ring-2 ring-[#990403]"></button>
+                <button onclick="app.setTheme('sepia')" class="w-6 h-6 rounded-full bg-[#f4ecd8] border border-[#e6dbbf] hover:ring-2 ring-[#990403]"></button>
+                <button onclick="app.setTheme('dark')" class="w-6 h-6 rounded-full bg-[#1f2937] border border-gray-600 hover:ring-2 ring-[#990403]"></button>
+            </div>
+        </div>
+
+        <!-- MENU SCREEN -->
+        <div id="screen-menu" class="fade-in">
+            <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-200">
+                
+                <!-- Tabs -->
+                <div class="flex flex-wrap justify-center gap-2 mb-8 bg-gray-100 p-1.5 rounded-xl w-fit mx-auto">
+                    <button onclick="app.switchMode('normal')" id="tab-normal" class="px-4 md:px-6 py-2 rounded-lg text-sm font-bold text-[#990403] bg-white shadow-sm">Đo Tốc Độ</button>
+                    <button onclick="app.switchMode('rsvp')" id="tab-rsvp" class="px-4 md:px-6 py-2 rounded-lg text-sm font-bold text-gray-500 hover:text-gray-700">Luyện RSVP</button>
+                    <button onclick="app.switchMode('vision')" id="tab-vision" class="px-4 md:px-6 py-2 rounded-lg text-sm font-bold text-gray-500 hover:text-gray-700 flex items-center gap-2">Luyện Tầm Nhìn</button>
+                </div>
+
+                <div class="text-center mb-8">
+                    <h1 id="menu-title" class="text-2xl font-bold text-gray-800 mb-2">Thư Viện Luyện Đọc</h1>
+                    <p id="menu-desc" class="text-gray-500 max-w-lg mx-auto">10 Bản tin chuyên sâu (>500 từ) được tổng hợp để rèn sức bền.</p>
+                </div>
+
+                <!-- SETUP CONTAINER -->
+                <div id="setup-reading-container">
+                    <div class="mb-8">
+                        <!-- Custom & PDF Input -->
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex gap-2">
+                                    <div class="flex-1 relative">
+                                        <input type="file" id="pdf-upload" accept=".pdf" class="hidden" onchange="app.handlePdfUpload(event)">
+                                        <label for="pdf-upload" class="cursor-pointer flex items-center justify-center gap-2 bg-white text-gray-700 px-4 py-3 rounded-lg font-bold text-sm border border-gray-300 hover:bg-gray-100 transition w-full shadow-sm">
+                                            <i data-lucide="file-text" class="w-4 h-4"></i> Upload PDF
+                                        </label>
+                                    </div>
+                                    <button onclick="app.toggleCustomInput()" class="flex-1 flex items-center justify-center gap-2 bg-white text-gray-700 px-4 py-3 rounded-lg font-bold text-sm border border-gray-300 hover:bg-gray-100 transition shadow-sm">
+                                        <i data-lucide="edit-3" class="w-4 h-4"></i> Dán Văn Bản
+                                    </button>
+                                </div>
+                                <div id="pdf-status" class="text-xs text-center text-gray-500 hidden"></div>
+                                <div id="custom-input-area" class="hidden-screen mt-2">
+                                    <textarea id="custom-text-input" rows="4" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#990403] text-sm" placeholder="Dán nội dung vào đây..."></textarea>
+                                    <button onclick="app.saveCustomText()" class="mt-2 w-full py-2 bg-gray-800 text-white text-xs font-bold rounded-lg hover:bg-black transition">Xác nhận văn bản</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 10 NEWS GRID -->
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                <i data-lucide="newspaper" class="w-3 h-3"></i> Danh sách 10 Bản Tin
+                            </label>
+                            <button onclick="app.fetchNews()" class="text-xs text-[#990403] hover:underline flex items-center gap-1 font-bold bg-red-50 px-2 py-1 rounded-md"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Cập nhật mới</button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar" id="level-container">
+                            <!-- Items injected here -->
+                            <div class="col-span-2 text-center py-12 text-gray-400 italic">Đang tổng hợp dữ liệu...</div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Panel -->
+                    <div id="reading-settings-panel" class="bg-brand-light p-6 rounded-2xl border border-[#990403]/10 mb-8">
+                        <div id="normal-mode-settings">
+                            <label class="block text-xs font-bold text-[#990403] mb-3 uppercase tracking-wider text-center">Cấu Hình Luyện Tập</label>
+                            <div class="flex flex-col md:flex-row justify-center gap-4 mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-[#990403] transition">
+                                    <input type="checkbox" id="pacer-toggle" class="w-4 h-4 text-[#990403] rounded focus:ring-[#990403]" onchange="app.togglePacerSettings()">
+                                    <span class="text-sm font-medium text-gray-700">Thước kẻ ảo (Pacer)</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-[#990403] transition">
+                                    <input type="checkbox" id="phrase-highlight-toggle" class="w-4 h-4 text-[#990403] rounded focus:ring-[#990403]" onchange="app.togglePhraseMode()">
+                                    <span class="text-sm font-medium text-gray-700">Highlight Cụm Từ</span>
+                                </label>
+                            </div>
+                            <div id="phrase-settings" class="hidden-screen mb-4 text-center animate-fade-in">
+                                <div class="text-xs text-gray-500 mb-2">Độ rộng tầm nhìn (Số từ/cụm)</div>
+                                <div class="flex justify-center gap-2">
+                                    <button onclick="app.setPhraseLength(3)" id="pl-3" class="px-3 py-1 text-xs font-bold border rounded bg-[#990403] text-white border-[#990403]">3 từ</button>
+                                    <button onclick="app.setPhraseLength(4)" id="pl-4" class="px-3 py-1 text-xs font-bold border rounded bg-white text-gray-600 border-gray-300">4 từ</button>
+                                    <button onclick="app.setPhraseLength(5)" id="pl-5" class="px-3 py-1 text-xs font-bold border rounded bg-white text-gray-600 border-gray-300">5 từ</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="rsvp-mode-settings" class="hidden-screen">
+                            <label class="block text-xs font-bold text-[#990403] mb-3 uppercase tracking-wider text-center">Gom Nhóm RSVP</label>
+                            <div class="flex justify-center gap-4 mb-6">
+                                <button onclick="app.setChunkSize(1)" id="chunk-1" class="px-4 py-2 rounded-lg text-sm font-bold border-2 border-[#990403] bg-[#990403] text-white">1 Từ</button>
+                                <button onclick="app.setChunkSize(2)" id="chunk-2" class="px-4 py-2 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-600">2 Từ</button>
+                                <button onclick="app.setChunkSize(3)" id="chunk-3" class="px-4 py-2 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-600">3 Từ</button>
+                            </div>
+                        </div>
+
+                        <div id="speed-selector-block" class="hidden-screen transition-all duration-300">
+                            <label class="block text-xs font-bold text-[#990403] mb-3 uppercase tracking-wider text-center">Tốc độ mục tiêu (WPM)</label>
+                            <div class="grid grid-cols-4 gap-2 md:gap-3 max-w-lg mx-auto mb-4" id="speed-options-container"></div>
+                            <div class="text-center"><span id="wpm-value-display" class="text-4xl font-black text-[#990403]">250</span> <span class="text-sm font-medium text-gray-400">WPM</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISION SCREEN -->
+                <div id="setup-vision-container" class="hidden-screen text-center max-w-lg mx-auto">
+                    <div class="bg-white p-6 rounded-2xl border-2 border-dashed border-gray-300 mb-6">
+                        <h3 class="font-bold text-[#990403] text-lg mb-2 flex items-center justify-center gap-2"><i data-lucide="grid" class="w-5 h-5"></i> Bảng Schulte</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed mb-4">Bài tập mắt kinh điển: Giữ mắt nhìn thẳng chấm đỏ trung tâm, dùng tầm nhìn ngoại vi tìm số từ 1-25 càng nhanh càng tốt.</p>
+                    </div>
+                </div>
+
+                <button onclick="app.startGame()" class="w-full md:w-auto px-12 py-4 bg-[#990403] hover:bg-[#7a0302] text-white font-bold rounded-full shadow-lg shadow-red-200 transform transition hover:scale-105 flex items-center justify-center gap-2 mx-auto group">
+                    Bắt Đầu Luyện Tập <i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- READING SCREENS -->
+        <div id="screen-reading-normal" class="fade-in hidden-screen">
+            <div class="sticky top-4 z-20 bg-white/95 backdrop-blur shadow-lg border border-gray-100 p-3 rounded-xl flex justify-between items-center mb-6 ring-1 ring-black/5">
+                <div class="flex items-center gap-2 text-[#990403] font-bold px-2"><i data-lucide="timer" class="w-5 h-5"></i> <span id="timer-display" class="text-xl font-mono">60s</span></div>
+                <button onclick="app.finishReading()" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-lg shadow transition active:scale-95">Đã Đọc Xong</button>
+            </div>
+            <div class="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-200 min-h-[400px] text-lg relative" id="pacer-container">
+                <div id="pacer-line"></div>
+                <h2 id="read-title-normal" class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4 border-gray-200 font-serif"></h2>
+                <div id="read-content-normal" class="prose prose-lg max-w-none text-gray-700 leading-loose font-medium font-serif text-justify"></div>
+            </div>
+        </div>
+
+        <div id="screen-reading-rsvp" class="fade-in hidden-screen">
+            <div class="max-w-2xl mx-auto mb-6 flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
+                <div class="text-sm font-bold text-gray-500"><span id="rsvp-progress" class="text-gray-900">0/0</span></div>
+                <div class="flex gap-3">
+                    <button onclick="app.togglePauseRSVP()" id="rsvp-pause-btn" class="p-2 bg-brand-light text-[#990403] rounded-lg hover:bg-[#990403]/10"><i data-lucide="pause" class="w-5 h-5 fill-current"></i></button>
+                    <button onclick="app.reset()" class="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl shadow-2xl border-4 border-[#990403]/5 max-w-3xl mx-auto overflow-hidden relative">
+                <div class="rsvp-container">
+                    <div class="rsvp-guide-top"></div><div class="rsvp-guide-bottom"></div>
+                    <div id="rsvp-word-display" class="text-5xl md:text-6xl font-black text-gray-800 text-center px-4 leading-tight">Sẵn sàng...</div>
+                </div>
+                <div class="h-2 bg-gray-100 w-full"><div id="rsvp-progress-bar" class="h-full bg-[#990403] transition-all duration-100" style="width: 0%"></div></div>
+            </div>
+        </div>
+
+        <div id="screen-vision" class="fade-in hidden-screen">
+            <div class="max-w-2xl mx-auto mb-6 flex justify-between items-center">
+                <div class="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200 font-bold text-[#990403] flex items-center gap-2"><i data-lucide="target" class="w-4 h-4"></i> Tìm số: <span id="schulte-target" class="text-2xl font-black">1</span></div>
+                <div class="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200 font-mono font-bold text-gray-700 text-xl" id="schulte-timer">00:00</div>
+            </div>
+            <div class="relative mx-auto w-fit"><div id="schulte-grid" class="schulte-grid bg-white shadow-2xl rounded-xl p-3 border border-gray-100"></div><div class="schulte-center-marker"></div></div>
+            <div class="text-center mt-8 flex gap-4 justify-center"><button onclick="app.reset()" class="px-6 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-lg">Thoát</button></div>
+        </div>
+
+        <div id="screen-selecting" class="fade-in hidden-screen">
+            <div class="bg-[#990403]/5 border-l-4 border-[#990403] p-4 mb-6 rounded-r-lg">
+                <div class="flex items-start"><i data-lucide="mouse-pointer-click" class="h-5 w-5 text-[#990403] mt-0.5"></i><div class="ml-3"><h3 class="text-lg font-bold text-[#990403]">Xác nhận điểm dừng</h3><p class="text-sm text-gray-700">Click vào <strong>từ cuối cùng</strong> bạn đọc được để hệ thống tính toán WPM.</p></div></div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100"><div id="select-content" class="text-lg leading-loose text-gray-700 select-none font-serif text-justify"></div></div>
+        </div>
+
+        <div id="screen-result" class="fade-in hidden-screen text-center">
+            <div class="bg-white p-8 rounded-3xl shadow-2xl border border-gray-100 max-w-xl mx-auto relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#990403] via-red-500 to-orange-500"></div>
+                <div class="flex justify-center mb-6"><div class="p-4 bg-yellow-50 rounded-full shadow-inner"><i data-lucide="trophy" id="trophy-icon" class="w-16 h-16 text-yellow-500"></i></div></div>
+                <h2 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-widest">Kết Quả</h2>
+                <div id="result-wpm-box"><div class="flex items-baseline justify-center gap-2 mb-2"><span id="wpm-display" class="text-8xl font-black text-[#990403] tracking-tighter">0</span><span class="text-2xl font-bold text-gray-400">WPM</span></div></div>
+                <div id="result-time-box" class="hidden-screen"><div class="flex items-baseline justify-center gap-2 mb-2"><span id="vision-time-display" class="text-7xl font-black text-[#990403] tracking-tighter">00:00</span></div></div>
+                <p id="message-display" class="font-medium text-lg mb-8 text-gray-600"></p>
+                <div id="stats-grid" class="grid grid-cols-2 gap-4 bg-gray-50 p-5 rounded-2xl mb-8 border border-gray-100">
+                    <div><p class="text-gray-400 text-xs font-bold uppercase mb-1">Thời gian</p><p class="text-xl font-bold text-gray-800"><span id="time-used-display">0</span> giây</p></div>
+                    <div><p class="text-gray-400 text-xs font-bold uppercase mb-1">Khối lượng</p><p class="text-xl font-bold text-gray-800"><span id="words-read-display">0</span> từ</p></div>
+                </div>
+                <button onclick="app.reset()" class="w-full py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-xl flex items-center justify-center gap-2 transition transform hover:-translate-y-0.5"><i data-lucide="rotate-ccw" class="w-5 h-5"></i> Thử Lại</button>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-400 text-xs py-4 font-medium border-t border-gray-200"><p>&copy; <span id="year"></span> <strong>SpeedReading.vn</strong>. All rights reserved.</p></footer>
+    </div>
+
+    <script>
+        // --- DỮ LIỆU CHUYÊN ĐỀ (STATIC LONG CONTENT) ---
+        // Dùng làm fallback hoặc nội dung chuyên sâu để đảm bảo độ dài >500 từ
+        const DEEP_READ_ARTICLES = [
+            {
+                id: 'deep_1', title: 'Chuyên đề: Tương Lai Của AI (Trí Tuệ Nhân Tạo)', 
+                desc: 'Phân tích sâu về tác động của AI đến thị trường lao động và đạo đức.',
+                content: `Trí tuệ nhân tạo (AI) không còn là những câu chuyện viễn tưởng trong phim ảnh, mà đã trở thành một phần không thể thiếu trong cuộc sống hàng ngày của chúng ta. Từ những thuật toán gợi ý bài hát trên Spotify, trợ lý ảo Siri hay Google Assistant, cho đến những hệ thống phức tạp điều khiển xe tự lái và chẩn đoán y khoa, AI đang âm thầm định hình lại thế giới. Tuy nhiên, sự phát triển chóng mặt này cũng mang đến những lo ngại sâu sắc về tương lai của thị trường lao động.
+
+Nhiều chuyên gia kinh tế dự báo rằng AI sẽ thay thế hàng triệu công việc truyền thống, đặc biệt là những công việc có tính chất lặp đi lặp lại hoặc xử lý dữ liệu cơ bản. Nhân viên nhập liệu, tổng đài viên, hay thậm chí là một số vị trí trong ngành lập trình và biên phiên dịch đang đứng trước nguy cơ bị đào thải. Tuy nhiên, lịch sử các cuộc cách mạng công nghiệp đã chứng minh rằng công nghệ không chỉ triệt tiêu việc làm cũ mà còn tạo ra vô số cơ hội mới. Những công việc đòi hỏi sự sáng tạo, trí tuệ cảm xúc (EQ), khả năng tư duy phản biện và kỹ năng giải quyết vấn đề phức tạp sẽ ngày càng trở nên giá trị. Thay vì lo sợ bị thay thế, người lao động cần tập trung vào việc nâng cao kỹ năng (upskilling) và học cách cộng tác với máy móc để tối ưu hóa hiệu suất làm việc.
+
+Bên cạnh vấn đề việc làm, khía cạnh đạo đức của AI cũng là một chủ đề nóng bỏng. Ai sẽ chịu trách nhiệm khi một chiếc xe tự lái gây tai nạn? Làm thế nào để đảm bảo các thuật toán tuyển dụng hoặc xét duyệt vay vốn không bị thiên kiến về chủng tộc hay giới tính? Quyền riêng tư dữ liệu cá nhân sẽ được bảo vệ ra sao khi các hệ thống AI ngày càng "đói" dữ liệu để huấn luyện? Đây là những câu hỏi hóc búa mà các nhà lập pháp, nhà khoa học và toàn xã hội cần chung tay giải quyết. Việc xây dựng một khung pháp lý vững chắc và minh bạch cho AI là điều kiện tiên quyết để đảm bảo công nghệ này phục vụ cho lợi ích chung của nhân loại, chứ không phải trở thành công cụ gây chia rẽ hay bất bình đẳng. Chúng ta đang đứng trước ngưỡng cửa của một kỷ nguyên mới, nơi sự cộng sinh giữa con người và trí tuệ nhân tạo sẽ quyết định sự thịnh vượng của toàn cầu trong những thập kỷ tới.`
+            },
+            {
+                id: 'deep_2', title: 'Chuyên đề: Sống Xanh & Biến Đổi Khí Hậu', 
+                desc: 'Thực trạng môi trường và xu hướng tiêu dùng bền vững tại Việt Nam.',
+                content: `Biến đổi khí hậu không còn là lời cảnh báo xa vời mà đã hiện hữu rõ rệt ngay tại Việt Nam, một trong những quốc gia chịu ảnh hưởng nặng nề nhất. Những đợt nắng nóng kỷ lục, bão lũ bất thường tại miền Trung, hay tình trạng xâm nhập mặn nghiêm trọng ở Đồng bằng sông Cửu Long là những minh chứng không thể chối cãi. Trước thực trạng đáng báo động này, xu hướng "Sống Xanh" (Green Living) đang dần lan tỏa mạnh mẽ, đặc biệt trong giới trẻ và tầng lớp trung lưu thành thị.
+
+Sống xanh không chỉ đơn thuần là trồng thêm một cái cây hay hạn chế dùng túi ni lông. Nó là một sự thay đổi toàn diện trong tư duy và hành vi tiêu dùng. Người tiêu dùng ngày càng khắt khe hơn với các sản phẩm họ mua. Họ ưu tiên các thương hiệu cam kết bảo vệ môi trường, sử dụng bao bì tái chế, nguyên liệu hữu cơ và quy trình sản xuất giảm thiểu carbon. Các phong trào như "No Straw" (Không ống hút nhựa), mang bình nước cá nhân đi mua cà phê, hay sử dụng làn đi chợ thay vì túi nhựa dùng một lần đang trở thành nét văn hóa mới tích cực.
+
+Tuy nhiên, con đường đến với một nền kinh tế xanh thực sự vẫn còn nhiều chông gai. Chi phí cho các sản phẩm thân thiện môi trường thường cao hơn, khiến chúng khó tiếp cận với đại đa số người dân có thu nhập trung bình và thấp. Bên cạnh đó, hạ tầng xử lý rác thải tại Việt Nam vẫn chưa đồng bộ; việc phân loại rác tại nguồn dù được khuyến khích nhưng khâu thu gom và xử lý cuối cùng vẫn còn nhiều bất cập. Để xu hướng này trở nên bền vững, cần sự vào cuộc đồng bộ từ ba phía: Chính phủ với các chính sách hỗ trợ và chế tài nghiêm khắc; Doanh nghiệp với sự chuyển đổi mô hình sản xuất xanh; và Người dân với ý thức trách nhiệm trong từng hành động nhỏ mỗi ngày. Chỉ khi đó, khái niệm "phát triển bền vững" mới thực sự đi vào đời sống, đảm bảo một môi trường trong lành cho thế hệ tương lai.`
+            },
+            {
+                id: 'deep_3', title: 'Chuyên đề: Sức Khỏe Tinh Thần Thời Đại Số', 
+                desc: 'Áp lực từ mạng xã hội và cách cân bằng cuộc sống (Digital Detox).',
+                content: `Trong kỷ nguyên số, khi chiếc điện thoại thông minh trở thành vật bất ly thân, sức khỏe tinh thần của con người đang đối mặt với những thách thức chưa từng có. Mạng xã hội, với vẻ ngoài hào nhoáng và kết nối, lại đang trở thành nguồn gốc của sự cô đơn và lo âu cho nhiều người. Hội chứng FOMO (Fear of Missing Out - Sợ bị bỏ lỡ) khiến chúng ta liên tục lướt web, kiểm tra thông báo một cách vô thức, dẫn đến tình trạng xao nhãng và giảm khả năng tập trung sâu.
+
+Hơn nữa, việc liên tục tiếp xúc với những hình ảnh "cuộc sống hoàn hảo" của người khác trên Instagram hay TikTok dễ nảy sinh tâm lý so sánh tiêu cực. Chúng ta thường quên rằng những gì hiển thị trên mạng xã hội chỉ là những lát cắt đẹp đẽ nhất đã qua chỉnh sửa, không phản ánh toàn bộ thực tế. Áp lực phải thành công, phải xinh đẹp, phải đi du lịch nhiều nơi... vô hình trung tạo nên những gánh nặng tâm lý đè nén, đặc biệt là đối với giới trẻ. Tỷ lệ trầm cảm và rối loạn lo âu gia tăng trong những năm gần đây là hồi chuông cảnh báo về mặt trái của công nghệ.
+
+Giải pháp "Digital Detox" (Thải độc kỹ thuật số) đang được nhiều chuyên gia tâm lý khuyến nghị. Điều này không có nghĩa là chúng ta phải từ bỏ hoàn toàn công nghệ, mà là thiết lập lại mối quan hệ lành mạnh với nó. Hãy thử bắt đầu bằng những hành động nhỏ: tắt thông báo điện thoại sau 9 giờ tối, dành những ngày cuối tuần không wifi để hòa mình vào thiên nhiên, hoặc đơn giản là có những bữa ăn trọn vẹn bên gia đình mà không có sự hiện diện của màn hình điện thoại. Việc tìm lại sự cân bằng, nuôi dưỡng các mối quan hệ thực tế và dành thời gian chăm sóc nội tâm chính là liều thuốc tốt nhất để bảo vệ sức khỏe tinh thần trong cơn bão thông tin hiện nay.`
+            },
+             {
+                id: 'deep_4', title: 'Chuyên đề: Kỹ Năng Tự Học (Self-Learning)', 
+                desc: 'Tại sao khả năng tự học lại quyết định thành công trong thế kỷ 21?',
+                content: `Thế giới đang thay đổi với tốc độ chóng mặt. Những kiến thức bạn học được trong trường đại học hôm nay có thể sẽ trở nên lỗi thời chỉ sau vài năm tốt nghiệp. Trong bối cảnh đó, "Kỹ năng tự học" (Self-learning) không còn là một lựa chọn, mà là yếu tố sống còn quyết định sự thành bại của mỗi cá nhân. Alvin Toffler từng nói: "Người mù chữ của thế kỷ 21 không phải là người không biết đọc, biết viết, mà là người không biết học, quên đi và học lại".
+
+Tự học đòi hỏi tính kỷ luật cao và khả năng quản lý thời gian hiệu quả. Nó bắt đầu từ sự tò mò và khát khao tri thức nội tại, chứ không phải do áp lực điểm số hay bằng cấp. Internet là một kho tàng vô tận với các khóa học MOOC (như Coursera, Udemy), video hướng dẫn trên YouTube, và hàng triệu cuốn sách điện tử. Tuy nhiên, thách thức lớn nhất không phải là thiếu tài liệu, mà là khả năng chọn lọc thông tin và kiên trì theo đuổi mục tiêu đến cùng giữa muôn vàn cám dỗ giải trí khác.
+
+Người có khả năng tự học tốt thường sở hữu tư duy mở (Growth Mindset). Họ coi thất bại là một phần tất yếu của quá trình học hỏi chứ không phải là dấu chấm hết. Họ biết cách đặt câu hỏi đúng, tìm kiếm sự giúp đỡ từ cộng đồng chuyên môn và liên tục áp dụng kiến thức mới vào thực tiễn. Trong thị trường lao động hiện đại, các nhà tuyển dụng ngày càng ít quan tâm đến bằng cấp hình thức mà chú trọng vào Portfolio (hồ sơ năng lực) và khả năng thích ứng nhanh của ứng viên. Vì vậy, đầu tư vào năng lực tự học chính là khoản đầu tư sinh lời nhất cho tương lai của chính bạn.`
+            },
+            {
+                id: 'deep_5', title: 'Chuyên đề: Lịch Sử Cà Phê Việt Nam', 
+                desc: 'Hành trình từ đồn điền Pháp đến vị thế xuất khẩu hàng đầu thế giới.',
+                content: `Cà phê không chỉ là một thức uống, mà đã trở thành một phần văn hóa không thể thiếu trong đời sống người Việt. Hành trình của hạt cà phê tại Việt Nam bắt đầu từ thế kỷ 19, khi người Pháp mang giống cây này đến trồng thử nghiệm. Từ những đồn điền nhỏ lẻ ban đầu ở Bắc Kỳ và Trung Kỳ, cây cà phê dần tìm thấy "thiên đường" của mình tại vùng đất đỏ bazan Tây Nguyên màu mỡ. Buôn Ma Thuột, Đắk Lắk nhanh chóng trở thành thủ phủ cà phê, nơi sản sinh ra những hạt Robusta đậm đà trứ danh.
+
+Sau những thăng trầm của lịch sử và chiến tranh, ngành cà phê Việt Nam đã có bước phát triển thần kỳ trong thời kỳ Đổi Mới. Từ một quốc gia thiếu đói, Việt Nam vươn lên trở thành nước xuất khẩu cà phê lớn thứ hai thế giới và đứng đầu về sản lượng Robusta. Cà phê Việt không chỉ xuất thô mà ngày càng khẳng định vị thế với các sản phẩm chế biến sâu. Cà phê sữa đá, cà phê trứng... đã trở thành những từ khóa ẩm thực nổi tiếng toàn cầu, được du khách quốc tế săn đón.
+
+Tuy nhiên, thách thức phía trước vẫn còn đó. Biến đổi khí hậu đang đe dọa diện tích vùng trồng; giá cả thị trường thế giới biến động thất thường ảnh hưởng đến đời sống người nông dân. Ngành cà phê đang đứng trước yêu cầu cấp thiết phải tái canh, áp dụng công nghệ cao vào sản xuất và xây dựng thương hiệu bền vững. Câu chuyện về hạt cà phê Việt Nam không chỉ là câu chuyện về kinh tế, mà còn là câu chuyện về sự cần cù, sáng tạo và khát vọng vươn ra biển lớn của người nông dân Việt.`
+            },
+            {
+                id: 'deep_6', title: 'Chuyên đề: Tối Giản Hóa Cuộc Sống (Minimalism)', 
+                desc: 'Sống ít đi để hạnh phúc nhiều hơn: Trào lưu hay triết lý sống?',
+                content: `Trong một xã hội tiêu dùng khuyến khích việc mua sắm và tích lũy vật chất, chủ nghĩa tối giản (Minimalism) nổi lên như một làn gió mới, mang lại sự cân bằng và thanh thản cho tâm hồn. Tối giản không có nghĩa là sống kham khổ hay vứt bỏ mọi thứ, mà là sự lựa chọn có ý thức: giữ lại những gì thực sự quan trọng và loại bỏ những thứ dư thừa gây xao nhãng.
+
+Ở khía cạnh vật chất, tối giản giúp không gian sống trở nên thoáng đãng, gọn gàng, từ đó giúp tâm trí con người trở nên sáng suốt hơn. Việc sở hữu ít đồ đạc hơn đồng nghĩa với việc bạn tốn ít thời gian hơn cho việc dọn dẹp, bảo quản và lo lắng về chúng. Thay vì dành cuối tuần để đi mua sắm những món đồ không thực sự cần thiết, người theo chủ nghĩa tối giản dành thời gian đó cho những trải nghiệm: đi du lịch, học một kỹ năng mới, hoặc đơn giản là trò chuyện sâu sắc với người thân.
+
+Ở khía cạnh tinh thần, tối giản là việc dọn dẹp những suy nghĩ lộn xộn, những mối quan hệ độc hại và những cam kết xã hội vô bổ. Nó dạy chúng ta biết nói "không" để tập trung năng lượng vào những giá trị cốt lõi của bản thân. Sống tối giản giúp chúng ta trân trọng hiện tại, tìm thấy niềm vui từ những điều giản dị và thoát khỏi vòng xoáy "cơm áo gạo tiền" đầy áp lực. Cuối cùng, mục đích của tối giản không phải là để sở hữu ít đi, mà là để sống một cuộc đời ý nghĩa và trọn vẹn hơn.`
+            },
+            {
+                id: 'deep_7', title: 'Chuyên đề: Khởi Nghiệp (Startup) Tại Việt Nam', 
+                desc: 'Cơ hội và thách thức cho các "Kỳ lân" công nghệ tương lai.',
+                content: `Hệ sinh thái khởi nghiệp tại Việt Nam đang trải qua giai đoạn sôi động chưa từng có, được mệnh danh là "ngôi sao đang lên" của khu vực Đông Nam Á. Với dân số trẻ, tỉ lệ sử dụng Internet cao và tinh thần kinh doanh mạnh mẽ, Việt Nam đang trở thành mảnh đất màu mỡ cho các ý tưởng đột phá. Các lĩnh vực như Fintech (Công nghệ tài chính), E-commerce (Thương mại điện tử), và Edtech (Công nghệ giáo dục) đang thu hút dòng vốn đầu tư mạo hiểm lớn từ cả trong và ngoài nước.
+
+Sự xuất hiện của các "Kỳ lân" (Unicorn - Startup được định giá trên 1 tỷ USD) như VNG, VNPay hay Sky Mavis đã truyền cảm hứng mạnh mẽ cho cộng đồng khởi nghiệp. Chính phủ cũng đang tích cực tạo hành lang pháp lý thông thoáng và các quỹ hỗ trợ đổi mới sáng tạo để tiếp sức cho doanh nghiệp. Tuy nhiên, con đường khởi nghiệp chưa bao giờ trải hoa hồng. Thống kê cho thấy hơn 90% các startup thất bại trong 3 năm đầu tiên. Thiếu vốn, thiếu kinh nghiệm quản trị, và sự cạnh tranh khốc liệt từ các ông lớn quốc tế là những rào cản lớn.
+
+Để thành công, các Founder (Nhà sáng lập) Việt không chỉ cần một ý tưởng hay, mà cần khả năng thực thi xuất sắc (Execution). Việc xây dựng đội ngũ nhân sự chất lượng, thấu hiểu nỗi đau của thị trường (Pain point) và khả năng linh hoạt (Pivot) khi mô hình kinh doanh gặp bế tắc là những yếu tố sống còn. Khởi nghiệp không chỉ là câu chuyện làm giàu, mà là hành trình giải quyết các vấn đề của xã hội bằng công nghệ và tư duy mới, góp phần đưa trí tuệ Việt Nam vươn tầm thế giới.`
+            }
+        ];
+
+        const MATERIALS = {
+            custom: { title: "Văn bản tùy chỉnh", content: "", description: "Nội dung từ PDF hoặc nhập tay." }
+            // Dữ liệu sẽ được nạp động từ fetchNews() và DEEP_READ_ARTICLES
+        };
+
+        const SPEED_LEVELS = [150, 250, 350, 450, 550, 650, 800, 1000];
+        const FONT_SIZES = ['text-base', 'text-lg', 'text-xl', 'text-2xl'];
+        const FONT_LABELS = ['S', 'M', 'L', 'XL'];
+
+        const app = {
+            state: {
+                mode: 'normal', currentLevel: 'news_group_0', timeLeft: 60, timerId: null, pacerInterval: null, timeUsed: 0, targetSpeed: 250, 
+                rsvpChunkSize: 1, rsvpIndex: 0, isPaused: false, wordsArray: [], schulteNext: 1, schulteStartTime: 0, fontSizeIndex: 1, 
+                usePacer: false, usePhraseHighlight: false, phraseChunkLength: 3, newsLoaded: false, isMusicPlaying: false
+            },
+
+            init: function() {
+                this.fetchNews();
+                this.renderSpeedButtons();
+                document.getElementById('year').textContent = new Date().getFullYear();
+                lucide.createIcons();
+                const audio = document.getElementById('bg-music');
+                audio.volume = 0.3; 
+            },
+
+            toggleMusic: function() {
+                const audio = document.getElementById('bg-music');
+                const btn = document.getElementById('btn-music');
+                if (this.state.isMusicPlaying) {
+                    audio.pause();
+                    this.state.isMusicPlaying = false;
+                    btn.classList.remove('music-active');
+                } else {
+                    audio.play().then(() => {
+                        this.state.isMusicPlaying = true;
+                        btn.classList.add('music-active');
+                    }).catch(e => alert("Click chuột vào trang trước khi bật nhạc!"));
+                }
+            },
+
+            // --- FETCH NEWS LOGIC (HYBRID: 3 Realtime + 7 Deep Reads) ---
+            fetchNews: async function() {
+                const container = document.getElementById('level-container');
+                container.innerHTML = '<div class="col-span-2 text-center py-8 text-gray-400 italic animate-pulse">Đang kết nối VnExpress & Tổng hợp dữ liệu...</div>';
+                
+                // Xóa dữ liệu cũ (trừ custom)
+                Object.keys(MATERIALS).forEach(k => { if(k !== 'custom') delete MATERIALS[k]; });
+
+                // 1. Thêm 7 bài chuyên đề (Deep Read) vào trước (để đảm bảo luôn có)
+                // Nhưng ta sẽ hiển thị Tin Nóng lên đầu khi render
+                DEEP_READ_ARTICLES.forEach(article => {
+                    MATERIALS[article.id] = {
+                        title: article.title,
+                        content: article.content,
+                        description: article.desc,
+                        type: 'deep'
+                    };
+                });
+
+                // 2. Thử lấy tin nóng (Real-time)
+                try {
+                    // Lấy 50 tin để gom nhóm
+                    const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://vnexpress.net/rss/tin-moi-nhat.rss&count=50');
+                    const data = await response.json();
+                    
+                    if (data.status === 'ok' && data.items.length > 0) {
+                        // Gom thành 3 nhóm tin nóng lớn
+                        const groupSize = 10; // 10 tin nhỏ gộp thành 1 bản tin lớn
+                        for (let i = 0; i < 3; i++) {
+                            const start = i * groupSize;
+                            const end = start + groupSize;
+                            const slice = data.items.slice(start, end);
+                            
+                            if (slice.length > 0) {
+                                let digest = "";
+                                slice.forEach((item, idx) => {
+                                    const temp = document.createElement("div");
+                                    temp.innerHTML = item.description;
+                                    let cleanDesc = temp.textContent || temp.innerText || "";
+                                    cleanDesc = cleanDesc.replace(/>/g, '').trim();
+                                    digest += `[TIN ${idx+1}] ${item.title.toUpperCase()}\n${cleanDesc}\n\n`;
+                                });
+
+                                const key = `news_group_${i}`;
+                                MATERIALS[key] = {
+                                    title: `BẢN TIN NÓNG #${i+1} (Cập nhật: ${new Date().toLocaleTimeString('vi-VN')})`,
+                                    content: digest,
+                                    description: `Tổng hợp ${slice.length} tin mới nhất. Phù hợp đọc lướt nắm bắt thông tin.`,
+                                    type: 'live'
+                                };
+                                // Set default to first news group
+                                if (i === 0) this.state.currentLevel = key;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.warn("News fetch fallback:", error);
+                    // Nếu lỗi mạng, chỉ dùng Deep Reads, set default về bài đầu tiên
+                    this.state.currentLevel = 'deep_1';
+                }
+
+                this.state.newsLoaded = true;
+                this.renderLevelButtons();
+            },
+
+            handlePdfUpload: async function(event) {
+                const file = event.target.files[0];
+                if (file && file.type === 'application/pdf') {
+                    const status = document.getElementById('pdf-status'); status.classList.remove('hidden'); status.textContent = `Đang đọc: ${file.name}...`;
+                    try {
+                        const ab = await file.arrayBuffer(); const pdf = await pdfjsLib.getDocument(ab).promise;
+                        let full = ''; for (let i=1; i<=pdf.numPages; i++) {
+                            const p = await pdf.getPage(i); const t = await p.getTextContent();
+                            full += t.items.map(s => s.str).join(' ') + ' ';
+                        }
+                        full = full.replace(/\s+/g, ' ').trim();
+                        if (full.length<10) { alert("PDF không có chữ."); status.classList.add('hidden'); return; }
+                        MATERIALS.custom.content = full; this.state.currentLevel = 'custom'; this.renderLevelButtons();
+                        status.textContent = "Đã tải xong!"; status.className = "text-xs text-center text-green-600 font-bold";
+                        document.getElementById('phrase-highlight-toggle').checked = true; this.togglePhraseMode();
+                    } catch (e) { alert("Lỗi PDF."); status.classList.add('hidden'); }
+                }
+            },
+            saveCustomText: function() {
+                const t = document.getElementById('custom-text-input').value.trim();
+                if (t) { MATERIALS.custom.content = t; this.state.currentLevel = 'custom'; this.renderLevelButtons(); this.toggleCustomInput(); }
+            },
+
+            // --- RENDER LEVEL LIST (10 ITEMS GRID) ---
+            renderLevelButtons: function() {
+                const container = document.getElementById('level-container');
+                container.innerHTML = '';
+
+                // Sort order: Live News -> Deep Reads -> Custom
+                const allKeys = Object.keys(MATERIALS);
+                const liveKeys = allKeys.filter(k => MATERIALS[k].type === 'live');
+                const deepKeys = allKeys.filter(k => MATERIALS[k].type === 'deep');
+                const customKeys = ['custom'];
+                
+                const sortedKeys = [...liveKeys, ...deepKeys, ...customKeys];
+
+                sortedKeys.forEach(key => {
+                    // Hide empty custom
+                    if (key === 'custom' && MATERIALS.custom.content === "") return;
+                    
+                    const data = MATERIALS[key];
+                    const isSelected = this.state.currentLevel === key;
+                    const btn = document.createElement('div');
+                    
+                    // Styling for grid items
+                    btn.className = `relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 flex flex-col gap-1 h-full
+                        ${isSelected ? 'border-[#990403] bg-brand-light shadow-md ring-1 ring-[#990403]/20' : 'border-gray-200 hover:border-[#990403]/50 hover:bg-gray-50'}`;
+                    btn.onclick = () => { this.state.currentLevel = key; this.renderLevelButtons(); };
+                    
+                    let badge = '';
+                    if (data.type === 'live') badge = `<span class="news-badge badge-live">Mới nhất</span>`;
+                    else if (data.type === 'deep') badge = `<span class="news-badge badge-deep">Chuyên đề</span>`;
+                    
+                    btn.innerHTML = `
+                        ${badge}
+                        <h3 class="font-bold text-gray-800 text-sm line-clamp-2 leading-tight">${data.title}</h3>
+                        <p class="text-xs text-gray-500 line-clamp-2 mt-auto pt-2">${data.description}</p>
+                    `;
+                    container.appendChild(btn);
+                });
+            },
+
+            // Standard Functions (unchanged logic, kept compact)
+            renderSpeedButtons: function() {
+                const c = document.getElementById('speed-options-container'); c.innerHTML = '';
+                SPEED_LEVELS.forEach(s => {
+                    const btn = document.createElement('button'); const sel = this.state.targetSpeed===s;
+                    btn.className = `py-2 px-1 rounded-lg text-xs font-bold border ${sel?'bg-[#990403] text-white border-[#990403]':'bg-white text-gray-500 border-gray-200'}`;
+                    btn.textContent = s; btn.onclick = ()=>{this.state.targetSpeed=s;document.getElementById('wpm-value-display').textContent=s;this.renderSpeedButtons();}; c.appendChild(btn);
+                });
+            },
+            setTheme: function(t) { document.getElementById('app-body').className = `bg-gray-50 font-sans text-gray-800 antialiased transition-colors duration-300 theme-${t}`; },
+            adjustFontSize: function(d) { const n = this.state.fontSizeIndex+d; if(n>=0 && n<FONT_SIZES.length){this.state.fontSizeIndex=n; document.getElementById('font-size-display').textContent=FONT_LABELS[n]; document.getElementById('read-content-normal').className=`prose prose-lg max-w-none text-gray-700 leading-loose font-medium font-serif text-justify ${FONT_SIZES[n]}`;} },
+            toggleCustomInput: function() { document.getElementById('custom-input-area').classList.toggle('hidden-screen'); },
+            togglePacerSettings: function() { this.state.usePacer = document.getElementById('pacer-toggle').checked; this.updateSpeedSelectorVisibility(); },
+            togglePhraseMode: function() { this.state.usePhraseHighlight = document.getElementById('phrase-highlight-toggle').checked; document.getElementById('phrase-settings').classList.toggle('hidden-screen'); },
+            setPhraseLength: function(l) { this.state.phraseChunkLength = l; [3,4,5].forEach(i => document.getElementById(`pl-${i}`).className = i===l ? "px-3 py-1 text-xs font-bold border rounded bg-[#990403] text-white border-[#990403]" : "px-3 py-1 text-xs font-bold border rounded bg-white text-gray-600 border-gray-300"); },
+            setChunkSize: function(s) { this.state.rsvpChunkSize=s; [1,2,3].forEach(i => document.getElementById(`chunk-${i}`).className = i===s ? "px-4 py-2 rounded-lg text-sm font-bold border-2 border-[#990403] bg-[#990403] text-white" : "px-4 py-2 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-600"); },
+            updateSpeedSelectorVisibility: function() { const sb = document.getElementById('speed-selector-block'); if(this.state.mode==='rsvp'||(this.state.mode==='normal'&&this.state.usePacer)) sb.classList.remove('hidden-screen'); else sb.classList.add('hidden-screen'); },
+            
+            switchMode: function(mode) {
+                this.state.mode = mode;
+                ['normal', 'rsvp', 'vision'].forEach(m => document.getElementById(`tab-${m}`).className = m===mode ? "px-4 md:px-6 py-2 rounded-lg text-sm font-bold bg-white text-[#990403] shadow-sm border border-gray-100" : "px-4 md:px-6 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-gray-600");
+                document.getElementById('setup-reading-container').classList.toggle('hidden-screen', mode === 'vision');
+                document.getElementById('setup-vision-container').classList.toggle('hidden-screen', mode !== 'vision');
+                document.getElementById('normal-mode-settings').classList.toggle('hidden-screen', mode === 'rsvp');
+                document.getElementById('rsvp-mode-settings').classList.toggle('hidden-screen', mode !== 'rsvp');
+                if(mode==='normal') { document.getElementById('menu-title').textContent="Thư Viện Luyện Đọc"; this.togglePacerSettings(); }
+                else if(mode==='rsvp') { document.getElementById('menu-title').textContent="Luyện Tập RSVP"; document.getElementById('speed-selector-block').classList.remove('hidden-screen'); }
+                else document.getElementById('menu-title').textContent="Luyện Mở Rộng Tầm Nhìn";
+            },
+            showScreen: function(name) { ['menu','reading-normal','reading-rsvp','vision','selecting','result'].forEach(s => document.getElementById(`screen-${s}`).classList.add('hidden-screen')); document.getElementById(`screen-${name}`).classList.remove('hidden-screen'); lucide.createIcons(); },
+            
+            startGame: function() {
+                if(this.state.mode==='vision') return this.startVisionTraining();
+                const data = MATERIALS[this.state.currentLevel];
+                this.state.wordsArray = data.content.split(' ').filter(w => w.length > 0);
+                if(this.state.mode==='normal') this.startNormalReading(data); else this.startRSVPReading();
+            },
+
+            startNormalReading: function(data) {
+                document.getElementById('read-title-normal').textContent = data.title;
+                const contentEl = document.getElementById('read-content-normal');
+                const displayContent = data.content.replace(/\n/g, '<br>'); // Giữ xuống dòng
+                
+                if(this.state.usePhraseHighlight) {
+                    const words = data.content.split(' '); let html = ""; let c = 0; const size = this.state.phraseChunkLength;
+                    for(let i=0; i<words.length; i+=size) {
+                        const chunk = words.slice(i, i+size).join(' ');
+                        html += `<span class="phrase-chunk ${c%2!==0 ? 'chunk-odd' : ''}">${chunk}</span> `; c++;
+                    }
+                    contentEl.innerHTML = html;
+                } else contentEl.innerHTML = displayContent;
+                contentEl.className = `prose prose-lg max-w-none text-gray-700 leading-loose font-medium font-serif text-justify ${FONT_SIZES[this.state.fontSizeIndex]}`;
+                
+                this.state.timeLeft = 60; document.getElementById('timer-display').textContent = "60s"; this.showScreen('reading-normal');
+                
+                const pacer = document.getElementById('pacer-line');
+                if(this.state.usePacer) {
+                    pacer.style.display = 'block'; pacer.style.top = '0px';
+                    const duration = (this.state.wordsArray.length / this.state.targetSpeed) * 60000;
+                    const start = Date.now();
+                    this.state.pacerInterval = setInterval(() => {
+                        const p = Math.min((Date.now()-start)/duration, 1);
+                        pacer.style.top = (p * contentEl.offsetHeight) + 'px';
+                        if(p>=1) clearInterval(this.state.pacerInterval);
+                    }, 50);
+                } else pacer.style.display = 'none';
+
+                this.state.timerId = setInterval(() => { this.state.timeLeft--; document.getElementById('timer-display').textContent = this.state.timeLeft + "s"; if(this.state.timeLeft<=0) this.finishReading(60); }, 1000);
+            },
+
+            finishReading: function(forced) {
+                clearInterval(this.state.timerId); clearInterval(this.state.pacerInterval);
+                this.state.timeUsed = forced || (60 - this.state.timeLeft); if(this.state.timeUsed<=0) this.state.timeUsed=1;
+                const container = document.getElementById('select-content'); container.innerHTML = '';
+                this.state.wordsArray.forEach((w, i) => {
+                    const s = document.createElement('span'); s.textContent = w + " "; s.className = "cursor-pointer inline-block px-1 hover:bg-brand-light hover:text-[#990403] rounded transition";
+                    s.onclick = () => this.showResult(i+1, Math.round(((i+1)/this.state.timeUsed)*60)); container.appendChild(s);
+                });
+                this.showScreen('selecting');
+            },
+
+            startRSVPReading: function() {
+                this.state.rsvpIndex=0; this.state.isPaused=false; this.state.chunkedWords=[]; 
+                for(let i=0; i<this.state.wordsArray.length; i+=this.state.rsvpChunkSize) this.state.chunkedWords.push(this.state.wordsArray.slice(i, i+this.state.rsvpChunkSize).join(" "));
+                this.showScreen('reading-rsvp');
+                let c=3; const d = document.getElementById('rsvp-word-display'); d.textContent=c;
+                const cd = setInterval(() => { c--; if(c>0) d.textContent=c; else { clearInterval(cd); this.runRSVPLoop(); } }, 600);
+            },
+            runRSVPLoop: function() {
+                const ms = (60000 * this.state.rsvpChunkSize) / this.state.targetSpeed;
+                const d = document.getElementById('rsvp-word-display'); const p = document.getElementById('rsvp-progress'); const bar = document.getElementById('rsvp-progress-bar');
+                this.state.timerId = setInterval(() => {
+                    if(this.state.isPaused) return;
+                    if(this.state.rsvpIndex >= this.state.chunkedWords.length) { clearInterval(this.state.timerId); this.showResult(this.state.wordsArray.length, this.state.targetSpeed); return; }
+                    d.textContent = this.state.chunkedWords[this.state.rsvpIndex]; this.state.rsvpIndex++;
+                    p.textContent = `${this.state.rsvpIndex}/${this.state.chunkedWords.length}`; bar.style.width = `${(this.state.rsvpIndex/this.state.chunkedWords.length)*100}%`;
+                }, ms);
+            },
+            togglePauseRSVP: function() { this.state.isPaused = !this.state.isPaused; const btn = document.getElementById('rsvp-pause-btn'); btn.innerHTML = this.state.isPaused ? '<i data-lucide="play" class="w-5 h-5 fill-current"></i>' : '<i data-lucide="pause" class="w-5 h-5 fill-current"></i>'; },
+
+            startVisionTraining: function() {
+                this.state.schulteNext=1; this.state.schulteStartTime=Date.now(); this.showScreen('vision'); document.getElementById('schulte-target').textContent='1';
+                const arr=Array.from({length:25},(_,i)=>i+1).sort(()=>Math.random()-0.5);
+                const grid = document.getElementById('schulte-grid'); grid.innerHTML='';
+                arr.forEach(n => { const c=document.createElement('div'); c.className='schulte-cell'; c.textContent=n; c.onclick=(e)=>this.handleSchulte(n,e.target); grid.appendChild(c); });
+                this.state.timerId = setInterval(() => { const e = Math.floor((Date.now()-this.state.schulteStartTime)/1000); document.getElementById('schulte-timer').textContent = `${Math.floor(e/60).toString().padStart(2,'0')}:${(e%60).toString().padStart(2,'0')}`; }, 1000);
+            },
+            handleSchulte: function(n, el) {
+                if(n===this.state.schulteNext) { el.classList.add('correct'); this.state.schulteNext++; if(this.state.schulteNext>25) this.finishSchulte(); else document.getElementById('schulte-target').textContent=this.state.schulteNext; }
+                else { el.classList.add('wrong'); setTimeout(()=>el.classList.remove('wrong'), 300); }
+            },
+            finishSchulte: function() {
+                clearInterval(this.state.timerId); this.showScreen('result');
+                document.getElementById('result-wpm-box').classList.add('hidden-screen'); document.getElementById('result-time-box').classList.remove('hidden-screen');
+                document.getElementById('vision-time-display').textContent = document.getElementById('schulte-timer').textContent;
+                document.getElementById('message-display').textContent = "Hoàn thành xuất sắc!";
+            },
+
+            showResult: function(wc, wpm) {
+                document.getElementById('result-wpm-box').classList.remove('hidden-screen'); document.getElementById('result-time-box').classList.add('hidden-screen');
+                document.getElementById('wpm-display').textContent = wpm;
+                let t = this.state.timeUsed; if(this.state.mode==='rsvp') t = Math.round((wc/wpm)*60);
+                document.getElementById('time-used-display').textContent = t; document.getElementById('words-read-display').textContent = wc;
+                const m = wpm<200?"Cần luyện thêm!":wpm<400?"Khá tốt!":wpm<700?"Tuyệt vời!":"Siêu phàm!";
+                document.getElementById('message-display').textContent = m; this.showScreen('result');
+            },
+            reset: function() { clearInterval(this.state.timerId); clearInterval(this.state.pacerInterval); this.state.isPaused=false; this.showScreen('menu'); }
+        };
+
+        app.init();
+        app.setChunkSize(1);
+    </script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Nạp Tiền Website Khuyến Mãi - Thiên Khôi</title>
+    <!-- Tích hợp Tailwind CSS cho giao diện -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp FontAwesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tích hợp Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .highlight-yellow {
+            background-color: #fef08a; /* Vàng nhạt giống highlight bút dạ */
+            padding: 0 4px;
+            border-radius: 2px;
+        }
+        /* Hiệu ứng toast thông báo copy thành công */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #10B981;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-gray-800 pb-12 antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm border-b-4 border-red-600 py-8 mb-8">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-red-600 mb-3 uppercase tracking-wide">
+                Hướng Dẫn Nạp Tiền Website Khuyến Mãi
+            </h1>
+            <p class="text-gray-600 text-sm md:text-base max-w-3xl mx-auto italic">
+                (Kể từ ngày 13/12/2025, các Thành viên có tài khoản đang hoạt động trên app Thiên Khôi được Tập đoàn hỗ trợ khuyến mại 90% trên 3 web đăng tin)
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 space-y-8">
+
+        <!-- 1. Batdongsan.com.vn -->
+        <section class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+            <div class="bg-red-50 px-6 py-4 border-b border-red-100 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-red-700 flex items-center gap-2">
+                    <span class="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">1</span>
+                    Đối với Batdongsan.com.vn
+                </h2>
+                <span class="bg-red-600 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full shadow-sm animate-pulse">
+                    KHUYẾN MÃI 90%
+                </span>
+            </div>
+            
+            <div class="p-6 md:flex gap-8">
+                <div class="flex-1 space-y-5">
+                    <!-- Khuyến mãi info -->
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm">
+                        <p class="font-semibold text-gray-800 mb-2"><i class="fa-solid fa-gift text-red-500 mr-2"></i>Hoàn tiền sau khi đăng tin:</p>
+                        <ul class="space-y-1 pl-6 text-gray-600">
+                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>10%</strong> đối với tin VIP Vàng và VIP Bạc</li>
+                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>12%</strong> đối với tin VIP Kim Cương</li>
+                        </ul>
+                        <p class="mt-3 text-xs text-gray-500 italic border-t pt-2 border-gray-200">
+                            <strong>Lưu ý:</strong> Mức hỗ trợ khuyến mại và hoàn tiền được tính trên giá đã trừ 8% VAT. Ưu đãi hoàn tiền chỉ áp dụng cho tin đăng trừ tiền từ tài khoản chính. Thành viên lưu ý tích chọn mục "Khuyến mãi" để nhận được hoàn tiền khi đăng tin.
+                        </p>
+                    </div>
+
+                    <!-- Thông tin chuyển khoản -->
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3"><i class="fa-solid fa-building-columns text-blue-600 mr-2"></i>Thông tin chuyển khoản:</h3>
+                        <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 space-y-2 text-sm">
+                            <p><span class="text-gray-500 w-28 inline-block">Ngân hàng:</span> <strong class="text-gray-800">Ngân hàng TMCP Quân đội (MBBank)</strong></p>
+                            <p><span class="text-gray-500 w-28 inline-block">Tên tài khoản:</span> <strong class="text-gray-800">CONG TY CO PHAN TAP DOAN THIEN KHOI</strong></p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-gray-500 w-28 inline-block">Số tài khoản:</span> 
+                                <strong class="text-xl text-blue-700 tracking-wider" id="stk-1">2675247703596</strong>
+                                <button onclick="copyText('2675247703596')" class="ml-2 text-gray-400 hover:text-blue-600 transition" title="Copy số tài khoản">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cú pháp -->
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2"><i class="fa-solid fa-keyboard text-gray-600 mr-2"></i>Nội dung chuyển khoản:</h3>
+                        <div class="bg-gray-800 text-white p-4 rounded-lg relative overflow-hidden group">
+                            <p class="text-gray-300 text-xs mb-1">Cú pháp: <code class="text-yellow-400">&lt;gmail&gt; tài khoản nhân viên</code></p>
+                            <div class="flex items-center justify-between">
+                                <p class="font-mono text-lg">Ví dụ: <span class="text-green-400">an97.baophuc.thienkhoihcm</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Khu vực chèn mã QR (Dành cho admin website thay thế ảnh) -->
+                <div class="mt-6 md:mt-0 w-full md:w-64 flex-shrink-0 flex flex-col items-center justify-center bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-4">
+                    <div class="text-center text-gray-400 mb-2">
+                        <i class="fa-solid fa-qrcode text-4xl"></i>
+                        <p class="text-xs mt-2">Mã QR Batdongsan.com.vn</p>
+                    </div>
+                    <img src="https://img.speedreading.vn/batdongsan.webp" alt="QR Code Batdongsan" class="rounded-lg shadow-sm w-full max-w-[200px] object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Alonhadat -->
+        <section class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+            <div class="bg-teal-50 px-6 py-4 border-b border-teal-100 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-teal-700 flex items-center gap-2">
+                    <span class="bg-teal-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">2</span>
+                    Đối với alonhadat
+                </h2>
+                <span class="bg-teal-600 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full shadow-sm animate-pulse">
+                    KHUYẾN MÃI 90%
+                </span>
+            </div>
+            
+            <div class="p-6 md:flex gap-8">
+                <div class="flex-1 space-y-5">
+                    <!-- Thông tin chuyển khoản -->
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3"><i class="fa-solid fa-building-columns text-blue-600 mr-2"></i>Thông tin chuyển khoản:</h3>
+                        <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 space-y-2 text-sm">
+                            <p><span class="text-gray-500 w-28 inline-block">Ngân hàng:</span> <strong class="text-gray-800">Ngân hàng TMCP Quân đội (MBBank)</strong></p>
+                            <p><span class="text-gray-500 w-28 inline-block">Tên tài khoản:</span> <strong class="text-gray-800">CONG TY CO PHAN TAP DOAN THIEN KHOI</strong></p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-gray-500 w-28 inline-block">Số tài khoản:</span> 
+                                <strong class="text-xl text-blue-700 tracking-wider" id="stk-2">3194019229110</strong>
+                                <button onclick="copyText('3194019229110')" class="ml-2 text-gray-400 hover:text-blue-600 transition" title="Copy số tài khoản">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cú pháp -->
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2"><i class="fa-solid fa-keyboard text-gray-600 mr-2"></i>Nội dung chuyển khoản:</h3>
+                        <div class="bg-gray-800 text-white p-4 rounded-lg relative overflow-hidden group">
+                            <p class="text-gray-300 text-xs mb-1">Cú pháp: <code class="text-yellow-400">&lt;Tên truy cập&gt;</code></p>
+                            <div class="flex items-center justify-between">
+                                <p class="font-mono text-lg">Ví dụ: <span class="text-green-400">Huynhannyeoly</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Khu vực chèn mã QR -->
+                <div class="mt-6 md:mt-0 w-full md:w-64 flex-shrink-0 flex flex-col items-center justify-center bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-4">
+                    <div class="text-center text-gray-400 mb-2">
+                        <i class="fa-solid fa-qrcode text-4xl"></i>
+                        <p class="text-xs mt-2">Mã QR Alonhadat</p>
+                    </div>
+                    <img src="https://img.speedreading.vn/alonhadat.webp" alt="QR Code Alonhadat" class="rounded-lg shadow-sm w-full max-w-[200px] object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Chợ tốt -->
+        <section class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+            <div class="bg-yellow-50 px-6 py-4 border-b border-yellow-200 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-yellow-600 flex items-center gap-2">
+                    <span class="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">3</span>
+                    Đối với Chợ tốt
+                </h2>
+                <span class="bg-yellow-500 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full shadow-sm animate-pulse">
+                    KHUYẾN MÃI 90%
+                </span>
+            </div>
+            
+            <div class="p-6 md:flex gap-8">
+                <div class="flex-1 space-y-5">
+                    
+                    <div class="bg-gray-50 p-3 rounded-lg text-sm text-gray-600">
+                        <i class="fa-solid fa-circle-info text-yellow-500 mr-2"></i> Tiền khuyến mại tính trên giá đã trừ 8% VAT.
+                    </div>
+
+                    <!-- Thông tin chuyển khoản -->
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3"><i class="fa-solid fa-building-columns text-blue-600 mr-2"></i>Thông tin chuyển khoản:</h3>
+                        <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 space-y-2 text-sm">
+                            <p><span class="text-gray-500 w-28 inline-block">Ngân hàng:</span> <strong class="text-gray-800">Ngân hàng TMCP Quân đội (MBBank)</strong></p>
+                            <p><span class="text-gray-500 w-28 inline-block">Tên tài khoản:</span> <strong class="text-gray-800">CONG TY CO PHAN TAP DOAN THIEN KHOI</strong></p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-gray-500 w-28 inline-block">Số tài khoản:</span> 
+                                <strong class="text-xl text-blue-700 tracking-wider" id="stk-3">1943929303341</strong>
+                                <button onclick="copyText('1943929303341')" class="ml-2 text-gray-400 hover:text-blue-600 transition" title="Copy số tài khoản">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cú pháp -->
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2"><i class="fa-solid fa-keyboard text-gray-600 mr-2"></i>Nội dung chuyển khoản:</h3>
+                        <div class="bg-gray-800 text-white p-4 rounded-lg relative overflow-hidden group">
+                            <p class="text-gray-300 text-xs mb-1">Cú pháp: <code class="text-yellow-400">&lt;Số điện thoại đăng ký tài khoản&gt;</code></p>
+                            <div class="flex items-center justify-between">
+                                <p class="font-mono text-lg">Ví dụ: <span class="text-green-400">0901089139</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Khu vực chèn mã QR -->
+                <div class="mt-6 md:mt-0 w-full md:w-64 flex-shrink-0 flex flex-col items-center justify-center bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-4">
+                    <div class="text-center text-gray-400 mb-2">
+                        <i class="fa-solid fa-qrcode text-4xl"></i>
+                        <p class="text-xs mt-2">Mã QR Chợ Tốt</p>
+                    </div>
+                    <img src="https://img.speedreading.vn/chottot.webp" alt="QR Code Cho Tot" class="rounded-lg shadow-sm w-full max-w-[200px] object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- LƯU Ý QUAN TRỌNG -->
+        <section class="bg-red-50 rounded-xl shadow-md border-l-4 border-red-600 overflow-hidden">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-red-600 mb-4 flex items-center">
+                    <i class="fa-solid fa-triangle-exclamation mr-3 text-2xl"></i> LƯU Ý QUAN TRỌNG
+                </h2>
+                <ul class="space-y-4 text-sm md:text-base text-gray-700 list-disc pl-5">
+                    <li>Tập đoàn đã cập nhật thay đổi số tài khoản nạp tiền đăng tin đối với Thiên Khôi miền Nam, các thành viên lưu ý cập nhật tránh chuyển khoản nhầm không được hưởng quyền lợi hỗ trợ. <br>
+                        <span class="highlight-yellow font-medium mt-1 inline-block">Tất cả các khoản tiền trong tài khoản chính, khuyến mại, hoàn tiền đều có thời hạn sử dụng trong vòng 3 tháng kể từ ngày cộng tiền.</span>
+                    </li>
+                    <li><span class="bg-blue-100 px-1 rounded">Giao dịch trước 15:00 mỗi ngày được nạp tiền trong ngày, các giao dịch sau 15:00 được nạp tiền vào sáng hôm sau.</span></li>
+                    <li><span class="bg-blue-100 px-1 rounded">Giao dịch không đúng cú pháp hoặc không xác định được tài khoản sẽ bị tạm hoãn nạp tiền.</span></li>
+                    <li>Các trường hợp chuyển nhầm sẽ được tổng hợp và xử lý.</li>
+                    <li><span class="bg-blue-100 px-1 rounded">Chính sách này chỉ áp dụng với các giao dịch chuyển tiền từ ngày 13/12/2025 vào số tài khoản mới theo thông báo này.</span></li>
+                    <li>
+                        <span class="highlight-yellow font-medium leading-relaxed">
+                            Lưu lại màn hình chuyển tiền thành công. Sau khi tiền vào tài khoản Website thì hãy xóa, Trong trường hợp sáng hôm sau chưa vào tiền gửi màn hình chuyển tiền thành công để Trợ lý Phòng GỬI THÔNG TIN TRA SOÁT.
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Thẻ Toast thông báo Copy -->
+    <div id="toast"><i class="fa-solid fa-check-circle mr-2"></i> Đã copy thành công!</div>
+
+    <!-- Script xử lý Copy -->
+    <script>
+        function copyText(text) {
+            // Dùng Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast();
+                }).catch(err => {
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        // Fallback cho trình duyệt cũ hoặc không có HTTPS
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                if(successful) showToast();
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showToast() {
+            var toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2500);
+        }
+    </script>
+</body>
+</html>

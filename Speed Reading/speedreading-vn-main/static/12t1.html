@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGK Speed Reading Lớp 12 - Bài 1 Tiết 1</title>
+    <style>
+        /* Cấu hình trang A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 20mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.5;
+            color: #222;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        
+        /* Header và Tiêu đề */
+        .header {
+            text-align: right;
+            font-size: 13px;
+            color: #4a0e17;
+            border-bottom: 2px solid #4a0e17;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .lesson-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lesson-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a0e17;
+            text-transform: uppercase;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+        .sub-title {
+            font-size: 16px;
+            color: #555;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* Định dạng các khối nội dung (Boxes) */
+        .box {
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            page-break-inside: avoid;
+        }
+        .box-title {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .box-title span {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        /* Khối Mục tiêu */
+        .box-muc-tieu { background-color: #fdfafb; border-left: 6px solid #4a0e17; }
+        .box-muc-tieu .box-title { color: #4a0e17; }
+        
+        /* Khối Pha 1 (Kích hoạt) */
+        .box-pha1 { background-color: #fffdf4; border: 2px dashed #d4af37; }
+        .box-pha1 .box-title { color: #b89214; }
+
+        /* Khối Pha 2 (Phân tích ma trận) */
+        .box-pha2 { background-color: #f7f9fa; border-left: 6px solid #333; }
+        .box-pha2 .box-title { color: #333; }
+
+        /* Khối Pha 3 (Mô phỏng áp lực) */
+        .box-pha3 { background-color: #fff; border: 1px solid #4a0e17; }
+        .box-pha3 .box-title { color: #4a0e17; }
+
+        /* Khối Pha 4 (Kết nối dữ liệu) */
+        .box-pha4 { background-color: #f4fdf8; border-left: 6px solid #27ae60; }
+        .box-pha4 .box-title { color: #27ae60; }
+
+        /* Typography & Đặc biệt */
+        .highlight-burgundy { color: #4a0e17; font-weight: bold; }
+        .highlight-gold { color: #b89214; font-weight: bold; }
+        
+        .alert-bar {
+            background-color: #4a0e17;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            margin: 15px 0;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Khối Văn bản đọc thử */
+        .exam-text {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-left: 5px solid #4a0e17;
+            padding: 28px 20px 20px 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .exam-tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #4a0e17;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-bottom-right-radius: 8px;
+        }
+        .word-count-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #d4af37;
+            color: #4a0e17;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-bottom-left-radius: 8px;
+        }
+        .exam-text p { text-indent: 20px; margin-bottom: 12px; text-align: justify; }
+
+        /* Form điền kết quả */
+        .result-matrix {
+            display: flex;
+            justify-content: space-between;
+            background-color: #fdfafb;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 16px;
+            border: 1px solid #e1b1b8;
+        }
+        .result-item span { color: #4a0e17; font-size: 18px; }
+
+        /* Lists */
+        ul { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        ol { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        p { margin-top: 5px; margin-bottom: 10px; text-align: justify; }
+
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        CHỦ ĐỀ I: CHIẾN LƯỢC TỔNG ÔN VÀ QUẢN TRỊ ÁP LỰC ĐỈNH CAO
+    </div>
+
+    <div class="title-container">
+        <div class="lesson-number">Bài 1: Khảo sát và tối ưu hóa hiệu suất tiền kỳ thi</div>
+        <div class="lesson-title">Tiết 1: ĐO LƯỜNG CHỈ SỐ WPM VÀ ERR TRÊN ĐỀ THI TÍCH HỢP</div>
+        <div class="sub-title">"Trong ma trận thông tin đa lĩnh vực, sự tỉnh táo của tiêu điểm quyết định điểm số."</div>
+    </div>
+
+    <div class="box box-muc-tieu">
+        <h3 class="box-title"><span>🎯</span> Yêu cầu cần đạt</h3>
+        <ul>
+            <li>Thực hiện đo lường chính xác Tốc độ đọc (WPM) và Tỉ lệ hiểu (CR) trên định dạng văn bản đề thi Đánh giá năng lực (tích hợp Toán - Kinh tế - Văn học).</li>
+            <li>Nhận diện hiện tượng <span class="highlight-burgundy">"Nghẽn nhận thức" (Cognitive Bottleneck)</span> khi phải chuyển đổi vùng kiến thức liên tục.</li>
+            <li>Xác định chỉ số ERR (Hiệu suất đọc thực tế) xuất phát điểm của Lớp 12 để làm cơ sở cho chiến lược tăng tốc tổng ôn.</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha1">
+        <h3 class="box-title"><span>⚡</span> BƯỚC 1: KÍCH HOẠT ĐỈNH CAO (3 Phút)</h3>
+        <p>Kể từ giây phút này, mọi kỹ năng Tốc đọc em tích lũy suốt các năm học trước phải chuyển hóa thành năng lực thực chiến. Đề thi hiện đại (như ĐGNL Đại học Quốc gia) không còn kiểm tra kiến thức đơn môn, mà sử dụng các văn bản <strong>tích hợp đa lĩnh vực</strong> với dung lượng cực dài.</p>
+        <p><strong>Thử thách tư duy:</strong> Khi em đang đọc một phân đoạn phân tích số liệu kinh tế, đoạn tiếp theo lại chuyển sang bình luận một tác phẩm văn học. Sự nhảy vọt về <em>trường từ vựng</em> này sẽ khiến não bộ bị "khựng" lại. Nếu không làm chủ tốc độ chuyển mạch tư duy, em sẽ bị cạn kiệt thời gian và năng lượng ngay trong 10 câu đầu tiên của đề thi.</p>
+    </div>
+
+    <div class="box box-pha2">
+        <h3 class="box-title"><span>🧠</span> BƯỚC 2: PHÂN TÍCH MA TRẬN ĐỀ THI (5 Phút)</h3>
+        <p>Để xử lý văn bản tích hợp đa năng lực, em phải áp dụng chiến thuật <span class="highlight-burgundy">"Đọc phân tách phân khúc tư duy"</span>. Bản chất của kỹ thuật này bao gồm:</p>
+        <ul>
+            <li><strong>Định vị cấu trúc chuyển mạch:</strong> Mắt lướt nhanh để tìm các câu nối (Ví dụ: <em>Tuy nhiên, Xét từ góc độ...</em>) nhằm báo hiệu cho não bộ thay đổi vùng xử lý kiến thức (từ tư duy định lượng sang tư duy ngôn ngữ/cảm xúc).</li>
+            <li><strong>Neo giữ từ khóa cốt lõi:</strong> Dùng bút chì gạch chân dưới các thuật ngữ trung tâm của từng phân đoạn. Không cho phép dư âm cảm xúc của đoạn văn học làm nhiễu logic của đoạn toán học tiếp theo.</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha3">
+        <h3 class="box-title"><span>⚔️</span> BƯỚC 3: MÔ PHỎNG ÁP LỰC PHÒNG THI (25 Phút)</h3>
+        <div class="alert-bar">
+            Bấm đồng hồ! Quét văn bản tích hợp dưới đây với tốc độ cao nhất, gấp sách lại và giải mã câu hỏi.
+        </div>
+        
+        <div class="exam-text">
+            <div class="exam-tag">VĂN BẢN TÍCH HỢP ĐA NĂNG LỰC</div>
+            <div class="word-count-tag">DUNG LƯỢNG: 385 TỪ</div>
+            <br>
+            <p>Xu thế phát triển bền vững trong kỷ nguyên số đòi hỏi các quốc gia phải giải quyết bài toán hài hòa giữa tăng trưởng kinh tế, công nghệ và bảo tồn các giá trị nhân văn truyền thống. Theo báo cáo thống kê vĩ mô của Diễn đàn Kinh tế Thế giới, việc ứng dụng Trí tuệ nhân tạo (AI) vào chuỗi cung ứng toàn cầu đã giúp gia tăng sản lượng công nghiệp trung bình đạt mức 23,5%, với hệ số tương quan tuyến tính tỷ lệ thuận với mức độ đầu tư hạ tầng máy học (Machine Learning). Nhưng đồng thời, đồ thị dữ liệu cũng chỉ ra một thực tế nghiệt ngã: sự sụt giảm 12% cơ cấu việc làm phổ thông tại các siêu đô thị. Hàm số phát triển này là minh chứng rõ nét cho quy luật đào thải khắt khe của công nghệ đối với lực lượng lao động thiếu kỹ năng thích ứng chuyên sâu.</p>
+            <p>Tuy nhiên, sự tác động này không chỉ dừng lại ở những con số tài chính hay các phương trình kinh tế khô khan. Nhìn từ góc độ văn hóa - xã hội học, sự dịch chuyển cơ cấu lao động đang vô tình làm rạn nứt cấu trúc gia đình truyền thống, khi làn sóng chuyển dịch việc làm ép buộc con người phải liên tục thay đổi không gian sinh tồn. Hiện tượng này gợi nhắc đến những câu thơ đầy trăn trở, mang tính dự báo của Nguyễn Du trong Truyện Kiều: <em>"Trải qua một cuộc bể dâu / Những điều trông thấy mà đau đớn lòng"</em>. Nỗi đau đớn ấy, xét đến cùng, chính là bi kịch của thân phận con người khi bị cuốn đi bất định trước những biến động vĩ mô của thời đại mà bản thân không thể kiểm soát.</p>
+            <p>Do đó, giải pháp cốt lõi cho lộ trình phát triển giáo dục thế hệ mới không phải là việc nhồi nhét các kiến thức đơn môn tách biệt. Học sinh cần xây dựng được "Tư duy liên ngành" (Interdisciplinary Thinking). Chúng ta phải biết dùng lăng kính toán học, logic học để định lượng các biến động xã hội, và đồng thời, biết dùng trí tuệ cảm xúc của văn học để giải mã, xoa dịu những khủng hoảng nhân sinh. Chỉ khi đạt được sự cân bằng đó, con người mới không bị cỗ máy công nghệ bỏ lại phía sau.</p>
+        </div>
+
+        <p><strong>Thời gian hoàn thành bài đọc của em:</strong> ....... Giây.</p>
+        <p><em>Công thức tính WPM:</em> (385 ÷ Số giây) × 60 = <strong>....... WPM.</strong></p>
+
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+        <p><strong>BÀI THI KHẢO SÁT CHỈ SỐ CR (Tuyệt đối không lật lại văn bản):</strong></p>
+        <ol>
+            <li><strong>Theo đoạn văn 1, mối quan hệ giữa việc gia tăng sản lượng công nghiệp và mức độ đầu tư hạ tầng máy học được thể hiện qua khái niệm toán học nào?</strong><br>
+                A. Hệ số tương quan tỷ lệ nghịch.<br>
+                B. Hệ số tương quan tuyến tính tỷ lệ thuận.<br>
+                C. Đồ thị phân phối chuẩn.
+            </li>
+            <li><strong>Việc tác giả trích dẫn hai câu thơ trong truyện Kiều ở đoạn văn 2 nhằm mục đích chính là gì?</strong><br>
+                A. Để chứng minh Nguyễn Du là một nhà kinh tế học vĩ đại có tầm nhìn dự báo.<br>
+                B. Nhằm phê phán sự phát triển của Trí tuệ nhân tạo (AI) đã phá hoại văn hóa.<br>
+                C. Để làm nổi bật bi kịch của thân phận con người trước những biến động vĩ mô không thể kiểm soát.
+            </li>
+            <li><strong>"Tư duy liên ngành" được định nghĩa trong đoạn cuối đòi hỏi sự kết hợp giữa những yếu tố nào?</strong><br>
+                A. Lăng kính toán học định lượng và trí tuệ cảm xúc văn học.<br>
+                B. Kiến thức công nghệ thông tin và kỹ năng lao động phổ thông.<br>
+                C. Việc học thuộc lòng nhiều môn học tách biệt cùng một lúc.
+            </li>
+        </ol>
+        <p><em>(Đáp án chuẩn thẩm định: 1-B, 2-C, 3-A. Xác định tỉ lệ % đúng để tính chỉ số CR của em)</em></p>
+    </div>
+
+    <div class="box box-pha4">
+        <h3 class="box-title"><span>📊</span> BƯỚC 4: KẾT NỐI VÀ TRUY XUẤT VĨ MÔ (5 Phút)</h3>
+        <p>Ghi nhận kết quả khảo sát khởi điểm của năm học Lớp 12 vào Ma trận hiệu suất dưới đây:</p>
+        
+        <div class="result-matrix">
+            <div class="result-item">TỐC ĐỘ (WPM): <span>..........</span></div>
+            <div class="result-item">TỈ LỆ HIỂU (CR): <span>......%</span></div>
+            <div class="result-item">HIỆU SUẤT LÕI (ERR): <span>..........</span></div>
+        </div>
+
+        <p><strong>Suy ngẫm chiến lược:</strong> Đoạn văn bản trên là một mô hình thu nhỏ có độ khó rất cao. Nếu điểm ERR của em bị sụt giảm, nguyên nhân trực tiếp là do bộ não bị "khựng" khi đột ngột chuyển từ việc xử lý dữ liệu <em>"hệ số tương quan tuyến tính"</em> sang vùng ngôn ngữ cảm xúc <em>"Trải qua một cuộc bể dâu"</em>. Hãy ghi nhớ quy tắc sinh tồn của Lớp 12: <span class="highlight-burgundy">"Tiêu điểm nhãn cầu phải di chuyển liên tục, nhưng vùng nhận thức của não bộ phải linh hoạt chuyển mạch chủ động!"</span>.</p>
+    </div>
+
+    <div class="footer">
+        Sách giáo khoa Speed Reading 12 - Tối ưu hiệu suất, Chinh phục đỉnh cao | Trang 6
+    </div>
+
+</body>
+</html>

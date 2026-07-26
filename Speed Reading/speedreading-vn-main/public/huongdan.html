@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Nhập Môn & Lộ Trình - Speed Reading Online</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#D31414',
+                        secondary: '#FF4D4D',
+                        dark: '#1a1a1a',
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            scroll-behavior: smooth;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #D31414, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #D31414 0%, #a80000 100%);
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(211, 20, 20, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <!-- Header -->
+    <header class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="font-heading font-bold text-2xl text-primary flex items-center gap-2">
+                <i class="fa-solid fa-book-open-reader"></i> SPEED READING
+            </div>
+            <nav class="hidden md:flex gap-6 font-medium">
+                <a href="#activation" class="hover:text-primary transition">Kích Hoạt</a>
+                <a href="#roadmap" class="hover:text-primary transition">Lộ Trình</a>
+                <a href="#prep" class="hover:text-primary transition">Chuẩn Bị</a>
+            </nav>
+            <a href="https://speedreading.vn/links" target="_blank" class="px-5 py-2 rounded-full border border-primary text-primary font-bold hover:bg-primary hover:text-white transition">
+                Thư viện tổng hợp
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 overflow-hidden">
+        <div class="absolute inset-0 bg-white"></div>
+        <!-- Decorative Circle -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-red-50 to-transparent rounded-bl-full opacity-60"></div>
+
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-red-100 text-primary text-sm font-bold mb-4 animate-bounce">
+                🎉 Chúc mừng bạn đã đăng ký thành công!
+            </span>
+            <h1 class="font-heading text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                Hướng Dẫn Nhập Môn & <br>
+                <span class="gradient-text">Lộ Trình Chinh Phục</span>
+            </h1>
+            <p class="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+                Bạn đang nắm trong tay tấm vé để tăng tốc độ đọc gấp 2-5 lần. Hãy làm theo hướng dẫn dưới đây để bắt đầu ngay hành trình này.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#activation" class="px-8 py-4 rounded-lg gradient-bg text-white font-bold shadow-lg shadow-red-500/30 hover:shadow-red-500/50 transition transform hover:-translate-y-1">
+                    Bắt đầu kích hoạt ngay
+                </a>
+                <a href="#roadmap" class="px-8 py-4 rounded-lg bg-white border border-gray-200 text-gray-700 font-bold hover:bg-gray-50 transition">
+                    Xem lộ trình học
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Step by Step Activation -->
+    <section id="activation" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-3xl font-bold mb-4">Quy Trình <span class="text-primary">Kích Hoạt Khóa Học</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="step-card bg-white p-8 rounded-2xl border border-gray-100 shadow-lg relative group">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full gradient-bg text-white flex items-center justify-center font-bold text-xl shadow-md">1</div>
+                    <div class="mt-6 text-center">
+                        <i class="fa-solid fa-envelope-open-text text-4xl text-red-300 mb-4 group-hover:text-primary transition"></i>
+                        <h3 class="font-bold text-xl mb-2">Nhận Mã Coupon</h3>
+                        <p class="text-gray-600 text-sm">Kiểm tra Email hoặc tin nhắn SMS để lấy Mã kích hoạt khóa học do hệ thống gửi.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card bg-white p-8 rounded-2xl border border-gray-100 shadow-lg relative group">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full gradient-bg text-white flex items-center justify-center font-bold text-xl shadow-md">2</div>
+                    <div class="mt-6 text-center">
+                        <i class="fa-solid fa-laptop-code text-4xl text-red-300 mb-4 group-hover:text-primary transition"></i>
+                        <h3 class="font-bold text-xl mb-2">Kích Hoạt Unica</h3>
+                        <p class="text-gray-600 text-sm">Đăng nhập <span class="font-bold">Unica.vn</span>, nhập mã vào mục "Kích hoạt khóa học" để sở hữu bộ video trọn đời.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card bg-white p-8 rounded-2xl border border-gray-100 shadow-lg relative group">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full gradient-bg text-white flex items-center justify-center font-bold text-xl shadow-md">3</div>
+                    <div class="mt-6 text-center">
+                        <i class="fa-brands fa-whatsapp text-4xl text-red-300 mb-4 group-hover:text-primary transition"></i>
+                        <h3 class="font-bold text-xl mb-2">Vào Nhóm Zalo</h3>
+                        <p class="text-gray-600 text-sm">Nhận link mời tham gia nhóm Zalo lớp chuyên sâu theo tháng để nhận hỗ trợ.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-card bg-white p-8 rounded-2xl border border-gray-100 shadow-lg relative group">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full gradient-bg text-white flex items-center justify-center font-bold text-xl shadow-md">4</div>
+                    <div class="mt-6 text-center">
+                        <i class="fa-solid fa-calendar-check text-4xl text-red-300 mb-4 group-hover:text-primary transition"></i>
+                        <h3 class="font-bold text-xl mb-2">Xem Lịch Zoom</h3>
+                        <p class="text-gray-600 text-sm">Theo dõi lịch học 7 buổi Zoom được ghim trên nhóm Zalo. Đừng bỏ lỡ!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <!-- Left Content -->
+                <div class="lg:w-1/2">
+                    <h2 class="font-heading text-3xl font-bold mb-6">Mô Hình Học Tập <br><span class="gradient-text">Video + Coaching</span></h2>
+                    <p class="text-gray-600 mb-8 text-lg">
+                        Không chỉ là khóa học video thông thường. Đây là chương trình huấn luyện thực chiến kết hợp giữa việc bạn tự trang bị kiến thức nền và chuyên gia chỉnh sửa kỹ thuật trực tiếp.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <!-- Phase 1 -->
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-red-100 text-primary flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl">Giai đoạn 1: Tự học nền tảng</h4>
+                                <p class="text-gray-600 text-sm mt-1">Học viên <span class="font-bold text-primary">NÊN học trước</span> bộ video trên Unica để nắm lý thuyết, nguyên lý não bộ và các bài tập cơ bản.</p>
+                            </div>
+                        </div>
+
+                        <!-- Phase 2 -->
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-red-100 text-primary flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl">Giai đoạn 2: Coaching 7 Buổi</h4>
+                                <p class="text-gray-600 text-sm mt-1">Tương tác trực tiếp qua Zoom. Huấn luyện viên sẽ sửa lỗi kỹ thuật mắt, ép tốc độ và giải đáp thắc mắc chuyên sâu.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual -->
+                <div class="lg:w-1/2 relative">
+                    <div class="absolute inset-0 bg-red-500 rounded-3xl transform rotate-3 opacity-10"></div>
+                    <div class="bg-white rounded-3xl shadow-2xl p-8 relative border-l-4 border-primary">
+                        <h3 class="font-bold text-2xl mb-6 text-center">Lịch Trình Tiêu Chuẩn</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
+                                <i class="fa-solid fa-check-circle text-primary"></i>
+                                <span class="font-medium">Bước 1: Kích hoạt & Xem Video</span>
+                            </li>
+                            <li class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
+                                <i class="fa-solid fa-check-circle text-primary"></i>
+                                <span class="font-medium">Bước 2: Vào nhóm Zalo tháng hiện tại</span>
+                            </li>
+                            <li class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
+                                <i class="fa-solid fa-check-circle text-primary"></i>
+                                <span class="font-medium">Bước 3: Tham gia 7 buổi Zoom tối</span>
+                            </li>
+                            <li class="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
+                                <i class="fa-solid fa-check-circle text-primary"></i>
+                                <span class="font-medium">Bước 4: Tổng kết & Cấp chứng nhận</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preparation Section -->
+    <section id="prep" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-3xl font-bold">Chuẩn Bị Gì Cho <span class="text-primary">Lớp Học Zoom?</span></h2>
+                <p class="text-gray-500 mt-2">Hãy chuẩn bị kỹ lưỡng để 7 buổi học đạt hiệu quả "bùng nổ"</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center p-6 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-200">
+                    <div class="w-16 h-16 mx-auto bg-red-50 rounded-full flex items-center justify-center text-primary text-2xl mb-4">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <h4 class="font-bold text-lg">Sách Giấy</h4>
+                    <p class="text-sm text-gray-500 mt-2">1-2 cuốn sách giấy bạn yêu thích (khổ A5) để thực hành.</p>
+                </div>
+
+                <div class="text-center p-6 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-200">
+                    <div class="w-16 h-16 mx-auto bg-red-50 rounded-full flex items-center justify-center text-primary text-2xl mb-4">
+                        <i class="fa-solid fa-pen-fancy"></i>
+                    </div>
+                    <h4 class="font-bold text-lg">Bút Dẫn Đường</h4>
+                    <p class="text-sm text-gray-500 mt-2">Một cây bút hoặc ngón tay để làm vật dẫn mắt.</p>
+                </div>
+
+                <div class="text-center p-6 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-200">
+                    <div class="w-16 h-16 mx-auto bg-red-50 rounded-full flex items-center justify-center text-primary text-2xl mb-4">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                    <h4 class="font-bold text-lg">App Metronome</h4>
+                    <p class="text-sm text-gray-500 mt-2">Cài app đếm nhịp hoặc dùng tool trên web speedreading.vn</p>
+                </div>
+
+                <div class="text-center p-6 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-200">
+                    <div class="w-16 h-16 mx-auto bg-red-50 rounded-full flex items-center justify-center text-primary text-2xl mb-4">
+                        <i class="fa-solid fa-mug-hot"></i>
+                    </div>
+                    <h4 class="font-bold text-lg">Tâm Thế Mới</h4>
+                    <p class="text-sm text-gray-500 mt-2">Vào lớp với tâm thế "chiếc ly rỗng" để nạp kiến thức mới.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commitment Banner -->
+    <section class="py-16 gradient-bg text-white text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="font-heading text-3xl md:text-4xl font-extrabold mb-6">CAM KẾT KẾT QUẢ ĐỘT PHÁ</h2>
+            <p class="text-xl md:text-2xl font-light max-w-3xl mx-auto mb-8">
+                "Sau 7 ngày coach qua Zoom, nếu bạn tuân thủ đúng lộ trình, kết quả tốc độ đọc và khả năng ghi nhớ sẽ làm bạn <span class="font-bold text-yellow-300">BẤT NGỜ!</span>"
+            </p>
+            <a href="https://unica.vn" target="_blank" class="inline-block bg-white text-primary px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:bg-gray-100 hover:scale-105 transition transform">
+                ĐĂNG NHẬP UNICA NGAY
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4 text-center md:text-left">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h5 class="font-heading font-bold text-xl mb-4">Speed Reading Online</h5>
+                    <p class="text-gray-400 text-sm">Hệ thống đào tạo kỹ năng đọc hiểu nhanh hàng đầu Việt Nam.</p>
+                </div>
+                <div>
+                    <h5 class="font-bold text-lg mb-4">Hỗ Trợ Học Viên</h5>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><i class="fa-solid fa-phone mr-2"></i> Hotline/Zalo: 09xx.xxx.xxx</li>
+                        <li><i class="fa-solid fa-envelope mr-2"></i> Email: support@speedreading.vn</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-lg mb-4">Liên Kết</h5>
+                    <div class="flex gap-4 justify-center md:justify-start">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500 text-sm">
+                &copy; 2024 Speed Reading. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

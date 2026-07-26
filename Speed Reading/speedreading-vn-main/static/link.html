@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng Hợp Liên Kết - Speed Reading</title>
+    
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tích hợp Font chữ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tích hợp FontAwesome cho Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-red': '#cc0000',
+                        'brand-dark': '#1a0000',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            /* Nền đỏ đen chuyên nghiệp */
+            background: radial-gradient(circle at top, #5c0000 0%, #1a0000 100%);
+            min-height: 100vh;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            background-attachment: fixed;
+        }
+
+        /* Hiệu ứng thẻ Glassmorphism */
+        .link-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 50, 50, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(204, 0, 0, 0.5);
+        }
+
+        .icon-wrapper {
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover .icon-wrapper {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="antialiased py-12 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Phần Header với Logo -->
+        <div class="text-center mb-12 animate-fade-in-down">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading Logo" class="h-20 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">Hệ Sinh Thái <span class="text-red-500">Speed Reading</span></h1>
+            <p class="text-gray-300 text-lg max-w-2xl mx-auto font-light">
+                Tổng hợp tất cả các công cụ, bài học và tài nguyên hỗ trợ bạn trên hành trình chinh phục kỹ năng đọc hiểu nhanh.
+            </p>
+        </div>
+
+        <!-- Lưới Danh sách Liên kết -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Thẻ 1 -->
+            <a href="https://canva.link/edgs1n4jfj6t54f" target="_blank" rel="noopener noreferrer" class="link-card rounded-2xl p-6 flex flex-col items-center text-center group">
+                <div class="h-16 w-16 rounded-full bg-red-950/50 flex items-center justify-center mb-4 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                    <i class="fas fa-desktop text-2xl icon-wrapper"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-red-400 transition-colors">Thuyết Trình Workshop</h3>
+                <p class="text-sm text-gray-400">Slide trình bày chuyên nghiệp trực tiếp trên sự kiện.</p>
+            </a>
+
+            <!-- Thẻ 2 -->
+            <a href="https://speedreading.vn/ngonhan" target="_blank" rel="noopener noreferrer" class="link-card rounded-2xl p-6 flex flex-col items-center text-center group">
+                <div class="h-16 w-16 rounded-full bg-red-950/50 flex items-center justify-center mb-4 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                    <i class="fas fa-brain text-2xl icon-wrapper"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-red-400 transition-colors">6 Ngộ Nhận Speed Reading</h3>
+                <p class="text-sm text-gray-400">Giải mã các lầm tưởng phổ biến cản bước bạn đọc nhanh.</p>
+            </a>
+
+            <!-- Thẻ 3 -->
+            <a href="https://speedreading.vn/trainghiem" target="_blank" rel="noopener noreferrer" class="link-card rounded-2xl p-6 flex flex-col items-center text-center group">
+                <div class="h-16 w-16 rounded-full bg-red-950/50 flex items-center justify-center mb-4 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                    <i class="fas fa-hourglass-half text-2xl icon-wrapper"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-red-400 transition-colors">Trải Nghiệm Đọc Chậm</h3>
+                <p class="text-sm text-gray-400">Bài kiểm tra để nhận thức rõ giới hạn của thói quen đọc cũ.</p>
+            </a>
+
+            <!-- Thẻ 4 -->
+            <a href="https://speedreading.vn/Tool" target="_blank" rel="noopener noreferrer" class="link-card rounded-2xl p-6 flex flex-col items-center text-center group">
+                <div class="h-16 w-16 rounded-full bg-red-950/50 flex items-center justify-center mb-4 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                    <i class="fas fa-tools text-2xl icon-wrapper"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-red-400 transition-colors">Công Cụ Luyện Tập</h3>
+                <p class="text-sm text-gray-400">Bộ công cụ chuyên biệt giúp tăng tốc độ xử lý của não bộ.</p>
+            </a>
+
+            <!-- Thẻ 5 -->
+            <a href="https://speedreading.vn/zoom" target="_blank" rel="noopener noreferrer" class="link-card rounded-2xl p-6 flex flex-col items-center text-center group lg:col-start-2">
+                <div class="h-16 w-16 rounded-full bg-red-950/50 flex items-center justify-center mb-4 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                    <i class="fas fa-video text-2xl icon-wrapper"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-red-400 transition-colors">Luyện Tập Online</h3>
+                <p class="text-sm text-gray-400">Phòng Zoom thực hành trực tuyến cùng cộng đồng.</p>
+            </a>
+
+            <!-- Thẻ 6 -->
+            <a href="https://speedreading.vn/study" target="_blank" rel="noopener noreferrer" class="link-card rounded-2xl p-6 flex flex-col items-center text-center group">
+                <div class="h-16 w-16 rounded-full bg-red-950/50 flex items-center justify-center mb-4 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                    <i class="fas fa-eye text-2xl icon-wrapper"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-red-400 transition-colors">Công Cụ Luyện Mắt</h3>
+                <p class="text-sm text-gray-400">Bài tập ngoại vi và chống mỏi mắt hiệu quả.</p>
+            </a>
+
+            <!-- Thẻ 7 -->
+            <a href="https://speedreading.vn/posts/" target="_blank" rel="noopener noreferrer" class="link-card rounded-2xl p-6 flex flex-col items-center text-center group md:col-span-2 lg:col-span-1 lg:col-start-3 lg:-mt-[224px]">
+                <div class="h-16 w-16 rounded-full bg-red-950/50 flex items-center justify-center mb-4 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                    <i class="fas fa-star text-2xl icon-wrapper"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-red-400 transition-colors">Trang Review Sách</h3>
+                <p class="text-sm text-gray-400">Tóm tắt và đánh giá những cuốn sách tinh hoa đáng đọc nhất.</p>
+            </a>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-16 text-center text-gray-500 text-sm">
+            <p>&copy; 2026 Speed Reading. Mọi bản quyền được bảo lưu.</p>
+        </div>
+    </div>
+
+</body>
+</html>

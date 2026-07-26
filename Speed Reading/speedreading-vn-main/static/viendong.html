@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherwin-Williams – Đẳng Cấp Sơn Gỗ 5 Sao | Nghĩa Thành Đông</title>
+    
+    <link rel="icon" type="image/svg+xml" href="https://nghiathanhfareast.com/wp-content/uploads/2022/05/NghiaThanh.Vien_.Dong_.Logo_.Primary.svg">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-red: #D32F2F; /* Màu đỏ chủ đạo chuyên nghiệp */
+            --dark-red: #A32424;
+            --light-red: #FFEBEE;
+            --text-color: #212121;
+            --text-secondary: #757575;
+            --white: #FFFFFF;
+            --gray-light: #F5F5F5;
+            --gray-dark: #333333;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* --- Global Components --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background-color: var(--primary-red);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-red);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-red);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary-red);
+            border: 2px solid var(--primary-red);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light-red);
+        }
+
+        /* --- 1. Header & Menu --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-red);
+        }
+
+        .lang-icon img {
+            height: 20px;
+            width: auto;
+            vertical-align: middle;
+        }
+
+        /* --- 2. [PHẦN 1: HERO SECTION] --- */
+        #hero {
+            padding-top: 200px; /* Thêm padding do header cố định */
+            background: linear-gradient(135deg, var(--light-red) 0%, var(--white) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-text {
+            max-width: 850px;
+            margin: 0 auto 50px auto;
+        }
+
+        #hero h1 {
+            font-size: 50px;
+            color: var(--primary-red);
+            margin-bottom: 25px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        #hero h2 {
+            font-size: 20px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* --- 3. [PHẦN 2: PROBLEM & SOLUTION] --- */
+        #problem-solution {
+            background-color: var(--white);
+        }
+
+        .ps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        .ps-column h3 {
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
+
+        .ps-column.pain h3 {
+            color: #ff9800; /* Màu cam cảnh báo */
+        }
+
+        .ps-column.solution h3 {
+            color: var(--primary-red);
+        }
+
+        .ps-list {
+            list-style: none;
+        }
+
+        .ps-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+
+        .ps-icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            border: 2px solid;
+        }
+
+        .pain .ps-icon-circle {
+            background-color: #fff8e1;
+            color: #ff9800;
+            border-color: #ffe082;
+        }
+
+        .solution .ps-icon-circle {
+            background-color: var(--light-red);
+            color: var(--primary-red);
+            border-color: #ffcdd2;
+        }
+
+        .ps-text {
+            color: var(--text-color);
+        }
+
+        /* Biểu đồ simple Chart */
+        .ps-chart {
+            margin-top: 40px;
+            background-color: var(--gray-light);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .chart-grid {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            height: 200px;
+            border-left: 2px solid var(--text-secondary);
+            border-bottom: 2px solid var(--text-secondary);
+            padding-left: 10px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .chart-grid::before {
+            content: 'Độ ngả vàng (hạ màu)';
+            position: absolute;
+            left: -150px;
+            top: 50%;
+            transform: rotate(-90deg) translateY(-50%);
+            font-size: 13px;
+            color: var(--text-secondary);
+            width: 150px;
+            text-align: center;
+        }
+
+        .chart-grid::after {
+            content: 'Thời gian (Năm)';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .chart-bar {
+            width: 45px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+            background-color: #E0E0E0;
+        }
+
+        .chart-bar span {
+            position: absolute;
+            top: -25px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .bar-sw {
+            background-color: var(--primary-red);
+            color: var(--white);
+        }
+
+        .bar-other {
+            background-color: #FFB300;
+            color: var(--white);
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* --- 4. [PHẦN 3: TRUST & AUTHORITY] --- */
+        #trust {
+            background-color: var(--gray-light);
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .trust-card {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .trust-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .trust-icon-container {
+            width: 60px;
+            height: 60px;
+            background-color: var(--light-red);
+            color: var(--primary-red);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .trust-card h4 {
+            font-size: 20px;
+            color: var(--primary-red);
+            margin-bottom: 10px;
+        }
+
+        .trust-resort-image {
+            width: 100%;
+            height: 150px;
+            background-image: url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600&auto=format&fit=crop'); /* Placeholder ảnh resort */
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* --- 5. [PHẦN 4: OFFERS] --- */
+        #offers {
+            background-color: var(--white);
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .offer-card {
+            border: 2px solid var(--light-red);
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .offer-card:hover {
+            border-color: var(--primary-red);
+            background-color: var(--light-red);
+            transform: scale(1.02);
+        }
+
+        .offer-icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--light-red);
+            color: var(--primary-red);
+            font-size: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+        }
+
+        .offer-card h4 {
+            font-size: 19px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        /* --- 6. [PHẦN 5: LEAD FORM] --- */
+        #register {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            color: var(--white);
+            position: relative;
+        }
+
+        #register .section-title {
+            color: var(--white);
+        }
+
+        #register .section-title::after {
+            background-color: var(--white);
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--white);
+            padding: 60px 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            color: var(--text-color);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h3 {
+            font-size: 26px;
+            color: var(--primary-red);
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .form-control-wrapper {
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 18px 18px 18px 50px; /* Thêm padding trái cho icon */
+            border: 2px solid var(--gray-light);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 10px var(--light-red);
+        }
+
+        .form-control-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+
+        select.form-control {
+            appearance: none; /* Ẩn mũi tên mặc định của select */
+        }
+
+        .form-control-icon-dropdown {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none; /* Bỏ qua sự kiện click vào icon dropdown */
+        }
+
+        .btn-form {
+            width: 100%;
+            padding: 20px;
+            font-size: 19px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 25px;
+        }
+
+        .form-security {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 20px;
+        }
+
+        /* --- 7. [PHẦN 6: TESTIMONIALS] --- */
+        #testimonials {
+            background-color: var(--gray-light);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .testimonial-card {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 80px;
+            color: var(--light-red);
+            font-family: serif;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            color: var(--text-color);
+        }
+
+        .testimonial-author-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #E0E0E0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+
+        /* Nút điều hướng slide (placeholder) */
+        .slide-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .slide-nav-btn {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #E0E0E0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slide-nav-btn.active {
+            background-color: var(--primary-red);
+            transform: scale(1.2);
+        }
+
+        /* --- 8. [PHẦN 7: FOOTER] --- */
+        footer {
+            background-color: var(--gray-dark);
+            color: rgba(255,255,255,0.8);
+            padding: 70px 0;
+            font-size: 15px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            width: auto;
+            margin-bottom: 20px;
+        }
+
+        .footer-info h5, .footer-social h5 {
+            color: var(--white);
+            font-size: 19px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-info p {
+            margin-bottom: 12px;
+        }
+
+        .footer-social h5 {
+            text-align: right;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+            justify-content: flex-end;
+        }
+
+        .social-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 20px;
+        }
+
+        .social-links a:hover {
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer-security {
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 30px;
+        }
+
+        /* --- Responsive Media Queries --- */
+        @media (max-width: 992px) {
+            .ps-grid, .trust-grid, .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            .offers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            #hero h1 { font-size: 40px; }
+            .hero-btns { flex-direction: column; gap: 15px; }
+            .form-container { padding: 40px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+            .footer-social h5, .social-links { text-align: left; justify-content: flex-start; }
+            .trust-card { flex-direction: column; gap: 15px; }
+            .trust-icon-container { margin: 0 auto; }
+            .trust-card h4, .trust-card p { text-align: center; }
+        }
+
+        @media (max-width: 768px) {
+            section { padding: 70px 0; }
+            .section-title { font-size: 29px; }
+            #hero { padding-top: 150px; }
+            #hero h1 { font-size: 34px; }
+            #hero h2 { font-size: 19px; }
+            .nav-menu { display: none; } /* Ẩn menu chính trên mobile, cần menu hamberger cho thực tế */
+            .header-content { justify-content: center; }
+            .ps-icon-circle { width: 50px; height: 50px; font-size: 20px; }
+            .ps-item { gap: 15px; }
+            .offers-grid { grid-template-columns: 1fr; }
+            .form-container { padding: 30px; }
+            .form-header h3 { font-size: 22px; }
+            .btn-form { font-size: 17px; }
+            .testimonial-card { padding: 30px; }
+            .quote-icon { font-size: 60px; }
+            .trust-resort-image { height: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <img src="https://nghiathanhfareast.com/wp-content/uploads/2022/05/NghiaThanh.Vien_.Dong_.Logo_.Primary.svg" alt="Nghĩa Thành Đông Logo">
+                </a>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="#hero">Trang chủ</a></li>
+                        <li><a href="#problem-solution">Sản phẩm</a></li>
+                        <li><a href="#trust">Tại sao chọn chúng tôi</a></li>
+                        <li><a href="#offers">Ưu đãi</a></li>
+                        <li><a href="#testimonials">Đánh giá</a></li>
+                        <li><a href="#register" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Đăng ký</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Sherwin-Williams – Đẳng Cấp Sơn Gỗ 5 Sao Cho Tuyệt Tác Nội Thất Cao Cấp</h1>
+                <h2>Bảo vệ vẻ đẹp nguyên bản cho biệt thự và căn hộ hạng sang với công nghệ chống ngả vàng đột phá từ thương hiệu số 1 thế giới.</h2>
+            </div>
+            <div class="hero-btns">
+                <a href="#register" class="btn btn-primary">Nhận Báo Giá Dự Án Ngay</a>
+                <a href="#register" class="btn btn-secondary">Tải Catalogue & Giải Pháp Kỹ Thuật</a>
+            </div>
+        </div>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://images.unsplash.com/photo-1596791656828-5a9f24b248eb?q=80&w=1600&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0.15; z-index: 1;"></div>
+    </section>
+
+    <section id="problem-solution">
+        <div class="container">
+            <h2 class="section-title">Nâng Tầm Công Trình & Giải Quyết Mọi Nỗi Lo Xuống Cấp</h2>
+            <div class="ps-grid">
+                <div class="ps-column pain">
+                    <h3>Vấn đề nội thất tiền tỷ bị xuống cấp:</h3>
+                    <ul class="ps-list">
+                        <li class="ps-item">
+                            <div class="ps-icon-circle"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="ps-text">
+                                <strong>Vàng ngả vàng:</strong> Sơn thông thường bắt đầu ngả vàng chỉ sau 6 tháng sử dụng, đặc biệt là các tông màu trắng tân cổ điển.
+                            </div>
+                        </li>
+                        <li class="ps-item">
+                            <div class="ps-icon-circle"><i class="fas fa-wind"></i></div>
+                            <div class="ps-text">
+                                <strong>Mùi sơn nồng nặc:</strong> Gây ảnh hưởng đến sức khỏe gia chủ trong thời gian dài.
+                            </div>
+                        </li>
+                        <li class="ps-item">
+                            <div class="ps-icon-circle"><i class="fas fa-hand-holding-water"></i></div>
+                            <div class="ps-text">
+                                <strong>Dễ bong tróc:</strong> Màng sơn mất đi độ láng mịn ban đầu, dễ bị bong tróc, trầy xước.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="ps-column solution">
+                    <h3>Giải pháp tối ưu từ Sherwin-Williams & Inchem:</h3>
+                    <ul class="ps-list">
+                        <li class="ps-item">
+                            <div class="ps-icon-circle"><i class="fas fa-check-circle"></i></div>
+                            <div class="ps-text">
+                                <strong>Chỉ số chặn ngả vàng vượt trội:</strong> Giữ màu sắc đồng nhất và bền đẹp từ 1 đến 2 năm mới bắt đầu chuyển màu nhẹ và đều màu, không bị loang lổ.
+                            </div>
+                        </li>
+                        <li class="ps-item">
+                            <div class="ps-icon-circle"><i class="fas fa-leaf"></i></div>
+                            <div class="ps-text">
+                                <strong>An toàn tuyệt đối:</strong> Hàm lượng VOC cực thấp, không mùi, đạt các chứng chỉ xanh bảo vệ sức khỏe cho không gian sống đẳng cấp.
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="ps-chart">
+                        <div class="chart-header">So sánh độ ngả vàng theo năm</div>
+                        <div class="chart-grid">
+                            <div style="width: 15px; visibility: hidden;"></div> <div class="chart-bar bar-other" style="height: 15%;" title="Sơn thường - Năm 1"><span><i class="fas fa-times-circle"></i> 15%</span></div>
+                            <div class="chart-bar bar-sw" style="height: 2%;" title="Sherwin-Williams - Năm 1"><span><i class="fas fa-check-circle"></i> 2%</span></div>
+                            
+                            <div style="width: 15px; visibility: hidden;"></div> <div class="chart-bar bar-other" style="height: 60%;" title="Sơn thường - Năm 2"><span><i class="fas fa-times-circle"></i> 60%</span></div>
+                            <div class="chart-bar bar-sw" style="height: 10%;" title="Sherwin-Williams - Năm 2"><span><i class="fas fa-check-circle"></i> 10%</span></div>
+                            
+                             <div style="width: 15px; visibility: hidden;"></div> <div class="chart-bar bar-other" style="height: 90%;" title="Sơn thường - Năm 3+"><span><i class="fas fa-times-circle"></i> 90%</span></div>
+                            <div class="chart-bar bar-sw" style="height: 25%;" title="Sherwin-Williams - Năm 3+"><span><i class="fas fa-check-circle"></i> 25%</span></div>
+                        </div>
+                        <div class="chart-labels">
+                            <div style="width: 45px; text-align: center;">Năm 1</div>
+                            <div style="width: 45px; text-align: center;">Năm 2</div>
+                            <div style="width: 45px; text-align: center;">Năm 3+</div>
+                        </div>
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px; font-size: 13px;">
+                            <div style="display: flex; align-items: center; gap: 5px;"><div style="width: 12px; height: 12px; background-color: var(--primary-red); border-radius: 2px;"></div> Sherwin-Williams</div>
+                            <div style="display: flex; align-items: center; gap: 5px;"><div style="width: 12px; height: 12px; background-color: #FFB300; border-radius: 2px;"></div> Sơn gỗ thông thường</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="trust">
+        <div class="container">
+            <h2 class="section-title">Tại Sao Chọn Chúng Tôi?</h2>
+            <div class="trust-grid">
+                <div class="trust-card">
+                    <div class="trust-icon-container"><i class="fas fa-history"></i></div>
+                    <div>
+                        <h4>Di sản 155 năm</h4>
+                        <p>Từ tập đoàn sơn số 1 thế giới.</p>
+                    </div>
+                </div>
+                
+                <div class="trust-card">
+                    <div class="trust-icon-container"><i class="fas fa-handshake"></i></div>
+                    <div>
+                        <h4>Sự kết hợp hoàn hảo</h4>
+                        <p>Inchem – "Thương hiệu quốc dân" trong giới thợ sơn gỗ Việt Nam nay đã chính thức thuộc về tập đoàn Sherwin-Williams, mang lại sự an tâm tuyệt đối về chất lượng.</p>
+                    </div>
+                </div>
+                
+                <div class="trust-card" style="grid-column: span 1;">
+                     <div>
+                        <div class="trust-resort-image"></div>
+                        <h4><i class="fas fa-hotel"></i> Tiêu chuẩn Resort 5 sao</h4>
+                        <p>Sản phẩm chuyên dụng cho các dự án nghỉ dưỡng, khách sạn cao cấp và biệt thự trị giá từ 15-20 tỷ đồng.</p>
+                    </div>
+                </div>
+                
+                <div class="trust-card">
+                    <div class="trust-icon-container"><i class="fas fa-tools"></i></div>
+                    <div>
+                        <h4>Kỹ thuật chuyên sâu</h4>
+                        <p>Cam kết hướng dẫn tỷ lệ pha chế chuẩn (2:1:1) để đảm bảo màng sơn láng mướt, không giòn xì, không chậm khô.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="offers">
+        <div class="container">
+            <h2 class="section-title">Đặc Quyền Dành Riêng Cho Kiến Trúc Sư & Chủ Xưởng Nội Thất Tháng Này</h2>
+            <div class="offers-grid">
+                <div class="offer-card">
+                    <div class="offer-icon-container"><i class="fas fa-id-card-alt"></i></div>
+                    <h4>Gói tư vấn kỹ thuật trực tiếp tại xưởng</h4>
+                    <p>Đội ngũ chuyên gia hỗ trợ xử lý mọi vấn đề về bề mặt và màu sắc.</p>
+                </div>
+                
+                <div class="offer-card">
+                    <div class="offer-icon-container"><i class="fas fa-percent"></i></div>
+                    <h4>Ưu đãi chiết khấu hấp dẫn</h4>
+                    <p>Dành cho các đơn hàng dự án đầu tiên hoặc đăng ký làm đối tác chiến lược.</p>
+                </div>
+                
+                <div class="offer-card">
+                    <div class="offer-icon-container"><i class="fas fa-book-open"></i></div>
+                    <h4>Bộ tài liệu độc quyền</h4>
+                    <p>Catalogue điện tử và bảng màu thực tế mới nhất từ hãng.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="register">
+        <div class="container">
+            <h2 class="section-title">Đăng Ký Tư Vấn & Nhận Báo Giá</h2>
+            <div class="form-container">
+                <div class="form-header">
+                    <h3>NHẬN NGAY BÁO GIÁ & TƯ VẤN GIẢI PHÁP SƠN GỖ TỐI ƯU</h3>
+                    <p>(Chỉ mất 30 giây để nâng tầm giá trị công trình của bạn)</p>
+                </div>
+                
+                <form id="leadForm" action="[DÁN_URL_WEBHOOK_CỦA_EM_Ở_ĐÂY]" method="POST">
+                    
+                    <input type="hidden" id="trafficSource" name="source" value="organic">
+
+                    <div class="form-group">
+                        <label for="name">Họ và tên:</label>
+                        <div class="form-control-wrapper">
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Nhập họ và tên của bạn" required>
+                            <i class="fas fa-user form-control-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại (Zalo):</label>
+                        <div class="form-control-wrapper">
+                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nhập số điện thoại (10-11 số)" required pattern="[0-9]{10,11}">
+                            <i class="fas fa-phone form-control-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">Bạn là:</label>
+                        <div class="form-control-wrapper">
+                            <select id="role" name="role" class="form-control" required>
+                                <option value="" disabled selected>-- Chọn vai trò --</option>
+                                <option value="Kiến trúc sư">Kiến trúc sư</option>
+                                <option value="Chủ xưởng">Chủ xưởng</option>
+                                <option value="Chủ đầu tư">Chủ đầu tư</option>
+                            </select>
+                            <i class="fas fa-briefcase form-control-icon"></i>
+                            <i class="fas fa-chevron-down form-control-icon-dropdown"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="needs">Nhu cầu:</label>
+                        <div class="form-control-wrapper">
+                            <select id="needs" name="needs" class="form-control" required>
+                                <option value="" disabled selected>-- Chọn nhu cầu --</option>
+                                <option value="Nhận báo giá">Nhận báo giá</option>
+                                <option value="Tư vấn kỹ thuật">Tư vấn kỹ thuật</option>
+                                <option value="Nhận Catalogue">Nhận Catalogue</option>
+                            </select>
+                            <i class="fas fa-clipboard-list form-control-icon"></i>
+                            <i class="fas fa-chevron-down form-control-icon-dropdown"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-form">Gửi Thông Tin Ngay <i class="fas fa-paper-plane"></i></button>
+                    <p class="form-security">🔒 Cam kết bảo mật thông tin và hỗ trợ trong vòng 2h làm việc.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials">
+        <div class="container">
+            <h2 class="section-title">Đánh Giá Từ Đối Tác Chiến Lược</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <span class="quote-icon">“</span>
+                    <p class="testimonial-text">"Từ khi chuyển sang dùng Sherwin-Williams cho các căn hộ tân cổ điển, khách hàng của tôi hoàn toàn hài lòng vì màu trắng không bị ố vàng sau năm đầu tiên."</p>
+                    <div class="testimonial-author-wrapper">
+                        <div class="author-avatar" style="background-color: #fce4ec; color: #ad1457;">MA</div>
+                        <p class="testimonial-author">– KTS. Minh Anh.</p>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <span class="quote-icon">“</span>
+                    <p class="testimonial-text">"Sơn không mùi là điểm cộng lớn nhất giúp chúng tôi bàn giao nhà cho khách ở ngay mà không gây khó chịu cho gia chủ."</p>
+                    <div class="testimonial-author-wrapper">
+                        <div class="author-avatar" style="background-color: #e3f2fd; color: #1565c0;">CX</div>
+                        <p class="testimonial-author">– Chủ xưởng nội thất tại Đồng Nai.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-nav">
+                <div class="slide-nav-btn active"></div>
+                <div class="slide-nav-btn"></div>
+                <div class="slide-nav-btn"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-info">
+                    <a href="#" class="footer-logo">
+                         <img src="https://nghiathanhfareast.com/wp-content/uploads/2022/05/NghiaThanh.Vien_.Dong_.Logo_.Primary.svg" alt="Nghĩa Thành Đông Logo">
+                    </a>
+                    <h5>Nghĩa Thành Đông – Nhà phân phối ủy quyền Sherwin-Williams khu vực Miền Nam.</h5>
+                    <p><i class="fas fa-map-marker-alt" style="width: 20px;"></i> Địa chỉ: C3-02.OT02 Central 3, Vinhomes Central Park, 720A Đường Điện Biên Phủ, Phường 22, Quận Bình Thạnh, TP HCM</p>
+                    <p><i class="fas fa-phone-alt" style="width: 20px;"></i> Hotline hỗ trợ: <strong>(028) 6268 1191 / (028) 3910 7138</strong></p>
+                </div>
+                <div class="footer-social">
+                    <h5>Kết nối với chúng tôi</h5>
+                    <ul class="social-links">
+                        <li><a href="[DÁN_LINK_FACEBOOK]" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="[DÁN_LINK_TIKTOK]" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a></li>
+                        <li><a href="[DÁN_LINK_YOUTUBE]" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="height: 1px; background-color: rgba(255,255,255,0.1);"></div>
+            <p class="footer-security">🔒 Bảo mật tương tác và thông tin 100%. Copyright © 2024 Nghĩa Thành Đông.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            // Hiệu ứng fade in cho Hero section khi load trang
+            const heroContent = document.querySelector('#hero .hero-content');
+            heroContent.style.opacity = '0';
+            heroContent.style.transform = 'translateY(20px)';
+            heroContent.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            
+            setTimeout(() => {
+                heroContent.style.opacity = '1';
+                heroContent.style.transform = 'translateY(0)';
+            }, 100);
+
+            // Xử lý UTM Source
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('source');
+            
+            if (source) {
+                const sourceField = document.getElementById('trafficSource');
+                if (sourceField) {
+                    sourceField.value = source;
+                    // Tùy chọn: Xóa param 'source' khỏi URL sau khi đã lấy
+                    const newUrl = window.location.pathname;
+                    window.history.replaceState({}, document.title, newUrl);
+                }
+            }
+        };
+
+        // JS cho Slide Testimonials đơn giản (tự chuyển sau 5 giây)
+        const slideNavBtns = document.querySelectorAll('.slide-nav-btn');
+        // Placeholder cho thực tế: cần implement logic chuyển slide ở đây
+        slideNavBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                slideNavBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // Tùy chọn: scroll đến testimonial tương ứng
+            });
+        });
+    </script>
+</body>
+</html>

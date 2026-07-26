@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading - Đấu Trường Đọc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { red: '#ef4444', darkRed: '#b91c1c', lightRed: '#fecaca', text: '#1e293b' }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { 
+            color: #1e293b; 
+            overflow-x: hidden; 
+            user-select: none; 
+            background-color: #ffffff;
+            /* Nền họa tiết chấm bi mờ tạo cảm giác game */
+            background-image: radial-gradient(#fca5a5 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+        
+        /* Box Game 3D */
+        .game-panel {
+            background: #ffffff;
+            border: 4px solid #ef4444; 
+            border-radius: 1.5rem;
+            box-shadow: 8px 10px 0px #b91c1c; 
+        }
+
+        .game-panel-inner {
+            background: #f8fafc;
+            border: 3px solid #fecaca;
+            border-radius: 1rem;
+        }
+
+        /* Nút Game 3D Đỏ */
+        .game-btn {
+            background: #ef4444;
+            color: white;
+            border-radius: 1rem;
+            border-bottom: 5px solid #b91c1c;
+            transition: transform 0.1s, border-bottom-width 0.1s, margin-top 0.1s;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+        .game-btn:active {
+            transform: translateY(5px);
+            border-bottom-width: 0px;
+            margin-bottom: 5px; /* Bù trừ khoảng trống khi viền biến mất */
+        }
+        
+        /* Nút Game 3D Viền Đỏ (Chưa active) */
+        .game-btn-outline {
+            background: white;
+            color: #ef4444;
+            border: 3px solid #ef4444;
+            border-bottom: 5px solid #b91c1c;
+            border-radius: 1rem;
+            transition: transform 0.1s, border-bottom-width 0.1s, background-color 0.2s;
+            font-weight: 800;
+        }
+        .game-btn-outline:active {
+            transform: translateY(5px);
+            border-bottom-width: 0px;
+            margin-bottom: 5px;
+        }
+        .game-btn-outline.active {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Giao diện vùng đọc chữ */
+        .reader-display { min-height: 280px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .focus-guide { position: absolute; height: 100%; width: 4px; background-color: rgba(239, 68, 68, 0.2); top: 0; z-index: 0; }
+        .word-chunk { position: relative; z-index: 10; font-weight: 900; letter-spacing: -0.02em; text-align: center; }
+        
+        #rpm-bar { transition: width 0.1s linear; }
+        
+        /* Styling cho thanh trượt Slider mượt mà */
+        input[type=range] { -webkit-appearance: none; background: transparent; width: 100%; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 32px; width: 32px; border-radius: 50%; background: #ef4444; border: 4px solid #b91c1c; cursor: pointer; margin-top: -12px; box-shadow: 0 4px 0 #b91c1c; transition: transform 0.1s; }
+        input[type=range]::-webkit-slider-thumb:active { transform: scale(0.9) translateY(4px); box-shadow: 0 0 0 #b91c1c; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 12px; cursor: pointer; background: #fecaca; border: 2px solid #ef4444; border-radius: 6px; }
+    </style>
+</head>
+<body class="h-screen flex flex-col font-sans">
+
+    <header class="bg-white border-b-4 border-brand-red py-3 px-6 flex justify-between items-center shadow-md shrink-0 relative z-20">
+        <div class="flex items-center gap-3">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading" onerror="this.src='https://placehold.co/40x40/ef4444/white?text=SR'" class="h-12 w-auto border-2 border-brand-red rounded-lg p-1">
+            <h1 class="text-3xl font-black tracking-tight text-brand-darkRed uppercase">Speed Reading <span class="text-brand-red">Arena</span></h1>
+        </div>
+        
+        <!-- 2 Nút Menu liên kết ngoài được thiết kế dạng 3D đồng bộ -->
+        <div class="hidden md:flex items-center gap-4">
+            <a href="https://speedreading.vn/skim" target="_blank" class="game-btn-outline px-4 py-2 text-sm flex items-center gap-2 no-underline shadow-[4px_4px_0px_#b91c1c] hover:bg-red-50">
+                <i class="fa-solid fa-circle-question text-brand-red"></i> Skimming là gì?
+            </a>
+            <a href="https://img.speedreading.vn/ebook-thuoc-bai-tai-lop.pdf" target="_blank" class="game-btn px-4 py-2 text-sm flex items-center gap-2 no-underline text-white">
+                <i class="fa-solid fa-book-open"></i> Trải nghiệm thực tế
+            </a>
+        </div>
+
+        <div class="text-brand-darkRed text-sm font-bold flex items-center gap-2 bg-red-100 px-4 py-2 rounded-full border-2 border-red-300">
+            <i class="fa-solid fa-gamepad text-red-500 text-lg"></i> Chế độ Đấu Trường
+        </div>
+    </header>
+
+    <!-- Menu phụ tối ưu hiển thị cho thiết bị di động -->
+    <div class="flex md:hidden bg-red-50 border-b-4 border-brand-red p-2 justify-around gap-2 z-10">
+        <a href="https://speedreading.vn/skim" target="_blank" class="game-btn-outline text-xs px-3 py-2 flex items-center gap-1 flex-1 justify-center no-underline shadow-[2px_2px_0px_#b91c1c]">
+            <i class="fa-solid fa-circle-question text-brand-red"></i> Skimming?
+        </a>
+        <a href="https://img.speedreading.vn/ebook-thuoc-bai-tai-lop.pdf" target="_blank" class="game-btn text-xs px-3 py-2 flex items-center gap-1 flex-1 justify-center no-underline text-white">
+            <i class="fa-solid fa-book-open"></i> Trải nghiệm
+        </a>
+    </div>
+
+    <main class="flex-grow relative flex flex-col items-center justify-center p-4 md:p-6 z-10">
+        
+        <div class="w-full max-w-5xl h-full flex flex-col gap-5">
+            
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Chọn bài học -->
+                <div class="game-panel p-3 flex-grow shadow-[6px_6px_0px_#b91c1c]">
+                    <div class="text-xs font-black text-brand-red uppercase mb-1 ml-2"><i class="fa-solid fa-book-open"></i> Nhiệm vụ huấn luyện</div>
+                    <select id="text-selector" class="w-full bg-white text-lg border-2 border-red-200 rounded-xl p-3 text-brand-darkRed font-black outline-none focus:border-red-500 transition-colors shadow-inner" onchange="loadSelectedText()">
+                        <option value="0">Nhiệm vụ 1: Radar Skimming</option>
+                        <option value="1">Nhiệm vụ 2: Quyền Năng Tiêu Đề</option>
+                        <option value="2">Nhiệm vụ 3: Chiến Thuật Đầu Đuôi</option>
+                        <option value="3">Nhiệm vụ 4: Thợ Săn Từ Khóa</option>
+                        <option value="4">Nhiệm vụ 5: Bộ Lọc Thông Tin</option>
+                        <option value="5">Nhiệm vụ 6: Đường Đua Chữ Z</option>
+                        <option value="6">Nhiệm vụ 7: Truy Tìm Trùm Cuối (Câu chủ đề)</option>
+                        <option value="7">Nhiệm vụ 8: Bản Đồ Cấu Trúc</option>
+                        <option value="8">Nhiệm vụ 9: Điểm Neo Sinh Tồn</option>
+                        <option value="9">Nhiệm vụ 10: Nhắm Mắt Thức Tỉnh</option>
+                    </select>
+                </div>
+
+                <!-- Chọn số từ (Nhịp đọc) -->
+                <div class="game-panel p-3 shrink-0 shadow-[6px_6px_0px_#b91c1c]">
+                    <div class="text-xs font-black text-brand-red uppercase mb-1 ml-2 text-center"><i class="fa-solid fa-layer-group"></i> Số từ / Nhịp</div>
+                    <div class="flex gap-2 justify-center">
+                        <button onclick="setChunk(1)" id="btn-chunk-1" class="game-btn-outline w-12 h-12 text-xl active">1</button>
+                        <button onclick="setChunk(2)" id="btn-chunk-2" class="game-btn-outline w-12 h-12 text-xl">2</button>
+                        <button onclick="setChunk(3)" id="btn-chunk-3" class="game-btn-outline w-12 h-12 text-xl">3</button>
+                        <button onclick="setChunk(4)" id="btn-chunk-4" class="game-btn-outline w-12 h-12 text-xl">4</button>
+                        <button onclick="setChunk(5)" id="btn-chunk-5" class="game-btn-outline w-12 h-12 text-xl">5</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-panel p-4 md:p-8 flex-grow flex flex-col relative bg-white">
+                
+                <!-- Tốc độ hiển thị -->
+                <div class="absolute top-4 right-6 text-right bg-red-50 border-2 border-red-200 px-4 py-2 rounded-2xl shadow-sm">
+                    <div class="text-xs font-black text-brand-red mb-0 uppercase">Vận tốc</div>
+                    <div class="text-5xl font-black tabular-nums text-brand-darkRed leading-none" id="wpm-display">250 <span class="text-xl text-brand-red">WPM</span></div>
+                </div>
+
+                <div class="flex-grow flex flex-col justify-center mt-16 md:mt-10">
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-red-100 h-6 rounded-full mb-6 relative border-4 border-red-200 overflow-hidden shadow-inner">
+                        <div id="rpm-bar" class="h-full bg-brand-red rounded-full w-[0%] relative">
+                            <div class="absolute top-0 left-0 w-full h-1/2 bg-white/30 rounded-t-full"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Word Display -->
+                    <div class="game-panel-inner reader-display shadow-inner">
+                        <div class="focus-guide"></div>
+                        <div id="reader-word" class="word-chunk text-5xl md:text-7xl lg:text-8xl px-4 text-brand-text">SẴN SÀNG!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-panel p-5 md:p-6 flex flex-col md:flex-row items-center gap-6">
+                <!-- Nút Play/Reset -->
+                <div class="flex gap-4 shrink-0">
+                    <button id="btn-play" onclick="togglePlay()" class="game-btn w-20 h-20 flex items-center justify-center text-4xl shadow-lg">
+                        <i class="fa-solid fa-play" id="icon-play"></i>
+                    </button>
+                    <button onclick="resetReader()" class="game-btn-outline w-20 h-20 flex items-center justify-center text-3xl text-brand-darkRed">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Thanh trượt và nút nhanh -->
+                <div class="flex-grow w-full flex flex-col gap-4">
+                    <div class="flex justify-between gap-2">
+                        <button onclick="setSpeed(250)" class="game-btn-outline flex-1 py-2 text-lg">250</button>
+                        <button onclick="setSpeed(350)" class="game-btn-outline flex-1 py-2 text-lg">350</button>
+                        <button onclick="setSpeed(450)" class="game-btn-outline flex-1 py-2 text-lg">450</button>
+                        <button onclick="setSpeed(550)" class="game-btn-outline flex-1 py-2 text-lg">550</button>
+                        <button onclick="setSpeed(650)" class="game-btn-outline flex-1 py-2 text-lg bg-red-50 text-red-700 border-red-700">650</button>
+                    </div>
+                    <div class="pt-2 px-2">
+                        <input type="range" id="wpm-slider" min="200" max="1000" step="50" value="250" oninput="handleSliderChange(this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="question-modal" class="fixed inset-0 bg-brand-text/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="game-panel p-8 max-w-2xl w-full text-center transform scale-95 transition-transform duration-300" id="modal-content">
+            
+            <div class="w-24 h-24 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-brand-darkRed shadow-[0_4px_0_#b91c1c]">
+                <i class="fa-solid fa-trophy text-5xl text-white"></i>
+            </div>
+            
+            <h2 id="modal-title" class="text-2xl md:text-3xl font-black mb-8 text-brand-darkRed leading-tight">Câu hỏi trắc nghiệm</h2>
+            
+            <div id="modal-options" class="flex flex-col gap-4 text-left">
+                <!-- Options injected by JS -->
+            </div>
+            
+            <div id="modal-action" class="mt-8 p-6 bg-red-50 border-4 border-red-200 rounded-2xl hidden shadow-inner">
+                <h3 class="text-brand-red font-black text-xl mb-3 flex items-center justify-center gap-2 uppercase">
+                    <i class="fa-solid fa-bolt"></i> Nhiệm Vụ Khai Phóng
+                </h3>
+                <p id="modal-action-text" class="text-brand-text font-bold text-lg text-center"></p>
+            </div>
+
+            <button onclick="closeModal()" class="mt-8 px-10 py-4 game-btn text-xl w-full md:w-auto inline-block">
+                TIẾP TỤC CHIẾN ĐẤU <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 10 Bài học chuyên sâu về Skimming được thiết kế giàu hình ảnh, ẩn dụ dễ hiểu cho học sinh
+        const skimmingData = [
+            { 
+                title: "Nhiệm vụ 1: Radar Skimming", 
+                text: "Skimming không phải là đọc lướt hời hợt, mà là kích hoạt một Radar quét sóng siêu mạnh của bộ não. Hãy tưởng tượng bạn là phi công đang lái máy bay dò tìm một hòn đảo kho báu giữa biển khơi bao la. Bạn không nhìn từng con sóng nhỏ hay từng hạt cát trên bờ, mắt bạn chỉ quét thật nhanh để tìm vương miện khổng lồ của hòn đảo. Khi Skimming, mắt bạn lướt nhanh để bắt lấy những tín hiệu cực lớn: ý nghĩa tổng quát nhất của toàn bài viết. Hãy lướt sóng, tóm ý, và làm chủ!" 
+            },
+            { 
+                title: "Nhiệm vụ 2: Quyền Năng Tiêu Đề", 
+                text: "Tiêu đề là tấm biển hiệu khổng lồ dựng ngay trước cổng công viên giải trí. Nó tiết lộ cho bạn biết chính xác bên trong có trò chơi tàu lượn siêu tốc hay nhà ma bí ẩn. Đừng bao giờ bỏ qua tiêu đề và các đề mục nhỏ in đậm. Chúng chính là xương sống của bài viết. Bằng cách đọc thật kỹ tiêu đề, bạn đã nắm giữ được năm mươi phần trăm bản đồ kho báu thông tin trước khi đọc phần nội dung chi tiết. Hãy học cách tin tưởng hoàn toàn vào tiêu đề!" 
+            },
+            { 
+                title: "Nhiệm vụ 3: Chiến Thuật Đầu Đuôi", 
+                text: "Một đoạn văn hoạt động giống như một đoàn tàu hỏa siêu tốc băng qua thung lũng. Câu đầu tiên chính là đầu tàu mạnh mẽ dẫn dắt hướng đi, còn câu cuối cùng là toa cuối khóa đuôi chốt chặn toàn bộ ý nghĩa. Quy tắc hai đầu khuyên bạn: chỉ cần đọc thật kỹ câu đầu và câu cuối của mỗi đoạn văn, bạn đã hiểu được tám mươi phần trăm câu chuyện. Những câu ở giữa chỉ là hành lý ví dụ đi kèm. Nếu đã biết tàu đi đâu, bạn có thể lướt qua các ví dụ!" 
+            },
+            { 
+                title: "Nhiệm vụ 4: Thợ Săn Từ Khóa", 
+                text: "Hãy biến đôi mắt của bạn thành một chiếc kính tầm nhiệt của thợ săn kho báu trong hang động tối. Bạn phải bỏ qua tất cả những viên đá cuội vô giá trị như các từ nối và, thì, là, ở, những. Mắt bạn chỉ dừng lại và hút lấy những viên hồng ngọc lấp lánh: đó là Danh từ chỉ người, vật, sự việc và Động từ chỉ hành động mạnh mẽ. Hãy để mắt nhảy cóc từ viên hồng ngọc này sang viên hồng ngọc khác để hiểu trọn vẹn nghĩa siêu nhanh!" 
+            },
+            { 
+                title: "Nhiệm vụ 5: Bộ Lọc Thông Tin", 
+                text: "Bộ não của bạn là một chiếc phễu lọc cát tìm vàng cực kỳ thông minh. Khi đọc sách, rất nhiều thông tin chỉ là phần quảng cáo, lời dẫn dắt dài dòng hoặc những ví dụ kể lể. Hãy bật màng lọc của não lên để gạt bỏ hoàn toàn lớp cát mịn vô ích đó sang một bên và đi thẳng vào phần lõi vàng ròng của kiến thức. Tập trung năng lượng tinh túy của bạn vào những gì quan trọng nhất, đừng để thông tin rác làm chậm bộ não!" 
+            },
+            { 
+                title: "Nhiệm vụ 6: Đường Đua Chữ Z", 
+                text: "Mắt con người di chuyển nhanh nhất khi lướt theo một tia sét hình chữ Z. Đi ngang qua mép trên, chém chéo xuống dưới, rồi lại đi ngang qua mép dưới. Khi Skimming một trang sách, đừng đọc tuần tự từng chữ từ trái sang phải như rùa bò. Hãy phóng mắt quét theo đường zíc zắc hình chữ Z bao trùm cả trang giấy. Bạn sẽ thu trọn cấu trúc và nội dung chính của cả trang sách chỉ trong ba giây ngắn ngủi!" 
+            },
+            { 
+                title: "Nhiệm vụ 7: Truy Tìm Trùm Cuối", 
+                text: "Trong thế giới của các đoạn văn, luôn có một Trùm Cuối nắm giữ chìa khóa vạn năng – đó chính là Câu Chủ Đề. Trùm Cuối thường thích ẩn nấp ở hai vị trí an toàn nhất: ngay ngai vàng ở câu đầu tiên, hoặc lối thoát hiểm bí mật ở câu cuối cùng của đoạn. Chỉ cần bạn tóm gọn được câu chủ đề này, toàn bộ các câu giải thích khác sẽ lập tức đầu hàng và dâng hiến toàn bộ bí mật cho bạn!" 
+            },
+            { 
+                title: "Nhiệm vụ 8: Bản Đồ Cấu Trúc", 
+                text: "Sách giáo khoa hay tài liệu không phải là một khu rừng rậm không lối thoát. Tác giả luôn để lại các mật mã dẫn đường: những dòng gạch đầu dòng, các số thứ tự một, hai, ba, hoặc các từ in đậm nổi bật. Đó chính là tấm bản đồ cấu trúc. Trước khi lao vào đọc chi tiết, hãy lùi lại một bước để nhìn toàn cảnh tấm bản đồ này. Bạn sẽ biết rõ mình đang đứng ở đâu và cần đi về hướng nào." 
+            },
+            { 
+                title: "Nhiệm vụ 9: Điểm Neo Sinh Tồn", 
+                text: "Khi leo một vách núi dựng đứng, người leo núi cần những chiếc đinh neo vững chắc để bám vào nghỉ ngơi. Khi đọc lướt cực nhanh, các điểm nhấn thị giác như chữ in nghiêng, biểu đồ, hình vẽ chính là những Điểm Neo Sinh Tồn giúp não bộ nghỉ chân và lưu trữ thông tin tức thì. Hãy huấn luyện mắt nhảy cóc và bám chặt vào các điểm neo này để nhớ lâu hơn gấp ba lần bình thường." 
+            },
+            { 
+                title: "Nhiệm vụ 10: Nhắm Mắt Thức Tỉnh", 
+                text: "Sau khi hoàn thành chuyến bay Skimming tốc độ cao, đừng vội vàng gấp sách lại ngay. Hãy dành ra đúng một phút nhắm mắt lại trong tĩnh lặng và tự hỏi bản thân câu hỏi tối cao: Ý chính lớn nhất mình vừa thu hoạch được là gì? Hành động nhắm mắt này giống như nút Lưu file trên máy tính, giúp cố định toàn bộ tri thức vừa quét được vào sâu trong trí nhớ dài hạn của bạn." 
+            }
+        ];
+
+        const quizData = [
+            { 
+                q: "Skimming hoạt động giống hệt công cụ nào để quét tìm kho báu?", 
+                o: ["Máy ghi âm ghi lại mọi âm thanh", "Radar quét sóng tìm tín hiệu cực lớn", "Kính lúp soi chi tiết từng hạt cát"], 
+                a: 1, 
+                action: "Hãy lấy một trang sách ngẫu nhiên, mở ra trong 5 giây và chỉ gọi tên đúng 3 từ to nhất bạn nhìn thấy!" 
+            },
+            { 
+                q: "Tại sao Tiêu đề lại được ví như tấm biển hiệu công viên giải trí?", 
+                o: ["Vì nó có màu sắc sặc sỡ để trang trí", "Vì nó tiết lộ chính xác trò chơi ẩn chứa bên trong", "Vì nó là phần dài nhất của cuốn sách"], 
+                a: 1, 
+                action: "Tìm 3 cuốn sách gần bạn nhất, chỉ đọc tiêu đề và tự vẽ ra trong đầu câu chuyện bên trong!" 
+            },
+            { 
+                q: "Khi dùng Quy tắc Đầu Đuôi, toa tàu nào nắm giữ ý nghĩa then chốt?", 
+                o: ["Những toa khách trung gian ở giữa", "Toa đầu tàu và toa chốt chặn cuối cùng", "Mỗi toa bánh xe của đoàn tàu"], 
+                a: 1, 
+                action: "Mở một bài báo trực tuyến, chỉ đọc câu đầu tiên và câu cuối cùng của mỗi đoạn để tóm ý!" 
+            },
+            { 
+                q: "Một Thợ Săn Từ Khóa thực thụ sẽ bỏ qua những viên đá cuội nào?", 
+                o: ["Các từ nối vô nghĩa như và, thì, là, ở", "Danh từ chỉ người và vật", "Động từ chỉ hành động mạnh mẽ"], 
+                a: 0, 
+                action: "Dùng ngón tay lướt nhanh qua 3 dòng chữ, chỉ dùng mắt bắt đúng các Danh từ và Động từ!" 
+            },
+            { 
+                q: "Bật màng lọc của não bộ giúp chúng ta gạt bỏ điều gì khi đọc?", 
+                o: ["Toàn bộ tri thức của cuốn sách", "Các từ khóa quan trọng nhất", "Những thông tin quảng cáo, dẫn dắt rác và ví dụ kể lể"], 
+                a: 2, 
+                action: "Đọc lướt một chương sách và dùng bút gạch chéo bỏ những phần ví dụ dài dòng không cần thiết!" 
+            },
+            { 
+                q: "Đường đua chữ Z giúp mắt di chuyển theo quỹ đạo nào?", 
+                o: ["Quét zíc zắc giống như tia sét bao trùm cả trang", "Chạy vòng tròn xung quanh trang giấy", "Đọc tuần tự từng từ một từ trái sang phải"], 
+                a: 0, 
+                action: "Vẽ một chữ Z vô hình thật lớn lên trang sách bằng mắt và lướt theo nó trong vòng 3 giây!" 
+            },
+            { 
+                q: "Trùm Cuối - Câu Chủ Đề của đoạn văn thường trốn ở vị trí nào?", 
+                o: ["Ẩn nấp ngẫu nhiên giữa các ví dụ", "Nằm ở câu đầu tiên hoặc câu cuối cùng của đoạn", "Luôn nằm ở trang tiếp theo"], 
+                a: 1, 
+                action: "Quét nhanh một đoạn văn ngắn và chỉ ra ngay lập tức câu chủ đề nắm giữ linh hồn đoạn đó!" 
+            },
+            { 
+                q: "Yếu tố nào giúp bạn không bị lạc lối trong khu rừng thông tin?", 
+                o: ["Các gạch đầu dòng, số thứ tự và từ in đậm", "Bìa sách đẹp đẽ phía ngoài", "Số trang in dưới chân sách"], 
+                a: 0, 
+                action: "Lướt qua mục lục cuốn sách và vẽ lại sơ đồ cấu trúc các chương trong đầu!" 
+            },
+            { 
+                q: "Điểm Neo Sinh Tồn có tác dụng gì đối với người leo núi tri thức?", 
+                o: ["Giúp trang sách nhìn bắt mắt hơn", "Là điểm dừng chân giúp não nghỉ ngơi và lưu trữ tức thì", "Để đánh dấu những chỗ bị in sai"], 
+                a: 1, 
+                action: "Chỉ đọc lướt qua các từ in nghiêng, in đậm và hình vẽ của chương sách tiếp theo!" 
+            },
+            { 
+                q: "Nút Lưu file trong trí nhớ dài hạn được kích hoạt bằng hành động nào?", 
+                o: ["Nhắm mắt 1 phút và hỏi bản thân ý chính lớn nhất là gì", "Gấp sách lại và đi ngủ ngay lập tức", "Đọc lại toàn bộ cuốn sách thêm ba lần nữa"], 
+                a: 0, 
+                action: "Nhắm mắt lại ngay lúc này, tự trả lời to ý chính lớn nhất của nhiệm vụ bạn vừa vượt qua!" 
+            }
+        ];
+
+        let words = [];
+        let currentWordIdx = 0;
+        let wpm = 250;
+        let isPlaying = false;
+        let intervalId = null;
+        let wordsPerChunk = 1; // Mặc định là 1 từ/nhịp
+
+        function setChunk(size) {
+            wordsPerChunk = size;
+            
+            // Cập nhật UI nút bấm
+            for(let i=1; i<=5; i++) {
+                const btn = document.getElementById(`btn-chunk-${i}`);
+                if(i === size) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+            // Load lại văn bản để cắt cụm lại
+            loadSelectedText();
+        }
+
+        function loadSelectedText() {
+            const idx = document.getElementById('text-selector').value;
+            const text = skimmingData[idx].text;
+            
+            // Tách từ thô
+            let rawWords = text.replace(/[,.?!]/g, '$& ').split(/\s+/).filter(w => w.length > 0);
+            
+            // Gom cụm (Chunking) theo biến wordsPerChunk
+            words = [];
+            for (let i = 0; i < rawWords.length; i += wordsPerChunk) {
+                words.push(rawWords.slice(i, i + wordsPerChunk).join(' '));
+            }
+
+            currentWordIdx = 0;
+            updateDisplay("SẴN SÀNG!", 0);
+            stopReader();
+        }
+
+        function updateDisplay(wordText, progressPercent) {
+            document.getElementById('reader-word').innerText = wordText;
+            document.getElementById('rpm-bar').style.width = `${progressPercent}%`;
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                stopReader();
+            } else {
+                if (currentWordIdx >= words.length) { currentWordIdx = 0; }
+                startReader();
+            }
+        }
+
+        function startReader() {
+            if (words.length === 0) return;
+            isPlaying = true;
+            document.getElementById('btn-play').classList.add('active', 'border-b-0', 'translate-y-1');
+            document.getElementById('icon-play').className = "fa-solid fa-pause";
+            
+            // Tính Delay chuẩn: (60,000ms / WPM) * Số từ mỗi nhịp
+            const msPerChunk = (60000 / wpm) * wordsPerChunk; 
+            intervalId = setInterval(showNextWord, msPerChunk);
+        }
+
+        function stopReader() {
+            isPlaying = false;
+            document.getElementById('btn-play').classList.remove('active', 'border-b-0', 'translate-y-1');
+            document.getElementById('icon-play').className = "fa-solid fa-play";
+            clearInterval(intervalId);
+        }
+
+        function resetReader() {
+            stopReader();
+            currentWordIdx = 0;
+            updateDisplay("SẴN SÀNG!", 0);
+        }
+
+        function showNextWord() {
+            if (currentWordIdx < words.length) {
+                const progress = ((currentWordIdx + 1) / words.length) * 100;
+                updateDisplay(words[currentWordIdx], progress);
+                currentWordIdx++;
+            } else {
+                stopReader();
+                updateDisplay("HOÀN THÀNH!", 100);
+                setTimeout(showQuiz, 800);
+            }
+        }
+
+        function handleSliderChange(val) { setSpeed(val); }
+
+        function setSpeed(val) {
+            wpm = parseInt(val);
+            document.getElementById('wpm-display').innerHTML = `${wpm} <span class="text-xl text-brand-red">WPM</span>`;
+            document.getElementById('wpm-slider').value = wpm;
+            
+            if (isPlaying) {
+                stopReader();
+                startReader();
+            }
+        }
+
+        function showQuiz() {
+            const idx = document.getElementById('text-selector').value;
+            const quiz = quizData[idx];
+            
+            document.getElementById('modal-title').innerText = quiz.q;
+            
+            const optionsHtml = quiz.o.map((opt, i) => 
+                `<button onclick="checkAnswer(${i}, ${quiz.a})" id="opt-${i}" class="game-btn-outline w-full text-left p-4 text-xl flex items-center gap-4 group">
+                    <span class="w-10 h-10 rounded-xl bg-red-100 group-hover:bg-brand-red group-hover:text-white flex items-center justify-center border-2 border-brand-red font-black transition-colors">${String.fromCharCode(65+i)}</span>
+                    <span class="font-bold text-gray-800">${opt}</span>
+                </button>`
+            ).join('');
+            
+            document.getElementById('modal-options').innerHTML = optionsHtml;
+            document.getElementById('modal-action').classList.add('hidden');
+            document.getElementById('modal-action-text').innerText = quiz.action;
+            
+            const modal = document.getElementById('question-modal');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function checkAnswer(selectedIndex, correctIndex) {
+            for (let i = 0; i < 3; i++) {
+                const btn = document.getElementById(`opt-${i}`);
+                btn.onclick = null;
+                
+                // Trạng thái đúng
+                if (i === correctIndex) {
+                    btn.classList.add('bg-green-500', 'border-green-700', 'text-white');
+                    btn.classList.remove('bg-white', 'game-btn-outline');
+                    btn.querySelector('span').classList.add('bg-green-700', 'border-green-900', 'text-white');
+                } 
+                // Trạng thái sai
+                else if (i === selectedIndex && i !== correctIndex) {
+                    btn.classList.add('bg-gray-500', 'border-gray-700', 'text-white');
+                    btn.classList.remove('bg-white', 'game-btn-outline');
+                    btn.querySelector('span').classList.add('bg-gray-700', 'border-gray-900', 'text-white');
+                }
+                
+                // Mở khóa Action
+                if(i === selectedIndex) {
+                    document.getElementById('modal-action').classList.remove('hidden');
+                    // Thêm hiệu ứng nảy (bounce) cho hộp action để hút mắt
+                    document.getElementById('modal-action').classList.add('animate-bounce');
+                    setTimeout(() => {
+                        document.getElementById('modal-action').classList.remove('animate-bounce');
+                    }, 1000);
+                }
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('question-modal');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                resetReader();
+            }, 300);
+        }
+
+        window.onload = () => { 
+            // Set mặc định chọn 1 từ
+            setChunk(1);
+        };
+    </script>
+</body>
+</html>

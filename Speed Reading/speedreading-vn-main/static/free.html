@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinar: Đọc Sách Thần Tốc - Giải Phóng Não Bộ</title>
+    <meta name="description" content="Khám phá bí kíp đọc xong 1 cuốn sách trong 1 buổi sáng dành riêng cho quý anh chị bận rộn.">
+    
+    <!-- 1. Cài đặt Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Cấu hình Import Map cho phép nạp React & JSX Runtime trực tiếp trên trình duyệt -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0"
+        }
+    }
+    </script>
+
+    <!-- 3. Cài đặt Babel Standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Font chữ Be Vietnam Pro cho tiếng Việt -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gold: #fbbf24;
+            --dark-blue: #0f172a;
+        }
+        body { 
+            font-family: 'Be Vietnam Pro', sans-serif; 
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .font-heading { 
+            font-family: 'Montserrat', sans-serif; 
+            letter-spacing: -0.02em;
+        }
+        
+        .bg-webinar {
+            background: linear-gradient(rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.96)), 
+                        url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .gold-gradient {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+        
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: shimmer-effect 3s infinite;
+        }
+        @keyframes shimmer-effect {
+            0% { transform: translate(-100%, -100%) rotate(45deg); }
+            100% { transform: translate(100%, 100%) rotate(45deg); }
+        }
+
+        .expert-card-shadow {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+    <!-- Điểm gắn ứng dụng React -->
+    <div id="root"></div>
+
+    <!-- Mã nguồn React được viết tự nhiên không cần bọc khối Hugo safeHTML -->
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { 
+            Calendar, Clock, User, Mail, Phone, ArrowRight, CheckCircle2, 
+            PlayCircle, Award, Users, BookOpen, AlertCircle, Sparkles, 
+            Zap, Heart, Share2, Camera, ShieldCheck, ChevronRight, Star, Loader2
+        } from 'lucide-react';
+
+        const CountdownTimer = () => {
+            const [timeLeft, setTimeLeft] = useState({ minutes: 14, seconds: 59 });
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setTimeLeft(prev => {
+                        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+                        if (prev.minutes > 0) return { minutes: prev.minutes - 1, seconds: 59 };
+                        return { minutes: 15, seconds: 0 };
+                    });
+                }, 1000);
+                return () => clearInterval(timer);
+            }, []);
+
+            return (
+                <div className="flex gap-3 justify-center md:justify-start items-center">
+                    <div className="text-center">
+                        <div className="bg-white/10 backdrop-blur-md text-white w-14 h-14 flex items-center justify-center rounded-xl text-xl font-bold border border-white/20 shadow-lg">
+                            {String(timeLeft.minutes).padStart(2, '0')}
+                        </div>
+                        <span className="text-[10px] font-bold uppercase text-white/50 mt-1 block tracking-wider">Phút</span>
+                    </div>
+                    <div className="text-amber-400 font-bold text-2xl animate-pulse mb-4">:</div>
+                    <div className="text-center">
+                        <div className="bg-white/10 backdrop-blur-md text-white w-14 h-14 flex items-center justify-center rounded-xl text-xl font-bold border border-white/20 shadow-lg">
+                            {String(timeLeft.seconds).padStart(2, '0')}
+                        </div>
+                        <span className="text-[10px] font-bold uppercase text-white/50 mt-1 block tracking-wider">Giây</span>
+                    </div>
+                </div>
+            );
+        };
+
+        const RegistrationModal = ({ isOpen, onClose }) => {
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [error, setError] = useState(null);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                setError(null);
+
+                const formData = new FormData(e.target);
+                const data = {
+                    first_name: formData.get('full_name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                };
+
+                const webhookUrl = "https://crm.speedreading.vn/?fluentcrm=1&route=contact&hash=5a99cd3e-b4b4-4c98-8756-5507c80b1337";
+
+                try {
+                    await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                        mode: 'no-cors'
+                    });
+
+                    window.location.href = "https://speedreading.vn/webinar";
+                    
+                } catch (err) {
+                    setError("Có lỗi xảy ra, quý anh chị vui lòng thử lại hoặc liên hệ hỗ trợ.");
+                    setIsSubmitting(false);
+                }
+            };
+
+            if (!isOpen) return null;
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm">
+                    <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-white/20">
+                        <div className="gold-gradient p-8 text-white text-center">
+                            <h3 className="text-2xl font-black font-heading text-amber-950">ĐĂNG KÝ GIỮ CHỖ</h3>
+                            <p className="text-amber-900 font-medium">Link tham gia sẽ được gửi qua Zalo & Email</p>
+                        </div>
+                        <form className="p-8 space-y-5" onSubmit={handleSubmit}>
+                            {error && (
+                                <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-xl flex items-center gap-2">
+                                    <AlertCircle size={16} /> {error}
+                                </div>
+                            )}
+                            <div className="space-y-1">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Họ tên của quý anh chị</label>
+                                <div className="relative group">
+                                    <User size={18} className="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-amber-500 transition-colors" />
+                                    <input required name="full_name" type="text" placeholder="Nhập đầy đủ họ tên..." className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:bg-white outline-none transition-all font-medium" />
+                                </div>
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Số điện thoại Zalo</label>
+                                <div className="relative group">
+                                    <Phone size={18} className="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-amber-500 transition-colors" />
+                                    <input required name="phone" type="tel" placeholder="09xx xxx xxx" className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:bg-white outline-none transition-all font-medium" />
+                                </div>
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Địa chỉ Email</label>
+                                <div className="relative group">
+                                    <Mail size={18} className="absolute left-4 top-3.5 text-slate-400 group-focus-within:text-amber-500 transition-colors" />
+                                    <input required name="email" type="email" placeholder="email@domain.com" className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:bg-white outline-none transition-all font-medium" />
+                                </div>
+                            </div>
+
+                            {/* Sử dụng lại ký tự backtick (`) một cách tự nhiên */}
+                            <button 
+                                type="submit" 
+                                disabled={isSubmitting}
+                                className={`w-full gold-gradient shimmer text-amber-950 font-black py-5 rounded-2xl shadow-xl transform transition-all text-lg tracking-tight flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-70 cursor-not-allowed scale-95' : 'active:scale-95'}`}
+                            >
+                                {isSubmitting ? (
+                                    <React.Fragment>
+                                        <div className="spinner"></div> ĐANG XỬ LÝ...
+                                    </React.Fragment>
+                                ) : (
+                                    "XÁC NHẬN & NHẬN QUÀ TẶNG 500K"
+                                )}
+                            </button>
+                            <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400 font-medium">
+                                <ShieldCheck size={14} className="text-green-500" /> Cam kết bảo mật thông tin tuyệt đối
+                            </div>
+                        </form>
+                        {!isSubmitting && (
+                            <button onClick={onClose} className="absolute top-4 right-4 text-amber-900/50 hover:text-amber-900 p-2">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [isModalOpen, setIsModalOpen] = useState(false);
+
+            return (
+                <div className="relative">
+                    <RegistrationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+                    {/* 1. HERO SECTION */}
+                    <header className="bg-webinar relative pt-20 pb-28 md:pt-32 md:pb-40 px-4">
+                        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-14">
+                            <div className="flex-1 text-center md:text-left space-y-8">
+                                <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-400 border border-amber-500/40 px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-[0.2em]">
+                                    <Star size={14} className="fill-amber-400" /> Sự kiện trực tuyến đặc biệt
+                                </div>
+                                
+                                <h1 className="text-4xl md:text-7xl font-black text-white leading-[1.1] md:tracking-tighter">
+                                    ĐỌC XONG 1 CUỐN SÁCH <br/> 
+                                    <span className="text-transparent bg-clip-text gold-gradient">TRONG 1 BUỔI SÁNG</span>
+                                </h1>
+                                
+                                <p className="text-lg md:text-2xl text-slate-300 font-medium leading-relaxed max-w-2xl">
+                                    Quý anh chị có đang cảm thấy "bất lực" với đống sách mua về? Webinar này sẽ tiết lộ phương pháp đọc hiểu tốc độ cao giúp quý khách hàng nắm bắt <span className="text-white border-b-2 border-amber-500">80% kiến thức tinh túy chỉ trong 60 phút.</span>
+                                </p>
+
+                                <div className="flex flex-col md:flex-row items-center gap-8 pt-4">
+                                    <button 
+                                        onClick={() => setIsModalOpen(true)}
+                                        className="w-full md:w-auto gold-gradient shimmer text-amber-950 font-black px-10 py-6 rounded-2xl text-xl shadow-[0_20px_50px_rgba(245,158,11,0.3)] transform transition hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+                                    >
+                                        ĐĂNG KÝ XEM NGAY <ArrowRight size={24} />
+                                    </button>
+                                    <div className="flex flex-col items-center md:items-start gap-2">
+                                        <p className="text-xs font-bold text-amber-400/80 uppercase tracking-widest">Sắp bắt đầu trong:</p>
+                                        <CountdownTimer />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm font-semibold text-slate-400 border-t border-white/10 pt-8">
+                                    <span className="flex items-center gap-2 text-white"><CheckCircle2 size={18} className="text-green-400"/> Webinar miễn phí 100%</span>
+                                    <span className="flex items-center gap-2"><Users size={18} className="text-amber-500"/> 2.450 quý anh chị tham gia</span>
+                                </div>
+                            </div>
+
+                            <div className="flex-1 w-full max-w-md relative">
+                                <div className="absolute -inset-4 bg-amber-500 opacity-20 blur-3xl rounded-full"></div>
+                                <div className="relative bg-slate-800 rounded-[2.5rem] overflow-hidden shadow-2xl border-[8px] border-slate-700/50 aspect-[4/5] md:aspect-square">
+                                    <img 
+                                        src="https://img.speedreading.vn/Hinh-van-hi-Speed-Reading.jpg" 
+                                        alt="Chuyên gia Văn Hỉ" 
+                                        className="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                                    <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 gold-gradient rounded-full flex items-center justify-center text-amber-950">
+                                                <PlayCircle size={28} fill="currentColor" />
+                                            </div>
+                                            <div>
+                                                <p className="text-white font-bold text-lg">Văn Hỉ</p>
+                                                <p className="text-amber-400 text-xs font-black uppercase">Speed Reading Expert</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* 2. PAIN POINTS SECTION */}
+                    <section className="py-28 px-4 bg-white relative">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+                                <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">Sách là kho tàng, nhưng quý anh chị có đang bỏ phí?</h2>
+                                <p className="text-lg text-slate-500 font-medium">Nếu quý anh chị đang gặp những vấn đề này, webinar này dành riêng cho quý khách hàng.</p>
+                                <div className="w-32 h-2 gold-gradient mx-auto rounded-full mt-6"></div>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-10">
+                                {[
+                                    { icon: <AlertCircle className="text-red-500" size={32} />, title: "Mua sách phong trào", desc: "Quý anh chị mua rất nhiều nhưng chỉ đọc được vài trang đầu là... ngủ gục?" },
+                                    { icon: <Zap className="text-amber-500" size={32} />, title: "Đọc xong quên ngay", desc: "Quý khách hàng đọc xong trang sau quên ngay trang trước, kiến thức không đọng lại gì?" },
+                                    { icon: <Clock className="text-blue-500" size={32} />, title: "Thời gian quá hẹp", desc: "Muốn thăng tiến nhưng công việc ngốn sạch thời gian để quý anh chị có thể cập nhật kiến thức?" }
+                                ].map((item, idx) => (
+                                    <div key={idx} className="group p-10 rounded-[2rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500">
+                                        <div className="bg-white w-20 h-20 flex items-center justify-center rounded-2xl shadow-sm mb-8 group-hover:scale-110 group-hover:bg-amber-50 transition-all">{item.icon}</div>
+                                        <h3 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">{item.title}</h3>
+                                        <p className="text-slate-600 leading-relaxed font-medium">{item.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* 3. AUTHORITY SECTION */}
+                    <section className="py-32 px-4 bg-slate-950 text-white overflow-hidden relative">
+                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] -mr-64 -mt-64"></div>
+                        <div className="max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row items-center gap-20">
+                            <div className="flex-1 order-2 md:order-1 space-y-8">
+                                <div className="space-y-4">
+                                    <p className="text-amber-400 font-black text-xs uppercase tracking-[0.3em]">Người truyền cảm hứng</p>
+                                    <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">Đồng hành cùng <br/> quý anh chị là ai?</h2>
+                                </div>
+                                
+                                <div className="space-y-6 text-slate-300 text-lg leading-relaxed font-medium">
+                                    <p className="text-xl text-white font-bold italic">"Em là Văn Hỉ – Giảng viên Speed Reading."</p>
+                                    <p>Speed Reading Việt Nam đã có cơ hội đào tạo phương pháp đọc hiểu tốc độ cao tại các tổ chức uy tín hàng đầu như <span className="text-amber-400 font-bold">Vinschool, Hoa Sen University, MB Bank...</span></p>
+                                    <p>Hiện tại, em đang xây dựng cộng đồng học tập với hơn <span className="text-white font-bold">100.000 thành viên</span> tích cực trên YouTube.</p>
+                                    <p>Sứ mệnh của em là giúp quý anh chị giải phóng sức mạnh não bộ, tiết kiệm hàng ngàn giờ đọc sách để dành thời gian cho gia đình.</p>
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/10">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                                            <Award size={24} />
+                                        </div>
+                                        <div>
+                                            <p className="text-white font-black text-xl leading-none">2 Năm</p>
+                                            <p className="text-slate-500 text-[11px] uppercase font-bold tracking-wider mt-1">Kinh nghiệm chuyên sâu</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                                            <Users size={24} />
+                                        </div>
+                                        <div>
+                                            <p className="text-white font-black text-xl leading-none">100k+</p>
+                                            <p className="text-slate-500 text-[11px] uppercase font-bold tracking-wider mt-1">Học viên tin dùng</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex-1 order-1 md:order-2 flex justify-center">
+                                <div className="relative expert-card-shadow rounded-[3rem] overflow-hidden border border-white/10 group">
+                                    <img 
+                                        src="https://img.speedreading.vn/Hinh-van-hi-Speed-Reading.jpg" 
+                                        alt="Chân dung Văn Hỉ" 
+                                        className="w-full max-w-[420px] h-auto object-cover filter brightness-90 group-hover:brightness-100 transition-all duration-500"
+                                    />
+                                    <div className="absolute inset-0 ring-1 ring-inset ring-white/20 rounded-[3rem]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* 4. LEAD MAGNET SECTION */}
+                    <section className="py-32 px-4 bg-white relative">
+                        <div className="max-w-5xl mx-auto">
+                            <div className="bg-slate-50 rounded-[3rem] shadow-2xl p-10 md:p-20 flex flex-col md:flex-row items-center gap-14 border border-slate-200 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl"></div>
+                                
+                                <div className="flex-shrink-0 relative">
+                                    <div className="w-32 h-32 md:w-40 md:h-40 bg-amber-500 rounded-full flex items-center justify-center text-white shadow-[0_20px_40px_rgba(245,158,11,0.4)] animate-bounce">
+                                        <Sparkles size={60} />
+                                    </div>
+                                    <div className="absolute -top-4 -right-4 bg-red-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg">HOT</div>
+                                </div>
+                                
+                                <div className="text-center md:text-left space-y-6">
+                                    <div className="inline-block bg-amber-100 text-amber-700 text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest">Quà tặng đặc biệt trị giá 500.000đ</div>
+                                    <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">Video "3 Bài Tập Mở Rộng <br className="hidden md:block"/> Tầm Nhìn Ngoại Vi"</h2>
+                                    <p className="text-lg text-slate-600 font-medium">Giúp quý anh chị tăng tốc độ đọc lên <span className="text-amber-600 font-bold">200% ngay lập tức</span> sau khi thực hành. Video độc quyền này chỉ được tặng trong buổi Webinar.</p>
+                                    
+                                    <button 
+                                        onClick={() => setIsModalOpen(true)}
+                                        className="w-full md:w-auto bg-slate-950 text-white font-black px-12 py-6 rounded-2xl hover:bg-slate-800 transition-all flex items-center justify-center gap-3 text-lg shadow-xl"
+                                    >
+                                        ĐĂNG KÝ XEM & NHẬN QUÀ <ChevronRight size={24} />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* FOOTER */}
+                    <footer className="bg-slate-950 text-slate-500 py-16 px-4 border-t border-white/5">
+                        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+                            <div className="text-center md:text-left space-y-4">
+                                <h3 className="text-white font-black text-2xl tracking-tight">Speed Reading Academy</h3>
+                                <p className="text-sm font-medium max-w-sm leading-relaxed">
+                                    Đào tạo kỹ năng đọc hiểu tốc độ cao bài bản, giúp quý anh chị làm chủ tri thức trong kỷ nguyên số.
+                                </p>
+                            </div>
+                            <div className="text-center md:text-right space-y-4">
+                                <div className="flex items-center justify-center md:justify-end gap-6 text-white/80">
+                                    <a href="#" className="hover:text-amber-500 transition-colors"><Users size={20}/></a>
+                                    <a href="#" className="hover:text-amber-500 transition-colors"><Mail size={20}/></a>
+                                    <a href="#" className="hover:text-amber-500 transition-colors"><ShieldCheck size={20}/></a>
+                                </div>
+                                <p className="text-xs font-bold tracking-widest uppercase">© 2024 VĂN HỈ - SPEED READING VIET NAM</p>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* STICKY MOBILE CTA */}
+                    <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-md border-t border-slate-200 z-50 shadow-2xl">
+                        <button 
+                            onClick={() => setIsModalOpen(true)}
+                            className="w-full gold-gradient shimmer text-amber-950 font-black py-5 rounded-2xl shadow-xl flex items-center justify-center gap-3"
+                        >
+                            ĐĂNG KÝ WEBINAR NGAY <ArrowRight size={20} />
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>

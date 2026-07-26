@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading - Dashboard Quản Lý</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Be Vietnam Pro', sans-serif; 
+            background-color: #f8fafc;
+        }
+        /* Custom Red Gradient */
+        .bg-gradient-brand {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+        .text-gradient-brand {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .step-card { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 4px solid #dc2626;
+        }
+        .step-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+        }
+        .btn-hover-effect {
+            transition: all 0.2s;
+        }
+        .btn-hover-effect:active {
+            transform: scale(0.98);
+        }
+        /* Checkbox custom color */
+        input[type="checkbox"]:checked {
+            accent-color: #dc2626;
+        }
+        .fa-spin-fast { animation: fa-spin 0.8s infinite linear; }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-10">
+
+    <!-- Header Gradient -->
+    <div class="bg-gradient-brand text-white shadow-lg mb-8">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
+                    <i class="fa-solid fa-bolt text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">SpeedReading Admin</h1>
+                    <p class="text-red-100 text-sm opacity-90">Hệ thống xử lý đơn hàng & Kích hoạt tự động</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="resetForm()" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 backdrop-blur-sm">
+                    <i class="fa-solid fa-rotate-right"></i> Làm mới
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- CỘT TRÁI: NHẬP LIỆU (Bước 1 & 2) -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Bước 1: Thông tin -->
+            <div class="bg-white p-6 rounded-xl shadow-sm step-card relative group">
+                <div class="absolute top-4 right-4 text-red-100 text-6xl font-bold -z-0 opacity-20 select-none group-hover:opacity-30 transition">01</div>
+                <div class="flex items-center gap-2 mb-6 relative z-10">
+                    <span class="bg-red-100 text-red-700 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">1</span>
+                    <h2 class="font-bold text-lg text-gray-800">Thông tin Học viên</h2>
+                </div>
+                
+                <div class="space-y-4 relative z-10">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Họ tên</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-gray-400"><i class="fa-regular fa-user"></i></span>
+                            <input type="text" id="sName" oninput="updatePreview()" placeholder="Ví dụ: Nguyễn Văn A" class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Số điện thoại (Zalo)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-gray-400"><i class="fa-solid fa-phone"></i></span>
+                            <input type="text" id="sPhone" oninput="updatePreview()" placeholder="09xxxxxxx" class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Email</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-gray-400"><i class="fa-regular fa-envelope"></i></span>
+                            <input type="email" id="sEmail" placeholder="email@example.com" class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bước 2: API Coupon -->
+            <div class="bg-white p-6 rounded-xl shadow-sm step-card relative group">
+                <div class="absolute top-4 right-4 text-red-100 text-6xl font-bold -z-0 opacity-20 select-none group-hover:opacity-30 transition">02</div>
+                <div class="flex items-center gap-2 mb-6 relative z-10">
+                    <span class="bg-red-100 text-red-700 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">2</span>
+                    <h2 class="font-bold text-lg text-gray-800">Mã Kích Hoạt (API)</h2>
+                </div>
+                
+                <div class="relative z-10">
+                    <button id="btnGetCoupon" onclick="fetchCouponAPI()" class="w-full bg-gradient-brand hover:opacity-90 text-white font-bold py-3 rounded-lg shadow-md transition transform active:scale-95 flex items-center justify-center gap-2 mb-4 btn-hover-effect">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Lấy mã tự động</span>
+                    </button>
+
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Mã Coupon:</label>
+                        <input type="text" id="sCoupon" oninput="updatePreview()" placeholder="....." class="w-full p-3 border-2 border-red-100 bg-red-50 rounded-lg focus:border-red-500 outline-none font-mono text-center font-bold text-xl text-red-600 tracking-wider">
+                        <button onclick="copyToClipboard(document.getElementById('sCoupon').value)" class="absolute right-3 bottom-3 text-red-300 hover:text-red-600 transition">
+                            <i class="fa-regular fa-copy text-lg"></i>
+                        </button>
+                    </div>
+                    <p id="apiStatus" class="h-4 text-xs text-center mt-2 text-gray-400 italic"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CỘT PHẢI: THAO TÁC (Bước 3-6) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Bước 3: CRM -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-start gap-4">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span class="font-bold text-lg">3</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800">Kích hoạt trên CRM</h3>
+                        <p class="text-sm text-gray-500">Truy cập FluentCRM để gắn thẻ (Tag) <span class="font-bold text-red-600">"student"</span>.</p>
+                    </div>
+                </div>
+                <a href="https://speedreading.vn/mail/wp-admin/admin.php?page=fluentcrm-admin#/subscribers?lists=2&sort_by=id&sort_type=DESC&filter_type=simple&t=1764746654290" target="_blank" class="px-6 py-2.5 rounded-lg border-2 border-red-100 text-red-600 font-bold hover:bg-red-50 transition flex items-center gap-2 btn-hover-effect whitespace-nowrap">
+                    <i class="fa-solid fa-tags"></i> Gắn Tag Ngay
+                </a>
+            </div>
+
+            <!-- Bước 4, 5, 6: Soạn Tin -->
+            <div class="bg-white p-0 rounded-xl shadow-sm step-card overflow-hidden">
+                <!-- Header Card -->
+                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-red-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">4</span>
+                        <h2 class="font-bold text-gray-800">Nội dung gửi khách</h2>
+                    </div>
+                    <div class="text-xs text-gray-400 italic">Tự động điền dữ liệu</div>
+                </div>
+
+                <div class="p-6">
+                    <!-- Config Link -->
+                    <div class="mb-5 flex items-center gap-3 bg-red-50 p-3 rounded-lg border border-red-100">
+                        <i class="fa-brands fa-zalo text-blue-600 text-xl"></i>
+                        <div class="flex-1">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase">Link nhóm Zalo lớp học:</label>
+                            <input type="text" id="zaloGroupLink" oninput="updatePreview()" value="https://speedreading.vn/nhomzalo" class="w-full bg-transparent border-none p-0 text-sm font-medium text-gray-800 focus:ring-0 placeholder-gray-400">
+                        </div>
+                    </div>
+
+                    <!-- Editor Area -->
+                    <div class="relative group">
+                        <textarea id="messageContent" rows="12" class="w-full p-5 border border-gray-200 rounded-xl bg-gray-50 font-sans text-gray-700 leading-relaxed focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition resize-none shadow-inner" spellcheck="false"></textarea>
+                        
+                        <!-- Quick Copy Action inside Textarea -->
+                        <button onclick="copyMessage()" class="absolute top-4 right-4 bg-white hover:bg-red-50 text-gray-500 hover:text-red-600 p-2 rounded-lg shadow-sm border border-gray-200 transition opacity-0 group-hover:opacity-100">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="copyMessage()" class="btn-hover-effect bg-gray-800 hover:bg-gray-900 text-white py-3 px-4 rounded-xl font-bold shadow-lg shadow-gray-200 flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-copy"></i> Copy Nội dung
+                        </button>
+                        
+                        <!-- Nút Zalo giữ màu Xanh Brand để dễ nhận diện nhưng style bo tròn giống theme -->
+                        <button onclick="openZaloChat()" class="btn-hover-effect bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-bold shadow-lg shadow-blue-100 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-comment-dots"></i> Chat Zalo
+                        </button>
+
+                        <button onclick="sendEmail()" class="btn-hover-effect bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-bold shadow-lg shadow-red-100 flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-envelope"></i> Gửi bằng Gmail
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checklist -->
+            <div class="bg-gradient-to-r from-red-50 to-white p-5 rounded-xl border border-red-100">
+                <h3 class="font-bold text-red-800 mb-3 text-sm uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i> Checklist hoàn thành:
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-white hover:shadow-sm transition select-none">
+                        <input type="checkbox" class="w-5 h-5 border-gray-300 rounded text-red-600 focus:ring-red-500"> 
+                        <span class="text-sm font-medium text-gray-700">Đã nhận tiền</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-white hover:shadow-sm transition select-none">
+                        <input type="checkbox" class="w-5 h-5 border-gray-300 rounded text-red-600 focus:ring-red-500"> 
+                        <span class="text-sm font-medium text-gray-700">Đã gắn Tag</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-white hover:shadow-sm transition select-none">
+                        <input type="checkbox" class="w-5 h-5 border-gray-300 rounded text-red-600 focus:ring-red-500"> 
+                        <span class="text-sm font-medium text-gray-700">Đã gửi mã</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-white hover:shadow-sm transition select-none">
+                        <input type="checkbox" class="w-5 h-5 border-gray-300 rounded text-red-600 focus:ring-red-500"> 
+                        <span class="text-sm font-medium text-gray-700">Vào nhóm Zalo</span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-gray-900 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-32 transition-transform duration-300 flex items-center gap-3 z-50 border-l-4 border-green-500">
+        <i class="fa-solid fa-circle-check text-green-400 text-xl"></i>
+        <div>
+            <h4 class="font-bold text-sm">Thông báo</h4>
+            <span id="toastMsg" class="text-sm text-gray-300">Nội dung thông báo</span>
+        </div>
+    </div>
+
+    <script>
+        // API URL Của bạn
+        const UNICA_API_URL = "https://unica.vn/api/teacher/coupon/14006/bVBRcm5nQjBGQ3lBWnhGQXBoL3RiMWs4SHJ3VnlXNXRoajNZaVc4WnRXOD0?aff=14006";
+
+        async function fetchCouponAPI() {
+            const btn = document.getElementById('btnGetCoupon');
+            const originalContent = btn.innerHTML;
+            const input = document.getElementById('sCoupon');
+            const status = document.getElementById('apiStatus');
+
+            // Loading state with Red Spinner
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin-fast"></i> <span>Đang kết nối...</span>';
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            status.innerText = "Đang gửi yêu cầu tới Unica...";
+
+            try {
+                const response = await fetch(UNICA_API_URL);
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                
+                const rawText = await response.text();
+                let finalCode = "";
+                try {
+                    const jsonData = JSON.parse(rawText);
+                    finalCode = jsonData.data || jsonData.code || jsonData; 
+                    if(typeof finalCode === 'object') finalCode = JSON.stringify(finalCode);
+                } catch (e) {
+                    finalCode = rawText;
+                }
+                
+                finalCode = finalCode.replace(/["']/g, "").trim();
+                input.value = finalCode;
+                updatePreview();
+                showToast("Đã tạo mã Coupon thành công!");
+                status.innerText = ""; // Clear status on success
+
+            } catch (error) {
+                console.error("Lỗi:", error);
+                if (error.message.includes("Failed to fetch") || error.name === 'TypeError') {
+                    status.innerHTML = "<span class='text-red-500'><i class='fa-solid fa-triangle-exclamation'></i> Trình duyệt chặn API. Đang mở tab mới...</span>";
+                    window.open(UNICA_API_URL, '_blank');
+                } else {
+                    status.innerText = "Lỗi: " + error.message;
+                }
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        function updatePreview() {
+            const name = document.getElementById('sName').value || 'Bạn';
+            const coupon = document.getElementById('sCoupon').value || '_____';
+            const groupLink = document.getElementById('zaloGroupLink').value;
+            
+            const template = `Chào ${name}, 👋
+            
+Cảm ơn bạn đã đăng ký khóa học. Giao dịch thanh toán đã được xác nhận thành công! ✅
+
+Dưới đây là thông tin kích hoạt tài khoản:
+
+HƯỚNG DẪN KÍCH HOẠT KHÓA HỌC
+Phương Pháp Đọc Hiểu Nhanh Speed Reading - Bản quyền từ Hoa Kỳ 🇺🇸
+
+Bước 1: Truy cập Unica.vn, bấm ĐĂNG KÝ nếu chưa có tài khoản
+Bước 2: Đăng nhập tài khoản học viên trên Unica.vn
+Bước 3: Truy cập http://unica.vn/coupon
+Bước 4: Nhập mã coupon: ${coupon}
+Bước 5: Bấm KÍCH HOẠT NGAY để bắt đầu vào học.
+
+---
+THAM GIA NHÓM HỖ TRỢ HỌC VIÊN:
+Mời bạn tham gia nhóm Zalo kín để nhận tài liệu và được hỗ trợ trực tiếp từ giảng viên:
+👉 ${groupLink}
+
+Chúc bạn có những giờ học hiệu quả! 🚀
+SpeedReading.vn Team`;
+
+            document.getElementById('messageContent').value = template;
+        }
+
+        function copyMessage() {
+            const content = document.getElementById('messageContent');
+            content.select();
+            content.setSelectionRange(0, 99999);
+            copyToClipboard(content.value);
+        }
+
+        function copyToClipboard(text) {
+             if (!text) return;
+             if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('Đã copy vào bộ nhớ tạm!');
+                });
+            } else {
+                const elem = document.createElement('textarea');
+                elem.value = text;
+                document.body.appendChild(elem);
+                elem.select();
+                document.execCommand('copy');
+                document.body.removeChild(elem);
+                showToast('Đã copy vào bộ nhớ tạm!');
+            }
+        }
+
+        function openZaloChat() {
+            const phone = document.getElementById('sPhone').value;
+            if (!phone) {
+                showToast('Vui lòng nhập số điện thoại trước!');
+                document.getElementById('sPhone').focus();
+                return;
+            }
+            window.open(`https://zalo.me/${phone}`, '_blank');
+        }
+
+        function sendEmail() {
+             const email = document.getElementById('sEmail').value;
+             const subject = "Xác nhận đăng ký khóa học Speed Reading";
+             const body = document.getElementById('messageContent').value;
+             if (!email) {
+                showToast('Vui lòng nhập Email khách hàng!');
+                document.getElementById('sEmail').focus();
+                return;
+             }
+             
+             // Sử dụng link soạn thảo của Gmail
+             const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+             
+             window.open(gmailUrl, '_blank');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.classList.remove('translate-y-32');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32');
+            }, 3000);
+        }
+
+        function resetForm() {
+            if(confirm('Làm mới form sẽ xóa hết dữ liệu hiện tại?')) {
+                document.getElementById('sName').value = '';
+                document.getElementById('sPhone').value = '';
+                document.getElementById('sEmail').value = '';
+                document.getElementById('sCoupon').value = '';
+                document.getElementById('apiStatus').innerText = '';
+                updatePreview();
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = false);
+            }
+        }
+
+        // Initialize
+        updatePreview();
+    </script>
+</body>
+</html>

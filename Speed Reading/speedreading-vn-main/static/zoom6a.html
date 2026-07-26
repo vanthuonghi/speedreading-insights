@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công thức 4 Bước Chia Sẻ Kiến Thức Hiệu Quả</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fcfcfc;
+        }
+        .red-gradient {
+            background: linear-gradient(135deg, #e53e3e 0%, #b7791f 100%);
+        }
+        .step-locked {
+            filter: grayscale(1) blur(1px);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .pulse-active {
+            animation: pulse-slow 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white border-b-2 border-red-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <img src="https://img.speedreading.vn/logo.png" alt="SpeedReading Logo" class="h-10 md:h-12 object-contain" onerror="this.src='https://placehold.co/150x50/e53e3e/ffffff?text=SpeedReading'">
+                <div class="hidden sm:block h-6 w-[2px] bg-red-200"></div>
+                <span class="hidden sm:inline text-red-600 font-bold text-lg">Học Viện Kỹ Năng</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full font-bold text-sm border border-red-200 flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="star" class="w-4 h-4 fill-red-500 text-red-500"></i>
+                    <span>Thử Thách Tri Thức</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+        <!-- Banner Giới thiệu trò chơi -->
+        <div class="bg-red-600 text-white rounded-2xl p-6 md:p-8 shadow-lg mb-8 relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10">
+                <i data-lucide="award" class="w-48 h-48"></i>
+            </div>
+            <div class="relative z-10 max-w-2xl">
+                <span class="bg-yellow-400 text-red-900 text-xs uppercase font-extrabold px-3 py-1 rounded-full">Bí kíp siêu đẳng</span>
+                <h1 class="text-2xl md:text-4xl font-extrabold mt-3 mb-2">Công Thức 4 Bước Chia Sẻ Kiến Thức</h1>
+                <p class="text-sm md:text-base text-red-50 opacity-95 leading-relaxed">
+                    Chào mừng các bạn học sinh năng động! Hãy cùng chinh phục thử thách mở khóa tư duy bằng cách khám phá 5 câu chuyện thực tế về sự thay đổi bản thân, giúp đỡ gia đình và chủ động học tập nhé!
+                </p>
+                <div class="mt-4 flex flex-wrap gap-2 text-xs md:text-sm">
+                    <span class="bg-red-700/50 px-3 py-1 rounded-full flex items-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Bước 1: Giá Trị</span>
+                    <span class="bg-red-700/50 px-3 py-1 rounded-full flex items-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Bước 2: Nội Dung</span>
+                    <span class="bg-red-700/50 px-3 py-1 rounded-full flex items-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Bước 3: Thông Điệp</span>
+                    <span class="bg-red-700/50 px-3 py-1 rounded-full flex items-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i> Bước 4: Hành Động</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Layout 2 cột: Danh sách bài học & Chi tiết Trình khám phá công thức -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Cột trái: Chọn Chủ Đề (5 Văn Bản đầu vào) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <i data-lucide="gamepad-2" class="text-red-600 w-6 h-6"></i>
+                    <h2 class="text-xl font-bold text-gray-900">Chọn 1 Câu Chuyện (Văn bản)</h2>
+                </div>
+                
+                <div class="space-y-4" id="story-list">
+                    <!-- Sẽ được render tự động qua JavaScript để dễ quản lý dữ liệu -->
+                </div>
+            </div>
+
+            <!-- Cột phải: Trò chơi Mở Khóa 4 Bước -->
+            <div class="lg:col-span-7 bg-white rounded-2xl border-2 border-red-100 shadow-sm p-6 relative">
+                
+                <!-- Khi chưa chọn bài học -->
+                <div id="welcome-placeholder" class="h-96 flex flex-col items-center justify-center text-center p-6">
+                    <div class="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-4 pulse-active border border-red-200">
+                        <i data-lucide="play" class="w-10 h-10 ml-1"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Sẵn sàng kích hoạt siêu năng lực?</h3>
+                    <p class="text-gray-500 max-w-sm text-sm">Hãy bấm chọn một trong 5 câu chuyện bên trái để bắt đầu hành trình mở khóa 4 bước truyền tải kiến thức siêu phàm nhé!</p>
+                </div>
+
+                <!-- Khi đã chọn câu chuyện -->
+                <div id="game-panel" class="hidden">
+                    <div class="border-b border-gray-100 pb-4 mb-6 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-red-500 uppercase tracking-widest">Đang khám phá chủ đề</span>
+                            <h3 id="current-story-title" class="text-lg md:text-xl font-bold text-gray-900"></h3>
+                        </div>
+                        <button onclick="resetStoryProgress()" class="text-xs text-red-500 hover:text-red-700 underline font-medium flex items-center gap-1">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Chơi lại bài này
+                        </button>
+                    </div>
+
+                    <!-- Thanh tiến trình (Step Progress) -->
+                    <div class="grid grid-cols-4 gap-2 mb-8">
+                        <button id="progress-tab-1" onclick="switchStepView(1)" class="py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1">
+                            <span>BƯỚC 1</span>
+                            <span class="hidden sm:inline">Giá Trị</span>
+                            <i data-lucide="check" class="w-3 h-3 text-emerald-500 hidden" id="check-icon-1"></i>
+                        </button>
+                        <button id="progress-tab-2" onclick="switchStepView(2)" class="py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 step-locked">
+                            <span>BƯỚC 2</span>
+                            <span class="hidden sm:inline">Nội Dung</span>
+                            <i data-lucide="check" class="w-3 h-3 text-emerald-500 hidden" id="check-icon-2"></i>
+                        </button>
+                        <button id="progress-tab-3" onclick="switchStepView(3)" class="py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 step-locked">
+                            <span>BƯỚC 3</span>
+                            <span class="hidden sm:inline">Thông Điệp</span>
+                            <i data-lucide="check" class="w-3 h-3 text-emerald-500 hidden" id="check-icon-3"></i>
+                        </button>
+                        <button id="progress-tab-4" onclick="switchStepView(4)" class="py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 step-locked">
+                            <span>BƯỚC 4</span>
+                            <span class="hidden sm:inline">Hành Động</span>
+                            <i data-lucide="check" class="w-3 h-3 text-emerald-500 hidden" id="check-icon-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Nội dung các Bước -->
+                    <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 min-h-[300px] flex flex-col justify-between">
+                        
+                        <!-- BƯỚC 1: GIÁ TRỊ CÁ NHÂN -->
+                        <div id="step-content-1" class="step-pane">
+                            <div class="flex items-start gap-3 mb-4">
+                                <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-bold text-red-600 text-base md:text-lg">Cách Nói Về Sự Thay Đổi Của Bản Thân</h4>
+                                    <p class="text-xs text-gray-500 mt-0.5">Tạo sức hút, sự đồng cảm và trân trọng đối với tri thức mới nhận được.</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm leading-relaxed text-sm md:text-base text-gray-700 italic" id="step-1-text">
+                                <!-- Điền tự động -->
+                            </div>
+                            <div class="mt-6 flex flex-col items-center p-3 bg-red-50 rounded-xl border border-dashed border-red-200">
+                                <p class="text-xs font-semibold text-red-800 text-center mb-3">⚡️ Thử thách trí tuệ: Bạn học được điều gì ý nghĩa từ sự thay đổi này?</p>
+                                <div class="grid grid-cols-2 gap-2 w-full" id="step-1-quiz-options">
+                                    <!-- Options -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BƯỚC 2: NỘI DUNG CỤ THỂ -->
+                        <div id="step-content-2" class="step-pane hidden">
+                            <div class="flex items-start gap-3 mb-4">
+                                <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-bold text-red-600 text-base md:text-lg">Trình Bày Nội Dung Cụ Thể (Ý chính & Ví dụ)</h4>
+                                    <p class="text-xs text-gray-500 mt-0.5">Mạch lạc, súc tích và dễ nhớ giúp người nghe nắm rõ toàn bộ câu chuyện.</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3" id="step-2-content-area">
+                                <!-- Điền tự động -->
+                            </div>
+                            <div class="mt-6 flex flex-col items-center p-3 bg-red-50 rounded-xl border border-dashed border-red-200">
+                                <p class="text-xs font-semibold text-red-800 text-center mb-3">🔑 Bạn đoán xem chìa khóa thành công ở bước 2 này là gì?</p>
+                                <div class="grid grid-cols-2 gap-2 w-full" id="step-2-quiz-options">
+                                    <!-- Options -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BƯỚC 3: THÔNG ĐIỆP CỐT LÕI -->
+                        <div id="step-content-3" class="step-pane hidden">
+                            <div class="flex items-start gap-3 mb-4">
+                                <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold flex-shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-bold text-red-600 text-base md:text-lg">Ý Đồ Thực Sự & Thông Điệp Cốt Lõi</h4>
+                                    <p class="text-xs text-gray-500 mt-0.5">Điều mà tác giả muốn gửi gắm sâu sắc nhất đến cuộc sống của bạn.</p>
+                                </div>
+                            </div>
+                            <div class="bg-red-50/50 p-4 rounded-xl border border-red-100 flex items-start gap-3" id="step-3-content-area">
+                                <i data-lucide="message-circle-heart" class="text-red-500 w-8 h-8 flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h5 class="font-bold text-gray-900 text-sm">Thông điệp cốt lõi dành cho bạn:</h5>
+                                    <p class="text-sm text-gray-700 mt-1 italic" id="step-3-text"></p>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex flex-col items-center p-3 bg-red-50 rounded-xl border border-dashed border-red-200">
+                                <p class="text-xs font-semibold text-red-800 text-center mb-3">💖 Bạn có cảm nhận được giá trị sâu xa này không?</p>
+                                <div class="grid grid-cols-2 gap-2 w-full" id="step-3-quiz-options">
+                                    <!-- Options -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BƯỚC 4: HÀNH ĐỘNG THỰC TẾ -->
+                        <div id="step-content-4" class="step-pane hidden">
+                            <div class="flex items-start gap-3 mb-4">
+                                <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold flex-shrink-0">4</div>
+                                <div>
+                                    <h4 class="font-bold text-red-600 text-base md:text-lg">Kế Hoạch Hành Động Thực Tế</h4>
+                                    <p class="text-xs text-gray-500 mt-0.5">Xác định những việc phải làm ngay để biến tri thức thành thói quen sống.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3" id="step-4-content-area">
+                                <!-- Điền tự động -->
+                            </div>
+
+                            <div class="mt-6 text-center" id="finish-game-area">
+                                <button onclick="triggerWin()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2 mx-auto transition-transform hover:scale-105">
+                                    <i data-lucide="party-popper" class="w-5 h-5"></i>
+                                    <span>HOÀN THÀNH THỬ THÁCH</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Nút điều hướng chuyển tiếp (Footer của bảng tương tác) -->
+                        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                            <button id="prev-btn" onclick="prevStep()" class="text-gray-500 hover:text-gray-800 text-sm font-semibold flex items-center gap-1 opacity-0 pointer-events-none">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i> Quay lại
+                            </button>
+                            
+                            <!-- Hiển thị gợi ý tiến trình game -->
+                            <span id="step-hint" class="text-xs text-gray-400 font-medium">Bấm Trả lời đúng để mở khóa Bước tiếp theo!</span>
+
+                            <button id="next-btn" onclick="nextStep()" class="bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-1 hover:bg-red-700 transition-all shadow-sm hidden">
+                                <span>Tiếp theo</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Sơ đồ tóm tắt Quy trình 4 Bước -->
+        <div class="mt-16 bg-white border-2 border-red-100 rounded-3xl p-6 md:p-8 shadow-sm">
+            <div class="text-center max-w-xl mx-auto mb-10">
+                <span class="text-red-500 font-extrabold text-xs uppercase tracking-wider">Học Nhanh Nhớ Lâu</span>
+                <h3 class="text-2xl md:text-3xl font-extrabold text-gray-900 mt-1">Sơ Đồ Tư Duy 4 Bước Chia Sẻ Tri Thức</h3>
+                <p class="text-gray-500 text-sm mt-2">Áp dụng công thức này vào bất kỳ bài học nào để trở thành người thuyết trình tài ba thu hút mọi ánh nhìn!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+                <!-- Bước 1 -->
+                <div class="bg-red-50 p-5 rounded-2xl border border-red-100 text-center relative group hover:shadow-md transition-all">
+                    <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg mx-auto mb-4 group-hover:scale-110 transition-transform">1</div>
+                    <h4 class="font-bold text-gray-900 mb-2">Giá Trị Cá Nhân</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Nói về sự thay đổi của chính mình để người nghe hiểu rõ vì sao tri thức này đáng quý và thu hút.</p>
+                </div>
+
+                <!-- Bước 2 -->
+                <div class="bg-red-50 p-5 rounded-2xl border border-red-100 text-center relative group hover:shadow-md transition-all">
+                    <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg mx-auto mb-4 group-hover:scale-110 transition-transform">2</div>
+                    <h4 class="font-bold text-gray-900 mb-2">Nội Dung Cụ Thể</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Trình bày ý chính, ý phụ rõ ràng kèm ví dụ trực quan sinh động để dễ tiếp thu nhất.</p>
+                </div>
+
+                <!-- Bước 3 -->
+                <div class="bg-red-50 p-5 rounded-2xl border border-red-100 text-center relative group hover:shadow-md transition-all">
+                    <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg mx-auto mb-4 group-hover:scale-110 transition-transform">3</div>
+                    <h4 class="font-bold text-gray-900 mb-2">Thông Điệp Cốt Lõi</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Khơi gợi và nhấn mạnh động cơ thực sự, bài học triết lý nhân văn sâu xa của tác giả.</p>
+                </div>
+
+                <!-- Bước 4 -->
+                <div class="bg-red-50 p-5 rounded-2xl border border-red-100 text-center relative group hover:shadow-md transition-all">
+                    <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg mx-auto mb-4 group-hover:scale-110 transition-transform">4</div>
+                    <h4 class="font-bold text-gray-900 mb-2">Hành Động Thực Tế</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Biến lời nói thành hành động với danh sách việc cần làm ngay lập tức sau khi học xong.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal thông báo thành công (Popup) -->
+    <div id="win-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full border-4 border-red-500 shadow-2xl text-center transform scale-95 transition-all">
+            <div class="w-20 h-20 bg-yellow-100 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i data-lucide="crown" class="w-12 h-12"></i>
+            </div>
+            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Chúc Mừng Nhà Chinh Phục!</h3>
+            <p class="text-gray-600 text-sm mb-6 leading-relaxed">
+                Bạn đã giải mã xuất sắc cả 4 bước chia sẻ tri thức cho chủ đề này. Hãy vận dụng công thức kỳ diệu này vào học tập để trở nên tỏa sáng hơn nhé!
+            </p>
+            <div class="space-y-2">
+                <button onclick="closeWinModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">
+                    Tiếp tục học chủ đề khác
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-8 border-t border-gray-850 mt-16">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <img src="https://img.speedreading.vn/logo.png" alt="SpeedReading Logo" class="h-8 brightness-0 invert">
+                <p class="text-xs">© 2026 Học Viện SpeedReading. Kiến tạo thế hệ học sinh chủ động.</p>
+            </div>
+            <div class="flex space-x-6 text-xs font-semibold">
+                <span class="hover:text-white transition-colors cursor-pointer">Phương pháp 4 Bước</span>
+                <span class="hover:text-white transition-colors cursor-pointer">Cẩm nang học tập</span>
+                <span class="hover:text-white transition-colors cursor-pointer">Liên hệ chúng tôi</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dữ liệu & Logic JavaScript -->
+    <script>
+        // Cơ sở dữ liệu 5 câu chuyện chất lượng cho học sinh cấp 2
+        const STORIES_DATA = [
+            {
+                id: 1,
+                title: "Thử thách '20 phút quét nhà' của Nam",
+                badge: "Việc nhà & Trách nhiệm",
+                icon: "home",
+                step1: "Tớ từng là một cậu nhóc lười biếng, ăn cơm xong chỉ thích cắm đầu vào máy tính và xem điện thoại, mặc cho mẹ vất vả quét dọn nhà cửa sau giờ làm việc mệt mỏi. Cho đến một ngày, tớ đọc được câu chuyện 'Chiếc chổi biết nói' dạy về sự thấu hiểu. Tớ nhận ra mình đã quá ích kỷ. Tớ quyết định đứng dậy cầm chổi, chỉ mất 20 phút mỗi ngày thôi mà nhà cửa sạch bong, mẹ tớ đi làm về nở nụ cười thật tươi. Thay đổi nhỏ đó làm tớ tự hào vô cùng vì đã biết chia sẻ!",
+                step2: {
+                    mainPoints: [
+                        { text: "Ý chính 1: Thấu hiểu nỗi vất vả của cha mẹ sau một ngày dài làm việc.", subText: "Nhìn thấy bàn tay chai sần và tấm lưng mỏi của mẹ khi lau nhà." },
+                        { text: "Ý chính 2: Thực hiện hành động nhỏ nhưng mang ý nghĩa lớn.", subText: "Chỉ tốn đúng 20 phút sau khi tan học để quét dọn toàn bộ phòng khách." },
+                        { text: "Ví dụ minh họa: Nụ cười hạnh phúc rạng ngời của mẹ.", subText: "Mẹ đi làm về mệt mỏi nhưng ôm chầm lấy Nam và tặng cậu một cốc nước cam mát lạnh." }
+                    ]
+                },
+                step3: "Hạnh phúc không nằm ở những điều lớn lao, mà nảy mầm từ sự sẻ chia những công việc nhỏ bé nhất hàng ngày. Sự giúp đỡ của bạn là liều thuốc giảm mệt mỏi tuyệt vời nhất cho cha mẹ.",
+                step4: [
+                    "Quét và lau nhà sạch sẽ ngay sau khi tan học về trước khi mẹ chuẩn bị cơm tối.",
+                    "Lập bảng phân công việc nhà nhỏ (rửa bát, đổ rác, quét phòng) cố định mỗi ngày.",
+                    "Dành tặng mẹ lời chúc ngọt ngào sau khi hoàn thành công việc để nhân đôi niềm vui."
+                ],
+                quizzes: {
+                    step1: {
+                        question: "Sự thay đổi quan trọng nhất của Nam ở Bước 1 là gì?",
+                        options: [
+                            { text: "Nam được mua điện thoại mới", isCorrect: false },
+                            { text: "Nam nhận ra sự vất vả của mẹ và chủ động quét nhà giúp mẹ", isCorrect: true },
+                            { text: "Nam học cách chơi game giỏi hơn", isCorrect: false },
+                            { text: "Nam dọn phòng ngủ riêng của mình sạch sẽ", isCorrect: false }
+                        ]
+                    },
+                    step2: {
+                        question: "Chi tiết ví dụ cụ thể nào làm nổi bật hành động của Nam ở Bước 2?",
+                        options: [
+                            { text: "Nam dọn dẹp mất cả một ngày cuối tuần", isCorrect: false },
+                            { text: "Nam quét nhà sạch và nhận được cốc nước cam từ nụ cười của mẹ", isCorrect: true },
+                            { text: "Mẹ mắng Nam vì quét nhà chưa sạch", isCorrect: false },
+                            { text: "Nam đi mua chổi mới cùng mẹ", isCorrect: false }
+                        ]
+                    },
+                    step3: {
+                        question: "Ý nghĩa sâu sắc mà câu chuyện của Nam muốn gửi gắm ở Bước 3 là gì?",
+                        options: [
+                            { text: "Phải chăm chỉ để được mẹ thưởng tiền", isCorrect: false },
+                            { text: "Hạnh phúc nảy mầm từ sự thấu hiểu và sẻ chia việc nhà nhỏ bé hàng ngày", isCorrect: true },
+                            { text: "Trẻ con cấp 2 không cần quét nhà nhiều", isCorrect: false },
+                            { text: "Quét nhà là việc của người lớn trong gia đình", isCorrect: false }
+                        ]
+                    }
+                }
+            },
+            {
+                id: 2,
+                title: "Chiến dịch tự giác 'Bàn học gọn gàng' của Vy",
+                badge: "Chủ động học tập",
+                icon: "book-open",
+                step1: "Trước đây, mỗi lần ngồi vào bàn học là tớ lại mất 15 phút chỉ để đi tìm cây bút chì, cuốn vở bài tập toán hay cục tẩy bị lạc mất giữa đống sách vở hỗn độn. Tớ luôn cáu gắt và cảm thấy học tập thật áp lực. Nhưng sau khi được hướng dẫn phương pháp tổ chức tối giản 5S, tớ dành một buổi chiều dọn dẹp lại toàn bộ góc học tập. Giờ đây, chỉ cần 3 giây tớ đã lấy được thứ mình cần. Tớ thấy tràn đầy cảm hứng học tập và tập trung cao độ hơn hẳn!",
+                step2: {
+                    mainPoints: [
+                        { text: "Ý chính 1: Bàn học lộn xộn gây mất thời gian tìm kiếm và tạo tâm lý chán nản.", subText: "Lãng phí trung bình 15 phút mỗi buổi học chỉ để tìm đồ dùng học tập." },
+                        { text: "Ý chính 2: Sắp xếp bàn học khoa học bằng phương pháp phân loại.", subText: "Chia sách giáo khoa, vở ghi, và dụng cụ học tập vào các khay riêng biệt." },
+                        { text: "Ví dụ minh họa: Góc học tập 'Thần kỳ' tràn ngập ánh sáng.", subText: "Vy trang trí thêm một chậu cây sen đá nhỏ tạo cảm giác dễ chịu khi ngồi làm bài." }
+                    ]
+                },
+                step3: "Môi trường xung quanh phản chiếu tư duy của chính bạn. Một góc học tập ngăn nắp, gọn gàng sẽ mang lại một trí tuệ sáng rõ, tập trung và tràn đầy hứng khởi sáng tạo.",
+                step4: [
+                    "Dọn dẹp bàn học sạch sẽ ngay sau khi hoàn thành bài tập buổi tối.",
+                    "Phân loại sách vở theo từng môn học vào các ngăn tài liệu khác nhau.",
+                    "Chuẩn bị đầy đủ sách vở của ngày hôm sau vào cặp trước khi đi ngủ."
+                ],
+                quizzes: {
+                    step1: {
+                        question: "Vy đã thay đổi thói quen xấu nào từ trước đây?",
+                        options: [
+                            { text: "Hay đi học muộn giờ", isCorrect: false },
+                            { text: "Thói quen để bàn học bừa bộn khiến học tập áp lực và mất thời gian", isCorrect: true },
+                            { text: "Không chịu làm bài tập về nhà", isCorrect: false },
+                            { text: "Hay nói chuyện riêng trong lớp học", isCorrect: false }
+                        ]
+                    },
+                    step2: {
+                        question: "Phương pháp nào được Vy sử dụng ở Bước 2 để giải quyết vấn đề?",
+                        options: [
+                            { text: "Nhờ mẹ dọn dẹp hộ bàn học", isCorrect: false },
+                            { text: "Vứt bỏ toàn bộ sách vở cũ đi", isCorrect: false },
+                            { text: "Sắp xếp phân loại khoa học vào các khay đựng riêng biệt", isCorrect: true },
+                            { text: "Mua bàn học mới to hơn", isCorrect: false }
+                        ]
+                    },
+                    step3: {
+                        question: "Thông điệp cốt lõi ở Bước 3 khuyên chúng ta điều gì?",
+                        options: [
+                            { text: "Mua thật nhiều đồ dùng học tập đắt tiền", isCorrect: false },
+                            { text: "Góc học tập ngăn nắp giúp trí óc sáng rõ, tập trung và hứng khởi học tập hơn", isCorrect: true },
+                            { text: "Chỉ dọn bàn học khi có khách đến chơi nhà", isCorrect: false },
+                            { text: "Học tập không liên quan đến việc bàn học sạch hay bừa", isCorrect: false }
+                        ]
+                    }
+                }
+            },
+            {
+                id: 3,
+                title: "Khánh và bí kíp tự chuẩn bị bữa sáng",
+                badge: "Tự lập & Sẻ chia",
+                icon: "utensils",
+                step1: "Tớ từng quen với việc mỗi sáng thức dậy muộn, được mẹ chuẩn bị sẵn đồ ăn sáng, thậm chí có hôm tớ còn nhăn mặt chê bai nếu món ăn không vừa ý. Một lần mẹ bị sốt cao, tớ phải tự mình loay hoay nấu gói mì mà suýt làm cháy cả bếp. Nhìn mẹ mệt mỏi nằm trên giường bệnh, tớ hối hận vô cùng. Tớ tự hứa phải tự lập. Tớ học cách làm món bánh mì ốp la đơn giản. Giờ đây, tớ không chỉ tự chuẩn bị bữa sáng cho mình mà còn làm tặng cả bố mẹ nữa!",
+                step2: {
+                    mainPoints: [
+                        { text: "Ý chính 1: Học cách tự lập từ những nhu cầu ăn uống cơ bản nhất của bản thân.", subText: "Không ỷ lại vào sự chăm sóc tuyệt đối từ mẹ mỗi buổi sáng." },
+                        { text: "Ý chính 2: Thực hành các kỹ năng bếp núc an toàn cơ bản.", subText: "Biết cách bật bếp ga/bếp từ an toàn và chế biến trứng ốp la, bánh mì kẹp." },
+                        { text: "Ví dụ minh họa: Đĩa bánh mì ốp la ấm áp dành cho cả nhà.", subText: "Bố mẹ vô cùng ngạc nhiên và hạnh phúc khi nhận đĩa thức ăn sáng do chính tay Khánh chuẩn bị." }
+                    ]
+                },
+                step3: "Sự trưởng thành đích thực bắt đầu khi bạn ngừng đòi hỏi sự phục vụ từ người khác và bắt đầu biết tự lo cho bản thân, đồng thời biết quan tâm chăm sóc ngược lại những người mình yêu thương.",
+                step4: [
+                    "Đặt báo thức tự dậy sớm hơn 15 phút mỗi sáng để tự chuẩn bị đồ ăn sáng đơn giản.",
+                    "Học thêm 2 món ăn sáng nhanh, dinh dưỡng từ mẹ hoặc trên Internet.",
+                    "Chủ động dọn dẹp, rửa sạch bát đũa, chảo nấu ngay sau khi ăn xong bữa sáng."
+                ],
+                quizzes: {
+                    step1: {
+                        question: "Sự kiện nào đã khiến Khánh thức tỉnh và thay đổi bản thân ở Bước 1?",
+                        options: [
+                            { text: "Khánh bị điểm kém môn công nghệ", isCorrect: false },
+                            { text: "Mẹ bị sốt cao và Khánh phải tự loay hoay nấu ăn, nhận ra mình quá ỷ lại", isCorrect: true },
+                            { text: "Khánh được đi ăn nhà hàng sang trọng", isCorrect: false },
+                            { text: "Khánh muốn học làm đầu bếp chuyên nghiệp", isCorrect: false }
+                        ]
+                    },
+                    step2: {
+                        question: "Nội dung cụ thể ở Bước 2 hướng dẫn bạn học kỹ năng gì?",
+                        options: [
+                            { text: "Cách dọn dẹp phòng khách", isCorrect: false },
+                            { text: "Kỹ năng bếp núc an toàn cơ bản và tự làm bữa sáng đơn giản", isCorrect: true },
+                            { text: "Cách đi chợ mua sắm tiết kiệm", isCorrect: false },
+                            { text: "Cách pha chế các loại nước ngọt", isCorrect: false }
+                        ]
+                    },
+                    step3: {
+                        question: "Thông điệp cốt lõi ở Bước 3 nhấn mạnh định nghĩa nào về sự 'trưởng thành'?",
+                        options: [
+                            { text: "Trưởng thành là khi lớn lên về tuổi tác", isCorrect: false },
+                            { text: "Trưởng thành là khi ngừng đòi hỏi, biết tự lập và biết quan tâm chăm sóc người khác", isCorrect: true },
+                            { text: "Trưởng thành là khi tự kiếm được thật nhiều tiền", isCorrect: false },
+                            { text: "Trưởng thành là có thể tự do làm mọi điều mình thích", isCorrect: false }
+                        ]
+                    }
+                }
+            },
+            {
+                id: 4,
+                title: "Mai và hành trình chinh phục môn tiếng Anh",
+                badge: "Chủ động học tập",
+                icon: "languages",
+                step1: "Tớ từng vô cùng sợ hãi mỗi khi đến tiết tiếng Anh, đặc biệt là phần từ vựng mới. Tớ thường xuyên trốn tránh làm bài tập và kết quả là điểm số luôn đứng lẹt đẹt cuối lớp. Một lần xem tivi, tớ thấy một bạn nhỏ vùng cao tự tin nói tiếng Anh trôi chảy với du khách nước ngoài. Sự tự tin đó làm tớ bừng tỉnh. Tớ quyết định thay đổi bằng cách mỗi ngày học đúng 5 từ vựng qua thẻ ghi nhớ. Sau 3 tháng chủ động, tớ đã có thể tự tin trò chuyện cơ bản và đạt điểm 9 đầu tiên!",
+                step2: {
+                    mainPoints: [
+                        { text: "Ý chính 1: Vượt qua nỗi sợ tâm lý bằng cách chia nhỏ mục tiêu hàng ngày.", subText: "Thay vì học dồn dập, chỉ tập trung học sâu đúng 5 từ mới mỗi ngày." },
+                        { text: "Ý chính 2: Ứng dụng phương pháp thẻ ghi nhớ (Flashcard) sinh động.", subText: "Vẽ hình minh họa vui nhộn cho từ vựng để kích thích trí nhớ bán cầu não phải." },
+                        { text: "Ví dụ minh họa: Đạt điểm số 9 đầu tiên trong bài kiểm tra định kỳ.", subText: "Sự tiến bộ vượt bậc làm thầy cô và bạn bè trong lớp vô cùng ngưỡng mộ Mai." }
+                    ]
+                },
+                step3: "Không có môn học nào quá khó, chỉ có nỗi sợ hãi trì hoãn cản bước chân ta. Chìa khóa của sự thông thái nằm ở sự kiên trì tích lũy đều đặn mỗi ngày một cách chủ động.",
+                step4: [
+                    "Tự làm 5 thẻ ghi nhớ từ vựng mới mỗi ngày và mang theo bên mình để ôn tập.",
+                    "Dành ra 15 phút mỗi tối nghe nhạc hoặc xem phim hoạt hình tiếng Anh ngắn.",
+                    "Chủ động giơ tay phát biểu ít nhất 1 lần trong mỗi tiết học ngoại ngữ ở lớp."
+                ],
+                quizzes: {
+                    step1: {
+                        question: "Động lực nào đã giúp Mai bừng tỉnh và quyết tâm thay đổi ở Bước 1?",
+                        options: [
+                            { text: "Bị bố mẹ trách phạt nặng nề", isCorrect: false },
+                            { text: "Nhìn thấy hình ảnh một bạn nhỏ vùng cao tự tin nói tiếng Anh trôi chảy", isCorrect: true },
+                            { text: "Mai muốn đi du lịch nước ngoài luôn", isCorrect: false },
+                            { text: "Được thưởng một món quà lớn", isCorrect: false }
+                        ]
+                    },
+                    step2: {
+                        question: "Chiến thuật học từ vựng hiệu quả của Mai ở Bước 2 là gì?",
+                        options: [
+                            { text: "Học thuộc lòng cả quyển từ điển cùng một lúc", isCorrect: false },
+                            { text: "Học sâu 5 từ mới mỗi ngày thông qua thẻ ghi nhớ sinh động", isCorrect: true },
+                            { text: "Chỉ học từ vựng trước khi thi 1 ngày", isCorrect: false },
+                            { text: "Nhờ bạn học giỏi chép bài hộ", isCorrect: false }
+                        ]
+                    },
+                    step3: {
+                        question: "Thông điệp sâu sắc ở Bước 3 muốn khuyên chúng ta điều gì về học tập?",
+                        options: [
+                            { text: "Học tập là do năng khiếu bẩm sinh quyết định", isCorrect: false },
+                            { text: "Kiên trì tích lũy chủ động đều đặn hàng ngày sẽ vượt qua mọi nỗi sợ hãi", isCorrect: true },
+                            { text: "Điểm số là thứ quan trọng duy nhất khi đi học", isCorrect: false },
+                            { text: "Chỉ cần học chăm chỉ môn mình thích là đủ", isCorrect: false }
+                        ]
+                    }
+                }
+            },
+            {
+                id: 5,
+                title: "Thảo và bí quyết 'Vận động viên rửa bát'",
+                badge: "Việc nhà vui vẻ",
+                icon: "smile",
+                step1: "Đối với tớ, bồn bát đĩa bẩn sau mỗi bữa ăn gia đình từng là một 'cơn ác mộng' khủng khiếp nhất. Tớ thường tìm mọi cách lảng tránh, đùn đẩy cho em gái hoặc cằn nhằn khó chịu khi phải làm. Cho đến một ngày, mẹ tớ chia sẻ cách biến công việc nhà thành một trò chơi vận động vui vẻ. Tớ thử thách bản thân làm 'Vận động viên rửa bát siêu tốc' trong 10 phút với âm nhạc sôi động. Thật kỳ diệu, tớ không còn ghét rửa bát nữa mà coi đó là giờ xả stress vô cùng thú vị!",
+                step2: {
+                    mainPoints: [
+                        { text: "Ý chính 1: Thay đổi tư duy từ 'bị ép buộc' sang 'chủ động trải nghiệm vui vẻ'.", subText: "Thay đổi góc nhìn biến công việc tẻ nhạt thành trò chơi rèn luyện." },
+                        { text: "Ý chính 2: Áp dụng phương pháp làm việc tập trung có giới hạn thời gian.", subText: "Sử dụng đồng hồ bấm giờ 10 phút kết hợp bật những bài nhạc yêu thích." },
+                        { text: "Ví dụ minh họa: Tiếng bát đĩa sạch bong kin kít vang lên vui tai.", subText: "Thảo tự hào khoe thành tích dọn dẹp sạch sẽ chảo và bát đũa bóng loáng chỉ trong nháy mắt." }
+                    ]
+                },
+                step3: "Thái độ quyết định trải nghiệm của bạn đối với cuộc sống. Khi bạn chủ động đón nhận mọi nhiệm vụ bằng tinh thần lạc quan, vui vẻ, công việc nặng nhọc nhất cũng sẽ trở thành niềm vui.",
+                step4: [
+                    "Đảm nhận nhiệm vụ rửa bát đũa sạch sẽ sau bữa cơm tối của gia đình.",
+                    "Bật một bài hát truyền năng lượng tích cực khi dọn dẹp căn bếp.",
+                    "Sắp xếp bát đĩa gọn gàng, lau khô ráo bàn ăn sau khi hoàn thành nhiệm vụ."
+                ],
+                quizzes: {
+                    step1: {
+                        question: "Cách thay đổi góc nhìn của Thảo đối với việc rửa bát ở Bước 1 là gì?",
+                        options: [
+                            { text: "Thuê người khác rửa bát hộ mình", isCorrect: false },
+                            { text: "Biến việc rửa bát nhàm chán thành trò chơi vận động siêu tốc vui vẻ", isCorrect: true },
+                            { text: "Được mẹ mua máy rửa bát tự động", isCorrect: false },
+                            { text: "Thảo quyết định nhịn ăn để khỏi phải rửa bát", isCorrect: false }
+                        ]
+                    },
+                    step2: {
+                        question: "Phương pháp cụ thể nào được nhắc tới ở Bước 2 để tăng hiệu suất dọn dẹp?",
+                        options: [
+                            { text: "Vừa rửa bát vừa xem phim hoạt hình trên tivi", isCorrect: false },
+                            { text: "Rửa bát thật nhanh, bỏ qua bước tráng nước sạch", isCorrect: false },
+                            { text: "Sử dụng đồng hồ bấm giờ tập trung 10 phút kết hợp âm nhạc sôi động", isCorrect: true },
+                            { text: "Nhờ em gái phụ rửa cùng để nhanh hơn", isCorrect: false }
+                        ]
+                    },
+                    step3: {
+                        question: "Bài học triết lý quý giá rút ra từ câu chuyện của Thảo ở Bước 3 là gì?",
+                        options: [
+                            { text: "Nên tránh xa những công việc vất vả trong nhà", isCorrect: false },
+                            { text: "Thái độ tích cực, chủ động lạc quan sẽ biến công việc tẻ nhạt nhất thành niềm vui", isCorrect: true },
+                            { text: "Chỉ rửa bát khi được bố mẹ trả công xứng đáng", isCorrect: false },
+                            { text: "Việc nhà là gánh nặng không thể tránh khỏi của học sinh", isCorrect: false }
+                        ]
+                    }
+                }
+            }
+        ];
+
+        // Trạng thái Trò chơi hiện tại
+        let activeStory = null;
+        let currentStep = 1;
+        let storyProgress = {
+            unlockedStep: 1 // Bước lớn nhất được mở khóa cho câu chuyện hiện tại
+        };
+
+        // Khởi động trang web
+        window.addEventListener('DOMContentLoaded', () => {
+            renderStoryList();
+            lucide.createIcons();
+        });
+
+        // Hàm render danh sách câu chuyện ở cột trái
+        function renderStoryList() {
+            const container = document.getElementById('story-list');
+            container.innerHTML = '';
+
+            STORIES_DATA.forEach(story => {
+                const card = document.createElement('div');
+                card.id = `story-card-${story.id}`;
+                card.className = "bg-white border-2 border-gray-150 rounded-2xl p-4 cursor-pointer hover:border-red-500 hover:shadow-md transition-all duration-300 relative overflow-hidden group";
+                
+                // Icon tương ứng
+                let iconName = "book-open";
+                if (story.icon === "home") iconName = "home";
+                if (story.icon === "utensils") iconName = "utensils";
+                if (story.icon === "languages") iconName = "languages";
+                if (story.icon === "smile") iconName = "smile";
+
+                card.innerHTML = `
+                    <div class="flex items-start gap-3.5 relative z-10">
+                        <div class="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center border border-red-100 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="${iconName}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="inline-block bg-red-100 text-red-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full mb-1">${story.badge}</span>
+                            <h4 class="font-bold text-gray-900 group-hover:text-red-600 transition-colors text-sm md:text-base leading-tight">${story.title}</h4>
+                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">${story.step1}</p>
+                        </div>
+                    </div>
+                    <div class="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i data-lucide="arrow-right-circle" class="w-5 h-5 text-red-500"></i>
+                    </div>
+                `;
+
+                card.onclick = () => selectStory(story.id);
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Hàm xử lý khi chọn câu chuyện
+        function selectStory(storyId) {
+            // Cập nhật trạng thái active trong UI danh sách
+            STORIES_DATA.forEach(s => {
+                const el = document.getElementById(`story-card-${s.id}`);
+                if (s.id === storyId) {
+                    el.classList.remove('border-gray-150', 'bg-white');
+                    el.classList.add('border-red-500', 'bg-red-50/30');
+                } else {
+                    el.classList.remove('border-red-500', 'bg-red-50/30');
+                    el.classList.add('border-gray-150', 'bg-white');
+                }
+            });
+
+            // Set câu chuyện hiện tại
+            activeStory = STORIES_DATA.find(s => s.id === storyId);
+            currentStep = 1;
+            storyProgress.unlockedStep = 1;
+
+            // Chuyển đổi giao diện hiển thị
+            document.getElementById('welcome-placeholder').classList.add('hidden');
+            document.getElementById('game-panel').classList.remove('hidden');
+
+            // Cập nhật thông tin tiêu đề và dữ liệu các bước
+            document.getElementById('current-story-title').innerText = activeStory.title;
+            
+            // Đặt lại các tab khóa/mở khóa
+            resetTabsUI();
+            
+            // Tải dữ liệu bước 1
+            loadStepData(1);
+
+            // Cuộn mượt đến khu vực trò chơi trên thiết bị di động
+            if (window.innerWidth < 1024) {
+                document.getElementById('game-panel').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Thiết lập lại các Tab UI về mặc định ban đầu
+        function resetTabsUI() {
+            for (let i = 1; i <= 4; i++) {
+                const tab = document.getElementById(`progress-tab-${i}`);
+                const icon = document.getElementById(`check-icon-${i}`);
+                
+                // Gỡ trạng thái check thành công
+                icon.classList.add('hidden');
+                
+                // Thiết lập trạng thái tab
+                if (i === 1) {
+                    tab.className = "py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 border-red-500 bg-red-600 text-white shadow-sm";
+                } else {
+                    tab.className = "py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 step-locked border-gray-200 bg-gray-50 text-gray-400";
+                }
+            }
+        }
+
+        // Tải dữ liệu cụ thể cho từng bước tương ứng
+        function loadStepData(step) {
+            currentStep = step;
+            
+            // Ẩn tất cả các khung nội dung
+            document.querySelectorAll('.step-pane').forEach(pane => pane.classList.add('hidden'));
+            // Hiển thị khung hiện tại
+            document.getElementById(`step-content-${step}`).classList.remove('hidden');
+
+            // Cập nhật trạng thái nút Quay lại
+            const prevBtn = document.getElementById('prev-btn');
+            if (step === 1) {
+                prevBtn.classList.add('opacity-0', 'pointer-events-none');
+            } else {
+                prevBtn.classList.remove('opacity-0', 'pointer-events-none');
+            }
+
+            // Nút tiếp theo mặc định ẩn đi cho đến khi vượt qua câu hỏi trắc nghiệm
+            const nextBtn = document.getElementById('next-btn');
+            const stepHint = document.getElementById('step-hint');
+
+            if (step < storyProgress.unlockedStep) {
+                // Đã giải quyết xong bước này trước đó
+                nextBtn.classList.remove('hidden');
+                stepHint.classList.add('hidden');
+            } else if (step === 4) {
+                // Ở bước cuối cùng
+                nextBtn.classList.add('hidden');
+                stepHint.innerText = "Chúc mừng bạn đã mở khóa thành công bước cuối cùng!";
+                stepHint.classList.remove('hidden');
+            } else {
+                // Đang thử thách, chưa vượt qua
+                nextBtn.classList.add('hidden');
+                stepHint.innerText = "⚡️ Trả lời đúng câu hỏi trắc nghiệm bên dưới để mở khóa Bước tiếp theo!";
+                stepHint.classList.remove('hidden');
+            }
+
+            // Điền dữ liệu văn bản động dựa vào bước
+            if (step === 1) {
+                document.getElementById('step-1-text').innerText = `"${activeStory.step1}"`;
+                renderQuiz(1);
+            } else if (step === 2) {
+                const area = document.getElementById('step-2-content-area');
+                area.innerHTML = '';
+                activeStory.step2.mainPoints.forEach((point, idx) => {
+                    area.innerHTML += `
+                        <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm flex gap-3">
+                            <span class="w-6 h-6 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">${idx + 1}</span>
+                            <div>
+                                <h5 class="font-bold text-gray-900 text-sm">${point.text}</h5>
+                                <p class="text-xs text-gray-500 mt-0.5">${point.subText}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                renderQuiz(2);
+            } else if (step === 3) {
+                document.getElementById('step-3-text').innerText = activeStory.step3;
+                renderQuiz(3);
+            } else if (step === 4) {
+                const area = document.getElementById('step-4-content-area');
+                area.innerHTML = '';
+                activeStory.step4.forEach((action, idx) => {
+                    area.innerHTML += `
+                        <div class="bg-white p-3.5 rounded-xl border-l-4 border-l-emerald-500 border-y border-r border-gray-200 shadow-sm flex items-center gap-3">
+                            <i data-lucide="check-circle-2" class="text-emerald-500 w-5 h-5 flex-shrink-0"></i>
+                            <span class="text-sm font-semibold text-gray-800">${action}</span>
+                        </div>
+                    `;
+                });
+                lucide.createIcons();
+            }
+
+            // Cập nhật trạng thái màu sắc các Tab điều hướng trên đầu
+            updateTabsStyle();
+        }
+
+        // Cập nhật phong cách các thẻ Tab theo tiến trình thực tế
+        function updateTabsStyle() {
+            for (let i = 1; i <= 4; i++) {
+                const tab = document.getElementById(`progress-tab-${i}`);
+                
+                // Mở khóa hoặc khóa tab dựa trên tiến trình unlockedStep
+                if (i <= storyProgress.unlockedStep) {
+                    tab.classList.remove('step-locked', 'border-gray-200', 'bg-gray-50', 'text-gray-400');
+                    
+                    // Nếu là tab đang được chọn xem
+                    if (i === currentStep) {
+                        tab.className = "py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 border-red-500 bg-red-600 text-white shadow-sm";
+                    } else {
+                        // Đã vượt qua nhưng không xem hiện tại
+                        tab.className = "py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 border-red-200 bg-red-50 text-red-600 hover:bg-red-100";
+                    }
+                } else {
+                    // Chưa được mở khóa
+                    tab.className = "py-2.5 rounded-xl border text-center transition-all duration-300 font-bold text-xs flex flex-col items-center justify-center gap-1 step-locked border-gray-200 bg-gray-50 text-gray-400";
+                }
+            }
+        }
+
+        // Tạo câu hỏi Trắc nghiệm Mini-game
+        function renderQuiz(step) {
+            let quizData;
+            let optionsContainer;
+
+            if (step === 1) {
+                quizData = activeStory.quizzes.step1;
+                optionsContainer = document.getElementById('step-1-quiz-options');
+            } else if (step === 2) {
+                quizData = activeStory.quizzes.step2;
+                optionsContainer = document.getElementById('step-2-quiz-options');
+            } else if (step === 3) {
+                quizData = activeStory.quizzes.step3;
+                optionsContainer = document.getElementById('step-3-quiz-options');
+            } else {
+                return; // Không có quiz ở bước 4
+            }
+
+            // Clear container cũ
+            optionsContainer.innerHTML = '';
+
+            // Render câu hỏi lên tiêu đề nhỏ
+            const questionTitle = optionsContainer.previousElementSibling;
+            questionTitle.innerText = `⚡️ Thử thách: ${quizData.question}`;
+
+            // Render các tùy chọn trả lời
+            quizData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-3 rounded-xl border-2 border-gray-200 bg-white hover:border-red-300 hover:bg-red-50/20 text-xs text-left font-semibold text-gray-700 transition-all duration-200";
+                btn.innerText = opt.text;
+                btn.onclick = () => checkQuizAnswer(opt.isCorrect, btn, step);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // Kiểm tra câu trả lời Trắc nghiệm
+        function checkQuizAnswer(isCorrect, element, step) {
+            const container = element.parentElement;
+            const buttons = container.querySelectorAll('button');
+
+            // Khóa nhấn lại
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                element.className = "p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-xs text-left font-bold text-emerald-800 transition-all duration-200";
+                
+                // Hiển thị icon Check thành công ở tab tiến trình
+                document.getElementById(`check-icon-${step}`).classList.remove('hidden');
+
+                // Mở khóa bước kế tiếp
+                if (storyProgress.unlockedStep === step) {
+                    storyProgress.unlockedStep = step + 1;
+                }
+
+                // Hiển thị nút "Tiếp theo"
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.getElementById('step-hint').classList.add('hidden');
+
+                // Hiệu ứng ăn mừng nhỏ bằng âm thanh tinh tế (phát tiếng click vui nhộn)
+                playSuccessBeep();
+            } else {
+                element.className = "p-3 rounded-xl border-2 border-red-400 bg-red-50 text-xs text-left font-semibold text-red-700 transition-all duration-200";
+                
+                // Cho phép chọn lại sau 1 giây phạt
+                setTimeout(() => {
+                    buttons.forEach(btn => {
+                        if (!btn.classList.contains('border-red-400')) {
+                            btn.disabled = false;
+                        }
+                    });
+                    element.innerHTML += " ❌ Thử lại";
+                }, 1000);
+            }
+        }
+
+        // Chuyển bước kế tiếp thủ công khi click tab đã mở khóa
+        function switchStepView(step) {
+            if (step <= storyProgress.unlockedStep) {
+                loadStepData(step);
+            }
+        }
+
+        // Nút điều khiển "Quay lại"
+        function prevStep() {
+            if (currentStep > 1) {
+                loadStepData(currentStep - 1);
+            }
+        }
+
+        // Nút điều khiển "Tiếp theo"
+        function nextStep() {
+            if (currentStep < 4 && currentStep < storyProgress.unlockedStep) {
+                loadStepData(currentStep + 1);
+            }
+        }
+
+        // Reset tiến độ của câu chuyện hiện tại
+        function resetStoryProgress() {
+            if (activeStory) {
+                selectStory(activeStory.id);
+            }
+        }
+
+        // Tạo âm thanh bíp vui vẻ bằng Web Audio API khi trả lời đúng
+        function playSuccessBeep() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime); // Tone C5
+                osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // Tone E5
+                osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // Tone G5
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.4);
+            } catch(e) {}
+        }
+
+        // Kích hoạt thắng cuộc trò chơi mở khóa
+        function triggerWin() {
+            document.getElementById('win-modal').classList.remove('hidden');
+        }
+
+        // Đóng Popup chiến thắng
+        function closeWinModal() {
+            document.getElementById('win-modal').classList.add('hidden');
+            // Cuộn lên đầu để chọn câu chuyện khác
+            document.getElementById('story-list').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

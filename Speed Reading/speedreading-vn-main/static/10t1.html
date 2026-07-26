@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGK Speed Reading Lớp 10 - Bài 1 Tiết 1</title>
+    <style>
+        /* Cấu hình trang A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 20mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.5;
+            color: #222;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        
+        /* Header và Tiêu đề */
+        .header {
+            text-align: right;
+            font-size: 13px;
+            color: #0a3d62;
+            border-bottom: 2px solid #0a3d62;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .lesson-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f39c12;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lesson-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0a3d62;
+            text-transform: uppercase;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+        .sub-title {
+            font-size: 16px;
+            color: #555;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* Định dạng các khối nội dung (Boxes) */
+        .box {
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            page-break-inside: avoid;
+        }
+        .box-title {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .box-title span {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        /* Khối Mục tiêu */
+        .box-muc-tieu { background-color: #f4f8fb; border-left: 6px solid #0a3d62; }
+        .box-muc-tieu .box-title { color: #0a3d62; }
+        
+        /* Khối Pha 1 (Định vị) */
+        .box-pha1 { background-color: #fdfbf7; border: 2px dashed #f39c12; }
+        .box-pha1 .box-title { color: #d68910; }
+
+        /* Khối Pha 2 (Bộ công cụ) */
+        .box-pha2 { background-color: #f4f6f9; border-left: 6px solid #34495e; }
+        .box-pha2 .box-title { color: #2c3e50; }
+
+        /* Khối Pha 3 (Mở rộng - Đọc thử) */
+        .box-pha3 { background-color: #fafafa; border: 1px solid #0a3d62; }
+        .box-pha3 .box-title { color: #0a3d62; }
+
+        /* Khối Pha 4 (Chuyển hóa) */
+        .box-pha4 { background-color: #f4fdf8; border-left: 6px solid #27ae60; }
+        .box-pha4 .box-title { color: #27ae60; }
+
+        /* Typography & Đặc biệt */
+        .highlight-blue { color: #0a3d62; font-weight: bold; }
+        .highlight-gold { color: #d68910; font-weight: bold; }
+        
+        .quote-box {
+            background-color: #0a3d62;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            margin: 15px 0;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            font-style: italic;
+        }
+
+        /* Khối Văn bản đọc thử */
+        .exam-text {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-left: 4px solid #0a3d62;
+            padding: 25px 20px 20px 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .exam-tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #0a3d62;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-bottom-right-radius: 8px;
+        }
+        .word-count-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #f39c12;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-bottom-left-radius: 8px;
+        }
+        .exam-text p { text-indent: 20px; margin-bottom: 10px; text-align: justify; }
+
+        /* Form điền kết quả */
+        .result-form {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f4f8fb;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 16px;
+            border: 1px solid #baccde;
+        }
+        .result-item span { color: #d68910; }
+
+        /* Lists */
+        ul { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        ol { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        p { margin-top: 5px; margin-bottom: 10px; text-align: justify; }
+
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        CHỦ ĐỀ I: TƯ DUY ĐỌC CHỦ ĐỘNG VÀ THIẾT LẬP LỘ TRÌNH CÁ NHÂN
+    </div>
+
+    <div class="title-container">
+        <div class="lesson-number">Bài 1: Từ "Đọc để thi" đến "Đọc để sống"</div>
+        <div class="lesson-title">Tiết 1: Đánh giá tổng quan tốc độ đọc trên văn bản phi hư cấu</div>
+        <div class="sub-title">"Tri thức thực sự bắt đầu khi bạn gấp sách giáo khoa lại."</div>
+    </div>
+
+    <div class="box box-muc-tieu">
+        <h3 class="box-title"><span>🎯</span> Yêu cầu cần đạt</h3>
+        <ul>
+            <li>Đo lường được tốc độ đọc (WPM) và hiệu suất (ERR) trên một văn bản Phi hư cấu (Non-fiction) mang tính triết lý, phát triển bản thân.</li>
+            <li>Nhận diện được sự khác biệt trong cách não bộ xử lý thông tin "Sách kỹ năng" so với "Sách giáo khoa".</li>
+            <li>Định vị được "lỗ hổng" trong thói quen tiếp nhận tri thức của bản thân.</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha1">
+        <h3 class="box-title"><span>🧭</span> BƯỚC 1: ĐỊNH VỊ NHU CẦU (Self-Reflection)</h3>
+        <p>Hãy trung thực trả lời: Trong suốt mùa hè vừa qua, ngoài sách giáo khoa và tài liệu luyện thi, em đã tự nguyện đọc trọn vẹn bao nhiêu cuốn sách? Đó là thể loại gì (Truyện tranh, Tiểu thuyết, Kỹ năng sống, hay Lịch sử)?</p>
+        <p>Thực tế cho thấy, nhiều học sinh có Tốc độ đọc rất cao khi đọc truyện ngôn tình hay truyện tranh, nhưng lại <span class="highlight-gold">"ngủ gật" chỉ sau 5 trang</span> sách Tâm lý học hoặc Kinh tế. Ở lớp 10, chúng ta cần làm quen với những văn bản mang tính "nâng cấp tư duy" đòi hỏi sự tập trung cao độ.</p>
+    </div>
+
+    <div class="box box-pha2">
+        <h3 class="box-title"><span>🛠️</span> BƯỚC 2: CUNG CẤP BỘ CÔNG CỤ</h3>
+        <p>Văn bản em sắp đọc dưới đây thuộc dòng sách <strong>Phát triển bản thân (Self-help)</strong>, trình bày về một quy luật nổi tiếng. Để đọc hiệu quả dòng sách này, hãy sử dụng công cụ <span class="highlight-blue">"Đọc đi tìm Thông điệp"</span>:</p>
+        <ul>
+            <li><strong>Không sa đà vào ví dụ:</strong> Tác giả thường kể những câu chuyện rất dài để minh họa. Em có thể đọc lướt nhanh các ví dụ.</li>
+            <li><strong>Tập trung vào Đúc kết:</strong> Tìm kiếm các câu chốt mang tính quy luật (thường nằm ở đầu hoặc cuối đoạn văn).</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha3">
+        <h3 class="box-title"><span>🌐</span> BƯỚC 3: MỞ RỘNG TRI THỨC (Thực hành đo lường)</h3>
+        <p>Chuẩn bị đồng hồ bấm giờ. Hãy đọc đoạn trích dưới đây để tìm hiểu về một khái niệm có thể thay đổi cách em nỗ lực mỗi ngày. Bấm <strong>"Bắt đầu"</strong> và <strong>"Dừng"</strong> để ghi nhận thời gian.</p>
+        
+        <div class="exam-text">
+            <div class="exam-tag">VĂN BẢN KỸ NĂNG SỐNG</div>
+            <div class="word-count-tag">ĐỘ DÀI: 280 TỪ</div>
+            <br>
+            <p>Albert Einstein từng gọi "Lãi kép" (Compound Interest) là kỳ quan thứ 8 của thế giới. Trong tài chính, nếu bạn gửi tiết kiệm, số tiền lãi sinh ra sẽ được cộng dồn vào gốc để tiếp tục sinh lãi, tạo ra sự tăng trưởng khổng lồ theo thời gian. Tuy nhiên, ít ai nhận ra rằng, nguyên lý lãi kép không chỉ tồn tại trong ngân hàng, mà nó áp dụng cho chính thói quen và sự phát triển cá nhân của chúng ta.</p>
+            <p>Hãy tưởng tượng, nếu mỗi ngày bạn nỗ lực để bản thân tốt hơn chỉ 1% so với ngày hôm qua, thì sau một năm (365 ngày), bạn sẽ tiến bộ gấp 37 lần. Ngược lại, nếu mỗi ngày bạn lười biếng và thụt lùi đi 1%, sau một năm, giá trị năng lực của bạn sẽ suy giảm gần như về con số không. Sự khác biệt giữa thành công và thất bại không nằm ở những quyết định mang tính bước ngoặt, mà nằm ở những lựa chọn nhỏ bé được lặp đi lặp lại hàng ngày.</p>
+            <p>Việc bạn đọc 10 trang sách hôm nay sẽ không biến bạn thành thiên tài ngay ngày mai. Việc bạn ăn một chiếc bánh ngọt hôm nay cũng không khiến bạn béo phì ngay lập tức. Chính vì hậu quả không diễn ra ngay tức khắc, con người thường dễ dàng thỏa hiệp với những thói quen xấu. Nhưng khi thời gian đủ dài, "lãi kép" của thói quen sẽ bộc lộ sức mạnh đáng sợ của nó.</p>
+            <p>Tương lai của bạn không được quyết định bởi những gì bạn làm đôi khi, mà bởi những gì bạn làm mỗi ngày.</p>
+        </div>
+
+        <p><strong>Thời gian đọc của em:</strong> ....... Giây.</p>
+        <p><em>Tính WPM:</em> (280 ÷ Số giây) × 60 = <strong>....... WPM.</strong></p>
+
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+        <p><strong>BÀI TEST HIỂU BÀI (Chỉ số CR):</strong></p>
+        <ol>
+            <li><strong>Nguyên lý cốt lõi của "lãi kép" khi áp dụng vào phát triển cá nhân là gì?</strong><br>
+                A. Đầu tư tiền vào ngân hàng từ khi còn trẻ.<br>
+                B. Sự tăng trưởng dựa trên những nỗ lực nhỏ được lặp đi lặp lại hàng ngày.<br>
+                C. Cố gắng thay đổi hoàn toàn bản thân chỉ trong một ngày.
+            </li>
+            <li><strong>Tại sao con người lại thường dễ dàng thỏa hiệp với những thói quen xấu?</strong><br>
+                A. Vì thói quen xấu mang lại sự thoải mái ngay lập tức.<br>
+                B. Vì không ai có đủ sự kiên trì trong 365 ngày.<br>
+                C. Vì hậu quả của thói quen xấu không diễn ra ngay lập tức.
+            </li>
+            <li><strong>Nếu mỗi ngày bạn tốt lên 1%, sau 1 năm (365 ngày), bạn sẽ tiến bộ khoảng bao nhiêu lần?</strong><br>
+                A. 10 lần.<br>
+                B. 37 lần.<br>
+                C. 365 lần.
+            </li>
+        </ol>
+        <p><em>(Giáo viên công bố đáp án: 1-B, 2-C, 3-B. Tính % CR)</em></p>
+    </div>
+
+    <div class="box box-pha4">
+        <h3 class="box-title"><span>📣</span> BƯỚC 4: CHUYỂN HÓA VÀ LAN TỎA</h3>
+        <p>Ghi nhận điểm số đo lường đầu năm học vào bảng sau:</p>
+        
+        <div class="result-form">
+            <div class="result-item">WPM: <span>..........</span></div>
+            <div class="result-item">CR: <span>......%</span></div>
+            <div class="result-item">ERR TỔNG: <span>..........</span></div>
+        </div>
+
+        <div class="quote-box">
+            "Sức mạnh của Tốc đọc không phải là lướt qua hàng nghìn trang sách, mà là khả năng nhanh chóng tìm thấy 1% tri thức giá trị nhất để thay đổi cuộc đời mình."
+        </div>
+        
+        <p><strong>BÀI TẬP VỀ NHÀ:</strong> Hãy viết một đoạn văn ngắn (khoảng 50 từ) chia sẻ về một <em>"thói quen 1% tích cực"</em> mà em dự định sẽ bắt đầu thực hiện kể từ ngày hôm nay.</p>
+    </div>
+
+    <div class="footer">
+        Sách giáo khoa Speed Reading 10 - Khai phóng tri thức, Định vị bản thân | Trang 6
+    </div>
+
+</body>
+</html>

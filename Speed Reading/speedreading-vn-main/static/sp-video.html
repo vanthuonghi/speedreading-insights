@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading - Trọn bộ Video Tự Học X3 Tốc Độ Đọc</title>
+    <meta name="description" content="Sở hữu trọn bộ video kỹ thuật Speed Reading giúp quý anh chị tăng tốc độ đọc hiểu và ghi nhớ ngay tại nhà.">
+    
+    <!-- 1. Cài đặt Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Cấu hình Import Map chuẩn hóa để nạp React và JSX Runtime -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0"
+        }
+    }
+    </script>
+
+    <!-- 3. Cài đặt Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Font chữ đẹp -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .bg-dots {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out; }
+
+        @keyframes pulse-red {
+            0%, 100% { background-color: #fee2e2; color: #991b1b; }
+            50% { background-color: #ef4444; color: white; }
+        }
+        .animate-pulse-urgent { animation: pulse-red 2s infinite; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { 
+            Clock, BookOpen, Brain, CheckCircle, AlertTriangle, 
+            ChevronDown, ChevronUp, Star, Zap, ShieldCheck, 
+            ArrowRight, User, Mail, Phone, Loader, PlayCircle, 
+            Building, GraduationCap, Users, Quote, XCircle, Target,
+            Calendar, Music, FileText, CheckSquare, Gift, Video, Book,
+            Lock, Play, X, Trophy, Download
+        } from 'lucide-react';
+
+        // --- Data ---
+        const LESSONS_DATA = [
+            { id: 1, title: "Bài 1: Tại sao quý anh chị cần kỹ năng đọc hiểu nhanh", duration: "10:05", isFree: true, videoId: "fSd3Wlwfnjc" },
+            { id: 2, title: "Bài 2: Lịch sử Speed Reading Hoa Kỳ", duration: "08:30", isFree: true, videoId: "WNda9q_Ler0" },
+            { id: 3, title: "Bài 3: Nguyên lý hoạt động của não bộ", duration: "12:15", isFree: false },
+            { id: 4, title: "Bài 4: Kỹ thuật loại bỏ đọc thầm", duration: "15:20", isFree: false },
+            { id: 5, title: "Bài 5: Mở rộng tầm nhìn ngoại vi", duration: "09:45", isFree: false },
+            { id: 6, title: "Bài 6: Kỹ thuật làm mềm sách", duration: "11:10", isFree: false },
+            { id: 7, title: "Bài 7: Tư thế ngồi chuẩn", duration: "07:50", isFree: false },
+            { id: 8, title: "Bài 8: Kỹ thuật lật trang tốc độ cao", duration: "14:00", isFree: false },
+            { id: 9, title: "Bài 9: Kỹ thuật chỉ tay 1 dòng", duration: "20:00", isFree: false },
+            { id: 10, title: "Bài 10: Kỹ thuật chỉ tay 2 dòng", duration: "18:45", isFree: false },
+            { id: 11, title: "Bài 11: Kỹ thuật Lazy S (Đỉnh cao)", duration: "22:15", isFree: false },
+            { id: 12, title: "Bài 12: Công thức 3-2-1", duration: "25:30", isFree: false },
+            { id: 13, title: "Bài 13: Sơ đồ tư duy (Mindmap)", duration: "30:00", isFree: false },
+            { id: 14, title: "Bài 14: Công thức PRPR (Preview - Read...)", duration: "19:20", isFree: false },
+            { id: 15, title: "Bài 15: Quy trình luyện tập mỗi ngày", duration: "16:50", isFree: false },
+            { id: 16, title: "Bài 16: Ứng dụng đọc sách chuyên ngành", duration: "21:10", isFree: false },
+            { id: 17, title: "Bài 17: Tổng kết & Định hướng học tập", duration: "15:00", isFree: false },
+        ];
+
+        // --- Components ---
+
+        const VideoModal = ({ videoId, onClose }) => {
+            if (!videoId) return null;
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in" onClick={onClose}>
+                    <div className="bg-black w-full max-w-4xl aspect-video rounded-xl overflow-hidden shadow-2xl relative" onClick={e => e.stopPropagation()}>
+                        <button onClick={onClose} className="absolute top-2 right-2 md:top-4 md:right-4 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-colors">
+                            <X size={24} />
+                        </button>
+                        <iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1`} title="YouTube video player" frameBorder="0" allowFullScreen></iframe>
+                    </div>
+                </div>
+            );
+        };
+
+        const CTAButton = ({ text, subtext, onClick, variant = 'primary', type = 'button', disabled = false, isLoading = false, className = '' }) => {
+            const baseClasses = `w-full md:w-auto font-bold uppercase tracking-wide py-4 px-8 rounded-full shadow-xl transform transition-all hover:scale-105 active:scale-95 flex flex-col items-center justify-center text-center disabled:opacity-70 disabled:cursor-not-allowed ${className}`;
+            const variants = {
+                primary: "bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 text-red-900 border-b-4 border-yellow-700",
+                secondary: "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white border-b-4 border-red-900",
+                white: "bg-white hover:bg-gray-50 text-red-600 border-b-4 border-gray-200"
+            };
+            return (
+                <button onClick={onClick} type={type} disabled={disabled} className={`${baseClasses} ${variants[variant]}`}>
+                    {isLoading ? (
+                        <span className="flex items-center gap-2"><Loader className="animate-spin" size={24} /> Đang xử lý...</span>
+                    ) : (
+                        <React.Fragment>
+                            <span className="text-xl md:text-2xl flex items-center gap-2">{text} <ArrowRight size={24} /></span>
+                            {subtext && <span className="text-xs md:text-sm font-normal mt-1 opacity-90">{subtext}</span>}
+                        </React.Fragment>
+                    )}
+                </button>
+            );
+        };
+
+        const Section = ({ children, className = "", id = "", maxWidth = "max-w-5xl" }) => (
+            <section id={id} className={`py-16 px-4 md:px-0 relative ${className}`}>
+                <div className={`${maxWidth} mx-auto relative z-10`}>{children}</div>
+            </section>
+        );
+
+        const InputField = ({ icon: Icon, type, name, placeholder, required = false }) => (
+            <div className="relative mb-4">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500"><Icon size={20} /></div>
+                <input type={type} name={name} required={required} placeholder={placeholder} className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none text-gray-900 placeholder-gray-500 bg-gray-50 transition-all" />
+            </div>
+        );
+
+        const handleImageError = (e) => { e.target.src = "https://placehold.co/800x600/e2e8f0/1e293b?text=Image+Unavailable"; };
+
+        // --- Main Application ---
+        function App() {
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [activeVideoId, setActiveVideoId] = useState(null);
+
+            const WEBHOOK_URL = "https://crm.speedreading.vn/?fluentcrm=1&route=contact&hash=f5bbf0cb-2f9c-4bbc-ad64-5958ab798237";
+            const REDIRECT_URL = "https://speedreading.vn/paymentvideo";
+
+            const scrollToCheckout = () => {
+                document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
+            };
+
+            const handleFormSubmit = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                const formData = new FormData(e.target);
+                try {
+                    await fetch(WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: formData });
+                    window.location.href = REDIRECT_URL; 
+                } catch (error) {
+                    console.error("Submission error:", error);
+                    alert("Có lỗi xảy ra trong quá trình xử lý. Quý anh chị vui lòng thử lại!");
+                    setIsSubmitting(false);
+                }
+            };
+
+            return (
+                <div className="font-sans text-gray-800 bg-dots min-h-screen pb-0 overflow-x-hidden relative">
+                    <VideoModal videoId={activeVideoId} onClose={() => setActiveVideoId(null)} />
+
+                    {/* 1. SCARCITY BAR */}
+                    <div className="fixed top-0 left-0 right-0 bg-red-700 text-white text-center py-3 z-50 font-bold text-xs md:text-sm shadow-md flex justify-center items-center gap-2 px-2">
+                        <div className="flex items-center gap-1 animate-pulse">
+                            <Zap size={16} className="text-yellow-300"/>
+                            <span className="uppercase">ƯU ĐÃI DUY NHẤT HÔM NAY: TRỌN BỘ VIDEO CHỈ 200K (GIÁ GỐC 2TR)</span>
+                        </div>
+                    </div>
+
+                    {/* 2. HERO SECTION */}
+                    <div className="relative pt-32 pb-20 bg-gray-900 text-white overflow-hidden border-b-4 border-yellow-500">
+                        <div className="absolute inset-0 z-0">
+                            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Learning" className="w-full h-full object-cover opacity-20" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-gray-900"></div>
+                        </div>
+
+                        <div className="relative z-10 max-w-5xl mx-auto text-center px-4">
+                            <div className="inline-flex items-center gap-2 bg-yellow-500 text-red-900 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6 shadow-lg animate-fade-in-up border border-yellow-400">
+                                <Trophy size={14} /> Giải pháp thăng tiến cho người bận rộn
+                            </div>
+                            
+                            <h1 className="flex flex-col items-center justify-center font-extrabold mb-6 drop-shadow-xl tracking-tight">
+                                <span className="text-3xl md:text-5xl leading-tight mb-2 block text-gray-100">
+                                    X3 TỐC ĐỘ ĐỌC HIỂU
+                                </span>
+                                <span className="text-4xl md:text-6xl lg:text-7xl text-yellow-400 leading-tight block uppercase">
+                                    LÀM CHỦ KIẾN THỨC <br/> CHỈ VỚI 200.000Đ
+                                </span>
+                            </h1>
+                            
+                            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed font-light">
+                                Kính thưa quý anh chị, đây là cơ hội để quý anh chị sở hữu trọn bộ bí kíp đọc hiểu nhanh của các chuyên gia hàng đầu. Học mọi lúc, mọi nơi, không giới hạn thời gian.
+                            </p>
+                            
+                            <div className="max-w-xs md:max-w-md mx-auto mb-8">
+                                <CTAButton 
+                                    text="SỞ HỮU TRỌN BỘ NGAY" 
+                                    subtext="Chỉ 200.000đ - Nhận link học tức thì"
+                                    variant="primary"
+                                    onClick={scrollToCheckout}
+                                    className="w-full"
+                                />
+                            </div>
+                            
+                            <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-sm text-gray-400 font-medium">
+                                <span className="flex items-center gap-1.5"><Video size={18} className="text-red-500"/> 17 Video bài giảng</span>
+                                <span className="flex items-center gap-1.5"><ShieldCheck size={18} className="text-blue-500"/> Truy cập trọn đời</span>
+                                <span className="flex items-center gap-1.5"><Download size={18} className="text-green-500"/> Tài liệu thực hành kèm theo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 3. LỢI ÍCH THỰC TẾ */}
+                    <Section className="bg-white">
+                        <div className="grid md:grid-cols-2 gap-10 items-center">
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-yellow-400 rounded-2xl transform rotate-2 opacity-10 group-hover:rotate-4 transition-transform"></div>
+                                <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Books and reading" className="relative rounded-2xl shadow-xl w-full object-cover h-auto md:h-96 hover:scale-[1.01] transition-all duration-500 border border-gray-100" onError={handleImageError} />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl font-bold mb-6 leading-tight text-gray-900">Tại sao quý anh chị không nên bỏ lỡ cơ hội này?</h2>
+                                <p className="text-gray-600 mb-6 text-lg italic">
+                                    "Đọc sách là cách rẻ nhất để trò chuyện với những bộ óc vĩ đại. Nhưng đọc chậm là rào cản lớn nhất của sự phát triển."
+                                </p>
+                                <ul className="space-y-4">
+                                    <li className="flex items-start">
+                                        <CheckCircle className="text-green-500 mr-3 flex-shrink-0 mt-1" />
+                                        <div>
+                                            <span className="font-bold text-gray-900">Tiết kiệm thời gian tối đa:</span>
+                                            <p className="text-sm text-gray-500">Giúp quý anh chị xử lý tài liệu, email, sách chuyên ngành nhanh gấp 3 lần so với hiện tại.</p>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <CheckCircle className="text-green-500 mr-3 flex-shrink-0 mt-1" />
+                                        <div>
+                                            <span className="font-bold text-gray-900">Chi phí cực kỳ tối ưu:</span>
+                                            <p className="text-sm text-gray-500">Chỉ 200.000đ - bằng một bữa ăn sáng - quý anh chị đã sở hữu kỹ năng đi cùng suốt đời.</p>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <CheckCircle className="text-green-500 mr-3 flex-shrink-0 mt-1" />
+                                        <div>
+                                            <span className="font-bold text-gray-900">Học tập chủ động:</span>
+                                            <p className="text-sm text-gray-500">Không cần chờ đợi lịch Zoom, quý anh chị có thể học bất cứ khi nào rảnh rỗi trên điện thoại hoặc máy tính.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </Section>
+
+                    {/* 4. SYLLABUS - NỘI DUNG KHOÁ HỌC */}
+                    <Section className="bg-gray-50 border-y border-gray-200" maxWidth="max-w-6xl">
+                        <div className="text-center mb-10">
+                            <span className="text-xs font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">NỘI DUNG CHI TIẾT</span>
+                            <h2 className="text-3xl font-bold text-gray-900">17 Bài Giảng Tinh Gọn & Hiệu Quả</h2>
+                            <p className="text-gray-500 mt-2 max-w-2xl mx-auto">Mỗi video tập trung vào một kỹ thuật thực chiến, dễ hiểu và dễ áp dụng ngay.</p>
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                            <div className="p-5 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 flex items-center gap-3">
+                                <div className="bg-red-600 text-white p-2 rounded-full shadow-md">
+                                    <PlayCircle size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg text-gray-800">Danh sách 17 Video Bài Giảng (Học Trọn Đời)</h3>
+                                    <p className="text-xs text-blue-600 font-bold italic">Quý anh chị có thể xem thử 2 bài đầu tiên dưới đây</p>
+                                </div>
+                            </div>
+                            
+                            <div className="bg-gray-50/50">
+                                <div className="grid md:grid-cols-2 gap-4 p-4 md:p-6">
+                                    {LESSONS_DATA.map((lesson) => (
+                                        <div key={lesson.id} className={`relative group p-4 rounded-xl border transition-all duration-200 flex items-center justify-between gap-3 ${lesson.isFree ? 'bg-white border-blue-100 hover:border-blue-300 cursor-pointer shadow-sm' : 'bg-gray-100 border-gray-200 opacity-80'}`} onClick={() => lesson.isFree && setActiveVideoId(lesson.videoId)}>
+                                            <div className="flex items-center gap-4">
+                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${lesson.isFree ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-500'}`}>
+                                                    {lesson.isFree ? <Play size={18} fill="currentColor" className="ml-0.5" /> : <Lock size={18} />}
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-sm text-gray-800">{lesson.title}</h4>
+                                                    <span className="text-xs text-gray-400 flex items-center gap-1 mt-1"><Clock size={10} /> {lesson.duration}</span>
+                                                </div>
+                                            </div>
+                                            {lesson.isFree && <span className="text-[10px] font-bold text-blue-500 uppercase">Xem thử</span>}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-10 bg-yellow-50 border border-yellow-200 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
+                            <div className="bg-yellow-400 p-4 rounded-full text-red-900 shadow-inner">
+                                <Download size={40} />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-xl text-gray-900">Quà tặng đi kèm: Bộ tài liệu thực hành PDF</h3>
+                                <p className="text-gray-600">Bao gồm các mẫu bài tập luyện mắt, sơ đồ tư duy mẫu và bảng theo dõi tiến độ dành riêng cho quý anh chị.</p>
+                            </div>
+                        </div>
+                    </Section>
+
+                    {/* 5. PRICING & OFFER */}
+                    <Section className="bg-white relative">
+                        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200 relative">
+                            <div className="absolute top-0 right-0 bg-red-600 text-white text-sm font-bold px-6 py-2 rounded-bl-xl shadow-md z-20">
+                                ƯU ĐÃI GIẢM 90%
+                            </div>
+
+                            <div className="grid md:grid-cols-5 h-full">
+                                {/* Left Side: Value Stack */}
+                                <div className="md:col-span-3 p-8 bg-gray-50 border-r border-gray-100">
+                                    <h3 className="font-bold text-xl text-gray-800 mb-6">Trọn gói quý anh chị nhận được:</h3>
+                                    <ul className="space-y-4">
+                                        <li className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                            <div className="flex items-center gap-3">
+                                                <Video size={20} className="text-blue-600"/>
+                                                <span className="font-medium text-sm md:text-base">17 Video bài giảng Speed Reading</span>
+                                            </div>
+                                            <span className="text-sm font-bold text-gray-400 line-through">1.500.000đ</span>
+                                        </li>
+                                        <li className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                            <div className="flex items-center gap-3">
+                                                <Download size={20} className="text-green-600"/>
+                                                <span className="font-medium text-sm md:text-base">Bộ tài liệu thực hành PDF</span>
+                                            </div>
+                                            <span className="text-sm font-bold text-gray-400 line-through">500.000đ</span>
+                                        </li>
+                                        <li className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200 shadow-sm">
+                                            <div className="flex items-center gap-3">
+                                                <CheckCircle size={20} className="text-red-600"/>
+                                                <span className="font-bold text-red-700 text-sm md:text-base">Quyền truy cập học trọn đời</span>
+                                            </div>
+                                            <span className="text-sm font-bold text-red-600 uppercase">Tặng kèm</span>
+                                        </li>
+                                    </ul>
+                                    <div className="mt-6 flex items-center justify-between text-sm text-gray-500 font-medium border-t border-gray-200 pt-4">
+                                        <span>Tổng giá trị:</span>
+                                        <span className="text-lg line-through">2.000.000đ</span>
+                                    </div>
+                                </div>
+
+                                {/* Right Side: Price & CTA */}
+                                <div className="md:col-span-2 p-8 flex flex-col justify-center items-center text-center bg-white relative">
+                                    <p className="text-gray-500 font-medium mb-2 uppercase tracking-tighter">Giá tri ân quý khách hàng</p>
+                                    <div className="text-5xl font-extrabold text-red-600 mb-2 tracking-tight">200.000đ</div>
+                                    <p className="text-xs text-gray-400 mb-6">Ưu đãi dành cho 100 anh chị đầu tiên hôm nay</p>
+                                    
+                                    <button onClick={scrollToCheckout} className="w-full bg-yellow-400 hover:bg-yellow-300 text-red-900 font-bold py-4 rounded-full shadow-lg border-b-4 border-yellow-600 transform transition hover:scale-105 active:scale-95 text-lg">
+                                        ĐĂNG KÝ NHẬN KHOÁ HỌC
+                                    </button>
+                                    
+                                    <div className="mt-4 flex items-center gap-1 text-xs text-gray-500">
+                                        <ShieldCheck size={14} className="text-green-600"/> Hỗ trợ kỹ thuật 24/7
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Section>
+
+                    {/* 6. CHECKOUT FORM */}
+                    <div id="checkout-section" className="py-20 px-4 bg-gray-900 text-white relative overflow-hidden border-t-8 border-yellow-500">
+                        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10 items-center relative z-10">
+                            <div className="text-center md:text-left">
+                                <h2 className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-yellow-400 italic">Hành động ngay!</h2>
+                                <p className="mb-8 text-gray-300 text-lg">Để nhận ngay link truy cập trọn bộ video 17 bài giảng và bộ tài liệu thực hành PDF. Quý anh chị vui lòng điền thông tin bên cạnh.</p>
+                                <div className="hidden md:block">
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <CheckCircle className="text-green-500" size={24}/>
+                                        <span className="font-bold text-xl text-white">Chỉ với 200.000đ</span>
+                                    </div>
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <CheckCircle className="text-green-500" size={24}/>
+                                        <span className="font-bold text-xl text-white">Sở hữu vĩnh viễn</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-white text-gray-900 p-6 md:p-8 rounded-2xl shadow-2xl transform transition-all hover:scale-[1.01]">
+                                <form onSubmit={handleFormSubmit}>
+                                    <div className="text-center mb-6">
+                                        <h3 className="font-extrabold text-2xl text-red-700 uppercase">Thông Tin Đăng Ký</h3>
+                                        <p className="text-sm text-gray-500">Hệ thống sẽ gửi link học qua Email quý anh chị</p>
+                                    </div>
+                                    
+                                    <div className="space-y-1">
+                                        <label className="text-xs font-bold uppercase text-gray-600 ml-1">Họ và tên quý anh chị</label>
+                                        <InputField icon={User} type="text" name="first_name" placeholder="Nguyễn Văn A" required={true} />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="text-xs font-bold uppercase text-gray-600 ml-1">Email (nhận bài giảng)</label>
+                                        <InputField icon={Mail} type="email" name="email" placeholder="email@example.com" required={true} />
+                                    </div>
+
+                                    <div className="space-y-1 mb-6">
+                                        <label className="text-xs font-bold uppercase text-gray-600 ml-1">Số điện thoại (Zalo hỗ trợ)</label>
+                                        <InputField icon={Phone} type="tel" name="phone" placeholder="0912..." required={true} />
+                                    </div>
+
+                                    <div className="pt-2">
+                                        <div className="flex justify-between items-center mb-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                            <span className="text-gray-600 font-medium">Thanh toán ưu đãi:</span>
+                                            <span className="font-extrabold text-red-600 text-3xl leading-none">200.000đ</span>
+                                        </div>
+
+                                        <CTAButton 
+                                            text="XÁC NHẬN ĐĂNG KÝ" 
+                                            subtext="Quý anh chị sẽ được chuyển đến trang thanh toán"
+                                            variant="primary"
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            isLoading={isSubmitting}
+                                            className="w-full text-lg shadow-red-900/50"
+                                        />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer className="bg-gray-950 text-gray-500 py-12 border-t border-gray-900 relative z-10 text-center text-sm">
+                        <p className="mb-2">© 2024 Speed Reading Academy.</p>
+                        <p>Kính chúc quý anh chị học tập hiệu quả và thành công.</p>
+                        <p className="mt-4">Hotline: 0899.320.202 | Email: support@speedreading.vn</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

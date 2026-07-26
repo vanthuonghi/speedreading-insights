@@ -1,0 +1,85 @@
+baseURL = "https://speedreading.vn/"
+languageCode = "vi-VN"
+title = "Speed Reading Vietnam"
+googleAnalytics = "G-CF0N2GFTBC"
+theme = "PaperMod"
+
+# Tối ưu SEO & Tốc độ
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+# BẬT TÍNH NĂNG TÌM KIẾM CỦA PAPERMOD (Tạo file dữ liệu JSON)
+[outputs]
+    home = ["HTML", "RSS", "JSON"]
+
+[params]
+    # Giao diện PaperMod
+    defaultTheme = "auto"
+    ShowReadingTime = true
+    ShowShareButtons = true
+    ShowPostNavLinks = true
+    ShowBreadCrumbs = true
+    ShowCodeCopyButtons = true
+    description = "Học đọc nhanh và tối ưu hiệu suất cùng Văn Hỉ"
+    author = "Văn Hỉ"
+
+    # Màu chủ đạo & Favicon
+    [params.assets]
+        disableHLJS = true
+        favicon = "https://img.speedreading.vn/logo.png"
+        favicon16x16 = "https://img.speedreading.vn/logo.png"
+        favicon32x32 = "https://img.speedreading.vn/logo.png"
+        apple_touch_icon = "https://img.speedreading.vn/logo.png"
+        safari_pinned_tab = "https://img.speedreading.vn/logo.png"
+
+    # SEO Trang chủ
+    [params.homeInfoParams]
+        Title = "Đọc Nhanh - Hiểu Sâu - Nhớ Lâu"
+        Content = "Chào mừng bạn đến với Blog của Văn Hỉ. Nơi chia sẻ phương pháp đọc sách tốc độ và ứng dụng AI vào học tập."
+
+    # Mạng xã hội
+    [[params.socialIcons]]
+        name = "youtube"
+        url = "https://youtube.com/@VanHiOfficial"
+    [[params.socialIcons]]
+        name = "facebook"
+        url = "https://facebook.com/"
+
+# MENU ĐIỀU HƯỚNG
+[[menu.main]]
+    identifier = "home"
+    name = "TRANG CHỦ"
+    url = "/"
+    weight = 5
+[[menu.main]]
+    identifier = "blog"
+    name = "REVIEW SÁCH"
+    url = "/posts/"
+    weight = 10
+[[menu.main]]
+    identifier = "categories"
+    name = "DANH MỤC"
+    url = "/categories/"
+    weight = 15
+[[menu.main]]
+    identifier = "tags"
+    name = "TỪ KHÓA"
+    url = "/tags/"
+    weight = 18
+[[menu.main]]
+    identifier = "audiences"
+    name = "ĐỐI TƯỢNG"
+    url = "/audiences/"
+    weight = 19
+[[menu.main]]
+    identifier = "search"
+    name = "🔍 TÌM KIẾM"
+    url = "/search/"
+    weight = 19
+# KHAI BÁO BỘ LỌC PHÂN LOẠI (Taxonomies)
+[taxonomies]
+    category = "categories"
+    tag = "tags"
+    audience = "audiences"

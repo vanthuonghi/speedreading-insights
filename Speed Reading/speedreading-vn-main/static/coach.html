@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaching 1 Năm: Đột phá Năng lực Học tập & Làm việc với Speed Reading + AI</title>
+    <meta name="description" content="Chương trình Coaching 1 năm đồng hành giúp quý anh chị tăng tốc độ đọc hiểu, làm chủ AI, tối ưu hóa năng lực nội tại cho người bận rộn và áp lực thi cử.">
+    
+    <!-- 1. Cài đặt Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Cấu hình Import Map chuẩn hóa để nạp React và JSX Runtime -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0"
+        }
+    }
+    </script>
+
+    <!-- 3. Cài đặt Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Font chữ đẹp -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .bg-dots {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out; }
+
+        @keyframes pulse-red {
+            0%, 100% { background-color: #fee2e2; color: #991b1b; }
+            50% { background-color: #ef4444; color: white; }
+        }
+        .animate-pulse-urgent { animation: pulse-red 2s infinite; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { 
+            Clock, BookOpen, Brain, CheckCircle, AlertTriangle, 
+            ChevronDown, ChevronUp, Star, Zap, ShieldCheck, 
+            ArrowRight, User, Mail, Phone, Loader, PlayCircle, 
+            Building, GraduationCap, Users, Quote, XCircle, Target,
+            Calendar, Music, FileText, CheckSquare, Gift, Video, Book,
+            Lock, Play, X, Trophy, Cpu, Sparkles, Compass
+        } from 'lucide-react';
+
+        // --- Data ---
+        const ROADMAP_DATA = [
+            { id: 1, title: "Tháng 1-2: Xóa bỏ rào cản - Nền tảng Speed Reading", desc: "Đánh giá năng lực hiện tại, loại bỏ thói quen đọc thầm, mở rộng tầm nhìn ngoại vi. Tăng tốc độ đọc hiểu cơ bản giúp quý anh chị tiết kiệm thời gian tiếp thu.", icon: Zap },
+            { id: 2, title: "Tháng 3-4: Đọc sâu & Ghi nhớ dài hạn", desc: "Áp dụng kỹ thuật Mindmap, sơ đồ hóa khối lượng kiến thức khổng lồ. Rất phù hợp cho quý anh chị đang trong giai đoạn ôn thi hoặc nghiên cứu chuyên môn.", icon: Brain },
+            { id: 3, title: "Tháng 5-6: Ứng dụng Trí Tuệ Nhân Tạo (AI) vào học tập", desc: "Hướng dẫn quý khách hàng sử dụng các công cụ AI (ChatGPT, Claude...) để tóm tắt sách, phân tích tài liệu và tạo ra trợ lý học tập cá nhân.", icon: Cpu },
+            { id: 4, title: "Tháng 7-8: Tối ưu hóa năng suất làm việc", desc: "Xây dựng quy trình làm việc thông minh. Áp dụng kỹ năng đọc nhanh và AI để xử lý hàng trăm email, báo cáo mỗi ngày mà không bị quá tải.", icon: Target },
+            { id: 5, title: "Tháng 9-10: Phát triển năng lực nội tại & Tư duy phản biện", desc: "Đồng hành rèn luyện kỹ năng phân tích sâu sắc từ các nguồn thông tin đa chiều. Nâng tầm tư duy lãnh đạo và định hướng phát triển bản thân.", icon: Compass },
+            { id: 6, title: "Tháng 11-12: Cá nhân hóa lộ trình & Mentoring", desc: "Giải quyết các bài toán cụ thể của từng quý anh chị trong công việc và học tập. Củng cố thói quen xuất chúng để tự tin bước sang giai đoạn mới.", icon: Trophy },
+        ];
+
+        // --- Components ---
+        const CTAButton = ({ text, subtext, onClick, variant = 'primary', type = 'button', disabled = false, isLoading = false, className = '' }) => {
+            const baseClasses = `w-full md:w-auto font-bold uppercase tracking-wide py-4 px-8 rounded-full shadow-xl transform transition-all hover:scale-105 active:scale-95 flex flex-col items-center justify-center text-center disabled:opacity-70 disabled:cursor-not-allowed ${className}`;
+            const variants = {
+                primary: "bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 text-red-900 border-b-4 border-yellow-700",
+                secondary: "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white border-b-4 border-red-900",
+                white: "bg-white hover:bg-gray-50 text-red-600 border-b-4 border-gray-200"
+            };
+            return (
+                <button onClick={onClick} type={type} disabled={disabled} className={`${baseClasses} ${variants[variant]}`}>
+                    {isLoading ? (
+                        <span className="flex items-center gap-2"><Loader className="animate-spin" size={24} /> Đang xử lý...</span>
+                    ) : (
+                        <React.Fragment>
+                            <span className="text-xl md:text-2xl flex items-center gap-2">{text} <ArrowRight size={24} /></span>
+                            {subtext && <span className="text-xs md:text-sm font-normal mt-1 opacity-90">{subtext}</span>}
+                        </React.Fragment>
+                    )}
+                </button>
+            );
+        };
+
+        const Section = ({ children, className = "", id = "", maxWidth = "max-w-5xl" }) => (
+            <section id={id} className={`py-16 px-4 md:px-0 relative ${className}`}>
+                <div className={`${maxWidth} mx-auto relative z-10`}>{children}</div>
+            </section>
+        );
+
+        const InputField = ({ icon: Icon, type, name, placeholder, required = false }) => (
+            <div className="relative mb-4">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500"><Icon size={20} /></div>
+                <input type={type} name={name} required={required} placeholder={placeholder} className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none text-gray-900 placeholder-gray-500 bg-gray-50 transition-all" />
+            </div>
+        );
+
+        const RoadmapCard = ({ title, desc, icon: Icon, step }) => (
+            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col h-full hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10"></div>
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 border border-blue-300 flex items-center justify-center flex-shrink-0 text-blue-700 shadow-inner">
+                        <Icon size={24} />
+                    </div>
+                    <div>
+                        <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Giai đoạn {step}</span>
+                        <h4 className="font-bold text-gray-900 text-lg leading-tight mt-1">{title}</h4>
+                    </div>
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed flex-grow">{desc}</p>
+            </div>
+        );
+
+        // --- Main Application ---
+        function App() {
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [isSuccess, setIsSuccess] = useState(false);
+
+            const WEBHOOK_URL = "https://crm.speedreading.vn/?fluentcrm=1&route=contact&hash=2346555b-9240-43c3-a514-c48a52e28120";
+            const PAYMENT_PAGE = "https://speedreading.vn/paymentcoach";
+
+            const handleFormSubmit = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                const formData = new FormData(e.target);
+                formData.append('status', 'subscribed');
+                formData.append('tags', 'Coaching 1 Year');
+
+                try {
+                    await fetch(WEBHOOK_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        body: formData
+                    });
+                    setIsSuccess(true);
+                    setTimeout(() => {
+                        window.location.href = PAYMENT_PAGE;
+                    }, 800);
+                } catch (error) {
+                    console.error("Submission error:", error);
+                    window.location.href = PAYMENT_PAGE;
+                }
+            };
+
+            const scrollToCheckout = () => {
+                document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });
+            };
+
+            return (
+                <div className="font-sans text-gray-800 bg-dots min-h-screen pb-0 overflow-x-hidden relative">
+
+                    {/* 1. SCARCITY BAR */}
+                    <div className="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-3 z-50 font-bold text-xs md:text-sm shadow-md flex justify-center items-center gap-2">
+                        <div className="flex items-center gap-1 animate-pulse">
+                            <AlertTriangle size={16} className="text-yellow-300"/>
+                            <span className="uppercase">CẢNH BÁO: ĐỂ ĐẢM BẢO CHẤT LƯỢNG COACHING, CHÚNG TÔI CHỈ NHẬN TỐI ĐA 10 HỌC VIÊN MỖI THÁNG</span>
+                        </div>
+                    </div>
+
+                    {/* 2. HERO SECTION */}
+                    <div className="relative pt-32 pb-20 bg-gray-900 text-white overflow-hidden">
+                        <div className="absolute inset-0 z-0">
+                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Đồng hành phát triển" className="w-full h-full object-cover opacity-20" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-gray-900"></div>
+                        </div>
+
+                        <div className="relative z-10 max-w-5xl mx-auto text-center px-4">
+                            <div className="inline-flex items-center gap-2 bg-yellow-500 text-red-900 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6 shadow-lg animate-fade-in-up border border-yellow-400">
+                                <Sparkles size={14} /> Mã SP: COACH1Y-AI | Chương trình Đồng hành Trực tiếp
+                            </div>
+                            
+                            <h1 className="flex flex-col items-center justify-center font-extrabold mb-6 drop-shadow-xl tracking-tight">
+                                <span className="text-3xl md:text-5xl leading-tight mb-2 block text-gray-100">
+                                    ĐỒNG HÀNH 1 NĂM CHUYÊN SÂU
+                                </span>
+                                <span className="text-3xl md:text-5xl lg:text-6xl text-yellow-400 leading-tight block uppercase mt-2">
+                                    ĐỘT PHÁ NĂNG LỰC VỚI <br/> SPEED READING & AI
+                                </span>
+                            </h1>
+                            
+                            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed font-light">
+                                Kính chào quý anh chị. Đây không chỉ là một khóa học, mà là hành trình <strong>thay đổi toàn diện năng lực nội tại</strong>. Tiết kiệm hàng ngàn giờ học tập, làm việc hiệu quả và tự tin vượt qua mọi áp lực thi cử, công việc.
+                            </p>
+                            
+                            <div className="max-w-xs md:max-w-md mx-auto mb-8">
+                                <CTAButton 
+                                    text="ĐĂNG KÝ XÈT DUYỆT NGAY" 
+                                    subtext="Chỉ 5.000.000đ cho 1 năm đồng hành liên tục"
+                                    variant="primary"
+                                    onClick={scrollToCheckout}
+                                    className="w-full"
+                                />
+                            </div>
+                            
+                            <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-sm text-gray-400 font-medium">
+                                <span className="flex items-center gap-1.5"><Users size={18} className="text-green-500"/> Phù hợp cho người nghiêm túc</span>
+                                <span className="flex items-center gap-1.5"><GraduationCap size={18} className="text-blue-500"/> Hiệu quả rõ rệt cho thi cử & sự nghiệp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 3. PROBLEM VISUALIZED - Lợi ích thực tế */}
+                    <Section className="bg-white">
+                        <div className="grid md:grid-cols-2 gap-10 items-center">
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-blue-600 rounded-2xl transform rotate-3 opacity-10 group-hover:rotate-6 transition-transform"></div>
+                                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Áp lực công việc và thi cử" className="relative rounded-2xl shadow-xl w-full object-cover h-auto md:h-[450px] hover:scale-[1.02] transition-all duration-500 border border-gray-200" />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl font-bold mb-6 leading-tight text-gray-900">Quý anh chị có đang cảm thấy quá tải và áp lực?</h2>
+                                <p className="text-gray-600 mb-6 text-lg">
+                                    Dành cho những người đang nghiêm túc với tương lai, chúng tôi thấu hiểu những rào cản mà quý khách hàng đang đối mặt mỗi ngày:
+                                </p>
+                                <ul className="space-y-4">
+                                    <li className="flex items-start bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                        <Target className="text-red-500 mr-3 flex-shrink-0 mt-1" />
+                                        <div>
+                                            <span className="font-bold text-gray-900">Áp lực thi cử đè nặng:</span>
+                                            <p className="text-sm text-gray-600 mt-1">Khối lượng kiến thức cần nạp quá lớn, học trước quên sau, tốn nhiều thời gian nhưng kết quả không như ý.</p>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                        <Target className="text-red-500 mr-3 flex-shrink-0 mt-1" />
+                                        <div>
+                                            <span className="font-bold text-gray-900">Công việc ngập đầu:</span>
+                                            <p className="text-sm text-gray-600 mt-1">Hàng tá tài liệu, báo cáo, email cần xử lý. Quý anh chị đang dùng thời gian nghỉ ngơi quý giá để bù đắp cho công việc.</p>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                        <Target className="text-red-500 mr-3 flex-shrink-0 mt-1" />
+                                        <div>
+                                            <span className="font-bold text-gray-900">Sợ tụt hậu trước làn sóng AI:</span>
+                                            <p className="text-sm text-gray-600 mt-1">Biết AI rất mạnh, nhưng chưa có định hướng rõ ràng để ứng dụng AI vào việc nâng cao năng suất thực tế.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div className="mt-8">
+                                    <CTAButton text="TÌM HIỂU GIẢI PHÁP ĐỒNG HÀNH" variant="secondary" onClick={scrollToCheckout} className="w-full md:w-auto text-sm py-3 px-6"/>
+                                </div>
+                            </div>
+                        </div>
+                    </Section>
+
+                    {/* 4. SOLUTION & SYLLABUS */}
+                    <Section className="bg-gray-50 border-t border-gray-200" maxWidth="max-w-6xl">
+                        <div className="text-center mb-12">
+                            <span className="text-xs font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">HÀNH TRÌNH 1 NĂM THAY ĐỔI</span>
+                            <h2 className="text-3xl font-bold text-gray-900">Lộ Trình Trở Thành Phiên Bản Xuất Sắc Nhất</h2>
+                            <p className="text-gray-600 mt-3 max-w-2xl mx-auto text-lg">Chúng tôi không bán một khóa học rồi bỏ mặc quý anh chị. Đây là sự đồng hành sát sao cho đến khi quý khách hàng làm chủ hoàn toàn các kỹ năng.</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {ROADMAP_DATA.map((item, index) => (
+                                <RoadmapCard key={item.id} title={item.title} desc={item.desc} icon={item.icon} step={index + 1} />
+                            ))}
+                        </div>
+                    </Section>
+
+                    {/* 5. PRICING & OFFER */}
+                    <Section className="bg-gradient-to-b from-white to-gray-50 relative">
+                        <h2 className="text-3xl font-bold text-center mb-10 text-gray-900 relative z-10">Khoản Đầu Tư Sinh Lời Nhất Cho Bản Thân</h2>
+
+                        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200 relative z-10">
+                            <div className="grid md:grid-cols-5 h-full">
+                                <div className="md:col-span-3 p-8 bg-gray-50 border-r border-gray-100">
+                                    <div className="mb-6 flex items-center justify-between">
+                                        <h3 className="font-bold text-xl text-gray-800">Quyền lợi của quý khách hàng:</h3>
+                                        <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded font-bold">Mã SP: COACH1Y-AI</span>
+                                    </div>
+                                    <ul className="space-y-4 text-sm md:text-base">
+                                        <li className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                            <Users size={20} className="text-blue-600"/>
+                                            <span className="font-medium">1 Năm Coaching Trực Tiếp</span>
+                                        </li>
+                                        <li className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                            <Sparkles size={20} className="text-purple-600"/>
+                                            <span className="font-medium">Chương trình Định Hướng AI thực chiến</span>
+                                        </li>
+                                        <li className="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-200 shadow-sm">
+                                            <ShieldCheck size={20} className="text-red-600"/>
+                                            <span className="font-bold text-red-700">Đồng hành cho đến khi thành thạo</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="md:col-span-2 p-8 flex flex-col justify-center items-center text-center bg-white">
+                                    <p className="text-gray-500 font-medium mb-2 uppercase text-xs tracking-wider">Học phí trọn gói 1 năm</p>
+                                    <div className="text-4xl md:text-5xl font-extrabold text-red-600 mb-4 tracking-tight">5.000.000đ</div>
+                                    <button onClick={scrollToCheckout} className="w-full bg-yellow-400 hover:bg-yellow-300 text-red-900 font-bold py-4 rounded-full shadow-lg border-b-4 border-yellow-600 transform transition hover:scale-105 active:scale-95">
+                                        ĐĂNG KÝ NGAY
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </Section>
+
+                    {/* 6. CHECKOUT FORM */}
+                    <div id="checkout-section" className="py-20 px-4 bg-gray-900 text-white relative overflow-hidden border-t-8 border-yellow-500">
+                        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10 items-center relative z-10">
+                            <div className="text-center md:text-left">
+                                <h2 className="text-3xl md:text-4xl font-extrabold mb-4 leading-tight text-yellow-400">Bước Bước Chân Đầu Tiên Cho Sự Thay Đổi</h2>
+                                <p className="mb-6 text-gray-300">Vui lòng để lại thông tin chính xác, chúng tôi sẽ liên hệ hỗ trợ quý anh chị ngay lập tức.</p>
+                                <div className="hidden md:block space-y-4">
+                                    <div className="flex items-center gap-4">
+                                        <CheckCircle className="text-green-500" size={24}/>
+                                        <span className="font-bold">Chi phí: 5.000.000đ / 1 Năm</span>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <CheckCircle className="text-green-500" size={24}/>
+                                        <span className="font-bold">Hỗ trợ qua Zalo: 0899.320.202</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-white text-gray-900 p-6 md:p-8 rounded-2xl shadow-2xl">
+                                {isSuccess ? (
+                                    <div className="text-center py-10 animate-fade-in">
+                                        <CheckCircle className="mx-auto text-green-500 mb-6" size={80} />
+                                        <h2 className="text-2xl font-bold mb-4">Ghi Nhận Thành Công!</h2>
+                                        <p className="text-gray-600 mb-4">Đang chuyển hướng quý anh chị đến trang thanh toán an toàn...</p>
+                                        <Loader className="mx-auto animate-spin text-blue-600" size={32} />
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleFormSubmit}>
+                                        <div className="text-center mb-6">
+                                            <h3 className="font-extrabold text-2xl text-red-700 uppercase">THÔNG TIN ĐĂNG KÝ</h3>
+                                            <p className="text-sm text-gray-500 mt-1">Quý khách hàng vui lòng điền form bên dưới</p>
+                                        </div>
+                                        
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="text-xs font-bold uppercase text-gray-600">Họ và tên quý khách</label>
+                                                <InputField icon={User} type="text" name="name" placeholder="Ví dụ: Diệu Linh" required={true} />
+                                            </div>
+                                            <div>
+                                                <label className="text-xs font-bold uppercase text-gray-600">Email nhận thông tin</label>
+                                                <InputField icon={Mail} type="email" name="email" placeholder="email@example.com" required={true} />
+                                            </div>
+                                            <div>
+                                                <label className="text-xs font-bold uppercase text-gray-600">Số điện thoại (Có Zalo)</label>
+                                                <InputField icon={Phone} type="tel" name="phone" placeholder="090..." required={true} />
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-8">
+                                            <CTAButton 
+                                                text="ĐĂNG KÝ & THANH TOÁN" 
+                                                subtext="Bảo mật tuyệt đối thông tin khách hàng"
+                                                variant="primary"
+                                                type="submit"
+                                                disabled={isSubmitting}
+                                                isLoading={isSubmitting}
+                                                className="w-full text-lg shadow-red-900/50"
+                                            />
+                                        </div>
+                                    </form>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer className="bg-gray-950 text-gray-500 py-12 text-center text-sm">
+                        <p>© 2024 Speed Reading & AI Academy. Mã SP: COACH1Y-AI</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>

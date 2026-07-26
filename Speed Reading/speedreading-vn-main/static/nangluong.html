@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kích Hoạt Năng Lượng Đỉnh Cao</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffcc00; /* Vàng năng lượng */
+            --text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.8s ease-in-out;
+            color: white;
+            text-align: center;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .label-text {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .main-question {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1.4;
+            text-shadow: var(--text-shadow);
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .metaphor-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            opacity: 0.95;
+            padding: 0 10px;
+            border-left: 3px solid var(--primary-color);
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .theme-select, .problem-input, .music-select {
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            width: 100%;
+        }
+
+        /* Music Select Style */
+        .music-select {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        /* Chỉnh màu cho các option trong select nhạc để dễ nhìn */
+        .music-select option {
+            background-color: #222;
+            color: white;
+            padding: 10px;
+        }
+
+        .hidden { display: none; }
+
+        .btn-action {
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            border: none;
+            padding: 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(221, 36, 118, 0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .btn-action:active { transform: scale(0.95); }
+
+        .controls-music {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 20px;
+        }
+
+        .btn-music-control {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-play-pause {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(221, 36, 118, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(221, 36, 118, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(221, 36, 118, 0); }
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+
+        @media (max-width: 400px) {
+            .main-question { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <div class="container">
+        <!-- Khu vực hiển thị thông điệp -->
+        <div class="question-card" id="cardContent">
+            <div class="label-text" id="labelText">✦ Tiêu Điểm Tập Trung ✦</div>
+            <div class="main-question" id="questionText">Bạn đã sẵn sàng bùng nổ năng lượng chưa?</div>
+            <div class="metaphor-text" id="metaphorText">"Hành trình vạn dặm bắt đầu từ một bước chân dứt khoát."</div>
+        </div>
+
+        <!-- Khu vực chọn chủ đề -->
+        <div class="input-section">
+            <select class="theme-select" id="themeSelect" onchange="handleThemeChange()">
+                <optgroup label="✨ Cảm Xúc & Tư Duy">
+                    <option value="general">Chủ đề: Chung (Ngẫu nhiên)</option>
+                    <option value="confidence">💪 Tự tin & Sức mạnh</option>
+                    <option value="happiness">😊 Hạnh phúc & Biết ơn</option>
+                    <option value="overcome">🔥 Vượt qua Thử thách</option>
+                </optgroup>
+                <optgroup label="⏰ Thời Gian Trong Ngày">
+                    <option value="morning">🌅 Chào buổi sáng (Khởi động)</option>
+                    <option value="noon">☀️ Buổi trưa (Nạp năng lượng)</option>
+                    <option value="evening">🌙 Buổi tối (Thư giãn & Tổng kết)</option>
+                </optgroup>
+                <optgroup label="💼 Công Việc & Học Tập">
+                    <option value="reading">📚 Đọc sách & Nạp kiến thức</option>
+                    <option value="online_work">💻 Làm việc Online (Tập trung)</option>
+                    <option value="solo_work">🧘‍♂️ Làm việc 1 mình (Deep Work)</option>
+                    <option value="client_meeting">🤝 Gặp gỡ Khách hàng</option>
+                </optgroup>
+                <optgroup label="🎯 Vấn Đề Riêng">
+                    <option value="specific">✍️ Nhập Vấn đề Cụ thể...</option>
+                </optgroup>
+            </select>
+            <input type="text" class="problem-input hidden" id="problemInput" placeholder="Nhập vấn đề bạn đang gặp phải...">
+        </div>
+
+        <button class="btn-action" id="boostBtn" onclick="boostEnergy()">
+            <span>⚡ Kích Hoạt Ngay</span>
+        </button>
+
+        <!-- Trình phát nhạc -->
+        <div class="controls-music">
+            <button class="btn-music-control" onclick="prevTrack()">⏮</button>
+            <button class="btn-music-control btn-play-pause" id="playPauseBtn" onclick="toggleMusic()">▶</button>
+            <button class="btn-music-control" onclick="nextTrack()">⏭</button>
+        </div>
+        <!-- Menu chọn bài hát -->
+        <select class="music-select" id="musicSelect" onchange="changeTrack(this.value)">
+            <!-- Danh sách bài hát sẽ được tạo tự động bằng Javascript -->
+        </select>
+    </div>
+
+    <!-- AUDIO PLAYER -->
+    <audio id="bgMusic" preload="auto"></audio>
+
+    <script>
+        // ============================================================
+        // PHẦN 1: CẤU HÌNH DANH SÁCH NHẠC (ĐÃ CẬP NHẬT)
+        // ============================================================
+        
+        const playlist = [
+            { file: "music/1.wav", title: "TẬP 1: QUYỀN NĂNG CỦA QUYẾT ĐỊNH" },
+            { file: "music/2.wav", title: "TẬP 2: LỰC ĐẨY CỦA ĐỜI NGƯỜI - NỖI ĐAU & SỰ SUNG SƯỚNG" },
+            { file: "music/3.wav", title: "TẬP 3: GIẢI PHẪU NIỀM TIN" },
+            { file: "music/4.wav", title: "TẬP 4: CÔNG NGHỆ THAY ĐỔI - 6 BƯỚC NAC" },
+            { file: "music/5.wav", title: "TẬP 5: MA THUẬT CỦA NGÔN TỪ & ẨN DỤ" },
+            { file: "music/6.wav", title: "TẬP 6: MẬT MÃ CẢM XÚC - TÍN HIỆU HÀNH ĐỘNG" },
+            { file: "music/7.wav", title: "TẬP 7: THIẾT KẾ TƯƠNG LAI" },
+            { file: "music/8.wav", title: "TẬP 8: LA BÀN NỘI TÂM" },
+            { file: "music/9.wav", title: "TẬP 9: TẤM CĂN CƯỚC MỚI" },
+            { file: "music/10.wav", title: "TẬP 10: SỢI CHỈ DỆT NÊN CUỘC ĐỜI" },
+            { file: "music/11.wav", title: "TẬP 11: LỰC KÉO VÔ HÌNH" },
+            { file: "music/12.wav", title: "TẬP 12: CÚ BÚNG TAY CỦA SỰ LỘT XÁC" },
+            { file: "music/13.wav", title: "TẬP 13: TIA LAZE CỦA TÂM TRÍ" },
+            { file: "music/14.wav", title: "TẬP 14: 10 NGÀY THỬ THÁCH TÂM TRÍ" }
+        ];
+
+        // ============================================================
+        // PHẦN 2: LOGIC XỬ LÝ (GIỮ NGUYÊN)
+        // ============================================================
+
+        // --- KHO DỮ LIỆU NỘI DUNG ---
+        const dataStore = {
+            general: {
+                questions: ["Ngay lúc này, điều gì làm mình cảm thấy HẠNH PHÚC nhất?", "Hôm nay mình sẽ trao đi giá trị tuyệt vời gì cho thế giới?", "Điều gì ở bản thân khiến mình cảm thấy TỰ HÀO nhất?", "Nếu hôm nay là ngày cuối cùng, mình sẽ sống rực rỡ như thế nào?", "Nguồn năng lượng tích cực nào mình có thể lan tỏa ngay bây giờ?"],
+                metaphors: ["Bạn là NGỌN LỬA, không phải là tàn tro. Hãy cháy lên!", "Đừng chỉ tồn tại như một chiếc bóng, hãy sống như một tia nắng.", "Bóng tối chỉ là cái nền để ngôi sao là bạn tỏa sáng rực rỡ hơn.", "Mỗi ngày là một trang giấy trắng, đừng để hôm qua viết lem vào hôm nay.", "Bạn không phải là giọt nước trong đại dương, bạn là cả đại dương trong một giọt nước."]
+            },
+            confidence: {
+                questions: ["Nếu biết chắc chắn mình sẽ thành công, mình sẽ dám làm điều gì ngay bây giờ?", "Ba điểm mạnh nhất của mình mà người khác ngưỡng mộ là gì?", "Mình đang cam kết trở thành phiên bản xuất sắc như thế nào?", "Khi nào là lần cuối mình cảm thấy mình 'bất khả chiến bại'?", "Mình đã vượt qua bao nhiêu khó khăn trong quá khứ để đứng ở đây?"],
+                metaphors: ["Đại bàng không tốn thời gian hỏi lũ sẻ cách bay.", "Bạn là Kiến trúc sư cho số phận của chính mình.", "Sự tự tin là bộ trang phục đẹp nhất bạn có thể mặc.", "Sư tử không bao giờ mất ngủ vì ý kiến của bầy cừu.", "Đừng cúi đầu, vương miện sẽ rơi."]
+            },
+            happiness: {
+                questions: ["Ai là người mình yêu thương nhất và mình biết ơn sự hiện diện của họ như thế nào?", "Một điều nhỏ bé nào vừa xảy ra khiến mình mỉm cười?", "Mình có thể làm gì ngay bây giờ để mang lại niềm vui cho người khác?", "Hương vị, âm thanh hay hình ảnh nào làm mình thấy bình yên nhất?", "Mình đang may mắn hơn bao nhiêu người trên thế giới này?"],
+                metaphors: ["Hạnh phúc không phải là đích đến, nó là cách bạn đi.", "Tâm hồn bạn là một khu vườn, hãy trồng những bông hoa của lòng biết ơn.", "Nụ cười là đường cong duy nhất làm mọi thứ trở nên thẳng tắp.", "Hạnh phúc giống như nước hoa, bạn không thể vẩy lên người khác mà không làm vương vài giọt lên chính mình.", "Đừng đếm những gì bạn đã mất, hãy quý những gì bạn đang có."]
+            },
+            overcome: {
+                questions: ["Cơ hội tuyệt vời nào đang ẩn giấu đằng sau thử thách này?", "Thử thách này đang rèn luyện cho mình 'cơ bắp' tinh thần nào?", "Lần trước mình đã vượt qua một khó khăn tương tự như thế nào?", "Điều tồi tệ nhất có thể xảy ra là gì, và mình sẽ xử lý nó ra sao?", "Ai là tấm gương về nghị lực mà mình muốn noi theo lúc này?"],
+                metaphors: ["Kim cương chỉ được hình thành dưới áp lực khủng khiếp.", "Hãy kiên định như núi, và linh hoạt như dòng nước chảy.", "Vết sẹo là minh chứng cho thấy bạn mạnh mẽ hơn điều đã làm bạn bị thương.", "Mũi tên chỉ được bắn về phía trước sau khi bị kéo ngược về phía sau.", "Hạt giống phải nứt vỏ trong bóng tối mới có thể vươn lên tìm ánh sáng."]
+            },
+            morning: {
+                questions: ["3 điều tuyệt vời nhất mình mong chờ sẽ xảy ra trong hôm nay là gì?", "Ngày hôm nay sẽ là một kiệt tác nếu mình hoàn thành được điều gì?", "Hôm nay mình chọn thái độ sống như thế nào: Tích cực hay Phàn nàn?", "Ai cần năng lượng tích cực của mình hôm nay?", "Mục tiêu số 1 của mình trong ngày hôm nay là gì?"],
+                metaphors: ["Mỗi buổi sáng là một tấm vé số trúng thưởng mang tên 'Cơ Hội'.", "Mặt trời mọc không phải vì nó cần, mà vì nó muốn đánh thức sự vĩ đại trong bạn.", "Hãy bắt đầu ngày mới bằng nụ cười, cuộc đời sẽ mỉm cười lại với bạn.", "Quá khứ đã ngủ yên, hôm nay là trang sách mới tinh khôi chờ bạn viết.", "Bình minh là lời nhắc nhở rằng bóng tối không bao giờ tồn tại mãi mãi."]
+            },
+            noon: {
+                questions: ["Mình cần nạp lại năng lượng gì (ăn uống, nghỉ ngơi, hít thở) để bứt phá chiều nay?", "Một chiến thắng nhỏ mình đã đạt được trong buổi sáng là gì?", "Điều gì quan trọng nhất mình cần tập trung giải quyết dứt điểm trong chiều nay?", "Làm thế nào để giữ vững nhịp độ này đến cuối ngày?", "Mình có đang làm việc thông minh hay chỉ đang làm việc chăm chỉ?"],
+                metaphors: ["Hãy bền bỉ như mặt trời lúc đứng bóng, rực rỡ và kiên định.", "Nghỉ ngơi đúng lúc chính là mài sắc chiếc rìu của bạn.", "Giống như dòng sông không ngừng chảy, hãy giữ cho dòng chảy công việc được thông suốt.", "Bạn đã đi được một nửa chặng đường, đích đến đang chờ người kiên trì.", "Trạm dừng chân là để nạp nhiên liệu, không phải để đỗ xe mãi mãi."]
+            },
+            evening: {
+                questions: ["3 điều tốt đẹp mình đã làm được trong ngày hôm nay là gì?", "Bài học lớn nhất mình rút ra được hôm nay?", "Mình chọn buông bỏ điều gì để có một giấc ngủ bình yên và sâu giấc?", "Mình biết ơn điều gì nhất về bản thân sau ngày hôm nay?", "Ngày mai mình sẽ làm gì tốt hơn ngày hôm nay?"],
+                metaphors: ["Những vì sao chỉ có thể tỏa sáng khi trời tối. Khó khăn làm bạn lấp lánh hơn.", "Kết thúc một ngày là để chuẩn bị cho một khởi đầu vĩ đại hơn vào ngày mai.", "Hãy trút bỏ gánh nặng như trút bỏ đôi giày chật, để tâm hồn được nghỉ ngơi.", "Ngủ ngon là cách bạn sạc lại pin cho siêu năng lực của mình.", "Mặt trăng là minh chứng rằng dù không trọn vẹn, bạn vẫn có thể tỏa sáng."]
+            },
+            reading: {
+                questions: ["Bài học 'đắt giá' nhất mình có thể áp dụng NGAY LẬP TỨC từ trang sách này là gì?", "Tác giả đang muốn truyền tải tư duy xuất chúng nào cho mình?", "Nếu chỉ được nhớ 1 điều từ cuốn sách này, đó sẽ là gì?", "Cuốn sách này đang mở ra cánh cửa nào trong tâm trí mình?", "Mình sẽ thay đổi hành động nào sau khi đọc chương này?"],
+                metaphors: ["Sách là ngọn hải đăng soi sáng những vùng biển chưa biết của tâm trí.", "Mỗi cuốn sách hay là một cuộc trò chuyện với những bộ óc vĩ đại nhất lịch sử.", "Đọc sách là cách rẻ nhất để du hành thời gian và không gian.", "Kiến thức là hạt giống, hành động là nước tưới.", "Một cuốn sách mở ra là một bộ não được đánh thức."]
+            },
+            online_work: {
+                questions: ["Làm thế nào để mình tạo ra kết quả vượt trội gấp đôi dù không ai giám sát?", "Sự tập trung của mình lúc này đáng giá bao nhiêu tiền?", "Công nghệ đang giúp mình lan tỏa giá trị xa đến mức nào?", "Mình sẽ hoàn thành nhiệm vụ này nhanh và xuất sắc như thế nào?", "Mình có đang để mạng xã hội kiểm soát hay mình đang kiểm soát công việc?"],
+                metaphors: ["Kỷ luật là cầu nối giữa mục tiêu và thành tựu.", "Dù bạn ngồi ở đâu, giá trị bạn tạo ra là thật và tác động là thật.", "Không gian làm việc là do tâm trí bạn định nghĩa, không phải 4 bức tường.", "Internet là đòn bẩy, còn bạn là người nâng cả thế giới.", "Màn hình là cửa sổ, bàn phím là vũ khí, bạn là chiến binh số."]
+            },
+            solo_work: {
+                questions: ["Trong sự tĩnh lặng này, ý tưởng đột phá nào đang chờ được khai phá?", "Mình đang rèn luyện sự tập trung sắc bén như tia laser như thế nào?", "Tại sao làm việc một mình lại là cơ hội vàng để mình phát triển chiều sâu?", "Mình là người lãnh đạo của chính mình, mình sẽ ra lệnh gì lúc này?", "Không ai nhìn thấy nỗ lực này, nhưng kết quả sẽ cho cả thế giới thấy, đúng không?"],
+                metaphors: ["Trong tĩnh lặng, trí tuệ nảy mầm mạnh mẽ nhất.", "Bạn là một đội quân tinh nhuệ gồm một người.", "Đại bàng thường bay một mình, chỉ có sẻ mới bay theo đàn.", "Sự cô đơn tích cực là phòng thí nghiệm của những thiên tài.", "Hãy yêu thích sự tĩnh lặng, đó là nơi những giấc mơ lớn được thai nghén."]
+            },
+            client_meeting: {
+                questions: ["Mình có thể trao thêm giá trị gì khiến khách hàng phải thốt lên 'Wow'?", "Mình đang lắng nghe để thực sự HIỂU hay chỉ để trả lời?", "Giải pháp của mình sẽ thay đổi cuộc sống/công việc của họ tốt hơn như thế nào?", "Sự tự tin và chân thành của mình sẽ lan tỏa đến họ ra sao?", "Mình muốn họ cảm thấy như thế nào sau khi rời khỏi cuộc gặp này?"],
+                metaphors: ["Khách hàng không mua sản phẩm, họ mua sự tin tưởng vào bạn.", "Mỗi cuộc gặp gỡ là một cơ hội để gieo hạt giống của sự thịnh vượng.", "Hãy phục vụ họ như phục vụ người thân yêu nhất của bạn.", "Nụ cười và ánh mắt chân thành là vũ khí thuyết phục mạnh nhất.", "Bạn không bán hàng, bạn đang giúp họ giải quyết vấn đề."]
+            },
+            specific: {
+                questions: ["Điều gì là QUAN TRỌNG NHẤT mình cần tập trung giải quyết trong vấn đề này?", "Nếu nhìn vấn đề này từ góc độ của một người thông thái, họ sẽ khuyên mình điều gì?", "Hành động nhỏ nhất và dễ dàng nhất mình có thể thực hiện NGAY BÂY GIỜ để cải thiện tình hình là gì?", "Mình có thể học được bài học quý giá nào từ trải nghiệm này?", "Trong 5 năm nữa, vấn đề này có còn quan trọng không?"],
+                metaphors: ["Đừng để một đám mây đen che khuất cả bầu trời xanh của bạn.", "Vấn đề không phải là dấu chấm hết, nó là một ngã rẽ để bạn khám phá con đường mới.", "Bạn lớn hơn mọi vấn đề của bạn. Hãy đứng cao hơn nó.", "Đôi khi, bước lùi lại là để lấy đà cho một cú nhảy xa hơn.", "Không có bùn thì không có sen."]
+            }
+        };
+
+        const backgrounds = [
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000", 
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000", 
+            "https://images.unsplash.com/photo-1476984256599-e8c563d6ef8d?q=80&w=1000", 
+            "https://images.unsplash.com/photo-1517511620798-cec17d428bc0?q=80&w=1000",
+            "https://images.unsplash.com/photo-1495570689269-d883be1800f2?q=80&w=1000",
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1000"
+        ];
+
+        let isPlaying = false;
+        let currentTrackIndex = 0;
+
+        const audio = document.getElementById("bgMusic");
+        const playPauseBtn = document.getElementById("playPauseBtn");
+        const musicSelect = document.getElementById("musicSelect");
+
+        // KHỞI TẠO MENU CHỌN NHẠC
+        function initMusicPlayer() {
+            musicSelect.innerHTML = "";
+            playlist.forEach((track, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.text = track.title;
+                musicSelect.appendChild(option);
+            });
+            audio.src = playlist[0].file;
+        }
+
+        // CHỨC NĂNG PHÁT NHẠC
+        function playTrack(index) {
+            currentTrackIndex = parseInt(index);
+            if (currentTrackIndex >= playlist.length) currentTrackIndex = 0;
+            if (currentTrackIndex < 0) currentTrackIndex = playlist.length - 1;
+
+            audio.src = playlist[currentTrackIndex].file;
+            audio.load();
+            audio.play().then(() => {
+                isPlaying = true;
+                updatePlayButton();
+            }).catch(err => console.log("Chưa thể phát nhạc tự động:", err));
+
+            musicSelect.value = currentTrackIndex;
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.play();
+                isPlaying = true;
+            }
+            updatePlayButton();
+        }
+
+        function updatePlayButton() {
+            playPauseBtn.innerText = isPlaying ? "❚❚" : "▶";
+        }
+
+        function nextTrack() {
+            playTrack(currentTrackIndex + 1);
+        }
+
+        function prevTrack() {
+            playTrack(currentTrackIndex - 1);
+        }
+
+        function changeTrack(val) {
+            playTrack(val);
+        }
+
+        // Tự động chuyển bài khi hết
+        audio.onended = function() {
+            nextTrack(); 
+        };
+
+        // --- HÀM LOGIC CHÍNH (NỘI DUNG) ---
+        function handleThemeChange() {
+            const themeSelect = document.getElementById("themeSelect");
+            const problemInput = document.getElementById("problemInput");
+            
+            if (themeSelect.value === 'specific') {
+                problemInput.classList.remove('hidden');
+                problemInput.focus();
+            } else {
+                problemInput.classList.add('hidden');
+            }
+        }
+
+        function boostEnergy() {
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            const card = document.getElementById("cardContent");
+            card.classList.remove("fade-in");
+            void card.offsetWidth;
+            card.classList.add("fade-in");
+
+            const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+            document.body.style.backgroundImage = `url('${randomBg}')`;
+
+            const themeSelect = document.getElementById("themeSelect");
+            const problemInput = document.getElementById("problemInput");
+            const selectedTheme = themeSelect.value;
+            
+            let currentQuestions, currentMetaphors, label;
+            const themeNameMap = {
+                general: "Chung", confidence: "Tự Tin", happiness: "Hạnh Phúc", overcome: "Vượt Khó",
+                morning: "Chào Buổi Sáng", noon: "Năng Lượng Trưa", evening: "Thư Giãn Tối",
+                reading: "Đọc Sách", online_work: "Làm Online", solo_work: "Làm Một Mình", client_meeting: "Gặp Khách"
+            };
+
+            if (selectedTheme === 'specific') {
+                const userProblem = problemInput.value.trim();
+                if (!userProblem) {
+                    alert("Bạn ơi, hãy nhập vấn đề của bạn vào ô bên dưới nhé!");
+                    problemInput.focus();
+                    return;
+                }
+                currentQuestions = dataStore.specific.questions;
+                currentMetaphors = dataStore.specific.metaphors;
+                label = `✦ Góc Nhìn Mới: "${userProblem.substring(0, 15)}..." ✦`;
+                problemInput.value = '';
+            } else {
+                currentQuestions = dataStore[selectedTheme].questions;
+                currentMetaphors = dataStore[selectedTheme].metaphors;
+                label = `✦ Tiêu Điểm: ${themeNameMap[selectedTheme]} ✦`;
+            }
+
+            document.getElementById("labelText").innerText = label;
+            document.getElementById("questionText").innerText = currentQuestions[Math.floor(Math.random() * currentQuestions.length)];
+            document.getElementById("metaphorText").innerText = `"${currentMetaphors[Math.floor(Math.random() * currentMetaphors.length)]}"`;
+        }
+
+        initMusicPlayer();
+        handleThemeChange();
+
+    </script>
+</body>
+</html>

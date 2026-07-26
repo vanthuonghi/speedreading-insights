@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Chiến Binh: Ngày 11 - 15</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0f172a;
+            color: #e0e0e0;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .step-card {
+            transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.07);
+        }
+        
+        /* Glows per Day */
+        .day-11-hover:hover { box-shadow: 0 10px 20px rgba(16, 185, 129, 0.25); border-color: #10b981; }
+        .day-12-hover:hover { box-shadow: 0 10px 20px rgba(14, 165, 233, 0.25); border-color: #0ea5e9; }
+        .day-13-hover:hover { box-shadow: 0 10px 20px rgba(249, 115, 22, 0.25); border-color: #f97316; }
+        .day-14-hover:hover { box-shadow: 0 10px 20px rgba(45, 212, 191, 0.25); border-color: #2dd4bf; }
+        .day-15-hover:hover { box-shadow: 0 10px 20px rgba(139, 92, 246, 0.25); border-color: #8b5cf6; }
+
+        /* Gradients */
+        .gradient-text-d11 { background: linear-gradient(to right, #10b981, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d12 { background: linear-gradient(to right, #0ea5e9, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d13 { background: linear-gradient(to right, #f97316, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d14 { background: linear-gradient(to right, #2dd4bf, #f0f9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d15 { background: linear-gradient(to right, #8b5cf6, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Tabs */
+        .tab-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-bottom: 2px solid;
+        }
+        .tab-btn.active.day11 { border-color: #10b981; }
+        .tab-btn.active.day12 { border-color: #0ea5e9; }
+        .tab-btn.active.day13 { border-color: #f97316; }
+        .tab-btn.active.day14 { border-color: #2dd4bf; }
+        .tab-btn.active.day15 { border-color: #8b5cf6; }
+        
+        .tab-btn:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .hidden-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .visible-content {
+            display: block;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 bg-[url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat bg-fixed relative">
+    
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-slate-900/90 z-0"></div>
+
+    <!-- Main Container -->
+    <div class="max-w-6xl w-full bg-slate-900/80 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden relative z-10 backdrop-blur-md mt-6 mb-10">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-700/50 bg-black/20 overflow-x-auto scrollbar-hide">
+            <button onclick="switchTab('day11')" id="tab-day11" class="tab-btn day11 active flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-coins mr-2"></i> Ngày 11
+            </button>
+            <button onclick="switchTab('day12')" id="tab-day12" class="tab-btn day12 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-clock mr-2"></i> Ngày 12
+            </button>
+            <button onclick="switchTab('day13')" id="tab-day13" class="tab-btn day13 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-fire mr-2"></i> Ngày 13
+            </button>
+            <button onclick="switchTab('day14')" id="tab-day14" class="tab-btn day14 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-broom mr-2"></i> Ngày 14
+            </button>
+            <button onclick="switchTab('day15')" id="tab-day15" class="tab-btn day15 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-user-secret mr-2"></i> Ngày 15
+            </button>
+        </div>
+
+        <!-- DAY 11 CONTENT -->
+        <div id="content-day11" class="visible-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-900 via-yellow-500 to-green-900 opacity-80"></div>
+            <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-green-500/10 blur-[120px] pointer-events-none rounded-full"></div>
+
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 right-10 hidden md:block opacity-20"><i class="fas fa-hand-holding-usd text-6xl text-yellow-400"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-xs font-bold tracking-widest mb-4 brand-font">Tư Duy Thịnh Vượng</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d11">NGÀY 11</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">KÍCH HOẠT TƯ DUY TÀI CHÍNH</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Tiền là công cụ của tự do. Đừng để tư duy 'Nghèo khó' và 'Khan hiếm' kiểm soát bạn."</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1: Freedom Number -->
+                <div class="step-card day-11-hover glass-panel p-6 rounded-2xl border-t-4 border-yellow-500 relative flex flex-col bg-gradient-to-b from-slate-900 to-yellow-900/10">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-calculator text-5xl text-yellow-400 mb-3"></i><h3 class="text-xl text-yellow-400 font-bold uppercase brand-font">Con Số Tự Do</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow">
+                        <p class="mb-2 italic text-center">Công thức tìm đích đến:</p>
+                        <div class="bg-black/40 p-4 rounded-xl border border-yellow-500/30 space-y-2 font-mono text-xs">
+                            <div class="flex justify-between"><span>Chi phí tháng:</span> <span class="text-white">50tr</span></div>
+                            <div class="flex justify-between"><span>Chi phí năm:</span> <span class="text-white">600tr</span></div>
+                            <div class="border-t border-gray-600 pt-1 flex justify-between font-bold text-yellow-400">
+                                <span>MỤC TIÊU:</span> <span>6 Tỷ (600/10%)</span>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-center text-xs text-gray-400">Viết to con số của BẠN ra giấy!</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Ban Scarcity -->
+                <div class="step-card day-11-hover glass-panel p-6 rounded-2xl border-t-4 border-red-500 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-ban text-5xl text-red-500 mb-3"></i><h3 class="text-xl text-red-400 font-bold uppercase brand-font">Cấm Khẩu</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow text-center">
+                        <p class="mb-2">Tuyệt đối không nói:</p>
+                        <p class="text-gray-500 line-through italic mb-4">"Tôi không có tiền / không mua nổi"</p>
+                        <div class="bg-green-900/20 p-4 rounded-xl border border-green-500/30">
+                            <p class="text-green-400 font-bold uppercase text-xs mb-1">Hãy hỏi câu quyền năng:</p>
+                            <p class="text-white font-bold text-lg">"LÀM THẾ NÀO để tôi mua được nó?"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Rich Wallet -->
+                <div class="step-card day-11-hover glass-panel p-6 rounded-2xl border-t-4 border-green-500 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-wallet text-5xl text-green-500 mb-3"></i><h3 class="text-xl text-green-400 font-bold uppercase brand-font">Ví Tiền Người Giàu</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow text-center">
+                        <p class="mb-3">Bài tập "Hack não" tiềm thức:</p>
+                        <ul class="text-left space-y-2 text-xs bg-slate-800 p-3 rounded-lg">
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-2"></i> Rút tờ tiền mệnh giá lớn nhất.</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-2"></i> Để trong ví như biểu tượng.</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-2"></i> <strong>KHÔNG ĐƯỢC TIÊU.</strong></li>
+                        </ul>
+                        <p class="mt-3 text-green-200 italic text-xs">"Mở ví ra là thấy sự dư dả."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 12 CONTENT -->
+        <div id="content-day12" class="hidden-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-900 via-cyan-500 to-blue-900 opacity-80"></div>
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 left-10 hidden md:block opacity-20"><i class="fas fa-history text-6xl text-cyan-400"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-bold tracking-widest mb-4 brand-font">Làm Chủ Thời Gian</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d12">NGÀY 12</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">TỐI ƯU HÓA THỜI GIAN (N.E.T)</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Biến rác thời gian thành vàng. Kỹ thuật N.E.T (No Extra Time)."</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Concept -->
+                <div class="step-card day-12-hover glass-panel p-6 rounded-2xl border-l-4 border-cyan-500">
+                     <h3 class="text-xl text-cyan-400 font-bold uppercase brand-font mb-4"><i class="fas fa-search mr-2"></i> Truy Tìm "Mỏ Vàng"</h3>
+                     <p class="text-sm text-gray-300 mb-4">Bạn có khoảng 2 tiếng "thời gian chết" mỗi ngày mà bạn đang vứt đi:</p>
+                     <div class="grid grid-cols-2 gap-4 text-center">
+                         <div class="bg-slate-800 p-3 rounded border border-gray-700">
+                             <i class="fas fa-car text-cyan-500 mb-1"></i>
+                             <p class="text-xs text-white">Lái xe/Bus</p>
+                         </div>
+                         <div class="bg-slate-800 p-3 rounded border border-gray-700">
+                             <i class="fas fa-sink text-cyan-500 mb-1"></i>
+                             <p class="text-xs text-white">Việc nhà</p>
+                         </div>
+                         <div class="bg-slate-800 p-3 rounded border border-gray-700">
+                             <i class="fas fa-walking text-cyan-500 mb-1"></i>
+                             <p class="text-xs text-white">Đi bộ/Gym</p>
+                         </div>
+                         <div class="bg-slate-800 p-3 rounded border border-gray-700">
+                             <i class="fas fa-clock text-cyan-500 mb-1"></i>
+                             <p class="text-xs text-white">Chờ đợi</p>
+                         </div>
+                     </div>
+                </div>
+
+                <!-- Action -->
+                <div class="step-card day-12-hover glass-panel p-6 rounded-2xl border-l-4 border-blue-500 bg-gradient-to-br from-slate-900 to-blue-900/20">
+                     <h3 class="text-xl text-blue-400 font-bold uppercase brand-font mb-4"><i class="fas fa-graduation-cap mr-2"></i> Đại Học Giao Thông</h3>
+                     <p class="text-sm text-gray-300 mb-4">Biến xe/tai nghe thành trường học danh giá nhất.</p>
+                     <div class="bg-blue-900/20 p-4 rounded-xl border border-blue-500/30">
+                         <p class="text-white font-bold text-sm mb-2 uppercase">Mệnh lệnh hôm nay:</p>
+                         <ul class="text-xs space-y-2 text-gray-300">
+                             <li><i class="fas fa-download text-blue-400 mr-2"></i> Tải ngay 1 Audiobook/Podcast.</li>
+                             <li><i class="fas fa-play text-blue-400 mr-2"></i> Nghe ít nhất <strong>30 phút</strong> khi đang làm việc chân tay.</li>
+                             <li><i class="fas fa-ban text-red-400 mr-2"></i> Cấm nghe nhạc ủy mị/tin tức rác.</li>
+                         </ul>
+                     </div>
+                </div>
+            </div>
+            <div class="px-6 md:px-10 pb-10 text-center">
+                <p class="text-gray-400 text-sm italic">"Hôm nay bạn sẽ học được điều gì mới trong lúc rửa bát?"</p>
+            </div>
+        </div>
+
+        <!-- DAY 13 CONTENT -->
+        <div id="content-day13" class="hidden-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-900 via-red-500 to-orange-900 opacity-80"></div>
+            
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 right-10 hidden md:block opacity-20"><i class="fas fa-fire-extinguisher text-6xl text-orange-500"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-400 text-xs font-bold tracking-widest mb-4 brand-font">Kẻ Thù Lớn Nhất</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d13">NGÀY 13</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">TIÊU DIỆT SỰ TRÌ HOÃN</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Làm cho việc Trì hoãn trở nên đau đớn tột cùng, và Hành động trở nên sung sướng tột đỉnh."</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1: Hell -->
+                <div class="step-card day-13-hover glass-panel p-6 rounded-2xl border-t-4 border-red-600 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-fire text-5xl text-red-500 mb-3"></i><h3 class="text-xl text-red-400 font-bold uppercase brand-font">Vẽ Ra Địa Ngục</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow text-center">
+                        <p class="mb-2 text-xs">Hỏi 3 câu tàn nhẫn về việc đang trì hoãn:</p>
+                        <ul class="text-left text-xs space-y-2 bg-red-900/10 p-3 rounded border border-red-500/20">
+                            <li>- Nếu KHÔNG làm hôm nay, giá phải trả là gì?</li>
+                            <li>- Nếu trì hoãn 1 NĂM nữa, chuyện gì xảy ra?</li>
+                            <li>- Nếu 10 năm nữa, đời mình sẽ thảm hại thế nào?</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 2: Heaven -->
+                <div class="step-card day-13-hover glass-panel p-6 rounded-2xl border-t-4 border-orange-500 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-cloud-sun text-5xl text-orange-400 mb-3"></i><h3 class="text-xl text-orange-400 font-bold uppercase brand-font">Vẽ Ra Thiên Đường</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow text-center">
+                        <p class="mb-2 text-xs">Chuyển kênh cảm xúc:</p>
+                        <div class="bg-orange-900/10 p-3 rounded border border-orange-500/20 italic">
+                            "Nếu làm xong NGAY BÂY GIỜ, mình sẽ tự hào thế nào? Cuộc đời sẽ tuyệt vời ra sao?"
+                        </div>
+                        <p class="mt-4 text-xs font-bold text-white">Hãy hình dung nụ cười chiến thắng của bạn.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: 5 Min Rule -->
+                <div class="step-card day-13-hover glass-panel p-6 rounded-2xl border-t-4 border-white relative flex flex-col bg-gradient-to-br from-red-900 to-slate-900">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-hourglass-start text-5xl text-white mb-3"></i><h3 class="text-xl text-white font-bold uppercase brand-font">Quy Tắc 5 Phút</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow text-center">
+                        <p class="mb-4">Đừng nghĩ đến việc hoàn thành. Chỉ cam kết làm <span class="text-red-500 font-bold text-lg">5 PHÚT</span>.</p>
+                        <div class="space-y-2 text-xs text-left pl-4">
+                            <p><i class="fas fa-running text-orange-500 mr-2"></i> Muốn chạy? -> Xỏ giày ra cửa.</p>
+                            <p><i class="fas fa-book text-orange-500 mr-2"></i> Muốn viết? -> Viết 1 câu đầu.</p>
+                        </div>
+                        <button class="mt-4 w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded uppercase text-xs">Đếm ngược: 5, 4, 3, 2, 1... LÀM!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 14 CONTENT -->
+        <div id="content-day14" class="hidden-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-900 via-white to-teal-900 opacity-50"></div>
+            
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 left-10 hidden md:block opacity-20"><i class="fas fa-flag-checkered text-6xl text-teal-200"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-teal-500/30 bg-teal-500/10 text-teal-400 text-xs font-bold tracking-widest mb-4 brand-font">Pit Stop Chiến Lược</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d14">NGÀY 14</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">DỌN DẸP & ĂN MỪNG</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Xe chạy càng nhanh, càng cần bảo dưỡng chuẩn xác. Chuẩn bị cho giai đoạn Đỉnh Cao."</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="step-card day-14-hover glass-panel p-6 rounded-2xl border-l-4 border-teal-500">
+                     <h3 class="text-xl text-teal-400 font-bold uppercase brand-font mb-4"><i class="fas fa-broom mr-2"></i> Dọn Dẹp Chiến Trường</h3>
+                     <p class="text-sm text-gray-300 mb-3">Sự bừa bộn bên ngoài phản ánh bên trong.</p>
+                     <ul class="text-sm space-y-2 text-gray-400">
+                         <li><i class="fas fa-check text-teal-500 mr-2"></i> Dọn sạch bàn làm việc.</li>
+                         <li><i class="fas fa-check text-teal-500 mr-2"></i> Xóa file rác máy tính.</li>
+                         <li><i class="fas fa-check text-teal-500 mr-2"></i> Thay ga giường mới.</li>
+                     </ul>
+                </div>
+                <div class="step-card day-14-hover glass-panel p-6 rounded-2xl border-l-4 border-white bg-gradient-to-br from-slate-900 to-teal-900/20">
+                     <h3 class="text-xl text-white font-bold uppercase brand-font mb-4"><i class="fas fa-trophy mr-2 text-yellow-400"></i> Phần Thưởng Chiến Binh</h3>
+                     <p class="text-sm text-gray-300 mb-3">Đừng bỏ đói đứa trẻ bên trong. Hãy làm 1 điều hoàn toàn vì niềm vui:</p>
+                     <div class="grid grid-cols-2 gap-2 text-xs font-bold text-black text-center">
+                         <div class="bg-teal-200 p-2 rounded">Xem phim rạp</div>
+                         <div class="bg-teal-200 p-2 rounded">Đi Spa</div>
+                         <div class="bg-teal-200 p-2 rounded">Mua đồ chơi</div>
+                         <div class="bg-teal-200 p-2 rounded">Tắt điện thoại</div>
+                     </div>
+                </div>
+            </div>
+            <div class="px-6 md:px-10 pb-10 text-center">
+                <p class="text-white font-bold uppercase tracking-widest border-t border-b border-gray-700 py-4 inline-block">Chúc mừng bạn đã hoàn thành 2/3 chặng đường!</p>
+            </div>
+        </div>
+
+        <!-- DAY 15 CONTENT -->
+        <div id="content-day15" class="hidden-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-900 via-fuchsia-500 to-violet-900 opacity-80"></div>
+            <div class="absolute top-20 right-0 w-[400px] h-[400px] bg-violet-500/10 blur-[120px] pointer-events-none rounded-full"></div>
+            
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 left-10 hidden md:block opacity-20"><i class="fas fa-mask text-6xl text-violet-400"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-400 text-xs font-bold tracking-widest mb-4 brand-font">Giai Đoạn 3: Mastery</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d15">NGÀY 15</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">ĐIỆP VỤ "NGƯỜI HÙNG BÓNG ĐÊM"</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Bí mật của cuộc sống là CHO ĐI. Nhưng hôm nay, chúng ta cho đi theo cách của Ninja."</p>
+            </div>
+
+            <div class="p-6 md:p-10">
+                <div class="glass-panel p-8 rounded-2xl border-t-2 border-violet-500 relative bg-gradient-to-b from-slate-900 to-violet-900/10">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex-1 text-center md:text-left">
+                            <h3 class="text-2xl text-violet-400 font-bold uppercase brand-font mb-4">Luật Chơi Bắt Buộc</h3>
+                            <p class="text-gray-300 mb-4 text-sm">Thực hiện ít nhất <span class="text-white font-bold">2 HÀNH ĐỘNG TỬ TẾ</span> với điều kiện tiên quyết:</p>
+                            <div class="bg-black/50 p-4 rounded-xl border border-red-500/50 text-center">
+                                <i class="fas fa-user-secret text-4xl text-white mb-2"></i>
+                                <p class="text-red-400 font-bold uppercase tracking-widest text-sm">Không một ai được phép biết đó là bạn</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-4">
+                            <h4 class="text-white font-bold uppercase text-sm border-b border-gray-700 pb-2">Gợi ý nhiệm vụ:</h4>
+                            <div class="flex items-start"><i class="fas fa-coffee text-violet-500 mt-1 mr-3"></i> <p class="text-xs text-gray-300"><strong>Thanh toán bí mật:</strong> Trả tiền cho bàn bên cạnh rồi rời đi.</p></div>
+                            <div class="flex items-start"><i class="fas fa-gift text-violet-500 mt-1 mr-3"></i> <p class="text-xs text-gray-300"><strong>Món quà vô danh:</strong> Đặt quà lên bàn đồng nghiệp kèm lời nhắn nặc danh.</p></div>
+                            <div class="flex items-start"><i class="fas fa-money-bill-wave text-violet-500 mt-1 mr-3"></i> <p class="text-xs text-gray-300"><strong>Tờ tiền may mắn:</strong> Kẹp tiền vào cuốn sách ở nhà sách.</p></div>
+                            <div class="flex items-start"><i class="fas fa-trash-alt text-violet-500 mt-1 mr-3"></i> <p class="text-xs text-gray-300"><strong>Dọn rác Ninja:</strong> Dọn sạch khu phố khi không ai nhìn thấy.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 md:px-10 pb-10 text-center">
+                 <button class="px-8 py-4 bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-full text-lg uppercase shadow-lg transform transition hover:scale-105">
+                     <i class="fas fa-check-circle mr-2"></i> Xác nhận nhiệm vụ Ninja
+                 </button>
+                 <p class="mt-4 text-gray-400 text-xs italic">"Hãy cảm nhận sự giàu có đích thực khi cho đi mà không cần ghi nhận."</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(day) {
+            // Deactivate all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // Activate current tab
+            document.getElementById('tab-' + day).classList.add('active');
+            
+            // Hide all content blocks
+            const days = ['day11', 'day12', 'day13', 'day14', 'day15'];
+            
+            days.forEach(d => {
+                const el = document.getElementById('content-' + d);
+                if (d === day) {
+                    el.classList.remove('hidden-content');
+                    el.classList.add('visible-content');
+                } else {
+                    el.classList.remove('visible-content');
+                    el.classList.add('hidden-content');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

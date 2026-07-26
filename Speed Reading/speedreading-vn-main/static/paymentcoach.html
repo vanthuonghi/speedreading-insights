@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán Coaching 1 Năm | Speed Reading & AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .modern-card { background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; transition: all 0.3s ease; }
+        .modern-card:hover { transform: translateY(-2px); box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08); }
+        .btn-primary { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); transition: all 0.3s ease; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4); }
+        .qr-glow { box-shadow: 0 0 25px rgba(59, 130, 246, 0.2); }
+    </style>
+</head>
+<body class="antialiased pb-20">
+
+    <!-- Header -->
+    <header class="glass-header fixed w-full top-0 z-50 border-b border-gray-100 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://img.speedreading.vn/logo.png" alt="Logo Speed Reading" class="h-12 w-auto object-contain">
+                <div class="h-8 w-[1px] bg-gray-200 hidden md:block"></div>
+                <span class="text-xl font-black tracking-tight text-gray-900 hidden md:block uppercase italic">Speed<span class="text-red-600">Reading</span></span>
+            </div>
+            <div class="flex items-center gap-2 text-sm font-semibold text-green-600 bg-green-50 px-4 py-2 rounded-full border border-green-100">
+                <span class="material-icons-round text-base">verified_user</span>
+                Bảo mật SSL 256-bit
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-32 max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Cột Trái: Giá trị & Thông tin thanh toán -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Thông báo ưu đãi -->
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5 flex items-start gap-4 shadow-sm animate-pulse">
+                <div class="p-2 bg-blue-100 rounded-full text-blue-700 shrink-0">
+                    <span class="material-icons-round">auto_awesome</span>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-blue-900">Suất Ưu Đãi Coaching 1 Năm</h2>
+                    <p class="text-sm text-blue-700 mt-1">
+                        Chào mừng quý anh chị! Quý vị đã được ghi nhận mức phí ưu đãi dành cho <b>Chương trình Đồng hành Chuyên sâu</b>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chi tiết lộ trình (Value Stack) -->
+            <section class="modern-card p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                    <span class="material-icons-round text-blue-600 text-3xl">psychology</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">Chi tiết lộ trình 12 tháng</h3>
+                        <p class="text-sm text-gray-500 italic">Mã sản phẩm: <span class="font-bold text-gray-700">COACH1Y-AI</span></p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div class="flex items-start gap-4">
+                        <span class="material-icons-round text-green-500 mt-1">check_circle</span>
+                        <div>
+                            <p class="font-bold text-gray-800">Master Speed Reading (Trọn đời)</p>
+                            <p class="text-sm text-gray-600">Làm chủ kỹ thuật đọc nhanh, xóa bỏ đọc thầm, tăng tốc 3-5 lần.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="material-icons-round text-green-500 mt-1">check_circle</span>
+                        <div>
+                            <p class="font-bold text-gray-800">Cố vấn AI cá nhân</p>
+                            <p class="text-sm text-gray-600">Ứng dụng ChatGPT, Claude vào xử lý báo cáo, email và tóm tắt sách.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-100 -mx-2">
+                        <span class="material-icons-round text-red-600 mt-1">stars</span>
+                        <div>
+                            <p class="font-bold text-red-700">1 Năm Mentoring Đồng Hành</p>
+                            <p class="text-sm text-red-600">Kèm cặp 1:1, sửa lỗi trực tiếp và giải quyết bài toán thực tế của quý anh chị.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QR Code & Tài khoản -->
+            <section class="modern-card p-6 md:p-8 overflow-hidden relative">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <span class="material-icons-round text-8xl">account_balance</span>
+                </div>
+                
+                <h3 class="text-xl font-bold text-gray-900 mb-8 flex items-center gap-2">
+                    <span class="material-icons-round text-red-600">payments</span>
+                    Thông tin chuyển khoản
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- VietQR -->
+                    <div class="flex flex-col items-center">
+                        <div class="qr-glow p-3 bg-white rounded-2xl border-2 border-gray-100 relative group transition-transform hover:scale-105">
+                            <img 
+                                src="https://img.vietqr.io/image/MB-0899320202-compact.png?amount=5000000&addInfo=COACH1Y%20[TEN%20QUY%20ANH%20CHI]&accountName=VAN%20THUONG%20HI" 
+                                alt="Mã QR Thanh Toán 5 Triệu" 
+                                class="w-52 h-52 rounded-lg"
+                            >
+                        </div>
+                        <p class="text-xs text-gray-400 mt-4 text-center italic">Quét mã bằng App Ngân hàng<br>(Tự động nhập số tiền & nội dung)</p>
+                    </div>
+
+                    <!-- Card Info -->
+                    <div class="bg-slate-900 rounded-3xl p-6 text-white shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full opacity-10 blur-3xl -mr-16 -mt-16"></div>
+                        
+                        <div class="mb-6 flex justify-between items-center">
+                            <div class="font-black text-2xl italic">MB<span class="text-blue-400 italic">BANK</span></div>
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded-full uppercase tracking-tighter">Hội trụ sở chính</span>
+                        </div>
+
+                        <div class="space-y-4 relative z-10">
+                            <div>
+                                <p class="text-slate-400 text-[10px] uppercase tracking-widest mb-1">Số Tài Khoản</p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl font-mono font-bold tracking-wider" id="accNo">0899 320 202</span>
+                                    <button onclick="copyAcc()" class="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition active:scale-90">
+                                        <span class="material-icons-round text-sm">content_copy</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <p class="text-slate-400 text-[10px] uppercase tracking-widest mb-1">Chủ Tài Khoản</p>
+                                    <p class="text-sm font-bold uppercase">VAN THUONG HI</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-slate-400 text-[10px] uppercase tracking-widest mb-1">Số Tiền</p>
+                                    <p class="text-xl font-bold text-yellow-400">5.000.000đ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-4 bg-orange-50 border border-orange-100 rounded-xl">
+                    <p class="text-sm text-orange-800 text-center font-medium">
+                        Nội dung: <span class="text-red-600 font-bold">[Số Điện Thoại] - COACH1Y</span>
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Cột Phải: Sticky Summary -->
+        <div class="lg:col-span-5 relative">
+            <div class="sticky top-32 space-y-6">
+                
+                <!-- Order Card -->
+                <div class="modern-card p-6 border-t-4 border-t-slate-900">
+                    <h3 class="font-bold text-lg text-gray-900 mb-6 flex justify-between items-center">
+                        Xác nhận đăng ký
+                        <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold uppercase tracking-wider">Đang chờ chuyển khoản</span>
+                    </h3>
+
+                    <div class="flex gap-4 mb-8">
+                        <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center shrink-0">
+                            <span class="material-icons-round text-3xl text-slate-800">workspace_premium</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 leading-tight">Coaching 1 Năm: Đột Phá Năng Lực</h4>
+                            <p class="text-xs text-gray-500 mt-1">Đồng hành sát sao cùng chuyên gia</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pb-6 border-b border-gray-100 text-sm">
+                        <div class="flex justify-between text-gray-500">
+                            <span>Giá trị niêm yết</span>
+                            <span class="line-through">10.000.000đ</span>
+                        </div>
+                        <div class="flex justify-between text-red-600 font-semibold">
+                            <span>Học phí ưu đãi (-50%)</span>
+                            <span>-5.000.000đ</span>
+                        </div>
+                        <div class="flex justify-between text-gray-800">
+                            <span>Phí cấp chứng chỉ</span>
+                            <span class="text-green-600 font-bold uppercase">Miễn phí</span>
+                        </div>
+                    </div>
+
+                    <div class="py-6 flex justify-between items-center">
+                        <span class="font-bold text-gray-800">Tổng thanh toán:</span>
+                        <div class="text-right">
+                            <span class="block text-3xl font-black text-red-600 tracking-tighter">5.000.000đ</span>
+                            <span class="text-xs text-gray-400">Không phát sinh thêm</span>
+                        </div>
+                    </div>
+
+                    <button onclick="confirmTransfer()" class="btn-primary w-full py-4 rounded-2xl text-white font-bold text-lg shadow-xl flex items-center justify-center gap-3 group">
+                        <span>XÁC NHẬN ĐÃ CHUYỂN</span>
+                        <span class="material-icons-round group-hover:translate-x-1 transition">send</span>
+                    </button>
+                    
+                    <p class="text-[10px] text-center text-gray-400 mt-6 leading-relaxed">
+                        Quý anh chị vui lòng chụp ảnh biên lai sau khi chuyển để quá trình kích hoạt lộ trình được nhanh nhất.
+                    </p>
+                </div>
+
+                <!-- Support -->
+                <div class="modern-card p-5 flex items-center gap-4 bg-white border border-gray-100">
+                    <img src="https://img.speedreading.vn/logo.png" alt="Mini Logo" class="w-10 h-10 object-contain opacity-50">
+                    <div>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Hỗ trợ 24/7</p>
+                        <p class="text-sm font-bold text-gray-900">Hotline: <a href="tel:0899320202" class="text-blue-600">0899 320 202</a></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-slate-900/80 z-[100] flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-[32px] max-w-md w-full p-10 text-center animate-bounce-in shadow-2xl">
+            <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                <span class="material-icons-round text-5xl">task_alt</span>
+            </div>
+            <h3 class="text-2xl font-black text-slate-900 mb-3">Đã Ghi Nhận!</h3>
+            <p class="text-slate-500 mb-8 leading-relaxed">Hệ thống đang kiểm tra giao dịch. Cố vấn sẽ liên hệ với quý anh chị qua Zalo trong ít phút để bắt đầu hành trình đồng hành.</p>
+            <button onclick="window.location.href='https://zalo.me/0899320202'" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl hover:bg-blue-700 transition shadow-lg">Liên hệ ngay qua Zalo</button>
+            <button onclick="closeModal()" class="mt-4 text-xs text-slate-400 font-medium hover:underline">Quay lại</button>
+        </div>
+    </div>
+
+    <!-- Zalo Floating -->
+    <a href="https://zalo.me/0899320202" target="_blank" class="fixed bottom-6 right-6 z-50 group">
+        <div class="w-16 h-16 bg-blue-600 rounded-full shadow-2xl flex items-center justify-center border-4 border-white cursor-pointer hover:bg-blue-500 transition transform hover:scale-110">
+            <svg width="35" height="35" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M84.75 32.5C84.75 14.5508 69.1992 0 50 0C30.8008 0 15.25 14.5508 15.25 32.5C15.25 43.125 20.8984 52.5586 29.5 58.3398V73.4375L43.8984 64.1016C45.8516 64.6484 47.8906 65 50 65C69.1992 65 84.75 50.4492 84.75 32.5Z" fill="white"/>
+                <path d="M57.6953 45.332L49.1602 33.3984H57.1484V28.3203H42.7539V32.9102L51.3672 44.8242H42.8516V49.9023H57.6953V45.332Z" fill="#0088FF"/>
+            </svg>
+        </div>
+    </a>
+
+    <script>
+        function copyAcc() {
+            const el = document.createElement('textarea');
+            el.value = '0899320202';
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const btn = document.querySelector('button[onclick="copyAcc()"]');
+            btn.innerHTML = '<span class="material-icons-round text-sm text-green-400">check</span>';
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-icons-round text-sm">content_copy</span>';
+            }, 2000);
+        }
+
+        function confirmTransfer() {
+            document.getElementById('successModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+
+    <style>
+        @keyframes bounce-in {
+            0% { transform: scale(0.9); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-bounce-in { animation: bounce-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    </style>
+
+</body>
+</html>

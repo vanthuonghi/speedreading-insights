@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Văn Hỉ - Chuyên gia BĐS Phía Tây</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a; /* Xanh Navy tạo sự tin tưởng */
+            --secondary-color: #f59e0b; /* Vàng cam tạo điểm nhấn, action */
+            --bg-color: #f8fafc; /* Nền xám sáng cực nhẹ */
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .hub-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 25px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .profile-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .profile-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.2);
+        }
+
+        .badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 2px solid #fff;
+        }
+
+        .name {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            color: var(--primary-color);
+        }
+
+        .hook-text {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            padding: 0 10px;
+        }
+
+        .hook-text strong {
+            color: var(--text-main);
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .link-btn:hover {
+            border-color: var(--primary-color);
+            background-color: #f0fdf4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .link-btn.primary {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+        }
+
+        .link-btn.primary:hover {
+            background-color: #1e40af;
+            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.3);
+        }
+
+        .footer {
+            margin-top: 35px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container">
+        <div class="profile-wrapper">
+            <img src="https://via.placeholder.com/150/1e3a8a/ffffff?text=Hi" alt="Văn Hỉ BĐS" class="profile-img">
+            <span class="badge">Tư vấn Miễn phí</span>
+        </div>
+        
+        <h1 class="name">Văn Hỉ</h1>
+        <p class="hook-text">
+            Giúp bạn tìm nhà, chốt giá sát thực tế tại <strong>Tân Phú, Tân Bình, Bình Tân & Quận 6</strong>. Luôn đăng hình thật, không báo giá ảo.
+        </p>
+
+        <div class="links-container">
+            <a href="#" class="link-btn primary" target="_blank">📋 Điền Form Ký Gửi Nhà Đất</a>
+            <a href="#" class="link-btn" target="_blank">🔍 Nhờ Hỉ Tìm Nhà Theo Nhu Cầu</a>
+            <a href="#" class="link-btn" target="_blank">🏡 Xem Giỏ Hàng Khu Vực Phía Tây</a>
+            <a href="#" class="link-btn" target="_blank">💬 Nhắn tin Zalo trực tiếp</a>
+        </div>
+
+        <div class="footer">
+            <p>Minh bạch thông tin - Giao dịch an toàn</p>
+        </div>
+    </div>
+
+</body>
+</html>

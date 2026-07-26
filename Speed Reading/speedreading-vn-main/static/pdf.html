@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trạm Upload PDF - SpeedReading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1f2937; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .drag-over { background-color: #eff6ff; border-color: #3b82f6; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased p-6 flex items-center justify-center min-h-screen">
+
+    <div class="glass-panel w-full max-w-3xl rounded-2xl shadow-xl overflow-hidden border border-gray-200 p-8">
+        <h2 class="text-2xl font-extrabold text-gray-900 mb-2">📄 Trạm Upload Tài Liệu (PDF)</h2>
+        <p class="text-gray-500 text-sm mb-6">Tự động chuẩn hóa tên file và tạo link tải trực tiếp cho khách hàng.</p>
+
+        <!-- Khu vực Kéo Thả -->
+        <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center transition-colors cursor-pointer hover:bg-gray-50 mb-6">
+            <input type="file" id="fileInput" accept="application/pdf" class="hidden" multiple>
+            <div class="text-4xl mb-2">📥</div>
+            <p class="text-gray-600 font-semibold">Kéo thả file PDF vào đây hoặc Click để chọn</p>
+            <p class="text-xs text-gray-400 mt-1">Hệ thống sẽ tự động đổi tên file thành dạng link chuẩn (không dấu)</p>
+        </div>
+
+        <!-- Danh sách file -->
+        <div id="fileListContainer" class="hidden mb-6 space-y-3 max-h-80 overflow-y-auto pr-2"></div>
+
+        <!-- Nút thao tác -->
+        <div id="actionArea" class="hidden flex flex-col gap-3">
+            <button id="uploadAllBtn" class="w-full bg-rose-600 text-white font-bold py-3 rounded-lg hover:bg-rose-700 transition-colors shadow-md flex justify-center items-center gap-2">
+                🚀 Upload PDF Lên Hosting
+            </button>
+            <button id="copyAllBtn" class="hidden w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700 transition-colors shadow-md flex justify-center items-center gap-2">
+                📋 Copy Toàn Bộ Link Tải
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const UPLOAD_API_URL = "https://img.speedreading.vn/upload.php";
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileListContainer = document.getElementById('fileListContainer');
+        const actionArea = document.getElementById('actionArea');
+        const uploadAllBtn = document.getElementById('uploadAllBtn');
+        const copyAllBtn = document.getElementById('copyAllBtn');
+        
+        let processedFiles = [];
+
+        function generateSlug(str) {
+            str = str.replace(/^\s+|\s+$/g, '').toLowerCase();
+            const from = "àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ·/_,:;";
+            const to   = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd------";
+            for (let i = 0, l = from.length; i < l; i++) {
+                str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+            }
+            return str.replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+        }
+
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            if(e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+        });
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => { 
+            if(e.target.files.length) handleFiles(e.target.files); 
+        });
+
+        function handleFiles(files) {
+            fileListContainer.classList.remove('hidden');
+            actionArea.classList.remove('hidden');
+
+            for (let file of files) {
+                if (file.type !== 'application/pdf') {
+                    alert("Chỉ hỗ trợ file PDF nhé Hỉ!");
+                    continue;
+                }
+
+                let originalName = file.name;
+                let baseName = originalName.substring(0, originalName.lastIndexOf('.'));
+                let finalName = generateSlug(baseName) + '.pdf';
+
+                if (processedFiles.some(f => f.originalName === originalName)) continue;
+
+                let fileObj = {
+                    id: Date.now(),
+                    originalName: originalName,
+                    finalName: finalName,
+                    fileData: file, // Giữ nguyên file gốc, không convert
+                    status: 'ready',
+                    hostedUrl: ''
+                };
+                
+                processedFiles.push(fileObj);
+                renderFileList();
+            }
+        }
+
+        function renderFileList() {
+            fileListContainer.innerHTML = '';
+            processedFiles.forEach(fileObj => {
+                let statusBadge = fileObj.status === 'ready' ? '<span class="text-xs font-bold text-indigo-600">✅ Sẵn sàng</span>' :
+                                  fileObj.status === 'uploading' ? '<span class="text-xs font-bold text-orange-500">🚀 Đang up...</span>' :
+                                  fileObj.status === 'success' ? '<span class="text-xs font-bold text-emerald-600">✔️ Xong</span>' :
+                                  '<span class="text-xs font-bold text-red-600">❌ Lỗi</span>';
+
+                let urlDisplay = fileObj.status === 'success' ? `<a href="${fileObj.hostedUrl}" target="_blank" class="text-xs text-blue-500 underline truncate block w-48">${fileObj.hostedUrl}</a>` : '';
+
+                const itemHtml = `
+                    <div class="flex items-center gap-4 bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="text-3xl">📄</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-gray-400 line-through truncate mb-1">${fileObj.originalName}</p>
+                            <p class="text-sm font-bold text-rose-700 truncate">${fileObj.finalName}</p>
+                            ${urlDisplay}
+                        </div>
+                        <div class="w-24 text-right">${statusBadge}</div>
+                    </div>
+                `;
+                fileListContainer.insertAdjacentHTML('beforeend', itemHtml);
+            });
+        }
+
+        uploadAllBtn.addEventListener('click', async () => {
+            uploadAllBtn.innerHTML = "⏳ Đang tải tài liệu lên...";
+            uploadAllBtn.disabled = true;
+            copyAllBtn.classList.add('hidden');
+
+            for (let fileObj of processedFiles) {
+                if (fileObj.status !== 'ready' && fileObj.status !== 'error') continue;
+
+                fileObj.status = 'uploading';
+                renderFileList();
+
+                const formData = new FormData();
+                formData.append('file', fileObj.fileData, fileObj.finalName);
+                formData.append('filename', fileObj.finalName);
+
+                try {
+                    const response = await fetch(UPLOAD_API_URL, { method: 'POST', body: formData });
+                    const result = await response.json();
+                    
+                    if(result.status === 'success') {
+                        fileObj.status = 'success';
+                        fileObj.hostedUrl = result.url;
+                    } else { fileObj.status = 'error'; }
+                } catch (error) { fileObj.status = 'error'; }
+                renderFileList();
+            }
+
+            if(processedFiles.some(f => f.status === 'success')) {
+                uploadAllBtn.innerHTML = "✅ Hoàn Tất Upload!";
+                copyAllBtn.classList.remove('hidden');
+            } else {
+                uploadAllBtn.innerHTML = "❌ Lỗi Upload";
+                uploadAllBtn.disabled = false;
+            }
+        });
+
+        copyAllBtn.addEventListener('click', () => {
+            const links = processedFiles.filter(f => f.status === 'success').map(f => f.hostedUrl).join('\n');
+            if (links) {
+                navigator.clipboard.writeText(links);
+                copyAllBtn.innerHTML = "✅ Đã Copy Tất Cả Link!";
+                setTimeout(() => copyAllBtn.innerHTML = "📋 Copy Toàn Bộ Link Tải", 3000);
+            }
+        });
+    </script>
+</body>
+</html>

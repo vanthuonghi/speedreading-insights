@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading - Dashboard Quản Lý Đa Kênh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Be Vietnam Pro', sans-serif; 
+            background-color: #f8fafc;
+        }
+        .bg-gradient-brand {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+        .step-card { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 4px solid #dc2626;
+        }
+        .step-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+        }
+        .btn-hover-effect { transition: all 0.2s; }
+        .btn-hover-effect:active { transform: scale(0.98); }
+        input[type="checkbox"]:checked { accent-color: #dc2626; }
+        .fa-spin-fast { animation: fa-spin 0.8s infinite linear; }
+        
+        .course-radio:checked + label {
+            border-color: #dc2626;
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-10">
+
+    <!-- Header -->
+    <div class="bg-gradient-brand text-white shadow-lg mb-8">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
+                    <i class="fa-solid fa-bolt text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">SpeedReading Admin</h1>
+                    <p class="text-red-100 text-sm opacity-90">Hệ thống xử lý & Kích hoạt lộ trình đọc nhanh đột phá</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="resetForm()" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 backdrop-blur-sm">
+                    <i class="fa-solid fa-rotate-right"></i> Làm mới
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- CỘT TRÁI: NHẬP LIỆU -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Bước 0: CHỌN LỘ TRÌNH -->
+            <div class="bg-white p-6 rounded-xl shadow-sm step-card relative group border-t-blue-600" style="border-top-color: #2563eb;">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="bg-blue-100 text-blue-700 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">0</span>
+                    <h2 class="font-bold text-lg text-gray-800">Chọn Lộ Trình Đăng Ký</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-3">
+                    <div>
+                        <input type="radio" name="courseType" id="c200" value="200" class="hidden course-radio" checked onchange="updatePreview()">
+                        <label for="c200" class="flex items-center justify-between p-3 border-2 border-gray-100 rounded-xl cursor-pointer hover:bg-gray-50 transition">
+                            <span class="font-bold text-sm">Học trọn bộ Video tự Học Speed Reading mọi lúc mọi nơi</span>
+                            <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full flex-shrink-0 ml-2">Video</span>
+                        </label>
+                    </div>
+                    <div>
+                        <input type="radio" name="courseType" id="c980" value="980" class="hidden course-radio" onchange="updatePreview()">
+                        <label for="c980" class="flex items-center justify-between p-3 border-2 border-gray-100 rounded-xl cursor-pointer hover:bg-gray-50 transition">
+                            <span class="font-bold text-sm">Học Speed Reading Zoom Online</span>
+                            <span class="text-[10px] bg-red-100 text-red-600 px-2 py-1 rounded-full flex-shrink-0 ml-2">Zoom</span>
+                        </label>
+                    </div>
+                    <div>
+                        <input type="radio" name="courseType" id="cVIP" value="VIP" class="hidden course-radio" onchange="updatePreview()">
+                        <label for="cVIP" class="flex items-center justify-between p-3 border-2 border-gray-100 rounded-xl cursor-pointer hover:bg-gray-50 transition">
+                            <span class="font-bold text-sm">Coach 1 Năm tăng trưởng đột phá</span>
+                            <span class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full flex-shrink-0 ml-2">Coach</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bước 1: Thông tin -->
+            <div class="bg-white p-6 rounded-xl shadow-sm step-card relative group">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="bg-red-100 text-red-700 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">1</span>
+                    <h2 class="font-bold text-lg text-gray-800">Thông tin Học viên</h2>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Họ tên</label>
+                        <input type="text" id="sName" oninput="updatePreview()" placeholder="Nguyễn Văn A" class="w-full px-4 py-2 bg-slate-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Số điện thoại (Zalo)</label>
+                        <input type="text" id="sPhone" oninput="updatePreview()" placeholder="09xxxxxxx" class="w-full px-4 py-2 bg-slate-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Email</label>
+                        <input type="email" id="sEmail" placeholder="email@example.com" class="w-full px-4 py-2 bg-slate-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bước 2: API Coupon (Chỉ dành cho lộ trình Video) -->
+            <div id="couponSection" class="bg-white p-6 rounded-xl shadow-sm step-card relative group">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="bg-red-100 text-red-700 w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm">2</span>
+                    <h2 class="font-bold text-lg text-gray-800">Mã Kích Hoạt (API Unica)</h2>
+                </div>
+                <div class="space-y-4">
+                    <button id="btnGetCoupon" onclick="fetchCouponAPI()" class="w-full bg-gradient-brand hover:opacity-90 text-white font-bold py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2 btn-hover-effect">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Lấy mã tự động</span>
+                    </button>
+                    <div class="relative">
+                        <input type="text" id="sCoupon" oninput="updatePreview()" placeholder="MÃ COUPON" class="w-full p-3 border-2 border-red-100 bg-red-50 rounded-lg text-center font-bold text-xl text-red-600 tracking-wider focus:border-red-500 outline-none">
+                    </div>
+                    <p id="apiStatus" class="h-4 text-[10px] text-center text-gray-400 italic"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CỘT PHẢI: THAO TÁC -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <!-- CRM Status -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-start gap-4">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span class="font-bold text-lg">3</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800">Kích hoạt CRM</h3>
+                        <p class="text-sm text-gray-500">Tag chuẩn: <span id="crmTagDisplay" class="font-bold text-red-600 uppercase">Học Video</span></p>
+                    </div>
+                </div>
+                <a href="https://crm.speedreading.vn/wp-admin/admin.php?page=fluentcrm-admin#/" target="_blank" class="px-6 py-2.5 rounded-lg border-2 border-red-100 text-red-600 font-bold hover:bg-red-50 transition flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-tags"></i> Mở CRM
+                </a>
+            </div>
+
+            <!-- Soạn Tin -->
+            <div class="bg-white p-0 rounded-xl shadow-sm step-card overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-red-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">4</span>
+                        <h2 class="font-bold text-gray-800">Nội dung gửi khách</h2>
+                    </div>
+                    <div id="courseBadge" class="px-3 py-1 rounded-full text-[10px] font-bold">Học Video</div>
+                </div>
+
+                <div class="p-6">
+                    <div class="mb-5 flex items-center gap-3 bg-red-50 p-3 rounded-lg border border-red-100">
+                        <i class="fa-brands fa-zalo text-blue-600 text-xl"></i>
+                        <div class="flex-1">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase">Link nhóm Zalo hỗ trợ:</label>
+                            <input type="text" id="zaloGroupLink" oninput="updatePreview()" class="w-full bg-transparent border-none p-0 text-sm font-medium text-gray-800 focus:ring-0">
+                        </div>
+                    </div>
+
+                    <textarea id="messageContent" rows="12" class="w-full p-5 border border-gray-200 rounded-xl bg-gray-50 font-sans text-gray-700 leading-relaxed focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition resize-none" spellcheck="false"></textarea>
+
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="copyMessage()" class="bg-gray-800 hover:bg-gray-900 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg">
+                            <i class="fa-regular fa-copy"></i> Copy Nội dung
+                        </button>
+                        <button onclick="openZaloChat()" class="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg">
+                            <i class="fa-solid fa-comment-dots"></i> Chat Zalo
+                        </button>
+                        <button onclick="sendEmail()" class="bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg">
+                            <i class="fa-regular fa-envelope"></i> Gửi Email
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-gray-900 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-32 transition-transform duration-300 flex items-center gap-3 z-50 border-l-4 border-green-500">
+        <i class="fa-solid fa-circle-check text-green-400 text-xl"></i>
+        <span id="toastMsg" class="text-sm">Thông báo thành công</span>
+    </div>
+
+    <script>
+        const UNICA_API_URL = "https://unica.vn/api/teacher/coupon/14006/bVBRcm5nQjBGQ3lBWnhGQXBoL3RiMWs4SHJ3VnlXNXRoajNZaVc4WnRXOD0?aff=14006";
+
+        const COURSE_CONFIG = {
+            "200": {
+                name: "Học trọn bộ Video tự Học Speed Reading mọi lúc mọi nơi",
+                tag: "Học Video Tự Học",
+                zalo: "https://speedreading.vn/nhomzalo-video-speedreading",
+                badgeClass: "bg-blue-100 text-blue-700",
+                badgeText: "VIDEO TỰ HỌC",
+                hasCoupon: true,
+                template: (name, coupon, zalo) => `Chào quý khách hàng ${name}, 👋\n\nCảm ơn anh/chị đã đăng ký lộ trình "Học trọn bộ Video tự Học Speed Reading mọi lúc mọi nơi". Giao dịch của quý anh chị đã được xác nhận thành công! ✅\n\nTHÔNG TIN KÍCH HOẠT (HỌC TRÊN UNICA):\n1. Truy cập: http://unica.vn/coupon\n2. Nhập mã: ${coupon}\n\nTHAM GIA NHÓM HỖ TRỢ ĐỂ NHẬN QUYỀN LỢI:\n👉 ${zalo}\n\nChúc quý anh chị có những trải nghiệm học tập tuyệt vời và đột phá tốc độ đọc của mình! 🚀`
+            },
+            "980": {
+                name: "Học Speed Reading Zoom Online",
+                tag: "Học Speed Reading Zoom",
+                zalo: "https://speedreading.vn/nhomzalo-zoom-online",
+                badgeClass: "bg-red-100 text-red-700",
+                badgeText: "ZOOM ONLINE",
+                hasCoupon: false,
+                template: (name, coupon, zalo) => `Chào quý anh chị ${name}, 👋\n\nChúc mừng anh/chị đã chính thức gia nhập chương trình "Học Speed Reading Zoom Online"! Đây là lộ trình chuyên sâu giúp quý anh chị làm chủ hoàn toàn kỹ năng đọc nhanh và ghi nhớ hệ thống thông qua các buổi học trực tiếp.\n\nQUYỀN LỢI ƯU VIỆT:\n✅ Tham gia 100% các buổi Zoom thực chiến cùng giảng viên.\n✅ Nhận bộ tài liệu Ebook & Audio độc quyền qua nhóm Zalo.\n✅ Hỗ trợ giải đáp thắc mắc 24/7 trong suốt lộ trình.\n\nĐƯỜNG DÂY HỖ TRỢ & NHẬN LỊCH HỌC:\n👉 Tham gia nhóm: ${zalo}\n\nQuý anh chị vui lòng vào nhóm để nhận ngay hướng dẫn chuẩn bị cho buổi học đầu tiên nhé! 🚀`
+            },
+            "VIP": {
+                name: "Coach 1 Năm tăng trưởng đột phá",
+                tag: "Coach 1 Năm",
+                zalo: "https://zalo.me/g/coaching-tang-truong-dot-pha",
+                badgeClass: "bg-yellow-100 text-yellow-700",
+                badgeText: "COACH 1 NĂM",
+                hasCoupon: false,
+                template: (name, coupon, zalo) => `Trân trọng chào quý anh chị ${name}, 👋\n\nRất vinh dự được đồng hành cùng anh/chị trong lộ trình đặc quyền "Coach 1 Năm tăng trưởng đột phá" - Chương trình cá nhân hóa cao cấp nhất của SpeedReading.\n\nQUY TRÌNH ĐỒNG HÀNH SẮP TỚI:\n💎 Giảng viên sẽ liên hệ riêng để khảo sát năng lực & thiết lập mục tiêu 1 năm.\n💎 Thiết kế lộ trình học tập & rèn luyện cá nhân hóa theo từng tháng.\n💎 Ưu tiên tham gia mọi Workshop và nhận tài liệu cao cấp nhất.\n\nNHÓM ĐẶC QUYỀN (GIẢNG VIÊN & TRỢ LÝ RIÊNG):\n👉 Link tham gia: ${zalo}\n\nQuý anh chị vui lòng tham gia nhóm đặc quyền này để chúng ta bắt đầu buổi định hướng chiến lược đầu tiên. Trân trọng! 🌟`
+            }
+        };
+
+        async function fetchCouponAPI() {
+            const btn = document.getElementById('btnGetCoupon');
+            const input = document.getElementById('sCoupon');
+            const originalText = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin-fast"></i> <span>Đang lấy mã...</span>';
+            
+            try {
+                const response = await fetch(UNICA_API_URL);
+                const data = await response.text();
+                let code = data.replace(/["']/g, "").trim();
+                input.value = code;
+                updatePreview();
+                showToast("Đã lấy mã Coupon tự động thành công!");
+            } catch (error) {
+                showToast("Lỗi kết nối API. Vui lòng thử lại!");
+                window.open(UNICA_API_URL, '_blank');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        function updatePreview() {
+            const type = document.querySelector('input[name="courseType"]:checked').value;
+            const config = COURSE_CONFIG[type];
+            const name = document.getElementById('sName').value || '[Tên Quý Anh Chị]';
+            const coupon = document.getElementById('sCoupon').value || '[Mã Kích Hoạt]';
+            
+            const zaloInput = document.getElementById('zaloGroupLink');
+            if(!zaloInput.dataset.manual) {
+                zaloInput.value = config.zalo;
+            }
+
+            document.getElementById('couponSection').style.display = config.hasCoupon ? 'block' : 'none';
+            document.getElementById('crmTagDisplay').innerText = config.tag;
+            
+            const badge = document.getElementById('courseBadge');
+            badge.innerText = config.badgeText;
+            badge.className = `px-3 py-1 rounded-full text-[10px] font-bold ${config.badgeClass}`;
+
+            document.getElementById('messageContent').value = config.template(name, coupon, zaloInput.value);
+        }
+
+        document.getElementById('zaloGroupLink').addEventListener('input', function() {
+            this.dataset.manual = "true";
+        });
+
+        function copyMessage() {
+            const content = document.getElementById('messageContent');
+            content.select();
+            document.execCommand('copy');
+            showToast('Đã copy nội dung kịch bản!');
+        }
+
+        function openZaloChat() {
+            const phone = document.getElementById('sPhone').value;
+            if (!phone) return showToast('Vui lòng nhập số điện thoại khách!');
+            window.open(`https://zalo.me/${phone}`, '_blank');
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('sEmail').value;
+            if (!email) return showToast('Vui lòng nhập Email khách!');
+            const type = document.querySelector('input[name="courseType"]:checked').value;
+            const subject = `[SpeedReading] Thông tin kích hoạt: ${COURSE_CONFIG[type].name}`;
+            const body = document.getElementById('messageContent').value;
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(gmailUrl, '_blank');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.classList.remove('translate-y-32');
+            setTimeout(() => toast.classList.add('translate-y-32'), 3000);
+        }
+
+        function resetForm() {
+            if(confirm('Bạn có muốn xóa dữ liệu hiện tại để bắt đầu đơn mới?')) {
+                location.reload();
+            }
+        }
+
+        updatePreview();
+    </script>
+</body>
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sách Giáo Khoa Speed Reading Lớp 4 - Toàn Bản</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 25mm 20mm 25mm 25mm;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #222;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+            color: #00796B; /* Xanh Ngọc */
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            text-indent: 1cm;
+            font-size: 16px;
+        }
+        .page-break {
+            page-break-after: always;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 40px;
+            margin-bottom: 40px;
+        }
+        
+        /* Trang Bìa Lót */
+        .cover-page {
+            text-align: center;
+            height: 900px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 0;
+        }
+        .cover-compiler {
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cover-title-box {
+            margin-top: 150px;
+        }
+        .cover-subject {
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .cover-main-title {
+            font-family: 'Comic Sans MS', sans-serif;
+            font-size: 40px;
+            font-weight: bold;
+            color: #00796B;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .cover-grade {
+            font-family: 'Comic Sans MS', sans-serif;
+            font-size: 85px;
+            font-weight: bold;
+            color: #FFA000; /* Vàng Cam */
+            line-height: 1;
+            text-shadow: 2px 3px 0px #FFE082;
+        }
+        .slogan {
+            font-size: 20px;
+            font-weight: bold;
+            color: #E64A19;
+            margin-top: 25px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cover-publisher {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: auto;
+            letter-spacing: 1px;
+        }
+        
+        /* Lời Nói Đầu & Hướng Dẫn */
+        .section-headline {
+            text-align: center;
+            font-size: 26px;
+            text-transform: uppercase;
+            border-bottom: 3px dashed #00796B;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-family: 'Comic Sans MS', sans-serif;
+            color: #00796B;
+        }
+        .author-sign {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 40px;
+            padding-right: 20px;
+            font-style: italic;
+            font-size: 16px;
+        }
+        .guide-box {
+            border: 2px solid #00796B;
+            background-color: #E0F2F1;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .guide-icon-title {
+            font-family: 'Comic Sans MS', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #E64A19;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .guide-box p {
+            text-indent: 0;
+            margin-bottom: 0;
+        }
+        
+        /* Mục Lục */
+        .toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .toc-table td {
+            padding: 8px 0;
+            vertical-align: bottom;
+            font-size: 15px;
+        }
+        .toc-theme {
+            font-weight: bold;
+            color: #00796B;
+            font-size: 16px;
+            padding-top: 25px !important;
+            text-transform: uppercase;
+            border-bottom: 2px solid #B2DFDB;
+        }
+        .toc-lesson {
+            font-weight: bold;
+            padding-left: 15px;
+            color: #E64A19;
+            padding-top: 12px;
+        }
+        .toc-period {
+            padding-left: 30px;
+            font-style: normal;
+            color: #333;
+        }
+        .page-num {
+            text-align: right;
+            font-weight: bold;
+            width: 40px;
+        }
+        .dots { border-bottom: 1px dotted #aaa; }
+
+        /* BÀI 1 TIẾT 1 CHI TIẾT */
+        .lesson-header {
+            text-align: right;
+            font-size: 14px;
+            color: #00796B;
+            border-bottom: 2px solid #00796B;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .title-container-lesson {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .lesson-number-tag {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFA000;
+            text-transform: uppercase;
+        }
+        .lesson-title-tag {
+            font-family: 'Comic Sans MS', sans-serif;
+            font-size: 26px;
+            font-weight: bold;
+            color: #00796B;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+        .lesson-sub-title {
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+        }
+        .box-detail {
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            page-break-inside: avoid;
+        }
+        .box-detail-title {
+            font-family: 'Comic Sans MS', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+        .box-detail-title span {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .box-nhiemvu { background-color: #E8F5E9; border-left: 6px solid #4CAF50; }
+        .box-nhiemvu .box-detail-title { color: #2E7D32; }
+        
+        .box-khoidong { background-color: #FFF8E1; border: 2px dashed #FFA000; }
+        .box-khoidong .box-detail-title { color: #F57F17; }
+        
+        .box-thuchanh { background-color: #E0F2F1; border: 2px solid #00796B; }
+        .box-thuchanh .box-detail-title { color: #00695C; }
+        
+        .box-thuhoach { background-color: #FBE9E7; border-left: 6px solid #FF5722; }
+        .box-thuhoach .box-detail-title { color: #D84315; }
+
+        .highlight-green { color: #00796B; font-weight: bold; }
+        .highlight-orange { color: #E64A19; font-weight: bold; }
+
+        .story-container {
+            background-color: #fff;
+            border: 2px dashed #00796B;
+            border-radius: 10px;
+            padding: 25px 20px 20px 20px;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .story-header-tag {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background-color: #00796B;
+            color: #fff;
+            padding: 4px 15px;
+            font-size: 14px;
+            font-family: 'Comic Sans MS', sans-serif;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+        .word-count-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #FFA000;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .story-container p { text-indent: 20px; margin-bottom: 10px; text-align: justify; }
+
+        .result-board {
+            display: flex;
+            justify-content: space-around;
+            background-color: #FFF3E0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            border: 2px solid #FFB74D;
+        }
+        .result-board span { color: #E64A19; font-size: 22px; }
+        
+        ul, ol { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="cover-page page-break">
+        <div class="cover-compiler">
+            HỘI ĐỒNG BIÊN SOẠN TÀI LIỆU PHÁT TRIỂN KỸ NĂNG NHÍ
+        </div>
+        <div class="cover-title-box">
+            <div class="cover-subject">Sách giáo khoa Kỹ năng</div>
+            <div class="cover-main-title">ĐỌC HIỂU SIÊU TỐC</div>
+            <div class="cover-grade">4</div>
+            <div class="slogan">"BẬT TỐC ĐÔI MẮT - KHÁM PHÁ THẾ GIỚI"</div>
+        </div>
+        <div class="cover-publisher">
+            NHÀ XUẤT BẢN GIÁO DỤC VIỆT NAM
+        </div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Lời nói đầu</div>
+        <p>Chào các phi hành gia nhí lớp 4!</p>
+        <p>Chúc mừng em đã lên lớp 4! Ở năm học này, những cuốn sách sẽ dày hơn một chút, những câu chuyện sẽ dài hơn một chút và có thật nhiều kiến thức Lịch sử, Khoa học thú vị đang chờ em khám phá.</p>
+        <p>Để con tàu vũ trụ của em bay thật xa trong dải ngân hà tri thức, em cần một động cơ cực mạnh. Động cơ đó chính là <strong>Đôi Mắt Tinh Anh</strong>. Cuốn sách này là bản đồ hướng dẫn em cách nâng cấp đôi mắt của mình, giúp em đọc sách nhanh như gió mà vẫn nhớ thật lâu.</p>
+        <p>Chúng mình sẽ cùng nhau rèn luyện để không còn bị mỏi mắt, không còn thói quen mấp máy môi khi đọc, và biết cách dùng ngón tay làm "chiếc đũa thần" dẫn đường trên trang giấy. Khi em đọc nhanh hơn, em sẽ có thể hoàn thành bài tập sớm hơn, và có thêm nhiều thời gian để chơi thể thao, vẽ tranh hay nghe nhạc.</p>
+        <p>Thắt dây an toàn vào nhé, chuyến bay Tốc độ cao chính thức bắt đầu!</p>
+        <div class="author-sign">CÁC TÁC GIẢ</div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Hướng dẫn bay</div>
+        <p style="text-indent: 0; margin-bottom: 20px;">Mỗi bài học trong cuốn sách này là một nhiệm vụ bí mật. Để hoàn thành xuất sắc, em hãy đi qua 4 trạm dừng chân sau:</p>
+        
+        <div class="guide-box">
+            <div class="guide-icon-title">🚀 TRẠM 1: KHỞI ĐỘNG ĐỘNG CƠ</div>
+            <p>Các bài tập vui nhộn như đảo mắt vòng tròn, đếm số nhanh để làm nóng cơ mắt. Đôi mắt khỏe thì mới đọc chữ nhanh được!</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">💡 TRẠM 2: MẬT MÃ BÍ ẨN</div>
+            <p>Khám phá một nguyên tắc mới. Em sẽ biết tại sao phải gom 2-3 chữ lại đọc cùng lúc, hay tại sao không được phép để mắt nhìn ngược lại dòng cũ.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">⚔️ TRẠM 3: THỬ THÁCH VƯỢT KHÔNG GIAN</div>
+            <p>Tay cầm bút, mắt nhìn trang sách và BẤM GIỜ! Em sẽ đọc những câu chuyện siêu thú vị về thiên nhiên, loài vật để đo xem mình bay nhanh cỡ nào.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">🏆 TRẠM 4: RINH QUÀ TRÍ NHỚ</div>
+            <p>Đọc nhanh xong phải nhớ nội dung nhé! Trạm này có các câu đố vui và bài tập vẽ sơ đồ để kiểm tra xem em nhớ được những chi tiết nào.</p>
+        </div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Bản đồ bay Lớp 4</div>
+        <table class="toc-table">
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ I: ĐO VẬN TỐC TÀU VŨ TRỤ</td>
+                <td class="dots"></td>
+                <td class="page-num">5</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 1: Khởi động và làm quen với Tốc độ đọc</td>
+                <td class="dots"></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 1: Đếm xem 1 phút em đọc được bao nhiêu chữ? (Đo WPM)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 2: Không chỉ nhanh, mà còn phải hiểu! (Đo chỉ số Nhớ bài)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">10</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 3: Lập bảng Theo dõi tốc độ trên cuốn sổ tay</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">14</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 2: Làm khỏe đôi mắt của phi hành gia</td>
+                <td class="dots"></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 4: Tập thể dục mắt: Vẽ hình số 8 khổng lồ trong không khí</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 5: Trò chơi tìm hình ẩn giấu trong trang sách chi chít chữ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">22</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ II: ĐÁNH BẠI NHỮNG LỰC CẢN VÔ HÌNH</td>
+                <td class="dots"></td>
+                <td class="page-num">27</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 3: Tạm biệt thói quen đọc thầm bằng miệng</td>
+                <td class="dots"></td>
+                <td class="page-num">28</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 6: Tại sao môi nhép theo chữ lại làm ta đọc chậm như rùa?</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">28</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 7: Kỹ thuật khóa môi: Cắn nhẹ đầu bút khi lướt mắt đọc sách</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">32</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 8: Tập nhẩm giai điệu La-La-La trong đầu để không đọc thầm chữ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">36</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 4: Mắt không được đi lùi!</td>
+                <td class="dots"></td>
+                <td class="page-num">40</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 9: Bệnh "đọc ngược" khiến mắt em mỏi nhừ ra sao?</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">40</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 10: Dùng tờ bìa cứng che dòng chữ vừa đọc xong</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">44</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 11: Thi đọc truyện Cổ tích: Ai không nhìn lùi lại là người chiến thắng</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">48</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ III: CHIẾC BÚT DẪN ĐƯỜNG THẦN TỐC</td>
+                <td class="dots"></td>
+                <td class="page-num">53</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 5: Học cách rê bút trên mặt giấy</td>
+                <td class="dots"></td>
+                <td class="page-num">54</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 12: Tay đi đến đâu, Mắt nhìn đến đó</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">54</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 13: Đọc lướt văn bản Địa lý 4: Rê bút theo nhịp đếm 1-2-3</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">58</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 14: Ép tốc độ: Đưa bút nhanh hơn bình thường để não bộ chạy theo</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">62</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 15: Kiểm tra giữa kỳ: Đọc truyện lịch sử bằng bút dẫn đường</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">66</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ IV: PHÉP THUẬT GOM CHỮ</td>
+                <td class="dots"></td>
+                <td class="page-num">71</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 6: Không nhìn từng chữ, hãy nhìn từng cụm</td>
+                <td class="dots"></td>
+                <td class="page-num">72</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 16: Trò chơi chụp ảnh: Nhìn 1 giây và đọc lại 3 chữ liền nhau</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">72</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 17: Tập đọc câu thơ bằng cách nhảy mắt 2 lần mỗi dòng</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">76</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 18: Luyện tập mở rộng góc nhìn của mắt bằng Bảng số Schulte (4x4)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">80</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 7: Thợ săn Từ khóa</td>
+                <td class="dots"></td>
+                <td class="page-num">84</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 19: Từ khóa là gì? Tại sao chỉ cần đọc từ khóa cũng hiểu cả câu?</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">84</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 20: Tập gạch chân nhanh tên người, địa điểm trong văn bản Khoa học</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">88</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 21: Lướt qua các từ nối "và, nhưng, thì, mà" để bay nhanh hơn</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">92</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ V: HỌA SĨ TRÍ NHỚ VÀ KHÁM PHÁ TỰ DO</td>
+                <td class="dots"></td>
+                <td class="page-num">97</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 8: Vẽ sơ đồ Tư duy đơn giản</td>
+                <td class="dots"></td>
+                <td class="page-num">98</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 22-26: Các bước vẽ sơ đồ Cây để tóm tắt bài học lớp 4</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">98</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 9: Chinh phục thư viện</td>
+                <td class="dots"></td>
+                <td class="page-num">118</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 27-31: Thực hành đọc các loại sách khác nhau (Sách Khoa học, Truyện ngắn)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">118</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 32-35: Đo lường tốc độ cuối năm và Lễ trao huy chương Tốc độ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">138</td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <div class="lesson-header">
+            CHỦ ĐỀ I: ĐO VẬN TỐC TÀU VŨ TRỤ
+        </div>
+
+        <div class="title-container-lesson">
+            <div class="lesson-number-tag">Bài 1: Khởi động và làm quen với Tốc độ đọc</div>
+            <div class="lesson-title-tag">Tiết 1: 1 PHÚT EM ĐỌC ĐƯỢC BAO NHIÊU CHỮ?</div>
+            <div class="lesson-sub-title">"Cùng kiểm tra xem đôi mắt của em đang bay ở vận tốc nào nhé!"</div>
+        </div>
+
+        <div class="box-detail box-nhiemvu">
+            <h3 class="box-detail-title"><span>🎯</span> Nhiệm vụ cần đạt</h3>
+            <ul>
+                <li>Biết cách tự cầm đồng hồ bấm giờ để đo tốc độ đọc của mình.</li>
+                <li>Làm quen với từ viết tắt <span class="highlight-green">WPM (Từ trong 1 phút)</span>.</li>
+                <li>Đọc hết một câu chuyện nhỏ và đếm xem mình mất bao nhiêu giây.</li>
+            </ul>
+        </div>
+
+        <div class="box-detail box-khoidong">
+            <h3 class="box-detail-title"><span>🚀</span> Trạm 1: Khởi động động cơ</h3>
+            <p>Trước khi tàu vũ trụ cất cánh, chúng ta phải làm nóng động cơ đôi mắt!</p>
+            <p><strong>Trò chơi "Con ong chăm chỉ":</strong> Em hãy giữ đầu thật im (không được quay đầu sang hai bên). Giơ ngón tay trỏ của em ra phía trước mặt. Mắt em hãy nhìn chằm chằm vào đầu ngón tay. Bây giờ, vẽ một hình tròn thật to bằng ngón tay trong không khí, và bắt đôi mắt phải đuổi theo ngón tay nhé. Làm 5 lần vòng tròn!</p>
+        </div>
+
+        <div class="box-detail box-thuchanh" style="background-color: #E0F2F1; border: 2px solid #00796B;">
+            <h3 class="box-detail-title" style="color: #00695C;"><span>💡</span> Trạm 2: Mật mã WPM</h3>
+            <p>Để biết tàu vũ trụ bay nhanh hay chậm, người ta dùng đồng hồ đo tốc độ km/h. Còn để biết mắt em đọc nhanh hay chậm, các nhà khoa học dùng mật mã tên là <span class="highlight-orange">WPM (Words Per Minute - Số chữ đọc được trong 1 phút)</span>.</p>
+            <p>Các bạn lớp 4 thường có tốc độ đọc khoảng <strong>120 chữ đến 150 chữ</strong> trong một phút. Mục tiêu của chúng mình sau khi học xong sách này là sẽ tăng lên thành 250 chữ/phút đấy!</p>
+        </div>
+
+        <div class="box-detail box-thuchanh" style="background-color: #fff; border: 2px solid #E64A19;">
+            <h3 class="box-detail-title" style="color: #E64A19;"><span>⚔️</span> Trạm 3: Thử thách Bấm giờ</h3>
+            <p>Em hãy lấy đồng hồ bấm giờ ra (hoặc nhờ thầy cô bấm giúp). Khi có hiệu lệnh <strong>"BẮT ĐẦU"</strong>, em hãy đọc thầm đoạn truyện dưới đây. Đọc với tốc độ tự nhiên nhất của em nhé, để hiểu xem chuyện gì đang xảy ra.</p>
+            
+            <div class="story-container">
+                <div class="story-header-tag">Truyện: Bí mật rừng đom đóm</div>
+                <div class="word-count-badge">Tổng cộng: 160 Chữ</div>
+                <p>Nghỉ hè năm nay, Bi được bố mẹ cho về quê ngoại chơi. Quê ngoại có một khu rừng nhỏ nằm ngay sau dãy đồi. Buổi tối, khi mặt trời vừa đi ngủ, bà ngoại dắt Bi ra bờ ao. Bỗng nhiên, Bi reo lên thích thú.</p>
+                <p>Trước mắt cậu bé là hàng ngàn đốm sáng nhỏ xíu đang bay lượn trong không trung. Trông chúng hệt như những ngôi sao nhỏ rớt xuống từ bầu trời đêm. Bà ngoại cười hiền từ và bảo: "Đó là những chú đom đóm đấy cháu ạ. Đom đóm thắp đèn lồng đi tìm bạn tình. Chúng chỉ xuất hiện ở những nơi không khí thật trong lành và sạch sẽ mà thôi."</p>
+                <p>Bi đưa tay ra, một chú đom đóm nhỏ xíu, bụng chớp nháy ánh sáng vàng xanh nhẹ nhàng đậu lên ngón tay cậu. Bi nín thở nhìn ngắm. Lần đầu tiên trong đời, cậu bé thành phố thấy thiên nhiên kì diệu đến vậy.</p>
+            </div>
+
+            <p><strong>🕒 Thời gian em đọc xong là:</strong> ....... Giây.</p>
+            <p><strong>Tính tốc độ WPM:</strong> Em hãy lấy <span class="highlight-green">160</span> chia cho số giây em vừa đọc, rồi nhân với 60 nhé! <br> 
+            <em>(Ví dụ em đọc hết 80 giây: 160 : 80 x 60 = 120 WPM)</em></p>
+        </div>
+
+        <div class="box-detail box-thuhoach">
+            <h3 class="box-detail-title"><span>🏆</span> Trạm 4: Rinh quà Trí nhớ</h3>
+            <p>Đọc nhanh xong thì gấp sách lại và kiểm tra xem em nhớ được chi tiết nào nhé!</p>
+            <ol>
+                <li>Bà ngoại dắt Bi đi xem con vật gì? (Đom đóm / Con dế / Con bướm)</li>
+                <li>Bà ngoại nói đom đóm chỉ xuất hiện ở nơi có môi trường như thế nào?</li>
+                <li>Ánh sáng của đom đóm màu gì?</li>
+            </ol>
+            
+            <div class="result-board">
+                <div>Tốc độ WPM của em: <span>..........</span></div>
+                <div>Em trả lời đúng: <span>.... / 3</span> câu</div>
+            </div>
+            <p style="text-align: center; margin-top: 15px; font-style: italic; color: #555;">Ghi lại kết quả này vào sổ tay để xem cuối kì em tiến bộ ra sao nhé!</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

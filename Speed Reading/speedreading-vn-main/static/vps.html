@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mở tài khoản chứng khoán VPS - Dành cho người mới</title>
+    <meta name="description" content="Hướng dẫn mở tài khoản chứng khoán VPS đơn giản, nhanh chóng. Miễn phí giao dịch 6 tháng, có chuyên gia đồng hành.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        vps: {
+                            light: '#f3e8ff',
+                            DEFAULT: '#7e22ce', // Purple 700
+                            dark: '#581c87',
+                        }
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Hiệu ứng nền tảng mesh gradient mềm mại cho Hero Section */
+        .mesh-bg {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(271,81%,90%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(254,100%,92%,1) 0, transparent 50%);
+        }
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased selection:bg-vps selection:text-white relative">
+
+    <!-- Hero Section -->
+    <header class="mesh-bg relative pt-20 pb-24 lg:pt-32 lg:pb-36 overflow-hidden">
+        <!-- Decorative blobs -->
+        <div class="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full overflow-hidden -z-10 pointer-events-none">
+            <div class="absolute -top-[10%] -right-[10%] w-[500px] h-[500px] rounded-full bg-purple-200/50 blur-3xl"></div>
+            <div class="absolute top-[20%] -left-[10%] w-[400px] h-[400px] rounded-full bg-blue-200/50 blur-3xl"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-purple-100 text-vps font-medium text-sm mb-8 animate-fade-in-up">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m17 5-5-3-5 3"/><path d="m17 19-5 3-5-3"/><path d="M2 12h20"/><path d="m5 7-3 5 3 5"/><path d="m19 7 3 5-3 5"/></svg>
+                Dành riêng cho người mới bắt đầu
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.15] mb-6 tracking-tight">
+                Bắt đầu đầu tư chứng khoán.<br> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-vps to-blue-600">Đơn giản và tiết kiệm.</span>
+            </h1>
+            
+            <!-- Hook -->
+            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
+                Chào bạn, Hỉ đây. Hỉ biết người mới thường ngại thủ tục lằng nhằng. Đừng lo, Hỉ sẽ giúp bạn mở tài khoản VPS chỉ với vài phút thao tác trên điện thoại.
+            </p>
+
+            <!-- CTA -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#huong-dan-mo-tai-khoan" class="group relative inline-flex items-center justify-center gap-3 bg-vps hover:bg-vps-dark text-white font-semibold text-lg py-4 px-10 rounded-full shadow-[0_8px_30px_rgba(126,34,206,0.3)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(126,34,206,0.4)] w-full sm:w-auto">
+                    Xem Hướng Dẫn Chi Tiết
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:translate-y-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+                </a>
+            </div>
+            
+            <div class="mt-6 inline-block glass-card px-5 py-2 rounded-2xl text-sm text-gray-600 font-medium">
+                Mã giới thiệu chuyên gia: <strong class="text-vps text-base ml-1">BVNU</strong>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tại Sao Nên Đầu Tư Chứng Khoán Section -->
+    <section class="py-20 bg-white border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-12">
+                <!-- Left: Sticky Title -->
+                <div class="lg:w-1/3">
+                    <div class="sticky top-24">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 text-red-600 font-medium text-sm mb-6 border border-red-100">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Kích hoạt tiền nhàn rỗi
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 tracking-tight leading-[1.2]">
+                            Tiền "ngủ yên" là tiền đang <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">mất giá.</span>
+                        </h2>
+                        <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                            Việc để vốn nhàn rỗi trong tài khoản tiết kiệm thông thường có thể khiến bạn bỏ lỡ cơ hội gia tăng tài sản mạnh mẽ. Chuyển hướng sang chứng khoán là bước đi chiến lược giúp bảo vệ đồng tiền trước lạm phát và hướng tới tự do tài chính.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right: Cards -->
+                <div class="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Item 1 -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-vps/30 hover:shadow-md transition-all group">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-2">Tối ưu hiệu suất đầu tư</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Giảm bớt sự lãng phí của dòng vốn. Tận dụng sóng thị trường và cổ tức để hướng tới mức sinh lời vượt trội so với tiết kiệm truyền thống.</p>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-vps/30 hover:shadow-md transition-all group">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-2">Đa dạng hóa danh mục</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Hệ sinh thái phong phú: Cổ phiếu tăng trưởng, Trái phiếu sinh lời hấp dẫn, hay Chứng chỉ quỹ an toàn phù hợp với mọi khẩu vị rủi ro của bạn.</p>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-vps/30 hover:shadow-md transition-all group">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-purple-600 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-2">Đòn bẩy bứt phá</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Sử dụng margin (vay ký quỹ) với lãi suất ưu đãi để gia tăng sức mua, tối đa hóa cơ hội lợi nhuận ngay khi thị trường có tín hiệu tích cực.</p>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-vps/30 hover:shadow-md transition-all group">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-2">Linh hoạt, Rào cản thấp</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Chỉ từ 500.000 VNĐ để bắt đầu. Giao dịch 100% online mọi lúc mọi nơi, linh hoạt thanh khoản chuyển đổi thành tiền mặt khi bạn cần.</p>
+                    </div>
+
+                    <!-- Item 5 (Spans 2 cols on tablet/desktop) -->
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 hover:border-vps/30 hover:shadow-md transition-all group sm:col-span-2 flex flex-col sm:flex-row gap-6 items-center">
+                        <div class="w-16 h-16 bg-white rounded-xl shadow-sm flex items-center justify-center text-teal-600 shrink-0 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-lg mb-2">Đội ngũ chuyên gia hỗ trợ</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed">Chưa có kinh nghiệm? Đội ngũ tư vấn 24/7 sẽ trực tiếp phân tích, cung cấp chiến lược thực chiến, giúp bạn tự tin ra quyết định và tối ưu quản trị rủi ro.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chứng Khoán Là Gì & Cách Sinh Lời Section -->
+    <section class="py-20 bg-gray-50 border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16 max-w-3xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-600 font-medium text-sm mb-6 border border-blue-100">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Kiến thức cốt lõi
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 tracking-tight uppercase">Chứng Khoán Là Gì & Tiền Đẻ Ra Tiền Thế Nào?</h2>
+                <p class="text-gray-600 text-lg leading-relaxed">Hỉ sẽ giải thích thật ngắn gọn để bạn nắm bắt ngay bản chất của thị trường, hoàn toàn không lý thuyết dài dòng.</p>
+            </div>
+
+            <!-- 3 Sản phẩm chính -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-purple-100 text-vps rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-xl mb-3">1. Cổ phiếu</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Đại diện cho phần vốn góp của bạn vào doanh nghiệp. Khi mua cổ phiếu, bạn chính thức trở thành cổ đông và được chia sẻ thành quả khi công ty kinh doanh có lãi.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-xl mb-3">2. Trái phiếu</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Là một chứng nhận nợ. Thay vì gửi ngân hàng, bạn cho các tổ chức uy tín vay tiền và sẽ nhận lại mức lợi tức định kỳ, thường hấp dẫn hơn lãi suất tiết kiệm.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-xl mb-3">3. Chứng chỉ quỹ</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Giải pháp ủy thác vốn cho chuyên gia. Quỹ sẽ thay bạn phân bổ đầu tư vào danh mục đa dạng để giúp cân bằng giữa mục tiêu tăng trưởng và an toàn vốn.</p>
+                </div>
+            </div>
+
+            <!-- Cách kiếm tiền + Ví dụ -->
+            <div class="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <!-- 2 Cách kiếm lợi nhuận -->
+                    <div class="p-8 lg:p-12 lg:border-r border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-8">2 Cách Tạo Ra Lợi Nhuận</h3>
+                        
+                        <div class="flex gap-4 mb-8">
+                            <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold shrink-0">A</div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">Hưởng chênh lệch giá (Mua thấp Bán cao)</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">Đây là phương pháp phổ biến nhất. Bạn tận dụng nhịp đập của thị trường, mua cổ phiếu khi giá rẻ và chốt lời bán ra khi giá đã tăng cao.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center font-bold shrink-0">B</div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">Nhận Cổ tức & Lợi tức</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">Ngay cả khi không bán, bạn vẫn có cơ hội nhận dòng tiền đều đặn từ việc chia lợi nhuận (cổ tức) hoặc từ tiền lãi cố định của trái phiếu.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ví dụ thực tế -->
+                    <div class="p-8 lg:p-12 bg-gradient-to-br from-gray-900 to-vps-dark text-white relative overflow-hidden">
+                        <!-- Decorative bg -->
+                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+                        
+                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">Ví dụ minh họa với 500.000 VNĐ</h3>
+                        <p class="text-gray-300 text-sm mb-6">Bạn nạp 500k vào VPS và mua ngay 50 cổ phiếu Công ty X (Giá 10.000đ/cổ phiếu).</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-green-400 mb-1 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                    Kịch bản 1: Chốt lời chênh lệch giá
+                                </h4>
+                                <p class="text-gray-200 text-sm">Sau 1 tháng, giá tăng lên 12.000đ. Bạn đặt lệnh bán thu về 600.000đ 👉 <strong class="text-white">Sinh lời 100.000đ (Tỷ suất 20%)</strong>.</p>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-blue-400 mb-1 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Kịch bản 2: Giữ nhận cổ tức
+                                </h4>
+                                <p class="text-gray-200 text-sm">Bạn giữ nguyên không bán. Công ty X quyết định chia cổ tức 1.000đ/cổ phiếu 👉 <strong class="text-white">Tài khoản tự động cộng thêm 50.000đ</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-white/10 flex items-start gap-3 relative z-10">
+                            <svg class="w-6 h-6 text-yellow-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                            <p class="text-gray-300 text-sm italic">Với ứng dụng SmartOne hiện đại và Hỉ theo sát hỗ trợ 24/7, mọi thao tác mua bán theo dõi lợi nhuận này chỉ tốn vài cú chạm trên điện thoại!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-20 bg-white relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">Tại sao nên bắt đầu cùng Hỉ tại VPS?</h2>
+                <p class="text-gray-500 text-lg">Những đặc quyền thiết thực nhất để bạn an tâm sinh lời.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+                <!-- Card 1 -->
+                <div class="bg-white p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 border border-gray-100 hover:-translate-y-2 group">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-50 text-vps rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Ưu đãi tối đa</h3>
+                    <p class="text-gray-600 leading-relaxed">Miễn phí giao dịch 6 tháng đầu tiên. Giúp bạn tiết kiệm chi phí tối đa trong giai đoạn mới làm quen thị trường.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 border border-gray-100 hover:-translate-y-2 group">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Dễ dàng sử dụng</h3>
+                    <p class="text-gray-600 leading-relaxed">Giao diện ứng dụng SmartOne cực kỳ trực quan, thiết kế chuẩn hóa, mọi thao tác mua bán đều mượt mà chỉ với một chạm.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 border border-gray-100 hover:-translate-y-2 group">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Đồng hành sát sao</h3>
+                    <p class="text-gray-600 leading-relaxed">Hỉ không để bạn cô đơn. Đội ngũ sẽ trực tiếp theo sát, giải đáp mọi thắc mắc và hướng dẫn bạn từng bước mỗi ngày.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tại Sao Chọn VPS Section -->
+    <section class="py-20 bg-vps-light/40 border-t border-purple-100/50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16 max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 tracking-tight uppercase">Tại Sao Bạn Nên Chọn Đầu Tư Tại VPS?</h2>
+                <p class="text-gray-600 text-lg leading-relaxed">Việc lựa chọn VPS không chỉ đơn thuần là mở một tài khoản giao dịch, mà là tiếp cận với một hệ sinh thái đầu tư chuyên nghiệp với những ưu điểm vượt trội sau:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Vị thế -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">Vị thế thị phần số 1</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Liên tục dẫn đầu thị phần môi giới tại Việt Nam trên cả 3 sàn (HOSE, HNX, UPCOM) và phái sinh. Minh chứng rõ nhất cho sự tin tưởng của đông đảo nhà đầu tư.</p>
+                </div>
+
+                <!-- Chi phí -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">Ưu đãi chi phí cực tốt</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Miễn phí 6 tháng giao dịch. Miễn phí nạp rút 2 chiều. Lãi suất vay margin ưu đãi chỉ từ 7%/năm, giúp tối ưu hóa nguồn vốn hiệu quả.</p>
+                </div>
+
+                <!-- Công nghệ -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-purple-50 text-vps rounded-xl flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">Công nghệ & Bảo mật</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Hệ thống bảo mật tối đa (đầu tư 355 tỷ VNĐ). App SmartOne trực quan, siêu mượt. Mở tài khoản eKYC 100% online chỉ 3 phút mà không cần ra quầy.</p>
+                </div>
+
+                <!-- Đội ngũ -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">Đội ngũ chuyên nghiệp</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Với hơn 20.000 chuyên viên, VPS luôn tận tâm hỗ trợ 24/7, cung cấp phân tích chuyên sâu và chiến lược đầu tư thực chiến cho người mới.</p>
+                </div>
+
+                <!-- Sản phẩm -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">Sản phẩm đa dạng</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Không chỉ cổ phiếu, VPS cung cấp hệ sinh thái toàn diện: phái sinh, trái phiếu lợi tức hấp dẫn đã thẩm định và chứng chỉ quỹ thanh khoản cao.</p>
+                </div>
+
+                <!-- Uy tín -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-yellow-50 text-yellow-600 rounded-xl flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-3.46 1.82.66-3.86L6.37 10.2l3.87-.56L12 6l1.76 3.64 3.87.56-2.83 2.76.66 3.86z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-lg mb-2">Uy tín quốc tế</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Nhận hàng loạt giải thưởng: "Nhà môi giới tốt nhất VN" (The Asset), "Tổ chức tài chính tiêu biểu" và Top thương hiệu giá trị nhất từ Forbes.</p>
+                </div>
+            </div>
+
+            <div class="mt-12 flex justify-center">
+                <div class="bg-white px-8 py-5 rounded-full shadow-md border border-purple-100 flex items-center gap-4">
+                    <div class="w-10 h-10 bg-vps text-white rounded-full flex items-center justify-center font-bold text-xl shrink-0">💡</div>
+                    <p class="text-gray-700 font-medium">
+                        Với số vốn bắt đầu chỉ từ <strong class="text-vps text-xl mx-1">500.000 VNĐ</strong>, bất kỳ ai cũng có thể tập đầu tư ngay hôm nay.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Steps Section -->
+    <section id="huong-dan-mo-tai-khoan" class="py-20 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight uppercase">Hướng Dẫn Mở Tài Khoản VPS Chi Tiết</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Dưới đây là bản tổng hợp hướng dẫn chi tiết các bước mở tài khoản chứng khoán VPS online năm 2026, giúp bạn thực hiện nhanh chóng trong vòng 3-5 phút và hoàn toàn miễn phí.</p>
+            </div>
+
+            <div class="space-y-12">
+                <!-- Bước 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-vps text-white font-bold text-xl shadow-md shrink-0">1</div>
+                        <h3 class="font-bold text-gray-900 text-2xl">Đăng ký thông tin mở tài khoản</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <p class="text-gray-600 mb-4">Bạn truy cập vào trang đăng ký chính thức của VPS và tiến hành nhập đầy đủ các thông tin cá nhân bao gồm:</p>
+                            <ul class="space-y-3 text-gray-600 mb-6">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span><strong>Họ và tên:</strong> Nhập đầy đủ họ tên có dấu.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span><strong>Số điện thoại:</strong> Nhập số điện thoại chính chủ đang dùng.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span><strong>Email:</strong> Nhập email cá nhân để nhận thông tin tài khoản.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span><strong>ID Chuyên viên tư vấn:</strong> Nhập mã <strong>BVNU</strong> để được Hỉ hỗ trợ.</span>
+                                </li>
+                            </ul>
+                            <a href="https://openaccount.vps.com.vn/open-account?MKTID=BVNU" target="_blank" rel="noopener noreferrer" class="inline-block bg-vps hover:bg-vps-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors">
+                                Mở Form Đăng Ký
+                            </a>
+                        </div>
+                        <div class="aspect-[4/3] bg-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 p-4 text-center">
+                            <svg class="w-12 h-12 mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="italic text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bước 2 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-vps text-white font-bold text-xl shadow-md shrink-0">2</div>
+                        <h3 class="font-bold text-gray-900 text-2xl">Đăng tải ảnh CCCD/CMND</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div class="order-2 md:order-1 aspect-[4/3] bg-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 p-4 text-center">
+                            <svg class="w-12 h-12 mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="italic text-sm"></span>
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <p class="text-gray-600 mb-4">Bạn sử dụng camera điện thoại để chụp ảnh mặt trước và mặt sau của Căn cước công dân hoặc Chứng minh nhân dân:</p>
+                            <ul class="space-y-3 text-gray-600 mb-4">
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span>Tải lên ảnh <strong>mặt trước</strong> của CCCD/CMND.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span>Tải lên ảnh <strong>mặt sau</strong> của CCCD/CMND.</span>
+                                </li>
+                            </ul>
+                            <div class="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm mb-4 border border-blue-100">
+                                <strong>Lưu ý:</strong> Ảnh chụp phải đảm bảo rõ nét, không bị mờ lóa, không mất góc và dung lượng mỗi ảnh không quá 5MB.
+                            </div>
+                            <p class="text-gray-600 font-medium">👉 Nhấn nút <strong class="text-vps">“TIẾP TỤC”</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bước 3 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-vps text-white font-bold text-xl shadow-md shrink-0">3</div>
+                        <h3 class="font-bold text-gray-900 text-2xl">Kiểm tra và Xác nhận thông tin</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <p class="text-gray-600 mb-4">Hệ thống sẽ tự động trích xuất thông tin từ CCCD của bạn. Bạn cần thực hiện:</p>
+                            <ul class="space-y-3 text-gray-600 mb-6">
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span><strong>Kiểm tra lại</strong> toàn bộ thông tin cá nhân xem đã chính xác chưa.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span><strong>Tích chọn vào ô:</strong> "Tôi xác nhận các thông tin cá nhân trên là hoàn toàn chính xác và đồng ý với các Điều khoản & Điều kiện...".</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span>Nhấn nút <strong>“XÁC NHẬN”</strong> (hoặc "TIẾP TỤC").</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span><strong>Kéo thanh trượt:</strong> Đưa mảnh ghép vào đúng vị trí trên ảnh để hoàn tất việc đăng ký.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="aspect-[4/3] bg-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 p-4 text-center">
+                            <svg class="w-12 h-12 mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="italic text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bước 4 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-vps text-white font-bold text-xl shadow-md shrink-0">4</div>
+                        <h3 class="font-bold text-gray-900 text-2xl">Tải ứng dụng và Xác thực eKYC</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div class="order-2 md:order-1 aspect-[4/3] bg-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 p-4 text-center">
+                            <svg class="w-12 h-12 mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="italic text-sm"></span>
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <p class="text-gray-600 mb-4">Sau khi hoàn thành đăng ký trên web, tài khoản của bạn sẽ ở trạng thái "Chưa xác thực". Bạn cần thực hiện các bước sau để kích hoạt hoàn toàn:</p>
+                            <ul class="space-y-3 text-gray-600 mb-4">
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span><strong>Tải ứng dụng VPS SmartOne:</strong> Tìm kiếm trên App Store hoặc Google Play.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span><strong>Đăng nhập và Đổi mật khẩu:</strong> Sử dụng Tên đăng nhập và Mật khẩu đã được VPS gửi qua SMS hoặc Email. Lần đầu đăng nhập, bạn bắt buộc phải đổi mật khẩu mới (từ 6-32 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt).</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span><strong>Xác thực khuôn mặt (eKYC):</strong> Tại trang chủ ứng dụng, nhấn vào hình Avatar (góc trên bên trái) -> chọn "Cài đặt tài khoản" -> chọn "Xác thực ngay". Làm theo hướng dẫn quay khuôn mặt.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></span>
+                                    <span><strong>Tải ảnh chữ ký:</strong> Ký tên lên giấy trắng, chụp ảnh lại rõ nét và tải lên ứng dụng.</span>
+                                </li>
+                            </ul>
+                            <p class="text-gray-600 font-medium">👉 Nhấn <strong class="text-vps">“TIẾP TỤC”</strong> để hoàn tất xác thực.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Các Lưu ý quan trọng -->
+            <div class="mt-16 bg-gradient-to-br from-gray-900 to-vps-dark p-8 md:p-10 rounded-3xl shadow-xl text-white">
+                <div class="flex items-center gap-3 mb-8">
+                    <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h3 class="text-2xl font-bold uppercase tracking-wider">Các Lưu Ý Quan Trọng</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white/10 backdrop-blur-sm p-5 rounded-2xl border border-white/20">
+                        <h4 class="font-bold text-yellow-300 mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Thời gian kích hoạt
+                        </h4>
+                        <p class="text-gray-200 text-sm leading-relaxed">Hồ sơ của bạn sẽ được xét duyệt trong khoảng 1 đến 2 ngày làm việc. Khi thành công, bạn sẽ nhận được thông báo kích hoạt hoàn toàn để bắt đầu giao dịch.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-5 rounded-2xl border border-white/20">
+                        <h4 class="font-bold text-yellow-300 mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Nạp tiền & Vốn tối thiểu
+                        </h4>
+                        <p class="text-gray-200 text-sm leading-relaxed">Bạn có thể nạp tiền thông qua tính năng SmartQR trên ứng dụng SmartOne. Chỉ từ <strong>500.000 VNĐ</strong> là bạn đã có thể bắt đầu tập đầu tư.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-5 rounded-2xl border border-white/20">
+                        <h4 class="font-bold text-yellow-300 mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                            Chương trình Ưu đãi
+                        </h4>
+                        <p class="text-gray-200 text-sm leading-relaxed">Khách hàng mới được hưởng đặc quyền miễn phí giao dịch trong 6 tháng đầu tiên, giúp tối ưu hóa chi phí đầu tư ban đầu.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-5 rounded-2xl border border-white/20">
+                        <h4 class="font-bold text-yellow-300 mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            Hỗ trợ 24/7
+                        </h4>
+                        <p class="text-gray-200 text-sm leading-relaxed">Nếu gặp khó khăn, bạn có thể gọi hotline 1900 6457 hoặc nhắn ngay cho chuyên viên tư vấn qua Zalo để được hỗ trợ giải quyết ngay lập tức.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút Action cuối trang -->
+            <div class="mt-16 text-center">
+                <a href="https://openaccount.vps.com.vn/open-account?MKTID=BVNU" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-bold text-lg py-4 px-12 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+                    Đăng Ký Mở Tài Khoản Ngay
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-10 border-t border-gray-800">
+        <div class="max-w-4xl mx-auto px-6 flex flex-col items-center">
+            <div class="w-12 h-12 bg-gray-800 rounded-2xl flex items-center justify-center text-white mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </div>
+            <p class="text-lg mb-2">Hỗ trợ trực tiếp qua Zalo</p>
+            <a href="https://zalo.me/0899320202" target="_blank" rel="noopener noreferrer" class="text-2xl font-bold text-white hover:text-vps-light transition-colors mb-6">
+                0899 320 202
+            </a>
+            <p class="text-sm text-gray-500">© 2026 Chứng khoán VPS. Được hỗ trợ bởi chuyên gia tư vấn đầu tư.</p>
+        </div>
+    </footer>
+
+    <!-- Nút Zalo nổi (Floating Zalo Button) - Tăng tương tác -->
+    <a href="https://zalo.me/0899320202" target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:-translate-y-1 hover:scale-105 transition-all z-50 animate-bounce-slow" aria-label="Chat Zalo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </a>
+
+</body>
+</html>

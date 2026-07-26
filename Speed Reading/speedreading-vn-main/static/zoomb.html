@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ĐẤU TRƯỜNG ĐỌC NHANH // ARENA MODE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --void:#080B13;
+    --panel:#111827;
+    --panel-2:#171F30;
+    --border:#26314A;
+    --border-soft:#1B2438;
+    --neon-red:#FF2D55;
+    --neon-red-dim:#8C1230;
+    --neon-cyan:#22E5FF;
+    --neon-gold:#FFC93C;
+    --text-hi:#EEF2F8;
+    --text-mid:#9AA5BD;
+    --text-dim:#5A6379;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+    font-family:'Space Grotesk', sans-serif;
+    background:var(--void);
+    color:var(--text-hi);
+}
+
+.font-display{ font-family:'Orbitron', sans-serif; }
+.font-mono-game{ font-family:'Share Tech Mono', monospace; }
+
+/* ===== Thanh cuộn Arena ===== */
+::-webkit-scrollbar{ width:6px; height:6px; }
+::-webkit-scrollbar-track{ background:var(--panel); }
+::-webkit-scrollbar-thumb{ background:var(--neon-red); border-radius:4px; }
+::-webkit-scrollbar-thumb:hover{ background:var(--neon-cyan); }
+
+/* ===== Nền Arena: lưới kỹ thuật số + vignette + hạt sáng trôi ===== */
+.arena-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,45,85,0.12), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(34,229,255,0.08), transparent 60%),
+        var(--void);
+}
+.arena-grid{
+    position:absolute; inset:-2px;
+    background-image:
+        linear-gradient(rgba(255,45,85,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,45,85,0.06) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(ellipse 90% 80% at 50% 20%, black 40%, transparent 90%);
+    animation:grid-drift 30s linear infinite;
+}
+@keyframes grid-drift{ from{ background-position:0 0; } to{ background-position:84px 84px; } }
+.particle{
+    position:absolute; bottom:-10px; border-radius:50%;
+    background:var(--neon-cyan); opacity:0.5;
+    animation:particle-rise linear infinite;
+    box-shadow:0 0 6px currentColor;
+}
+@keyframes particle-rise{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    10%{ opacity:0.6; }
+    90%{ opacity:0.4; }
+    100%{ transform:translateY(-110vh) translateX(20px); opacity:0; }
+}
+
+/* ===== Khối HUD kiểu bảng mạch, góc cắt ===== */
+.hud-frame{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    transition:all .25s cubic-bezier(.4,0,.2,1);
+}
+.hud-frame::before, .hud-frame::after{
+    content:''; position:absolute; width:14px; height:14px; pointer-events:none;
+    border-color:var(--neon-red); opacity:.8;
+}
+.hud-frame::before{ top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; border-top-left-radius:8px; }
+.hud-frame::after{ bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; border-bottom-right-radius:8px; }
+.hud-frame:hover{ border-color:var(--neon-red); box-shadow:0 0 0 1px var(--neon-red), 0 0 24px rgba(255,45,85,.18); transform:translateY(-2px); }
+
+/* ===== Nút bấm neon ===== */
+.neon-btn{
+    font-weight:800; letter-spacing:.03em; border-radius:6px; cursor:pointer;
+    border:2px solid var(--neon-red); background:var(--neon-red); color:#fff;
+    box-shadow:0 0 0 rgba(255,45,85,0); transition:all .18s ease;
+}
+.neon-btn:hover{ box-shadow:0 0 18px rgba(255,45,85,.55); transform:translateY(-1px); }
+.neon-btn:active{ transform:translateY(1px); }
+.neon-btn-ghost{
+    background:transparent; color:var(--neon-red); border:2px solid var(--neon-red);
+}
+.neon-btn-ghost:hover{ background:rgba(255,45,85,.1); }
+.neon-btn-gold{ background:var(--neon-gold); border-color:var(--neon-gold); color:#1A1200; }
+.neon-btn-gold:hover{ box-shadow:0 0 18px rgba(255,201,60,.55); }
+.neon-btn-cyan{ background:transparent; border:2px solid var(--neon-cyan); color:var(--neon-cyan); }
+.neon-btn-cyan:hover{ background:rgba(34,229,255,.1); box-shadow:0 0 18px rgba(34,229,255,.4); }
+.neon-btn-dark{ background:var(--panel-2); border:2px solid var(--border); color:var(--text-hi); }
+.neon-btn-dark:hover{ border-color:var(--neon-cyan); box-shadow:0 0 14px rgba(34,229,255,.3); }
+.timer-btn.is-running{ background:var(--panel-2); border-color:var(--text-dim); color:var(--text-hi); }
+
+.icon-btn{
+    width:38px; height:38px; border-radius:6px; border:1.5px solid var(--border);
+    display:flex; align-items:center; justify-content:center; color:var(--text-mid);
+    background:var(--panel-2); transition:all .18s ease; cursor:pointer;
+}
+.icon-btn:hover{ border-color:var(--neon-cyan); color:var(--neon-cyan); }
+.icon-btn.is-active{ border-color:var(--neon-cyan); color:var(--neon-cyan); box-shadow:0 0 12px rgba(34,229,255,.4); }
+.icon-btn.is-muted{ border-color:var(--neon-red); color:var(--neon-red); }
+
+/* ===== Glitch tiêu đề khi lên cấp ===== */
+.glitch-pulse{ animation:glitch-flicker .5s steps(2,end) 2; }
+@keyframes glitch-flicker{
+    0%,100%{ text-shadow:0 0 0 transparent; transform:translateX(0); }
+    20%{ text-shadow:2px 0 var(--neon-cyan), -2px 0 var(--neon-red); transform:translateX(-1px); }
+    50%{ text-shadow:-2px 0 var(--neon-cyan), 2px 0 var(--neon-red); transform:translateX(1px); }
+    80%{ text-shadow:1px 0 var(--neon-red); transform:translateX(0); }
+}
+
+/* ===== Điều hướng Ải (sidebar) ===== */
+.nav-btn{
+    width:100%; text-align:left; padding:.75rem; border-radius:8px; position:relative; overflow:hidden;
+    border:1.5px solid var(--border); background:var(--panel); transition:all .2s ease; display:flex; flex-direction:column; gap:.2rem;
+}
+.nav-btn:hover{ border-color:var(--neon-cyan); }
+.nav-btn .nav-tag{ color:var(--text-dim); }
+.nav-btn .nav-title{ color:var(--text-hi); }
+.nav-btn .nav-desc{ color:var(--text-mid); }
+.nav-btn.is-active{ border-color:var(--neon-red); background:linear-gradient(90deg, rgba(255,45,85,.12), transparent); box-shadow:0 0 0 1px var(--neon-red), 4px 4px 0 0 rgba(255,45,85,.35); }
+.nav-btn.is-active .nav-tag{ color:var(--neon-red); }
+.nav-btn.is-active .nav-title{ color:var(--neon-red); }
+.nav-btn.is-active::after{
+    content:''; position:absolute; right:0; top:0; height:100%; width:4px;
+    background:repeating-linear-gradient(-45deg, var(--neon-red), var(--neon-red) 6px, var(--neon-gold) 6px, var(--neon-gold) 12px);
+}
+
+.badge-step{ width:24px; height:24px; border-radius:999px; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; background:var(--panel); color:var(--text-dim); font-size:.7rem; transition:all .2s ease; }
+.badge-step.is-done{ border-color:var(--neon-red); background:var(--neon-red); color:#fff; box-shadow:0 0 10px rgba(255,45,85,.5); }
+
+/* ===== Thẻ kỹ thuật (Stage 2) ===== */
+.tech-card{ position:relative; cursor:pointer; }
+.tech-card .tag{ background:var(--panel-2); color:var(--text-mid); border:1px solid var(--border); }
+.tech-card h4{ color:var(--text-hi); }
+.tech-card p{ color:var(--text-mid); }
+.tech-card .tech-footer{ color:var(--text-dim); border-top:1px solid var(--border-soft); }
+.tech-card.is-active{ border-color:var(--neon-red) !important; background:linear-gradient(180deg, rgba(255,45,85,.08), var(--panel)); }
+.tech-card.is-active .tag{ background:var(--neon-red); color:#fff; border-color:var(--neon-red); }
+.tech-card.is-active h4{ color:var(--neon-red); }
+.tech-card.is-active .tech-footer{ color:var(--neon-red); border-top-color:rgba(255,45,85,.3); }
+
+/* ===== Vòng tròn thời gian (Progress Ring) ===== */
+.ring-wrap{ position:relative; width:220px; height:220px; }
+.progress-ring-svg{ transform:rotate(-90deg); width:100%; height:100%; }
+.progress-ring-bg{ fill:none; stroke:var(--border); stroke-width:8; }
+.progress-ring-fg{ fill:none; stroke:var(--neon-red); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset .3s linear, stroke .3s ease; filter:drop-shadow(0 0 6px rgba(255,45,85,.7)); }
+.progress-ring-fg.is-critical{ stroke:var(--neon-gold); filter:drop-shadow(0 0 10px rgba(255,201,60,.9)); animation:ring-pulse .6s ease-in-out infinite; }
+@keyframes ring-pulse{ 0%,100%{ opacity:1;} 50%{ opacity:.55;} }
+.ring-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
+/* ===== Sơ đồ tư duy (Mindmap) - bản tối ===== */
+.mindmap-wrapper{ display:flex; align-items:flex-start; justify-content:center; width:100%; padding:10px; overflow-x:auto; }
+.mindmap-root{ background:var(--neon-red); color:#fff; padding:12px 24px; border-radius:6px; font-size:1.05rem; font-weight:800; border:2px solid #1A1200; box-shadow:4px 4px 0 0 rgba(0,0,0,.4), 0 0 18px rgba(255,45,85,.35); outline:none; text-align:center; min-width:220px; z-index:2; cursor:text; font-family:'Orbitron', sans-serif; }
+.mindmap-branches{ display:flex; flex-direction:column; gap:15px; position:relative; padding-left:40px; list-style:none; text-align:left; margin-top:20px; }
+.mindmap-branches::before{ content:''; position:absolute; top:20px; bottom:20px; left:0; width:3px; background:var(--neon-red); border-radius:5px; box-shadow:0 0 8px rgba(255,45,85,.5); }
+.mindmap-branch{ position:relative; display:flex; flex-direction:column; }
+.mindmap-branch::before{ content:''; position:absolute; left:-40px; top:20px; width:40px; height:3px; background:var(--neon-red); }
+.root-connector{ width:3px; height:25px; background:var(--neon-red); }
+.node-wrapper{ display:flex; align-items:center; gap:8px; position:relative; z-index:2; }
+.mindmap-node{ background:var(--panel); border:2px solid var(--neon-red); padding:8px 16px; border-radius:6px; color:var(--text-hi); font-weight:700; font-size:.95rem; box-shadow:2px 2px 0 0 rgba(255,45,85,.4); outline:none; min-width:200px; transition:all .2s ease; cursor:text; }
+.mindmap-node:focus{ background:var(--panel-2); box-shadow:0 0 0 2px var(--neon-cyan), 4px 4px 0 0 rgba(255,45,85,.4); transform:scale(1.02); }
+.mindmap-node[data-placeholder]:empty:before{ content:attr(data-placeholder); color:var(--text-dim); font-style:italic; font-weight:400; }
+.add-sub-btn{ width:24px; height:24px; border-radius:5px; border:2px solid var(--neon-red); background:var(--panel); color:var(--neon-red); font-weight:bold; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s; outline:none; }
+.add-sub-btn:hover{ background:var(--neon-red); color:#fff; box-shadow:0 0 10px rgba(255,45,85,.6); }
+.mindmap-sub-branches{ list-style:none; padding-left:40px; margin-top:10px; display:none; flex-direction:column; gap:8px; position:relative; }
+.mindmap-sub-branches.active{ display:flex; }
+.mindmap-sub-branches::before{ content:''; position:absolute; left:15px; top:-10px; bottom:15px; width:2px; background:var(--neon-red); opacity:.4; }
+.mindmap-sub-branch{ position:relative; display:flex; align-items:center; }
+.mindmap-sub-branch::before{ content:''; position:absolute; left:-25px; top:50%; width:25px; height:2px; background:var(--neon-red); opacity:.4; }
+.mindmap-sub-node{ background:rgba(255,45,85,.06); border:1.5px dashed var(--neon-red); padding:6px 12px; border-radius:5px; font-size:.85rem; color:var(--text-hi); outline:none; min-width:160px; font-weight:500; }
+.mindmap-sub-node:focus{ background:var(--panel-2); border-style:solid; box-shadow:2px 2px 0 rgba(255,45,85,.5); }
+.add-branch-btn{ background:transparent; border:2px dashed var(--neon-red); color:var(--neon-red); padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:700; font-size:.9rem; outline:none; transition:all .2s; display:inline-flex; align-items:center; gap:6px; margin-top:5px; }
+.add-branch-btn:hover{ background:rgba(255,45,85,.08); box-shadow:2px 2px 0 0 rgba(255,45,85,.4); }
+
+/* ===== Vùng chỉnh sửa tự do ===== */
+.editable{ outline:none; transition:all .2s; border:1px dashed transparent; border-radius:4px; color:var(--text-hi); }
+.editable:hover{ border-color:var(--neon-red); background:rgba(255,45,85,.06); cursor:text; }
+.editable:focus{ border-color:var(--neon-cyan); background:var(--panel-2); box-shadow:0 0 0 2px rgba(34,229,255,.25); }
+[data-placeholder]:empty:before{ content:attr(data-placeholder); color:var(--text-dim); font-style:italic; }
+
+/* ===== Roster / Vòng quay chọn tên ===== */
+.roster-chip{ display:flex; align-items:center; justify-content:space-between; gap:6px; background:var(--panel-2); border:1px solid var(--border); border-radius:5px; padding:4px 8px; font-size:.72rem; font-weight:600; color:var(--text-hi); }
+.roster-chip button{ color:var(--neon-red); font-weight:900; cursor:pointer; line-height:1; }
+.roster-empty{ color:var(--text-dim); font-size:.72rem; font-style:italic; padding:4px 0; }
+.wheel-display{
+    font-family:'Orbitron', sans-serif; font-weight:800; font-size:1.8rem; letter-spacing:.02em;
+    color:var(--neon-gold); background:var(--panel-2); border:2px solid var(--border);
+    border-radius:8px; padding:1.5rem 1rem; margin-bottom:1.25rem; min-height:80px;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    transition:all .2s ease;
+}
+.wheel-display.is-spinning{ border-color:var(--neon-cyan); box-shadow:0 0 20px rgba(34,229,255,.4); color:var(--neon-cyan); }
+.wheel-display.is-winner{ border-color:var(--neon-gold); box-shadow:0 0 30px rgba(255,201,60,.6); animation:winner-bounce .4s ease; }
+@keyframes winner-bounce{ 0%{ transform:scale(.9);} 50%{ transform:scale(1.06);} 100%{ transform:scale(1);} }
+
+/* ===== Confetti ===== */
+#confetti-layer{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:60; }
+.confetti-piece{ position:absolute; top:-10px; width:8px; height:14px; opacity:.9; animation:confetti-fall linear forwards; }
+@keyframes confetti-fall{
+    to{ transform:translateY(105vh) translateX(calc(var(--dx,0) * 160px)) rotate(540deg); opacity:0; }
+}
+
+/* ===== Bảng WPM ===== */
+.wpm-input{ background:var(--panel-2); border:1.5px solid var(--border); border-radius:6px; color:var(--text-hi); padding:.5rem .6rem; font-family:'Share Tech Mono', monospace; width:100%; outline:none; }
+.wpm-input:focus{ border-color:var(--neon-cyan); box-shadow:0 0 0 2px rgba(34,229,255,.2); }
+.wpm-number{ font-family:'Orbitron', sans-serif; font-size:1.4rem; color:var(--neon-gold); }
+#wpm-history li{ display:flex; justify-content:space-between; font-size:.7rem; color:var(--text-mid); padding:3px 0; border-bottom:1px dashed var(--border-soft); }
+.wpm-date{ color:var(--text-dim); }
+
+.stage-section.hidden{ display:none; }
+</style>
+</head>
+<body class="h-screen overflow-hidden flex flex-col antialiased select-none">
+
+<div class="arena-bg"><div class="arena-grid"></div><div id="particles"></div></div>
+<div id="confetti-layer"></div>
+
+<!-- Thanh HUD trên cùng -->
+<div class="h-1 w-full" style="background:repeating-linear-gradient(-45deg,var(--neon-red),var(--neon-red) 8px,var(--neon-gold) 8px,var(--neon-gold) 16px);"></div>
+
+<header class="px-4 py-3 shrink-0 flex items-center justify-between relative z-10" style="background:var(--panel); border-bottom:1px solid var(--border);">
+    <div class="flex items-center gap-4">
+        <div class="p-1 rounded-md" style="background:var(--panel-2); border:1px solid var(--border);">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading Logo" class="h-10 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/120x40/0B0E17/FF2D55?text=SPEED+READING'">
+        </div>
+        <div class="hidden sm:block">
+            <h1 class="font-display text-sm font-extrabold tracking-tight uppercase flex items-center gap-2" style="color:var(--neon-red);">
+                <span class="inline-block w-2.5 h-2.5 rounded-full" style="background:var(--neon-red); animation:ring-pulse 1.4s ease-in-out infinite;"></span>
+                <span id="header-title-text">Đấu Trường Luyện Đọc • Chặng 1: Ý Hay</span>
+            </h1>
+            <p class="text-[10px] font-bold uppercase tracking-wider" style="color:var(--text-dim);">Học Viện Đọc Nhanh Siêu Tốc & Đúc Kết Tối Giản</p>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+        <div class="px-3 py-1.5 rounded flex items-center gap-2.5" style="background:var(--panel-2); border:1.5px solid var(--neon-red);">
+            <span class="text-xs font-bold uppercase tracking-widest font-mono-game" style="color:var(--neon-red);">LV.</span>
+            <span id="player-level" class="text-lg font-extrabold font-mono-game leading-none" style="color:var(--neon-red);">01</span>
+            <div class="h-4 w-px" style="background:var(--border);"></div>
+            <div class="flex flex-col">
+                <span class="text-[9px] font-bold uppercase leading-none" style="color:var(--text-dim);">Focus XP</span>
+                <div class="w-20 h-1.5 rounded-full overflow-hidden mt-1" style="background:var(--border);">
+                    <div id="player-xp-bar" class="h-full w-[15%] transition-all duration-300" style="background:var(--neon-red); box-shadow:0 0 6px var(--neon-red);"></div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="toggleFullscreen()" id="fullscreen-btn" class="icon-btn" title="Toàn màn hình / Chế độ tập trung">⛶</button>
+        <button onclick="toggleAmbient()" id="ambient-btn" class="icon-btn" title="Bật/tắt nhạc nền tập trung">🎧</button>
+        <button onclick="toggleMute()" id="sound-btn" class="icon-btn" title="Bật/Tắt âm thanh thông báo">
+            <svg id="volume-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.75l-3-3H5.25A2.25 2.25 0 013 13.5v-3a2.25 2.25 0 012.25-2.25H9l3-3V18.75z"></path>
+            </svg>
+        </button>
+    </div>
+</header>
+
+<!-- Bản đồ tiến độ -->
+<div class="px-4 py-2 flex items-center justify-between text-xs font-bold relative z-10" style="background:var(--panel-2); border-bottom:1px solid var(--border-soft); color:var(--text-mid);">
+    <div class="flex items-center gap-2">
+        <span>TIẾN ĐỘ THỬ THÁCH:</span>
+        <div class="flex items-center gap-1.5">
+            <span id="badge-1" class="badge-step is-done font-mono-game">1</span>
+            <span style="color:var(--neon-red);">Ý Hay</span>
+            <span style="color:var(--text-dim);">➔</span>
+            <span id="badge-2" class="badge-step font-mono-game">2</span>
+            <span>Ép Tốc 3-2-1</span>
+            <span style="color:var(--text-dim);">➔</span>
+            <span id="badge-3" class="badge-step font-mono-game">3</span>
+            <span>Đọc Hiểu Sâu</span>
+            <span style="color:var(--text-dim);">➔</span>
+            <span id="badge-4" class="badge-step font-mono-game">4</span>
+            <span>Hoàn Thành</span>
+        </div>
+    </div>
+    <div class="font-mono-game px-2 py-0.5 rounded uppercase tracking-widest" style="color:var(--neon-red); background:rgba(255,45,85,.08); border:1px solid rgba(255,45,85,.3);">
+        Học phần: 60 Phút &nbsp;|&nbsp; <span style="color:var(--text-dim);">Phím tắt: Space = Play/Pause</span>
+    </div>
+</div>
+
+<div class="flex flex-1 overflow-hidden relative z-10">
+
+    <!-- Sidebar -->
+    <aside class="w-80 p-4 flex flex-col gap-3 shrink-0 overflow-y-auto" style="background:var(--panel); border-right:1px solid var(--border);">
+        <h2 class="text-xs font-black uppercase tracking-widest px-1 pb-1 flex items-center gap-1.5" style="color:var(--neon-red); border-bottom:2px solid var(--neon-red);">
+            <span>🎯</span> BẢNG NHIỆM VỤ GAME
+        </h2>
+
+        <button id="nav-btn-1" class="nav-btn is-active" onclick="switchStage(1, this)">
+            <span class="text-[9px] font-black tracking-widest uppercase font-mono-game nav-tag">ẢI 01 • 15 PHÚT</span>
+            <span class="text-sm font-extrabold flex items-center gap-1.5 nav-title"><span>💡</span> 1. Thu Thập Ý Hay</span>
+            <p class="text-[10px] font-medium nav-desc">Lập sơ đồ ý chính trước giờ đọc</p>
+        </button>
+
+        <button id="nav-btn-2" class="nav-btn" onclick="switchStage(2, this)">
+            <span class="text-[9px] font-black tracking-widest uppercase font-mono-game nav-tag">ẢI 02 • 15 PHÚT</span>
+            <span class="text-sm font-extrabold flex items-center gap-1.5 nav-title"><span>⚡</span> 2. Luyện Chỉ Tay 3-2-1</span>
+            <p class="text-[10px] font-medium nav-desc">Ép tốc độ mắt vượt ngưỡng</p>
+        </button>
+
+        <button id="nav-btn-3" class="nav-btn" onclick="switchStage(3, this)">
+            <span class="text-[9px] font-black tracking-widest uppercase font-mono-game nav-tag">ẢI 03 • 15 PHÚT</span>
+            <span class="text-sm font-extrabold flex items-center gap-1.5 nav-title"><span>🧠</span> 3. Đọc Hiểu Đúc Kết Sâu</span>
+            <p class="text-[10px] font-medium nav-desc">Bản đồ đúc kết 5 chiều tư duy</p>
+        </button>
+
+        <button id="nav-btn-4" class="nav-btn" onclick="switchStage(4, this)">
+            <span class="text-[9px] font-black tracking-widest uppercase font-mono-game nav-tag">ẢI 04 • 15 PHÚT</span>
+            <span class="text-sm font-extrabold flex items-center gap-1.5 nav-title"><span>🏆</span> 4. Đúc Kết & Chia Sẻ</span>
+            <p class="text-[10px] font-medium nav-desc">Rung chuông ngẫu nhiên báo cáo</p>
+        </button>
+
+        <!-- Roster: danh sách học viên cho vòng quay -->
+        <div class="hud-frame p-3">
+            <h3 class="text-[11px] font-black uppercase tracking-widest mb-2 flex items-center gap-1" style="color:var(--neon-cyan);">
+                <span>👥</span> DANH SÁCH HỌC VIÊN
+            </h3>
+            <div class="flex gap-1.5 mb-2">
+                <input id="roster-input" type="text" placeholder="Tên học viên..." class="wpm-input text-xs" style="padding:.4rem .5rem;" onkeydown="if(event.key==='Enter')addStudent()">
+                <button onclick="addStudent()" class="neon-btn-cyan neon-btn px-3 text-xs font-black rounded">+</button>
+            </div>
+            <ul id="roster-list" class="flex flex-col gap-1.5 max-h-32 overflow-y-auto"></ul>
+        </div>
+
+        <!-- Tiện ích -->
+        <div class="mt-auto hud-frame p-3" style="border-style:dashed;">
+            <h3 class="text-[11px] font-black uppercase tracking-widest mb-2 flex items-center gap-1" style="color:var(--neon-red);">
+                <span>🛠️</span> TIỆN ÍCH HỖ TRỢ
+            </h3>
+            <div class="flex flex-col gap-1.5">
+                <a href="https://speedreading.vn/Tool" target="_blank" class="text-xs font-bold flex items-center gap-1.5 transition-colors p-1 rounded" style="color:var(--text-mid);">
+                    <span>🔗</span> Công Cụ Trải Nghiệm
+                </a>
+                <a href="https://speedreading.vn/study" target="_blank" class="text-xs font-bold flex items-center gap-1.5 transition-colors p-1 rounded" style="color:var(--text-mid);">
+                    <span>👁️</span> Công Cụ Luyện Mắt
+                </a>
+                <a href="https://speedreading.vn/posts/" target="_blank" class="text-xs font-bold flex items-center gap-1.5 transition-colors p-1 rounded" style="color:var(--text-mid);">
+                    <span>📚</span> Tóm Tắt & Review Sách
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Vùng làm việc chính -->
+    <main class="flex-1 p-6 overflow-y-auto flex flex-col items-center justify-start relative">
+        <div class="w-full max-w-4xl flex flex-col gap-6 relative z-10">
+
+            <!-- Đồng hồ đếm ngược với vòng tròn tiến độ -->
+            <div class="hud-frame p-5 flex flex-col items-center justify-center">
+                <div class="w-full flex justify-between items-center px-2 pb-2.5 mb-2" style="border-bottom:1px solid var(--border-soft);">
+                    <span class="text-xs font-bold uppercase tracking-wider flex items-center gap-1" style="color:var(--neon-red);">
+                        <span class="inline-block w-2 h-2 rounded-full" style="background:var(--neon-red); animation:ring-pulse 1s ease-in-out infinite;"></span>
+                        Nhiệm Vụ Đang Diễn Ra
+                    </span>
+                    <span id="game-status-text" class="text-xs font-bold uppercase tracking-widest font-mono-game" style="color:var(--text-mid);">
+                        TRẠNG THÁI: CHỜ KÍCH HOẠT
+                    </span>
+                </div>
+
+                <div class="ring-wrap">
+                    <svg class="progress-ring-svg" viewBox="0 0 200 200">
+                        <circle class="progress-ring-bg" cx="100" cy="100" r="90"></circle>
+                        <circle id="progress-ring-fg" class="progress-ring-fg" cx="100" cy="100" r="90"></circle>
+                    </svg>
+                    <div class="ring-center">
+                        <div class="text-4xl md:text-5xl font-extrabold tracking-tight font-mono-game select-none" id="global-timer" style="color:var(--neon-red);">15:00</div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 flex-wrap justify-center mt-3">
+                    <button class="neon-btn-dark neon-btn px-3 py-1.5 text-xs rounded font-mono-game" onclick="adjustTime(-60)">-01:00</button>
+                    <button id="play-pause-btn" class="neon-btn timer-btn px-8 py-2 text-sm rounded flex items-center gap-2" onclick="toggleTimer()">
+                        <span>▶ START MISSION</span>
+                    </button>
+                    <button class="neon-btn-dark neon-btn px-4 py-1.5 text-xs rounded font-mono-game" onclick="resetTimer(15)">RESET 15P</button>
+                    <button class="neon-btn-dark neon-btn px-3 py-1.5 text-xs rounded font-mono-game" onclick="adjustTime(60)">+01:00</button>
+                </div>
+            </div>
+
+            <!-- ẢI 1 -->
+            <div id="stage-1" class="stage-section w-full">
+                <div class="rounded p-4 text-center mb-6" style="background:rgba(255,45,85,.06); border:1.5px solid rgba(255,45,85,.25);">
+                    <p class="text-sm font-bold leading-relaxed" style="color:var(--text-mid);">
+                        💡 <span class="font-extrabold" style="color:var(--neon-red);">CHIẾN THUẬT:</span> Khảo sát nhanh sách/tài liệu và lập sơ đồ ý tưởng cốt lõi của hôm nay.
+                        Bấm đúp để chỉnh sửa nội dung, nhấn <span class="px-1 py-0.5 rounded font-black text-xs" style="background:var(--panel-2); border:1px solid var(--neon-red); color:var(--neon-red);">+</span> để tạo ý phụ.
+                    </p>
+                </div>
+
+                <div class="hud-frame p-6 relative overflow-x-auto min-h-[400px]">
+                    <div class="mindmap-wrapper">
+                        <div class="flex flex-col items-center">
+                            <div class="mindmap-root" contenteditable="true">💡 SÁCH CẦN ĐỌC HÔM NAY</div>
+                            <div class="root-connector"></div>
+                            <ul class="mindmap-branches" id="mindmap-list">
+                                <li class="mindmap-branch">
+                                    <div class="node-wrapper">
+                                        <div class="mindmap-node" contenteditable="true" data-placeholder="Nhập ý chính...">🎯 Ý chính số 1</div>
+                                        <button class="add-sub-btn" onclick="addSubBranch(this)" title="Thêm ý phụ">+</button>
+                                    </div>
+                                    <ul class="mindmap-sub-branches"></ul>
+                                </li>
+                                <li class="mindmap-branch">
+                                    <div class="node-wrapper">
+                                        <div class="mindmap-node" contenteditable="true" data-placeholder="Nhập ý chính...">🔑 Ý chính số 2</div>
+                                        <button class="add-sub-btn" onclick="addSubBranch(this)" title="Thêm ý phụ">+</button>
+                                    </div>
+                                    <ul class="mindmap-sub-branches"></ul>
+                                </li>
+                                <li class="mindmap-branch" id="add-btn-wrapper" style="margin-top:10px;">
+                                    <button class="add-branch-btn" onclick="addMindmapBranch()">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                        Thêm Nhánh Chính
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ẢI 2 -->
+            <div id="stage-2" class="stage-section hidden w-full">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="col-span-1 md:col-span-3 hud-frame p-4 flex items-start gap-3" style="background:rgba(255,45,85,.06);">
+                        <span class="text-3xl">🛡️</span>
+                        <div>
+                            <h4 class="font-extrabold text-sm tracking-wide uppercase" style="color:var(--neon-red);">CHỈ THỊ NHIỆM VỤ: KHAI PHÁ CƠ MẮT SIÊU TỐC</h4>
+                            <p class="text-xs leading-relaxed mt-1" style="color:var(--text-mid);">
+                                Mục tiêu chính là bắt đôi mắt làm việc ở tốc độ tối cao, vượt hẳn khả năng tiếp thu thường nhật.
+                                <strong style="color:var(--text-hi);">Chấp nhận hiểu ít (chỉ cần 30-50%)</strong> ở những chu kỳ ép tốc đầu tiên để phá vỡ quán tính đọc thầm!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-span-1 hud-frame p-4 flex flex-col items-center justify-center text-center">
+                        <span class="text-[9px] font-black tracking-widest uppercase" style="color:var(--text-dim);">MẮT ĐÃ QUÉT (KỶ LỤC)</span>
+                        <span id="best-wpm-badge" class="text-2xl font-black font-mono-game" style="color:var(--neon-gold);">-- wpm</span>
+                        <span class="text-[9px] font-bold uppercase mt-0.5" style="color:var(--text-dim);">Tốc độ rèn luyện</span>
+                    </div>
+                </div>
+
+                <div class="rounded-lg overflow-hidden relative mb-6" style="border:3px solid var(--border); background:#000;">
+                    <div class="absolute top-0 left-0 right-0 h-1.5" style="background:repeating-linear-gradient(-45deg,var(--neon-red),var(--neon-red) 8px,var(--neon-gold) 8px,var(--neon-gold) 16px);"></div>
+                    <div class="aspect-video w-full">
+                        <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/zACclTU3n08?si=ikSwbTrW_90OhHqG" title="Thực hành đập mắt ép tốc độ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="text-white text-[10px] px-3 py-1 font-mono-game flex justify-between" style="background:var(--panel-2);">
+                        <span>VIDEO TRAINING: ĐẬP MẮT THEO NHỊP</span>
+                        <span style="color:var(--neon-red);" class="animate-pulse">● LIVE STREAM</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-black uppercase tracking-widest mb-4 flex items-center justify-center gap-1.5" style="color:var(--neon-red);">
+                        <span>🎯</span> HỆ THỐNG PHƯƠNG PHÁP CHỈ TAY (BẤM ĐỂ TỰ ĐỘNG NẠP THỜI GIAN LUYỆN)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div id="card-tech-1" class="hud-frame tech-card is-active p-4 rounded-lg flex flex-col justify-between" onclick="selectTrainingCard(1, 3)">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="tag text-[10px] font-black px-2 py-0.5 rounded font-mono-game">3 PHÚT</span>
+                                    <span class="text-xl">👉</span>
+                                </div>
+                                <h4 class="font-extrabold text-sm mb-1.5 uppercase">Chỉ Tay 1 Dòng</h4>
+                                <p class="text-[11px] leading-relaxed">Dùng ngón tay/ngòi bút dẫn dắt ánh nhìn trượt thật mượt mà dưới <strong>từng dòng chữ đơn lẻ</strong>. Tay đi trước, mắt bắt nhịp bám đuổi theo sau.</p>
+                            </div>
+                            <div class="tech-footer mt-4 pt-2 text-[10px] font-bold uppercase text-center font-mono-game">[ CLICK ĐỂ KÍCH HOẠT ]</div>
+                        </div>
+
+                        <div id="card-tech-2" class="hud-frame tech-card p-4 rounded-lg flex flex-col justify-between" onclick="selectTrainingCard(2, 2)">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="tag text-[10px] font-black px-2 py-0.5 rounded font-mono-game">2 PHÚT</span>
+                                    <span class="text-xl">✌️</span>
+                                </div>
+                                <h4 class="font-extrabold text-sm mb-1.5 uppercase">Chỉ Tay Gom Nhóm</h4>
+                                <p class="text-[11px] leading-relaxed">Lướt tay với biên độ lớn hơn, một nét gom quét <strong>2 dòng văn bản cùng lúc</strong>. Gom trọn các nhóm từ ở giữa mà không cần đọc rời rạc từng chữ.</p>
+                            </div>
+                            <div class="tech-footer mt-4 pt-2 text-[10px] font-bold uppercase text-center font-mono-game">[ CLICK ĐỂ KÍCH HOẠT ]</div>
+                        </div>
+
+                        <div id="card-tech-3" class="hud-frame tech-card p-4 rounded-lg flex flex-col justify-between" onclick="selectTrainingCard(3, 1)">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="tag text-[10px] font-black px-2 py-0.5 rounded font-mono-game">1 PHÚT</span>
+                                    <span class="text-xl">〰️</span>
+                                </div>
+                                <h4 class="font-extrabold text-sm mb-1.5 uppercase">Chỉ Tay Lazy S</h4>
+                                <p class="text-[11px] leading-relaxed">Dùng tay kéo nhẹ nhàng theo hình <strong>chữ S ngả ngang mềm mại</strong> dọc trục dọc văn bản. Chụp nhanh các cụm từ khóa trung tâm quan trọng.</p>
+                            </div>
+                            <div class="tech-footer mt-4 pt-2 text-[10px] font-bold uppercase text-center font-mono-game">[ CLICK ĐỂ KÍCH HOẠT ]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Máy đo tốc độ đọc WPM -->
+                <div class="hud-frame p-5 mt-6">
+                    <h3 class="text-xs font-black uppercase tracking-widest mb-3 flex items-center gap-1.5" style="color:var(--neon-cyan);">
+                        <span>📟</span> MÁY ĐO TỐC ĐỘ ĐỌC (WPM)
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 items-end">
+                        <div>
+                            <label class="text-[10px] font-bold uppercase" style="color:var(--text-dim);">Số từ đã đọc</label>
+                            <input id="wpm-words" type="number" min="0" class="wpm-input mt-1" placeholder="VD: 620">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase" style="color:var(--text-dim);">Phút</label>
+                            <input id="wpm-min" type="number" min="0" class="wpm-input mt-1" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase" style="color:var(--text-dim);">Giây</label>
+                            <input id="wpm-sec" type="number" min="0" max="59" class="wpm-input mt-1" placeholder="0">
+                        </div>
+                        <button onclick="calcWPM()" class="neon-btn neon-btn-cyan px-3 py-2 rounded text-xs font-black">TÍNH TỐC ĐỘ</button>
+                    </div>
+                    <div id="wpm-result" class="mt-3 text-sm font-bold" style="color:var(--text-mid);">Nhập dữ liệu rồi bấm Tính Tốc Độ.</div>
+                    <ul id="wpm-history" class="mt-3"></ul>
+                </div>
+            </div>
+
+            <!-- ẢI 3 -->
+            <div id="stage-3" class="stage-section hidden w-full">
+                <h3 class="text-xs font-black uppercase tracking-widest text-center mb-4 flex items-center justify-center gap-1.5" style="color:var(--neon-red);">
+                    <span>📋</span> CHIẾN LƯỢC ĐỌC CHI TIẾT & CHUYỂN HOÁ TRI THỨC
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="hud-frame p-5 flex flex-col relative">
+                        <div class="absolute -top-3 left-4 text-white text-[10px] font-black px-2.5 py-0.5 rounded uppercase font-mono-game" style="background:var(--neon-red);">BƯỚC 1 • 3 PHÚT</div>
+                        <div class="flex items-center gap-2 mb-2 mt-2"><span class="text-2xl">🔍</span><h4 class="font-extrabold text-sm uppercase" style="color:var(--neon-red);">Xem Trước Tài Liệu</h4></div>
+                        <p class="text-xs leading-relaxed" style="color:var(--text-mid);">Quét nhanh tiêu đề chương, đề mục lớn nhỏ, sơ đồ, bảng biểu, từ in đậm. Xây dựng bản đồ nhận thức tổng quan trong đầu trước khi đi sâu.</p>
+                    </div>
+                    <div class="hud-frame p-5 flex flex-col relative">
+                        <div class="absolute -top-3 left-4 text-white text-[10px] font-black px-2.5 py-0.5 rounded uppercase font-mono-game" style="background:var(--neon-red);">BƯỚC 2 • 12 PHÚT</div>
+                        <div class="flex items-center gap-2 mb-2 mt-2"><span class="text-2xl">✍️</span><h4 class="font-extrabold text-sm uppercase" style="color:var(--neon-red);">Đọc Sâu & Chép Nhanh</h4></div>
+                        <p class="text-xs leading-relaxed" style="color:var(--text-mid);">Áp dụng kỹ thuật chỉ tay rèn luyện để rà soát. <span class="font-extrabold" style="color:var(--neon-red);">Quy tắc vàng:</span> Cứ đọc xong <strong style="color:var(--text-hi);">2-3 trang sách</strong>, hãy dừng lại ghi chép tóm tắt ý chính bằng lời của mình.</p>
+                    </div>
+                    <div class="hud-frame p-5 flex flex-col relative">
+                        <div class="absolute -top-3 left-4 text-white text-[10px] font-black px-2.5 py-0.5 rounded uppercase font-mono-game" style="background:var(--neon-red);">BƯỚC 3 • CHUYỂN HOÁ</div>
+                        <div class="flex items-center gap-2 mb-2 mt-2"><span class="text-2xl">🌟</span><h4 class="font-extrabold text-sm uppercase" style="color:var(--neon-red);">Rút Ra Bài Học Sâu</h4></div>
+                        <p class="text-xs leading-relaxed" style="color:var(--text-mid);">Cuối giờ đọc, tập trung đọc lại những gì đã ghi chép để đúc kết sâu sắc các giá trị chuyển hoá thực tiễn cuộc sống.</p>
+                    </div>
+                </div>
+
+                <div class="hud-frame p-6 relative">
+                    <h4 class="text-sm font-black uppercase tracking-widest pb-3 mb-6 flex items-center gap-1.5" style="color:var(--neon-red); border-bottom:1px solid var(--border-soft);">
+                        <span>🧠</span> KHUNG TƯ DUY ĐÚC KẾT CHIỀU SÂU (5 TRỤ CỘT) — bấm vào ô bên dưới mỗi câu hỏi để ghi câu trả lời
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="flex gap-3 pr-2">
+                            <div class="w-10 h-10 rounded flex items-center justify-center text-xl font-bold shrink-0" style="border:2px solid var(--neon-red); background:rgba(255,45,85,.08);">✉️</div>
+                            <div class="text-left w-full">
+                                <h5 class="font-extrabold text-sm leading-snug">Thông Điệp Của Tác Giả</h5>
+                                <p class="text-[11px] mt-1 leading-normal" style="color:var(--text-dim);">Đâu là thông điệp cốt lõi, tư duy giá trị nhất mà tác giả muốn bạn thấu cảm qua chương sách vừa đọc?</p>
+                                <div class="pillar-answer editable text-xs mt-2 p-2" contenteditable="true" data-label="Thông Điệp Của Tác Giả" data-placeholder="Ghi câu trả lời của bạn..."></div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 pr-2">
+                            <div class="w-10 h-10 rounded flex items-center justify-center text-xl font-bold shrink-0" style="border:2px solid var(--neon-red); background:rgba(255,45,85,.08);">🗽</div>
+                            <div class="text-left w-full">
+                                <h5 class="font-extrabold text-sm leading-snug">Tư Duy Khai Phóng</h5>
+                                <p class="text-[11px] mt-1 leading-normal" style="color:var(--text-dim);">Kiến thức này giúp giải phóng những định kiến, lối mòn suy nghĩ nào trong bạn để mở ra cách nhìn rộng lớn mới?</p>
+                                <div class="pillar-answer editable text-xs mt-2 p-2" contenteditable="true" data-label="Tư Duy Khai Phóng" data-placeholder="Ghi câu trả lời của bạn..."></div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 pr-2">
+                            <div class="w-10 h-10 rounded flex items-center justify-center text-xl font-bold shrink-0" style="border:2px solid var(--neon-red); background:rgba(255,45,85,.08);">🧐</div>
+                            <div class="text-left w-full">
+                                <h5 class="font-extrabold text-sm leading-snug">Tư Duy Phản Biện</h5>
+                                <p class="text-[11px] mt-1 leading-normal" style="color:var(--text-dim);">Khía cạnh nào trong luận điểm của tác giả chưa hợp lý? Ở hoàn cảnh của tôi cần điều chỉnh ra sao cho thích hợp?</p>
+                                <div class="pillar-answer editable text-xs mt-2 p-2" contenteditable="true" data-label="Tư Duy Phản Biện" data-placeholder="Ghi câu trả lời của bạn..."></div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 pr-2 mt-2 md:mt-0">
+                            <div class="w-10 h-10 rounded flex items-center justify-center text-xl font-bold shrink-0" style="border:2px solid var(--neon-red); background:rgba(255,45,85,.08);">🌱</div>
+                            <div class="text-left w-full">
+                                <h5 class="font-extrabold text-sm leading-snug">Liên Hệ Bản Thân</h5>
+                                <p class="text-[11px] mt-1 leading-normal" style="color:var(--text-dim);">Đối chiếu bài học với công việc và thực tế hiện tại của bạn. Bạn đã từng mắc lỗi sai gì ở khía cạnh này chưa?</p>
+                                <div class="pillar-answer editable text-xs mt-2 p-2" contenteditable="true" data-label="Liên Hệ Bản Thân" data-placeholder="Ghi câu trả lời của bạn..."></div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 md:col-span-2 mt-2 md:mt-0 pr-2">
+                            <div class="w-10 h-10 rounded flex items-center justify-center text-xl font-bold shrink-0" style="border:2px solid var(--neon-red); background:rgba(255,45,85,.08);">🚀</div>
+                            <div class="text-left w-full">
+                                <h5 class="font-extrabold text-sm leading-snug">Hành Động Chuyển Hoá Thực Tế</h5>
+                                <p class="text-[11px] mt-1 leading-normal" style="color:var(--text-dim);">Quyết định hành động cụ thể, thực tế và có thể đo lường được nào bạn sẽ tự giác áp dụng và thực hiện ngay ngày mai?</p>
+                                <div class="pillar-answer editable text-xs mt-2 p-2" contenteditable="true" data-label="Hành Động Chuyển Hoá Thực Tế" data-placeholder="Ghi câu trả lời của bạn..."></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ẢI 4 -->
+            <div id="stage-4" class="stage-section hidden w-full">
+                <div class="hud-frame p-6 relative overflow-hidden mb-6 text-left">
+                    <h3 class="editable font-black text-base mb-4 uppercase tracking-wider flex items-center gap-1.5 p-1" style="color:var(--neon-red);" contenteditable="true">
+                        <span>💡</span> GỢI Ý NỘI DUNG CHIA SẺ VỚI ĐỒNG ĐỘI (BẤM ĐỂ CHỈNH SỬA):
+                    </h3>
+                    <ul class="editable list-decimal pl-5 space-y-3.5 text-sm font-bold p-1" contenteditable="true" style="color:var(--text-mid);">
+                        <li>3 Từ khóa đặc sắc / Ý chính đắt giá nhất bạn đúc kết được trong chương sách này?</li>
+                        <li>Trải nghiệm sử dụng kỹ thuật dẫn tay (Chỉ 1 dòng, 2 dòng, Lazy S) hỗ trợ cải tiến tốc độ rà mắt của bạn như thế nào?</li>
+                        <li>Quyết định hành động cụ thể nào bạn cam kết chuyển hoá và áp dụng ngay để chuyển hoá cuộc sống?</li>
+                    </ul>
+                </div>
+
+                <div class="hud-frame flex flex-col items-center justify-center gap-2 p-6 text-center" style="border-style:dashed;">
+                    <div id="wheel-display" class="wheel-display w-full max-w-md">🎰 Sẵn sàng gọi tên...</div>
+                    <button class="neon-btn neon-btn-gold py-4 px-10 rounded flex items-center gap-3 text-lg" onclick="spinWheel()">
+                        <span>🔔 RUNG CHUÔNG CHỌN TÊN PHÁT BIỂU</span>
+                    </button>
+                    <p class="text-xs font-bold uppercase tracking-wide mt-1" style="color:var(--text-dim);">
+                        Thêm học viên vào "Danh Sách Học Viên" ở thanh bên trái, sau đó bấm chuông để quay ngẫu nhiên!
+                    </p>
+                </div>
+
+                <div class="flex justify-center mt-6">
+                    <button class="neon-btn neon-btn-cyan py-3 px-8 rounded text-sm" onclick="exportSummary()">📥 XUẤT TỔNG KẾT BUỔI HỌC (.TXT)</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    // ===== Trạng thái trò chơi =====
+    let timeLeft = 15 * 60;
+    let totalDuration = 15 * 60;
+    let timerInterval = null;
+    let isRunning = false;
+    let activeStage = 1;
+    let playerLevel = 1;
+    let playerXP = 15;
+    let isMuted = false;
+    let isAmbientOn = false;
+    let ambientNodes = null;
+    let isSpinning = false;
+
+    const RING_CIRC = 2 * Math.PI * 90;
+
+    // ===== Tham chiếu DOM =====
+    const timerDisplay = document.getElementById('global-timer');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const headerTitleText = document.getElementById('header-title-text');
+    const levelDisplay = document.getElementById('player-level');
+    const xpBarDisplay = document.getElementById('player-xp-bar');
+    const gameStatusText = document.getElementById('game-status-text');
+    const ringFg = document.getElementById('progress-ring-fg');
+
+    ringFg.style.strokeDasharray = RING_CIRC;
+
+    // ===== Âm thanh tổng hợp (Web Audio API) =====
+    let audioCtx = null;
+    function getAudioContext(){
+        if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+        return audioCtx;
+    }
+
+    function playSynthSound(freqs, duration, type = 'sine'){
+        if(isMuted) return;
+        try{
+            const ctx = getAudioContext();
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            osc.type = type;
+            if(Array.isArray(freqs)){
+                freqs.forEach((f, idx) => { osc.frequency.setValueAtTime(f, now + (idx * (duration / freqs.length))); });
+            } else {
+                osc.frequency.setValueAtTime(freqs, now);
+            }
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.3, now + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            osc.connect(gainNode); gainNode.connect(ctx.destination);
+            osc.start(now); osc.stop(now + duration);
+        }catch(e){ console.warn('Synth sound failed to play', e); }
+    }
+
+    // Hợp âm nhiều bè + delay nhẹ tạo cảm giác "ngầu", vang vọng hơn
+    function playChord(freqs, duration, type = 'sine', vol = 0.25){
+        if(isMuted) return;
+        try{
+            const ctx = getAudioContext();
+            const now = ctx.currentTime;
+            const master = ctx.createGain();
+            master.gain.setValueAtTime(vol, now);
+            const delay = ctx.createDelay();
+            delay.delayTime.value = 0.18;
+            const feedback = ctx.createGain();
+            feedback.gain.value = 0.22;
+            delay.connect(feedback); feedback.connect(delay);
+            master.connect(ctx.destination);
+            master.connect(delay); delay.connect(ctx.destination);
+
+            freqs.forEach((f, i) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(f, now);
+                g.gain.setValueAtTime(0, now);
+                g.gain.linearRampToValueAtTime(vol, now + 0.04 + i * 0.02);
+                g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+                osc.connect(g); g.connect(master);
+                osc.start(now + i * 0.02);
+                osc.stop(now + duration + 0.15);
+            });
+        }catch(e){ console.warn('Chord sound failed to play', e); }
+    }
+
+    function playClickSound(){ playSynthSound(440, 0.1, 'triangle'); }
+    function playTickSound(){ playSynthSound(1046, 0.045, 'square'); }
+    function playLevelUpSound(){ playChord([261.63, 329.63, 392.00, 523.25], 0.7, 'sine', 0.22); }
+    function playAlarmSound(){ playSynthSound([523.25, 493.88, 523.25, 493.88, 523.25], 1.2, 'sawtooth'); }
+    function playLuckyBell(){ playChord([523.25, 659.25, 783.99, 1046.50, 1318.51], 1.8, 'sine', 0.24); }
+
+    function startAmbient(){
+        try{
+            const ctx = getAudioContext();
+            const g = ctx.createGain();
+            g.gain.value = 0.0001;
+            g.connect(ctx.destination);
+            g.gain.linearRampToValueAtTime(0.045, ctx.currentTime + 2);
+            const o1 = ctx.createOscillator(); o1.type = 'sine'; o1.frequency.value = 110;
+            const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 110 * 1.5;
+            const lfo = ctx.createOscillator(); lfo.frequency.value = 0.08;
+            const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.018;
+            lfo.connect(lfoGain); lfoGain.connect(g.gain);
+            o1.connect(g); o2.connect(g);
+            o1.start(); o2.start(); lfo.start();
+            ambientNodes = { g, o1, o2, lfo };
+        }catch(e){ console.warn('Ambient sound failed', e); }
+    }
+    function stopAmbient(){
+        if(!ambientNodes) return;
+        try{
+            const ctx = getAudioContext();
+            const { g, o1, o2, lfo } = ambientNodes;
+            g.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 1);
+            setTimeout(() => { try{ o1.stop(); o2.stop(); lfo.stop(); }catch(e){} }, 1100);
+        }catch(e){}
+        ambientNodes = null;
+    }
+    function toggleAmbient(){
+        isAmbientOn = !isAmbientOn;
+        const btn = document.getElementById('ambient-btn');
+        if(isAmbientOn){ startAmbient(); btn.classList.add('is-active'); }
+        else { stopAmbient(); btn.classList.remove('is-active'); }
+    }
+
+    function toggleMute(){
+        isMuted = !isMuted;
+        const volIcon = document.getElementById('volume-icon');
+        const btn = document.getElementById('sound-btn');
+        if(isMuted){
+            volIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6L4.5 9H1.5v6h3l4.5 3.75V3.75z"></path>';
+            btn.classList.add('is-muted');
+        } else {
+            volIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.75l-3-3H5.25A2.25 2.25 0 013 13.5v-3a2.25 2.25 0 012.25-2.25H9l3-3V18.75z"></path>';
+            btn.classList.remove('is-muted');
+            playClickSound();
+        }
+    }
+
+    // ===== Cấp độ & XP (lưu tiến trình theo trình duyệt) =====
+    function loadProgress(){
+        try{
+            const saved = JSON.parse(localStorage.getItem('srg_progress') || 'null');
+            if(saved){ playerLevel = saved.level || 1; playerXP = saved.xp || 15; }
+        }catch(e){}
+        levelDisplay.textContent = playerLevel.toString().padStart(2, '0');
+        xpBarDisplay.style.width = `${playerXP}%`;
+    }
+    function saveProgress(){
+        try{ localStorage.setItem('srg_progress', JSON.stringify({ level: playerLevel, xp: playerXP })); }catch(e){}
+    }
+    function gainXP(amount){
+        playerXP += amount;
+        if(playerXP >= 100){
+            playerXP = playerXP % 100;
+            playerLevel++;
+            levelDisplay.textContent = playerLevel.toString().padStart(2, '0');
+            playLevelUpSound();
+            headerTitleText.classList.add('glitch-pulse');
+            setTimeout(() => headerTitleText.classList.remove('glitch-pulse'), 1000);
+        }
+        xpBarDisplay.style.width = `${playerXP}%`;
+        saveProgress();
+    }
+
+    // ===== Đồng hồ đếm ngược =====
+    function updateRing(){
+        const total = totalDuration > 0 ? totalDuration : 900;
+        const pct = Math.max(0, Math.min(1, timeLeft / total));
+        ringFg.style.strokeDashoffset = RING_CIRC * (1 - pct);
+        ringFg.classList.toggle('is-critical', pct <= 0.15 && timeLeft > 0);
+    }
+
+    function updateDisplay(){
+        if(timeLeft < 0) timeLeft = 0;
+        let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+        timerDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        updateRing();
+        if(timeLeft === 0 && isRunning){
+            playAlarmSound();
+            toggleTimer();
+            gameStatusText.textContent = "NHIỆM VỤ: HOÀN THÀNH";
+            launchConfetti();
+        }
+    }
+
+    function toggleTimer(){
+        playClickSound();
+        if(isRunning){
+            clearInterval(timerInterval);
+            playPauseBtn.innerHTML = '<span>▶ TIẾP TỤC BÀI LUYỆN</span>';
+            playPauseBtn.classList.remove('is-running');
+            gameStatusText.textContent = "TRẠNG THÁI: TẠM DỪNG";
+        } else {
+            if(timeLeft === 0) return;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                if(timeLeft % 10 === 0) gainXP(1);
+            }, 1000);
+            playPauseBtn.innerHTML = '<span>⏸ TẠM NGỪNG THỬ THÁCH</span>';
+            playPauseBtn.classList.add('is-running');
+            gameStatusText.textContent = "TRẠNG THÁI: ĐANG HOẠT ĐỘNG";
+        }
+        isRunning = !isRunning;
+    }
+
+    function resetTimer(minutes){
+        playClickSound();
+        clearInterval(timerInterval);
+        isRunning = false;
+        timeLeft = minutes * 60;
+        totalDuration = minutes * 60;
+        playPauseBtn.innerHTML = '<span>▶ START MISSION</span>';
+        playPauseBtn.classList.remove('is-running');
+        gameStatusText.textContent = "TRẠNG THÁI: SẴN SÀNG";
+        updateDisplay();
+    }
+
+    function adjustTime(seconds){
+        playClickSound();
+        timeLeft += seconds;
+        if(timeLeft < 0) timeLeft = 0;
+        if(timeLeft > totalDuration) totalDuration = timeLeft;
+        updateDisplay();
+    }
+
+    // ===== Điều hướng Ải =====
+    function switchStage(stageNum, btnElement){
+        playLevelUpSound();
+        activeStage = stageNum;
+        document.querySelectorAll('.stage-section').forEach(sec => sec.classList.add('hidden'));
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('is-active'));
+        document.getElementById(`stage-${stageNum}`).classList.remove('hidden');
+        btnElement.classList.add('is-active');
+
+        for(let i = 1; i <= 4; i++){
+            document.getElementById(`badge-${i}`).classList.toggle('is-done', i <= stageNum);
+        }
+
+        const titles = [
+            "Đấu Trường Luyện Đọc • Chặng 1: Ý Hay",
+            "Đấu Trường Luyện Đọc • Chặng 2: Luyện 3-2-1",
+            "Đấu Trường Luyện Đọc • Chặng 3: Đọc Hiểu Đúc Kết Sâu",
+            "Đấu Trường Luyện Đọc • Chặng 4: Đúc Kết & Chia Sẻ"
+        ];
+        headerTitleText.textContent = titles[stageNum - 1];
+
+        gainXP(20);
+        resetTimer(15);
+    }
+
+    function selectTrainingCard(cardIdx, minutes){
+        playClickSound();
+        document.querySelectorAll('.tech-card').forEach(card => card.classList.remove('is-active'));
+        document.getElementById(`card-tech-${cardIdx}`).classList.add('is-active');
+        resetTimer(minutes);
+    }
+
+    // ===== Sơ đồ tư duy =====
+    function addMindmapBranch(){
+        playClickSound();
+        const list = document.getElementById('mindmap-list');
+        const addBtnWrapper = document.getElementById('add-btn-wrapper');
+        const newLi = document.createElement('li');
+        newLi.className = 'mindmap-branch';
+        newLi.innerHTML = `
+            <div class="node-wrapper">
+                <div class="mindmap-node" contenteditable="true" data-placeholder="Nhập ý chính...">✨ Ý chính mới</div>
+                <button class="add-sub-btn" onclick="addSubBranch(this)" title="Thêm ý phụ">+</button>
+            </div>
+            <ul class="mindmap-sub-branches"></ul>`;
+        list.insertBefore(newLi, addBtnWrapper);
+        newLi.querySelector('.mindmap-node').focus();
+        gainXP(5);
+    }
+
+    function addSubBranch(btn){
+        playClickSound();
+        const parentBranch = btn.closest('.mindmap-branch');
+        const subBranchesList = parentBranch.querySelector('.mindmap-sub-branches');
+        subBranchesList.classList.add('active');
+        const newSubLi = document.createElement('li');
+        newSubLi.className = 'mindmap-sub-branch';
+        newSubLi.innerHTML = `<div class="mindmap-sub-node" contenteditable="true" data-placeholder="Nhập ý phụ...">➖ Ý phụ mới</div>`;
+        subBranchesList.appendChild(newSubLi);
+        newSubLi.querySelector('.mindmap-sub-node').focus();
+        gainXP(3);
+    }
+
+    // ===== Danh sách học viên (Roster) =====
+    let roster = [];
+    try{ roster = JSON.parse(localStorage.getItem('srg_roster') || '[]'); }catch(e){ roster = []; }
+
+    function saveRoster(){ try{ localStorage.setItem('srg_roster', JSON.stringify(roster)); }catch(e){} }
+    function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
+    function renderRoster(){
+        const list = document.getElementById('roster-list');
+        list.innerHTML = '';
+        if(roster.length === 0){
+            list.innerHTML = '<li class="roster-empty">Chưa có học viên nào...</li>';
+            return;
+        }
+        roster.forEach((name, idx) => {
+            const li = document.createElement('li');
+            li.className = 'roster-chip';
+            li.innerHTML = `<span>${escapeHtml(name)}</span><button onclick="removeStudent(${idx})" title="Xoá">×</button>`;
+            list.appendChild(li);
+        });
+    }
+
+    function addStudent(){
+        const input = document.getElementById('roster-input');
+        const name = input.value.trim();
+        if(!name) return;
+        roster.push(name);
+        input.value = '';
+        saveRoster(); renderRoster(); playClickSound();
+    }
+
+    function removeStudent(idx){
+        roster.splice(idx, 1);
+        saveRoster(); renderRoster(); playClickSound();
+    }
+
+    // ===== Vòng quay chọn tên (Slot machine) =====
+    function spinWheel(){
+        if(isSpinning) return;
+        if(roster.length === 0){
+            alert('Hãy thêm tên học viên vào "Danh Sách Học Viên" ở thanh bên trái trước khi rung chuông nhé!');
+            return;
+        }
+        isSpinning = true;
+        const display = document.getElementById('wheel-display');
+        display.classList.remove('is-winner');
+        display.classList.add('is-spinning');
+        const winner = roster[Math.floor(Math.random() * roster.length)];
+        const totalSteps = 20 + Math.floor(Math.random() * 8);
+        let step = 0;
+
+        function tick(){
+            step++;
+            const showWinner = step >= totalSteps;
+            display.textContent = showWinner ? winner : roster[Math.floor(Math.random() * roster.length)];
+            playTickSound();
+            if(showWinner){
+                display.classList.remove('is-spinning');
+                display.classList.add('is-winner');
+                playLuckyBell();
+                launchConfetti();
+                gainXP(10);
+                gameStatusText.textContent = "NHIỆM VỤ: ĐÃ CHỌN XONG";
+                setTimeout(() => display.classList.remove('is-winner'), 2500);
+                isSpinning = false;
+                return;
+            }
+            const delay = Math.min(50 + Math.pow(step, 1.7) * 3, 280);
+            setTimeout(tick, delay);
+        }
+        tick();
+    }
+
+    // ===== Hiệu ứng pháo giấy =====
+    function launchConfetti(){
+        const colors = ['#FF2D55', '#FFC93C', '#22E5FF', '#EEF2F8'];
+        const container = document.getElementById('confetti-layer');
+        for(let i = 0; i < 40; i++){
+            const el = document.createElement('div');
+            el.className = 'confetti-piece';
+            el.style.left = (40 + Math.random() * 20) + '%';
+            el.style.background = colors[Math.floor(Math.random() * colors.length)];
+            el.style.setProperty('--dx', (Math.random() * 2 - 1).toFixed(2));
+            el.style.animationDuration = (1.2 + Math.random()) + 's';
+            el.style.animationDelay = (Math.random() * 0.2) + 's';
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 2600);
+        }
+    }
+
+    // ===== Máy đo tốc độ đọc WPM =====
+    let wpmRecords = [];
+    try{ wpmRecords = JSON.parse(localStorage.getItem('srg_wpm') || '[]'); }catch(e){ wpmRecords = []; }
+
+    function saveWpmRecords(){ try{ localStorage.setItem('srg_wpm', JSON.stringify(wpmRecords)); }catch(e){} }
+
+    function calcWPM(){
+        playClickSound();
+        const words = parseFloat(document.getElementById('wpm-words').value);
+        const mins = parseFloat(document.getElementById('wpm-min').value) || 0;
+        const secs = parseFloat(document.getElementById('wpm-sec').value) || 0;
+        const totalMin = mins + secs / 60;
+        const resultEl = document.getElementById('wpm-result');
+        if(!words || totalMin <= 0){
+            resultEl.textContent = 'Nhập đủ số từ & thời gian nhé!';
+            return;
+        }
+        const wpm = Math.round(words / totalMin);
+        let rating = 'Khởi động';
+        if(wpm >= 800) rating = 'SIÊU TỐC ĐỘ 🚀';
+        else if(wpm >= 500) rating = 'XUẤT SẮC 🔥';
+        else if(wpm >= 300) rating = 'TỐT ⚡';
+        else if(wpm >= 150) rating = 'TRUNG BÌNH';
+        resultEl.innerHTML = `<span class="wpm-number">${wpm}</span> wpm — ${rating}`;
+
+        wpmRecords.unshift({ wpm, date: new Date().toLocaleString('vi-VN') });
+        wpmRecords = wpmRecords.slice(0, 8);
+        saveWpmRecords();
+        renderWpmRecords();
+        updateBestWpmBadge();
+        gainXP(8);
+    }
+
+    function renderWpmRecords(){
+        const list = document.getElementById('wpm-history');
+        if(!list) return;
+        list.innerHTML = wpmRecords.length
+            ? wpmRecords.map(r => `<li><span>${r.wpm} wpm</span><span class="wpm-date">${r.date}</span></li>`).join('')
+            : '<li class="roster-empty">Chưa có kỷ lục nào</li>';
+    }
+
+    function updateBestWpmBadge(){
+        const best = wpmRecords.reduce((m, r) => Math.max(m, r.wpm), 0);
+        const badge = document.getElementById('best-wpm-badge');
+        if(badge) badge.textContent = best > 0 ? best + ' wpm' : '-- wpm';
+    }
+
+    // ===== Toàn màn hình =====
+    function toggleFullscreen(){
+        playClickSound();
+        if(!document.fullscreenElement){
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // ===== Xuất tổng kết buổi học =====
+    function exportSummary(){
+        playClickSound();
+        let out = `TỔNG KẾT BUỔI LUYỆN ĐỌC — ${new Date().toLocaleString('vi-VN')}\n`;
+        out += `Cấp độ đạt được: LV.${playerLevel.toString().padStart(2, '0')} (${playerXP}/100 XP)\n\n`;
+
+        out += `--- SƠ ĐỒ Ý CHÍNH ---\n`;
+        const root = document.querySelector('.mindmap-root');
+        if(root) out += `• ${root.textContent.trim()}\n`;
+        document.querySelectorAll('.mindmap-branch').forEach(branch => {
+            const node = branch.querySelector('.mindmap-node');
+            if(!node) return;
+            out += `  - ${node.textContent.trim()}\n`;
+            branch.querySelectorAll('.mindmap-sub-node').forEach(sub => { out += `      • ${sub.textContent.trim()}\n`; });
+        });
+
+        out += `\n--- 5 TRỤ CỘT ĐÚC KẾT ---\n`;
+        document.querySelectorAll('.pillar-answer').forEach(ans => {
+            const label = ans.dataset.label || '';
+            const text = ans.textContent.trim();
+            out += `${label}: ${text || '(chưa ghi)'}\n`;
+        });
+
+        out += `\n--- TỐC ĐỘ ĐỌC ĐÃ GHI NHẬN ---\n`;
+        out += wpmRecords.length ? wpmRecords.map(r => `${r.date}: ${r.wpm} wpm`).join('\n') + '\n' : '(chưa có dữ liệu)\n';
+
+        out += `\n--- GỢI Ý CHIA SẺ ---\n`;
+        document.querySelectorAll('#stage-4 li').forEach(li => { out += `- ${li.textContent.trim()}\n`; });
+
+        const blob = new Blob([out], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tong-ket-buoi-doc-${Date.now()}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        gainXP(15);
+    }
+
+    // ===== Hạt sáng trôi nền Arena =====
+    function initParticles(){
+        const wrap = document.getElementById('particles');
+        const count = 26;
+        for(let i = 0; i < count; i++){
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = 2 + Math.random() * 3;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.color = Math.random() > 0.5 ? '#22E5FF' : '#FF2D55';
+            p.style.animationDuration = (10 + Math.random() * 14) + 's';
+            p.style.animationDelay = (Math.random() * 14) + 's';
+            wrap.appendChild(p);
+        }
+    }
+
+    // ===== Phím tắt: Space để Play/Pause =====
+    document.addEventListener('keydown', (e) => {
+        if(e.code === 'Space'){
+            const tag = (e.target.tagName || '').toLowerCase();
+            if(tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+            e.preventDefault();
+            toggleTimer();
+        }
+    });
+
+    // ===== Khởi tạo =====
+    loadProgress();
+    renderRoster();
+    renderWpmRecords();
+    updateBestWpmBadge();
+    initParticles();
+    updateDisplay();
+</script>
+</body>
+</html>

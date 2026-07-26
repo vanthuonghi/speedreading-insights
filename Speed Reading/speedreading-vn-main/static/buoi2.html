@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Viện Speed Reading 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Animations */
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+        .animate-pop { animation: pop 0.3s ease-in-out; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+
+        /* Button styles */
+        .btn-option {
+            transition: all 0.2s;
+            transform-origin: center;
+        }
+        .btn-option:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .btn-option:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .hidden-screen { display: none !important; }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 text-gray-800">
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- TRANG CHỦ -->
+    <div id="start-screen" class="glass-card rounded-3xl p-8 max-w-lg w-full text-center animate-bounce-in relative">
+        <div class="text-6xl mb-4 animate-float">📚🚀</div>
+        <h1 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 mb-4">
+            Master Speed Reading
+        </h1>
+        <p class="text-lg text-gray-600 mb-8 font-semibold">
+            Luyện mắt hay Đọc hiểu? Khám phá ranh giới để đột phá tốc độ đọc.<br>
+            Bạn đã sẵn sàng chưa?
+        </p>
+        <button onclick="startGame()" class="w-full bg-gradient-to-r from-pink-400 to-purple-500 text-white font-bold text-xl py-4 px-8 rounded-full shadow-lg hover:shadow-xl hover:from-pink-500 hover:to-purple-600 transition-all active:scale-95 animate-pop">
+            🚀 Bắt Đầu Ngay!
+        </button>
+    </div>
+
+    <!-- TRANG CÂU HỎI -->
+    <div id="quiz-screen" class="glass-card rounded-3xl p-6 md:p-8 max-w-2xl w-full hidden-screen relative">
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-3 mb-6 overflow-hidden">
+            <div id="progress-bar" class="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <span class="bg-purple-100 text-purple-700 py-1 px-4 rounded-full font-bold text-sm" id="question-counter">Câu 1/10</span>
+            <span class="bg-yellow-100 text-yellow-700 py-1 px-4 rounded-full font-bold text-sm flex items-center">
+                ⭐ <span id="score-display" class="ml-1">0</span>
+            </span>
+        </div>
+
+        <h2 id="question-text" class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 leading-snug">
+            Đang tải câu hỏi...
+        </h2>
+
+        <div id="options-container" class="space-y-3 mb-6">
+            <!-- Nút câu trả lời sẽ được tạo bằng JS -->
+        </div>
+
+        <!-- Giải thích (hiển thị sau khi chọn) -->
+        <div id="explanation-box" class="hidden bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-6 animate-bounce-in">
+            <p class="font-bold text-blue-800 flex items-center"><span class="mr-2">💡</span> Góc Kiến Thức:</p>
+            <p id="explanation-text" class="text-blue-700 text-sm mt-1"></p>
+        </div>
+
+        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-blue-500 text-white font-bold text-lg py-3 px-8 rounded-xl shadow-md hover:bg-blue-600 transition-all active:scale-95">
+            Tiếp Tục ➡️
+        </button>
+    </div>
+
+    <!-- TRANG KẾT QUẢ -->
+    <div id="result-screen" class="glass-card rounded-3xl p-8 max-w-lg w-full text-center hidden-screen">
+        <div id="result-icon" class="text-7xl mb-4 animate-bounce-in">🏆</div>
+        <h2 class="text-3xl font-black text-gray-800 mb-2">Tuyệt Vời!</h2>
+        <p class="text-gray-600 text-lg mb-6">Bạn đã phân biệt rõ thế nào là Luyện mắt và Đọc hiểu.</p>
+        
+        <div class="bg-gray-50 rounded-2xl p-6 mb-8 border-2 border-dashed border-gray-200">
+            <p class="text-sm text-gray-500 font-bold uppercase mb-1">Điểm của bạn</p>
+            <p class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500" id="final-score">
+                0 / 10
+            </p>
+            <p id="result-message" class="text-md font-semibold text-purple-600 mt-4"></p>
+        </div>
+
+        <button onclick="restartGame()" class="w-full bg-gray-800 text-white font-bold text-xl py-4 px-8 rounded-full shadow-lg hover:bg-black transition-all active:scale-95 mb-4">
+            🔄 Chơi Lại Từ Đầu
+        </button>
+        <p class="text-xs text-gray-400">Tập luyện đúng cách, hiệu quả nhân đôi!</p>
+    </div>
+
+    <script>
+        // --- DỮ LIỆU CÂU HỎI ---
+        const quizData = [
+            {
+                question: "Mục đích chính của các bài tập luyện mắt (1 dòng, 2 dòng, Lazy S) là gì?",
+                options: ["Nhớ ngay mọi chi tiết trong trang sách", "Tăng tốc độ đưa mắt và mở rộng tầm nhìn", "Đọc chậm lại để hiểu sâu ý tác giả", "Thay thế hoàn toàn việc đọc hiểu"],
+                correct: 1,
+                explanation: "Hỉ lưu ý nhé: Luyện mắt là bài tập 'thể dục' cho cơ mắt, giúp lướt nhanh hơn. Nó không nhằm mục đích hiểu ngay nội dung lúc đó."
+            },
+            {
+                question: "Khi dùng ngón tay chỉ 1 dòng (Single-line), bạn đang xử lý vấn đề gì?",
+                options: ["Ép mắt tiến liên tục, chống thói quen nhảy mắt ngược (hồi quy)", "Dừng lại phân tích các từ khó", "Học thuộc lòng ngữ pháp", "Ghi nhớ từng con số cụ thể"],
+                correct: 0,
+                explanation: "Chỉ tay 1 dòng tạo ra một 'người dẫn đường'. Mắt bạn buộc phải đuổi theo tay, triệt tiêu ngay thói quen đọc lại câu vừa xem."
+            },
+            {
+                question: "Kỹ thuật quét 2 dòng (Double-line sweep) mang lại lợi thế gì so với 1 dòng?",
+                options: ["Chậm hơn nhưng chắc ăn hơn", "Đọc kỹ từng chữ cái", "Mở rộng tầm nhìn dọc, gom cụm từ ở cả 2 dòng cùng lúc", "Phù hợp để đọc văn bản luật pháp"],
+                correct: 2,
+                explanation: "Khi mắt đã quen với 1 dòng, Hỉ khuyên bạn nâng cấp lên 2 dòng để ép não bộ 'chụp' khối thông tin lớn hơn trong một lần dừng mắt."
+            },
+            {
+                question: "Bài tập lướt dích dắc 'Lazy S' phát huy sức mạnh cao nhất khi nào?",
+                options: ["Lướt cực nhanh để tìm từ khóa hoặc dò mạch ý chính (Skimming)", "Đọc truyện trinh thám", "Đọc hợp đồng chi tiết", "Học thuộc lòng bài diễn văn"],
+                correct: 0,
+                explanation: "Lazy S giống như radar dò mìn. Bạn không dùng nó để hiểu từng chữ, mà dùng để quét cấu trúc và tóm nhanh các điểm mù quan trọng."
+            },
+            {
+                question: "Sai lầm lớn nhất khi bạn mới bắt đầu tập luyện các bài quét mắt tốc độ cao?",
+                options: ["Cố gắng phải HIỂU ngay nội dung đang lướt", "Dùng ngón tay hoặc bút để chỉ", "Chớp mắt quá ít", "Mở nhạc không lời"],
+                correct: 0,
+                explanation: "Lúc tập tạ cho mắt, bạn cứ lướt qua chữ dù không hiểu gì! Hãy ép não quen với tốc độ lướt mới trước, sự hiểu sẽ tự đuổi kịp sau."
+            },
+            {
+                question: "Vậy khi nào chúng ta mới thực sự bước vào giai đoạn 'Đọc hiểu' (Comprehension)?",
+                options: ["Ngay lúc đang lướt tốc độ cao bằng Lazy S", "Chỉ khi đọc to thành tiếng", "Khi đã định vị được đoạn văn chứa thông tin cốt lõi cần đào sâu", "Lúc chuẩn bị đi ngủ"],
+                correct: 2,
+                explanation: "Hỉ luôn nhắc: Lướt mắt để TÌM, đọc chậm lại để HIỂU. Đó là sự kết hợp hoàn hảo để làm chủ mọi cuốn sách."
+            },
+            {
+                question: "Đâu là sự khác biệt bản chất giữa 'Luyện mắt tốc độ' và 'Đọc hiểu'?",
+                options: ["Luyện mắt tốn thời gian hơn", "Luyện mắt là phá vỡ rào cản vật lý, đọc hiểu là xử lý thông tin nhận thức", "Luyện mắt dùng sách giấy, đọc hiểu dùng thiết bị điện tử", "Không có gì khác biệt"],
+                correct: 1,
+                explanation: "Mắt lướt nhanh giúp nạp dữ liệu thô lẹ. Não nhạy bén giúp xử lý dữ liệu sâu. Bạn cần tách bạch 2 giai đoạn này khi rèn luyện."
+            },
+            {
+                question: "Nếu áp dụng tốc độ Lazy S để đọc chi tiết một tài liệu chuyên ngành mới tinh từ đầu đến cuối, hệ quả là gì?",
+                options: ["Hiểu bài ngay lập tức", "Nhớ cực dai và lâu", "Cải thiện vốn từ vựng", "Tốc độ rất nhanh nhưng mức độ hiểu (Comprehension) rớt thê thảm"],
+                correct: 3,
+                explanation: "Đừng áp dụng sai chiến thuật! Với kiến thức mới tinh, hãy lướt lấy sườn bài, sau đó hạ tốc độ xuống để đọc hiểu thật chắc phần trọng tâm."
+            },
+            {
+                question: "'Đọc nhẩm' (Subvocalization) trong đầu là kẻ thù số 1 của kỹ năng nào?",
+                options: ["Khả năng lướt mắt tốc độ cao (quét 1 dòng, 2 dòng)", "Khả năng phân tích logic", "Khả năng tập trung", "Khả năng ghi nhớ dài hạn"],
+                correct: 0,
+                explanation: "Bạn không thể quét 2 dòng cùng lúc nếu trong đầu vẫn đang mải miết 'đọc tiếng' từng chữ một. Hãy để mắt làm việc của nó, cắt đứt tiếng nói thầm!"
+            },
+            {
+                question: "Tóm lại, quy trình vàng để chinh phục thông tin nhanh và sâu là gì?",
+                options: ["Mở trang 1 và đọc chậm rãi đến trang cuối", "Chỉ đọc phần mục lục và kết luận", "Lướt mắt (Skim/Lazy S) tìm cấu trúc -> Quét để tìm ý -> Hạ tốc độ Đọc hiểu phần cốt lõi", "Nhắm mắt lại và tưởng tượng"],
+                correct: 2,
+                explanation: "Tuyệt vời! Bạn đang kết hợp tính linh hoạt của 'Luyện mắt' và chiều sâu của 'Đọc hiểu'. Đó mới chính là đẳng cấp thực sự của Speed Reader."
+            }
+        ];
+
+        // --- STATE QUẢN LÝ ---
+        let currentQuestion = 0;
+        let score = 0;
+        let isAnswered = false;
+
+        // --- ÂM THANH (Web Audio API - Không cần file ngoài) ---
+        let audioCtx;
+        
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            if (type === 'click') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'correct') {
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.5);
+            } else if (type === 'wrong') {
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'win') {
+                const freqs = [523.25, 659.25, 783.99, 1046.50];
+                freqs.forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gn = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.value = freq;
+                        osc.connect(gn);
+                        gn.connect(audioCtx.destination);
+                        gn.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                        gn.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.5);
+                    }, i * 150);
+                });
+            }
+        }
+
+        // --- LÔ-GÍC TRÒ CHƠI ---
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        function startGame() {
+            initAudio();
+            playSound('click');
+            
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('score-display').innerText = score;
+            
+            startScreen.classList.add('hidden-screen');
+            resultScreen.classList.add('hidden-screen');
+            quizScreen.classList.remove('hidden-screen');
+            quizScreen.classList.add('animate-bounce-in');
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            isAnswered = false;
+            const qData = quizData[currentQuestion];
+            
+            document.getElementById('question-counter').innerText = `Câu ${currentQuestion + 1}/${quizData.length}`;
+            document.getElementById('question-text').innerText = qData.question;
+            
+            const progress = ((currentQuestion) / quizData.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            document.getElementById('explanation-box').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option w-full text-left p-4 rounded-2xl border-2 border-gray-100 bg-white font-semibold text-gray-700 shadow-sm flex items-center group';
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center mr-4 font-bold group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors">${String.fromCharCode(65 + index)}</span>
+                    <span class="flex-1">${opt}</span>
+                `;
+                btn.onclick = () => selectAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex, btnElement) {
+            if (isAnswered) return;
+            isAnswered = true;
+            
+            const qData = quizData[currentQuestion];
+            const isCorrect = selectedIndex === qData.correct;
+            const allButtons = document.querySelectorAll('.btn-option');
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('score-display').innerText = score;
+                playSound('correct');
+                
+                btnElement.classList.remove('border-gray-100', 'bg-white');
+                btnElement.classList.add('border-green-500', 'bg-green-50', 'animate-pop');
+                btnElement.querySelector('span:first-child').classList.add('bg-green-500', 'text-white');
+            } else {
+                playSound('wrong');
+                
+                btnElement.classList.remove('border-gray-100', 'bg-white');
+                btnElement.classList.add('border-red-400', 'bg-red-50', 'animate-shake');
+                btnElement.querySelector('span:first-child').classList.add('bg-red-500', 'text-white');
+                
+                const correctBtn = allButtons[qData.correct];
+                correctBtn.classList.remove('border-gray-100', 'bg-white');
+                correctBtn.classList.add('border-green-500', 'bg-green-50');
+                correctBtn.querySelector('span:first-child').classList.add('bg-green-500', 'text-white');
+            }
+
+            allButtons.forEach(btn => btn.style.pointerEvents = 'none');
+
+            document.getElementById('explanation-text').innerText = qData.explanation;
+            document.getElementById('explanation-box').classList.remove('hidden');
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.innerText = (currentQuestion === quizData.length - 1) ? "Xem Kết Quả 🏆" : "Tiếp Tục ➡️";
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            playSound('click');
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            quizScreen.classList.add('hidden-screen');
+            resultScreen.classList.remove('hidden-screen');
+            resultScreen.classList.add('animate-bounce-in');
+            
+            document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+            
+            const resultMsg = document.getElementById('result-message');
+            const icon = document.getElementById('result-icon');
+            
+            if (score === quizData.length) {
+                resultMsg.innerText = "Xuất sắc! Bạn đã nắm rõ bản chất để tối ưu tốc độ và độ hiểu! 🚀";
+                icon.innerText = "🌟";
+                playSound('win');
+                fireConfetti();
+            } else if (score >= 7) {
+                resultMsg.innerText = "Rất tốt! Bạn hiểu rõ mục tiêu từng kỹ thuật. Áp dụng ngay nhé! 👏";
+                icon.innerText = "🔥";
+                playSound('win');
+                fireConfetti();
+            } else {
+                resultMsg.innerText = "Không sao! Nắm vững tư duy là bước đầu tiên để đọc bứt phá. 💪";
+                icon.innerText = "🌱";
+            }
+        }
+
+        function restartGame() {
+            playSound('click');
+            startGame();
+        }
+
+        // --- HIỆU ỨNG PHÁO GIẤY (Confetti) ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function fireConfetti() {
+            particles = [];
+            const colors = ['#f472b6', '#a78bfa', '#34d399', '#fbbf24', '#60a5fa'];
+            
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2 + 100,
+                    r: Math.random() * 6 + 4,
+                    dx: Math.random() * 20 - 10,
+                    dy: Math.random() * -15 - 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.floor(Math.random() * 10) - 10,
+                    tiltAngle: 0,
+                    tiltAngleInc: (Math.random() * 0.07) + 0.05
+                });
+            }
+            cancelAnimationFrame(animationId);
+            renderConfetti();
+        }
+
+        function renderConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            
+            particles.forEach(p => {
+                p.tiltAngle += p.tiltAngleInc;
+                p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
+                p.x += Math.sin(p.tiltAngle) * 2;
+                p.dy += 0.2; // Gravity
+                p.y += p.dy;
+                p.x += p.dx;
+
+                if (p.y <= canvas.height) active = true;
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+                ctx.stroke();
+            });
+
+            if (active) {
+                animationId = requestAnimationFrame(renderConfetti);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+    </script>
+</body>
+</html>

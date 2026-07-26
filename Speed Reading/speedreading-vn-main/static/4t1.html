@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGK Speed Reading Lớp 4 - Bài 1 Tiết 1</title>
+    <style>
+        /* Cấu hình trang A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 20mm;
+        }
+        body {
+            font-family: 'Comic Sans MS', 'Nunito', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        
+        /* Header và Tiêu đề */
+        .header {
+            text-align: right;
+            font-size: 15px;
+            color: #00796B;
+            border-bottom: 3px dashed #B2DFDB;
+            padding-bottom: 8px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .title-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .lesson-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFA000;
+            text-transform: uppercase;
+            background-color: #FFF8E1;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 25px;
+            border: 2px dashed #FFCA28;
+            margin-bottom: 15px;
+        }
+        .lesson-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #00796B;
+            text-transform: uppercase;
+            margin-top: 0;
+            line-height: 1.4;
+        }
+        .lesson-sub-title {
+            font-size: 17px;
+            color: #E64A19;
+            font-style: italic;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Định dạng các khối nội dung (Boxes) */
+        .box {
+            border-radius: 18px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 0px rgba(0,0,0,0.08);
+            page-break-inside: avoid;
+        }
+        .box-title {
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+        .box-title span {
+            font-size: 26px;
+            margin-right: 12px;
+        }
+        
+        .box p {
+            font-size: 17px;
+            text-align: justify;
+            margin-bottom: 12px;
+        }
+
+        /* Từng phòng/trạm học */
+        .box-nhiemvu { 
+            background-color: #E0F2F1; 
+            border: 3px solid #26A69A; 
+            box-shadow: 0 5px 0px #80CBC4; 
+        }
+        .box-nhiemvu .box-title { color: #00695C; }
+        
+        .box-khoidong { 
+            background-color: #FFF3E0; 
+            border: 3px solid #FFA726; 
+            box-shadow: 0 5px 0px #FFCC80; 
+        }
+        .box-khoidong .box-title { color: #E65100; }
+        
+        .box-lythuyet { 
+            background-color: #FBE9E7; 
+            border: 3px solid #FF7043; 
+            box-shadow: 0 5px 0px #FFAB91; 
+        }
+        .box-lythuyet .box-title { color: #D84315; }
+
+        /* Khối Văn bản đọc thử */
+        .box-thuchanh {
+            background-color: #fff; 
+            border: 3px dashed #00796B; 
+            box-shadow: 0 5px 0px #B2DFDB;
+        }
+        .box-thuchanh .box-title { color: #00796B; }
+
+        .story-container {
+            background-color: #FAFAFA;
+            border: 2px solid #80CBC4;
+            border-radius: 12px;
+            padding: 30px 20px 15px 20px;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .story-header-tag {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background-color: #00796B;
+            color: #fff;
+            padding: 5px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 15px;
+            box-shadow: 0 3px 0px #004D40;
+        }
+        .story-container p { 
+            text-indent: 20px; 
+            margin-bottom: 12px; 
+        }
+        .word-count-note {
+            display: inline-block;
+            background-color: #FFF8E1;
+            color: #F57F17;
+            font-size: 13px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin-left: 8px;
+            font-weight: bold;
+            border: 1px solid #FFE082;
+        }
+
+        /* Khối Thu hoạch */
+        .result-board {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #FFF;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            border: 3px dashed #FFA000;
+            color: #333;
+            margin-top: 20px;
+        }
+        .result-board .score { 
+            color: #E64A19; 
+            font-size: 26px; 
+            display: inline-block;
+            border-bottom: 2px solid #E64A19;
+            width: 70px;
+            text-align: center;
+        }
+
+        .highlight-orange { color: #E64A19; font-weight: bold; }
+        .highlight-green { color: #00796B; font-weight: bold; }
+        
+        ul, ol { margin-top: 5px; margin-bottom: 15px; padding-left: 25px; font-size: 17px; }
+        li { margin-bottom: 8px; }
+
+        .footer {
+            margin-top: 40px;
+            border-top: 2px dashed #B2DFDB;
+            padding-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #00796B;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        CHỦ ĐỀ I: ĐO VẬN TỐC TÀU VŨ TRỤ
+    </div>
+
+    <div class="title-container">
+        <div class="lesson-number">Bài 1: Khởi động đôi mắt phi hành gia</div>
+        <div class="lesson-title">Tiết 1: 1 PHÚT EM ĐỌC ĐƯỢC BAO NHIÊU CHỮ?</div>
+        <div class="lesson-sub-title">"Cùng kiểm tra xem đôi mắt của em đang bay ở vận tốc nào nhé!"</div>
+    </div>
+
+    <div class="box box-nhiemvu">
+        <h3 class="box-title"><span>🎯</span> Nhiệm vụ cần đạt</h3>
+        <ul>
+            <li>Biết cách tự cầm đồng hồ bấm giờ để đo tốc độ đọc của chính mình.</li>
+            <li>Làm quen với mật mã <span class="highlight-green">WPM (Words Per Minute)</span>.</li>
+            <li>Đọc lướt qua một câu chuyện nhỏ và hoàn thành các câu hỏi trí nhớ.</li>
+        </ul>
+    </div>
+
+    <div class="box box-khoidong">
+        <h3 class="box-title"><span>🚀</span> Trạm 1: Khởi động Động cơ Mắt</h3>
+        <p>Trước khi tàu vũ trụ cất cánh, chúng ta phải làm nóng động cơ!</p>
+        <p><strong>Trò chơi "Vẽ vòng số 8":</strong> Em hãy ngồi thẳng, giữ đầu thật im (không được lắc lư đầu sang hai bên). Giơ ngón tay trỏ ra phía trước mặt. Mắt em hãy nhìn chằm chằm vào đầu ngón tay.</p>
+        <p>Bây giờ, hãy dùng ngón tay vẽ một số 8 nằm ngang (giống hệt dấu vô cực ∞) thật to trong không khí, và bắt đôi mắt phải đuổi theo ngón tay nhé. Làm 5 vòng như vậy!</p>
+    </div>
+
+    <div class="box box-lythuyet">
+        <h3 class="box-title"><span>💡</span> Trạm 2: Giải mã Mật mã WPM</h3>
+        <p>Để biết ô tô chạy nhanh hay chậm, người ta dùng đồng hồ km/h. Còn để biết mắt em đọc nhanh hay chậm, các nhà khoa học dùng mật mã tên là <span class="highlight-orange">WPM</span> (Nghĩa là: Số chữ đọc được trong 1 phút).</p>
+        <p>Các bạn lớp 4 thường có tốc độ đọc khoảng <strong>120 chữ đến 150 chữ</strong> trong một phút. Mục tiêu của chuyến bay này là giúp em tăng tốc lên thành <strong>250 chữ/phút</strong> đấy!</p>
+    </div>
+
+    <div class="box box-thuchanh">
+        <h3 class="box-title"><span>⏱️</span> Trạm 3: Thử thách Bấm giờ</h3>
+        <p>Em hãy nhờ thầy cô hoặc tự bấm đồng hồ (dùng điện thoại hoặc đồng hồ điện tử). Khi có hiệu lệnh <strong>"BẮT ĐẦU"</strong>, em hãy đọc đoạn truyện dưới đây. Khi đọc xong từ cuối cùng, bấm <strong>"DỪNG"</strong> ngay lập tức nhé!</p>
+        
+        <div class="story-container">
+            <div class="story-header-tag">Truyện: Bí mật rừng đom đóm</div>
+            
+            <p>Nghỉ hè năm nay, Bi được bố mẹ cho về quê ngoại chơi. Quê ngoại có một khu rừng nhỏ nằm ngay sau dãy đồi. Buổi tối, khi mặt trời vừa đi ngủ, bà ngoại dắt Bi ra bờ ao. Bỗng nhiên, Bi reo lên thích thú. <span class="word-count-note">46 chữ</span></p>
+            
+            <p>Trước mắt cậu bé là hàng ngàn đốm sáng nhỏ xíu đang bay lượn trong không trung. Trông chúng hệt như những ngôi sao nhỏ rớt xuống từ bầu trời đêm. Bà ngoại cười hiền từ và bảo: "Đó là những chú đom đóm đấy cháu ạ. Đom đóm thắp đèn lồng đi tìm bạn. Chúng chỉ xuất hiện ở những nơi có không khí thật trong lành và sạch sẽ mà thôi." <span class="word-count-note">73 chữ</span></p>
+            
+            <p>Bi đưa tay ra, một chú đom đóm nhỏ xíu, bụng chớp nháy ánh sáng vàng xanh nhẹ nhàng đậu lên ngón tay cậu. Bi nín thở nhìn ngắm. Lần đầu tiên trong đời, cậu bé thành phố thấy thiên nhiên kì diệu đến vậy. <span class="word-count-note">44 chữ</span></p>
+        </div>
+
+        <p><strong>🕒 Thời gian em đọc xong là:</strong> ....... Giây.</p>
+        <p style="background-color: #E0F2F1; padding: 10px; border-radius: 8px; border-left: 4px solid #00796B;">
+            <strong>Cách tính WPM:</strong> Em hãy lấy tổng số chữ là <span class="highlight-green">163</span>, chia cho số giây em vừa đọc, rồi nhân với 60 nhé! <br>
+            <em>(Ví dụ em đọc hết 80 giây: 163 ÷ 80 × 60 = 122 WPM)</em>
+        </p>
+    </div>
+
+    <div class="box box-khoidong" style="background-color: #FFF8E1; border-color: #FFC107; box-shadow: 0 5px 0px #FFE082;">
+        <h3 class="box-title" style="color: #F57F17;"><span>🏆</span> Trạm 4: Rinh quà Trí nhớ</h3>
+        <p>Đọc nhanh xong thì gấp sách lại! Trả lời 3 câu hỏi sau xem em nhớ được gì nào:</p>
+        
+        <ol>
+            <li>Bà ngoại dắt Bi đi xem con vật gì? (Đom đóm / Con dế / Con bướm)</li>
+            <li>Bà ngoại nói loài vật đó chỉ xuất hiện ở nơi có môi trường như thế nào?</li>
+            <li>Ánh sáng của con vật đậu trên tay Bi có màu gì?</li>
+        </ol>
+        
+        <div class="result-board">
+            <div>🚀 Tốc độ WPM:<br><span class="score">&nbsp;</span></div>
+            <div>🌟 Số câu đúng:<br><span class="score">&nbsp;</span> / 3</div>
+        </div>
+        
+        <p style="text-align: center; margin-top: 15px; color: #E64A19; font-style: italic;">Ghi lại kết quả này vào sổ tay Phi hành gia nhé!</p>
+    </div>
+
+    <div class="footer">
+        Sách giáo khoa Speed Reading Lớp 4 - Bật tốc đôi mắt, Khám phá thế giới | Trang 6
+    </div>
+
+</body>
+</html>

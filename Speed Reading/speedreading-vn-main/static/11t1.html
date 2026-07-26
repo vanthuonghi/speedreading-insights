@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGK Speed Reading Lớp 11 - Bài 1 Tiết 1</title>
+    <style>
+        /* Cấu hình trang A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 20mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.5;
+            color: #222;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        
+        /* Header và Tiêu đề */
+        .header {
+            text-align: right;
+            font-size: 13px;
+            color: #0d47a1;
+            border-bottom: 2px solid #0d47a1;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .lesson-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #6a1b9a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lesson-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0d47a1;
+            text-transform: uppercase;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+        .sub-title {
+            font-size: 16px;
+            color: #555;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* Định dạng các khối nội dung (Boxes) */
+        .box {
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            page-break-inside: avoid;
+        }
+        .box-title {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .box-title span {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        /* Khối Mục tiêu */
+        .box-muc-tieu { background-color: #f4f6fb; border-left: 6px solid #0d47a1; }
+        .box-muc-tieu .box-title { color: #0d47a1; }
+        
+        /* Khối Pha 1 (Setup) */
+        .box-pha1 { background-color: #fcf4ff; border: 2px dashed #6a1b9a; }
+        .box-pha1 .box-title { color: #6a1b9a; }
+
+        /* Khối Pha 2 (Chiến thuật học thuật) */
+        .box-pha2 { background-color: #f5f9ff; border-left: 6px solid #1565c0; }
+        .box-pha2 .box-title { color: #1565c0; }
+
+        /* Khối Pha 3 (Thực chiến KHTN) */
+        .box-pha3 { background-color: #fafafa; border: 1px solid #0d47a1; }
+        .box-pha3 .box-title { color: #0d47a1; }
+
+        /* Khối Pha 4 (Phân tích dữ liệu) */
+        .box-pha4 { background-color: #fbf8fc; border-left: 6px solid #8e24aa; }
+        .box-pha4 .box-title { color: #8e24aa; }
+
+        /* Typography & Đặc biệt */
+        .highlight-blue { color: #0d47a1; font-weight: bold; }
+        .highlight-purple { color: #6a1b9a; font-weight: bold; }
+        
+        .alert-box {
+            background-color: #0d47a1;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            margin: 15px 0;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        /* Khối Văn bản đọc thử */
+        .academic-text {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-left: 5px solid #6a1b9a;
+            padding: 25px 20px 20px 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .academic-tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #6a1b9a;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-bottom-right-radius: 8px;
+        }
+        .word-count-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #0d47a1;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-bottom-left-radius: 8px;
+        }
+        .academic-text p { text-indent: 20px; margin-bottom: 10px; text-align: justify; }
+
+        /* Form điền kết quả */
+        .result-form {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f5f9ff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 16px;
+            border: 1px solid #bbdefb;
+        }
+        .result-item span { color: #6a1b9a; font-size: 18px; }
+
+        /* Lists */
+        ul { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        ol { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        p { margin-top: 5px; margin-bottom: 10px; text-align: justify; }
+
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        CHỦ ĐỀ I: NÂNG CẤP HỆ THỐNG XỬ LÝ VĂN BẢN HỌC THUẬT
+    </div>
+
+    <div class="title-container">
+        <div class="lesson-number">Bài 1: Khởi động và Đánh giá sức chịu đựng của não bộ</div>
+        <div class="lesson-title">Tiết 1: Đánh giá chỉ số WPM & ERR trên văn bản KHTN chuyên sâu</div>
+        <div class="sub-title">"Sự mệt mỏi nhận thức bắt đầu khi bạn gặp quá nhiều thuật ngữ mới."</div>
+    </div>
+
+    <div class="box box-muc-tieu">
+        <h3 class="box-title"><span>🎯</span> Yêu cầu cần đạt</h3>
+        <ul>
+            <li>Thực hiện đo lường Tốc độ (WPM) và Tỷ lệ hiểu (CR) trên một văn bản Khoa học Tự nhiên chứa nhiều thuật ngữ chuyên ngành.</li>
+            <li>Nhận diện tình trạng <span class="highlight-blue">"Sương mù não" (Brain Fog)</span> và sự suy giảm tốc độ đột ngột khi não bộ phải xử lý chuỗi logic phức tạp.</li>
+            <li>Thiết lập trạng thái <em>Làm việc sâu (Deep Work)</em> trước khi tiếp xúc với tài liệu học thuật.</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha1">
+        <h3 class="box-title"><span>🛡️</span> BƯỚC 1: XÂY DỰNG KHÔNG GIAN LÀM VIỆC SÂU</h3>
+        <p>Để đọc hiểu các tài liệu ở cấp độ Lớp 11 và Đại học, sự tập trung bình thường là không đủ. Em cần trạng thái <strong>Deep Work (Làm việc sâu)</strong>. Yêu cầu trước khi bắt đầu bài test:</p>
+        <ul>
+            <li>Loại bỏ hoàn toàn các yếu tố gây nhiễu: Tắt thông báo điện thoại, dọn dẹp mặt bàn.</li>
+            <li>Tư thế chuẩn học thuật: Ngồi thẳng lưng, khoảng cách từ mắt đến sách từ 30-40cm, cầm sẵn một cây bút chì để làm Vật dẫn đường (Pacer).</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha2">
+        <h3 class="box-title"><span>🔬</span> BƯỚC 2: GIẢI MÃ CHIẾN THUẬT HỌC THUẬT</h3>
+        <p>Văn bản Khoa học luôn chứa những <em>Thuật ngữ (Terminology)</em> khó hiểu. Lỗi sai lớn nhất của học sinh là <strong>dừng mắt lại để cố gắng tự dịch nghĩa thuật ngữ đó</strong>, dẫn đến việc mất đà và đứt gãy tư duy.</p>
+        <p><strong>Chiến thuật bỏ qua có chủ đích:</strong> Khi gặp một thuật ngữ lạ (ví dụ: <em>Synap, Myelin, Neuroplasticity</em>), hãy coi nó như một ký hiệu toán học "X". Tiếp tục quét mắt về phía trước để tìm định nghĩa của tác giả hoặc đoán "X" dựa trên ngữ cảnh toàn câu.</p>
+    </div>
+
+    <div class="box box-pha3">
+        <h3 class="box-title"><span>⚔️</span> BƯỚC 3: THỰC CHIẾN ÁP LỰC CAO</h3>
+        <div class="alert-box">
+            Bấm đồng hồ! Hãy quét văn bản Sinh học thần kinh dưới đây với tốc độ cao nhất, nhưng vẫn phải đảm bảo nắm được quy luật nhân quả.
+        </div>
+        
+        <div class="academic-text">
+            <div class="academic-tag">TÀI LIỆU KHOA HỌC CHUYÊN SÂU</div>
+            <div class="word-count-tag">ĐỘ DÀI: 310 TỪ</div>
+            <br>
+            <p>Bộ não con người không phải là một cỗ máy tĩnh với dung lượng bộ nhớ cố định như ổ cứng máy tính. Thay vào đó, nó hoạt động dựa trên cơ chế <strong>Tính dẻo của thần kinh (Neuroplasticity)</strong>. Đây là khả năng não bộ liên tục tự tổ chức lại các con đường dẫn truyền thần kinh bằng cách hình thành các khớp nối mới, gọi là các <em>Synap</em>, trong suốt cuộc đời.</p>
+            <p>Khi bạn học một kiến thức mới, ví dụ như cách giải một phương trình Hóa học phức tạp hay học một từ vựng Tiếng Anh, một tín hiệu điện sẽ chạy qua mạng lưới các tế bào thần kinh (Neuron). Lần đầu tiên tín hiệu này đi qua, con đường rất mờ nhạt và điện trở cao, khiến bạn cảm thấy khó khăn và dễ quên. Tuy nhiên, nếu bạn lặp lại hành động đó nhiều lần, một lớp vỏ bọc chất béo gọi là <em>Myelin</em> sẽ dần dần hình thành và bao bọc lấy sợi trục của tế bào thần kinh.</p>
+            <p>Lớp vỏ Myelin này đóng vai trò như một lớp cách điện hoàn hảo, giúp ngăn chặn sự rò rỉ tín hiệu và tăng tốc độ truyền dẫn xung thần kinh lên tới 100 lần so với ban đầu. Điều này giải thích tại sao một hành động ban đầu cần rất nhiều nỗ lực ý thức (như tập đi xe đạp), sau một thời gian rèn luyện, lại trở thành phản xạ tự động không cần suy nghĩ.</p>
+            <p>Từ góc độ sinh học, việc nhồi nhét kiến thức (Cramming) trước kỳ thi không tạo ra đủ thời gian để vỏ Myelin hình thành dày dặn. Hậu quả là, mạng lưới Synap sẽ nhanh chóng suy yếu và kiến thức sẽ biến mất khỏi trí nhớ dài hạn chỉ sau vài ngày.</p>
+        </div>
+
+        <p><strong>Thời gian đọc của em:</strong> ....... Giây.</p>
+        <p><em>Tính WPM:</em> (310 ÷ Số giây) × 60 = <strong>....... WPM.</strong></p>
+
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+        <p><strong>BÀI TEST KHẢ NĂNG TRÍCH XUẤT DỮ LIỆU:</strong></p>
+        <ol>
+            <li><strong>Chức năng chính của lớp vỏ Myelin trong hệ thần kinh là gì?</strong><br>
+                A. Hình thành các tế bào não (Neuron) mới.<br>
+                B. Cách điện, ngăn rò rỉ tín hiệu và tăng tốc độ xung thần kinh.<br>
+                C. Tự động xóa bỏ những ký ức không cần thiết.
+            </li>
+            <li><strong>Dưới góc độ sinh học thần kinh, tại sao việc "nhồi nhét" kiến thức trước khi thi lại không hiệu quả?</strong><br>
+                A. Vì não bộ hoạt động giống như một ổ cứng máy tính bị đầy bộ nhớ.<br>
+                B. Vì tín hiệu điện sẽ làm cháy các tế bào thần kinh non trẻ.<br>
+                C. Vì lớp vỏ Myelin không có đủ thời gian để hình thành và củng cố mạng lưới Synap.
+            </li>
+            <li><strong>Khái niệm "Tính dẻo của thần kinh (Neuroplasticity)" được hiểu là:</strong><br>
+                A. Sự mềm dẻo về mặt vật lý của hộp sọ con người.<br>
+                B. Khả năng não bộ liên tục tổ chức lại bằng cách tạo ra các khớp nối (Synap) mới.<br>
+                C. Khả năng não bộ tạo ra một lượng điện năng khổng lồ khi học bài.
+            </li>
+        </ol>
+        <p><em>(Giáo viên công bố đáp án: 1-B, 2-C, 3-B. Tính % CR)</em></p>
+    </div>
+
+    <div class="box box-pha4">
+        <h3 class="box-title"><span>⚙️</span> BƯỚC 4: TỔNG HỢP VÀ TÁI CẤU TRÚC DỮ LIỆU</h3>
+        <p>Ghi nhận hồ sơ năng lực khởi điểm của Lớp 11:</p>
+        
+        <div class="result-form">
+            <div class="result-item">WPM: <span>..........</span></div>
+            <div class="result-item">CR: <span>......%</span></div>
+            <div class="result-item">ERR TỔNG: <span>..........</span></div>
+        </div>
+
+        <p><strong>Nhật ký phân tích "Sương mù não":</strong> Khi đối diện với hàng loạt từ vựng như <em>Neuroplasticity, Synap, Myelin</em>, em có cảm thấy nhịp đọc bị khựng lại hay mắt bị "trượt" qua chữ nhưng não không hiểu gì không? Nếu có, điểm ERR của bài này chính là thước đo độ bền nhận thức (Cognitive Endurance) hiện tại của em. Mục tiêu của lớp 11 là phải duy trì ERR cao liên tục trong các văn bản dài gấp 5 lần bài test này!</p>
+    </div>
+
+    <div class="footer">
+        Sách giáo khoa Speed Reading 11 - Làm chủ học thuật, Kiến tạo lợi thế | Trang 6
+    </div>
+
+</body>
+</html>

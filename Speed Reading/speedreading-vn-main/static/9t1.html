@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGK Speed Reading Lớp 9 - Bài 1 Tiết 1</title>
+    <style>
+        /* Cấu hình trang A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 20mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.5;
+            color: #222;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        
+        /* Header và Tiêu đề */
+        .header {
+            text-align: right;
+            font-size: 13px;
+            color: #1b2a47;
+            border-bottom: 2px solid #1b2a47;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .lesson-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #b30000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lesson-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #1b2a47;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+        .sub-title {
+            font-size: 16px;
+            color: #555;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        /* Định dạng các khối nội dung (Boxes) */
+        .box {
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+            page-break-inside: avoid;
+        }
+        .box-title {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .box-title span {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        /* Khối Mục tiêu */
+        .box-muc-tieu { background-color: #f4f6f9; border-left: 6px solid #1b2a47; }
+        .box-muc-tieu .box-title { color: #1b2a47; }
+        
+        /* Khối Pha 1 (Thời gian) */
+        .box-pha1 { background-color: #fff5f5; border: 2px dashed #b30000; }
+        .box-pha1 .box-title { color: #b30000; }
+
+        /* Khối Pha 2 (Chiến thuật) */
+        .box-pha2 { background-color: #f0f4f8; border-left: 6px solid #2980b9; }
+        .box-pha2 .box-title { color: #2980b9; }
+
+        /* Khối Pha 3 (Thực chiến) */
+        .box-pha3 { background-color: #fafafa; border: 1px solid #1b2a47; }
+        .box-pha3 .box-title { color: #1b2a47; }
+
+        /* Khối Pha 4 (Lưu trữ) */
+        .box-pha4 { background-color: #f4fdf8; border-left: 6px solid #27ae60; }
+        .box-pha4 .box-title { color: #27ae60; }
+
+        /* Typography & Đặc biệt */
+        .highlight-navy { color: #1b2a47; font-weight: bold; }
+        .highlight-red { color: #b30000; font-weight: bold; }
+        
+        .alert-box {
+            background-color: #b30000;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            margin: 15px 0;
+            font-size: 15px;
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+        }
+
+        /* Khối Văn bản đọc thử */
+        .exam-text {
+            background-color: #fff;
+            border: 2px solid #ccc;
+            padding: 25px 20px 20px 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .exam-tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #555;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .word-count-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #1b2a47;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+        .exam-text p { text-indent: 20px; margin-bottom: 10px; text-align: justify; }
+
+        /* Form điền kết quả */
+        .result-form {
+            display: flex;
+            justify-content: space-between;
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 16px;
+            border: 1px dashed #b30000;
+        }
+        .result-item span { color: #b30000; }
+
+        /* Lists */
+        ul { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        ol { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
+        p { margin-top: 5px; margin-bottom: 10px; text-align: justify; }
+
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        CHỦ ĐỀ I: THIẾT LẬP CHIẾN LƯỢC VÀ KIỂM SOÁT ÁP LỰC
+    </div>
+
+    <div class="title-container">
+        <div class="lesson-number">Bài 1: Khảo sát năng lực tiền kỳ thi</div>
+        <div class="lesson-title">Tiết 1: ĐO LƯỜNG CHỈ SỐ WPM VÀ ERR TRÊN ĐỀ THI</div>
+        <div class="sub-title">"Trong phòng thi, thời gian chính là điểm số!"</div>
+    </div>
+
+    <div class="box box-muc-tieu">
+        <h3 class="box-title"><span>🎯</span> Yêu cầu cần đạt</h3>
+        <ul>
+            <li>Thực hiện đo lường chỉ số Tốc độ đọc (WPM) và Tỉ lệ hiểu (CR) dưới áp lực thời gian thực của phòng thi.</li>
+            <li>Nhận diện hiện tượng <span class="highlight-navy">"Bẫy tốc độ"</span> (đọc quá nhanh dẫn đến sót từ khóa mang tính chất phủ định/tuyệt đối).</li>
+            <li>Xác định trạng thái xuất phát điểm của bản thân để lập lộ trình tăng tốc cho kì thi Tuyển sinh 10.</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha1">
+        <h3 class="box-title"><span>⏱️</span> BƯỚC 1: KIỂM SOÁT THỜI GIAN (Time-Boxing)</h3>
+        <p>Chào mừng các em đến với chiến dịch Lớp 9. Ở năm học này, chúng ta sẽ không đọc sách theo kiểu thư giãn nữa. Mọi văn bản xuất hiện trong sách này đều được mô phỏng theo cấu trúc đề thi Đọc hiểu môn Ngữ văn hoặc Tiếng Anh.</p>
+        <p><strong>Quy tắc Time-Boxing:</strong> Khi có hiệu lệnh, em phải bật đồng hồ đếm ngược. Áp lực thời gian sẽ khiến nhịp tim tăng lên, mắt dễ bị nhảy dòng. Nhiệm vụ của em là <span class="highlight-red">giữ cái đầu lạnh</span>, quét thông tin bằng sự tỉnh táo tuyệt đối.</p>
+    </div>
+
+    <div class="box box-pha2">
+        <h3 class="box-title"><span>💡</span> BƯỚC 2: GIẢI MÃ CHIẾN THUẬT</h3>
+        <p>Để đạt điểm tuyệt đối ở phần Đọc hiểu (3 điểm) trong đề thi Ngữ văn lớp 10, em phải vượt qua hiện tượng <strong>Bẫy tốc độ (Speed Trap)</strong>.</p>
+        <ul>
+            <li><span class="highlight-navy">Bẫy tốc độ là gì?</span> Đó là khi học sinh cuống cuồng đọc lướt để tiết kiệm thời gian, dẫn đến việc não bộ tự động "bỏ qua" các từ chức năng cực kỳ quan trọng như: <em>"không", "ngoại trừ", "chủ yếu", "tất cả"</em>.</li>
+            <li><strong>Chiến thuật:</strong> Đọc lướt nhanh toàn bộ văn bản (Skimming) để lấy ý chính, nhưng khi đọc câu hỏi trắc nghiệm phải lập tức <span class="highlight-red">đạp phanh (Deep reading)</span>, dùng bút khoanh tròn các từ khóa mang tính phủ định/hạn định.</li>
+        </ul>
+    </div>
+
+    <div class="box box-pha3">
+        <h3 class="box-title"><span>⚔️</span> BƯỚC 3: THỰC CHIẾN ĐỀ THI (Mock Test)</h3>
+        <div class="alert-box">
+            THỬ THÁCH: Bấm đồng hồ tính giây. Đọc văn bản sau và trả lời 3 câu hỏi trắc nghiệm!
+        </div>
+        
+        <div class="exam-text">
+            <div class="exam-tag">ĐỀ THI MÔ PHỎNG</div>
+            <div class="word-count-tag">ĐỘ DÀI: 305 TỪ</div>
+            <br>
+            <p>Áp lực đồng trang lứa (Peer pressure) thường được nhắc đến như một "bóng đen" tâm lý đối với thanh thiếu niên. Chúng ta dễ dàng bắt gặp hình ảnh một học sinh cố gắng thức trắng đêm học bài chỉ vì bạn cùng bàn vừa đạt điểm 10, hay một nhóm bạn thay đổi cách ăn mặc để không bị xem là "lạc hậu". Đa số các chuyên gia giáo dục cảnh báo rằng, nếu không biết cách kiểm soát, áp lực này sẽ dẫn đến sự tự ti, chứng rối loạn lo âu và thậm chí là trầm cảm học đường.</p>
+            <p>Tuy nhiên, không phải mọi áp lực đồng trang lứa đều mang ý nghĩa tiêu cực. Ở một góc nhìn khác, chính khát khao không bị bỏ lại phía sau lại là động lực mạnh mẽ nhất thúc đẩy con người tiến lên. Khi được đặt trong một tập thể xuất sắc, sự ganh đua lành mạnh sẽ kích hoạt tiềm năng tiềm ẩn mà đôi khi chính bản thân học sinh cũng không nhận ra. Những người bạn giỏi giang không chỉ là đối thủ, mà còn là những tấm gương phản chiếu để ta tự hoàn thiện mình.</p>
+            <p>Điều quan trọng nhất là mỗi cá nhân phải xây dựng được một "bộ lọc" giá trị. Thay vì so sánh bản thân với điểm mạnh của người khác một cách mù quáng, hãy tự hỏi: "Sự so sánh này có giúp mình tốt lên không?". Chỉ khi biết biến áp lực thành lực đẩy, học sinh mới thực sự làm chủ được cuộc đời mình trước những biến động của tuổi trưởng thành.</p>
+        </div>
+
+        <p><strong>Thời gian đọc của em:</strong> ....... Giây.</p>
+        <p><em>Tính WPM:</em> (305 ÷ Số giây) × 60 = <strong>....... WPM.</strong></p>
+
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+        <p><strong>TRẮC NGHIỆM TƯ DUY (CHÚ Ý BẪY THÔNG TIN):</strong></p>
+        <ol>
+            <li><strong>Theo đoạn văn 1, hệ quả tiêu cực của áp lực đồng trang lứa KHÔNG bao gồm điều nào sau đây?</strong><br>
+                A. Chứng rối loạn lo âu.<br>
+                B. Sự ganh đua lành mạnh.<br>
+                C. Sự tự ti và trầm cảm học đường.
+            </li>
+            <li><strong>Tác giả cho rằng yếu tố nào là động lực mạnh mẽ nhất thúc đẩy con người tiến lên?</strong><br>
+                A. Lời khuyên của các chuyên gia giáo dục.<br>
+                B. Việc thức trắng đêm để học bài.<br>
+                C. Khát khao không bị bỏ lại phía sau.
+            </li>
+            <li><strong>Đâu là giải pháp cốt lõi nhất được đề xuất ở cuối văn bản?</strong><br>
+                A. Phải luôn so sánh bản thân với những người bạn xuất sắc nhất.<br>
+                B. Xây dựng "bộ lọc" giá trị để biến áp lực thành lực đẩy.<br>
+                C. Không bao giờ được so sánh bản thân với bất kỳ ai.
+            </li>
+        </ol>
+        <p><em>(Giáo viên công bố đáp án: 1-B, 2-C, 3-B. Tính phần trăm Tỉ lệ hiểu - CR)</em></p>
+    </div>
+
+    <div class="box box-pha4">
+        <h3 class="box-title"><span>🧠</span> BƯỚC 4: XUẤT DỮ LIỆU TỔNG ÔN</h3>
+        <p>Hãy tính toán điểm số hiệu suất thực tế của em trong lần khảo sát đầu năm này:</p>
+        
+        <div class="result-form">
+            <div class="result-item">WPM: <span>..........</span></div>
+            <div class="result-item">CR: <span>......%</span></div>
+            <div class="result-item">ERR TỔNG: <span>..........</span></div>
+        </div>
+
+        <p><strong>Nhật ký chẩn đoán lỗi:</strong> Nếu em sai ở câu số 1, rất có thể em đã rơi vào "Bẫy tốc độ" vì bỏ sót từ chữ <span class="highlight-red">KHÔNG</span> in hoa trong câu hỏi. Hãy ghi chú lớn vào vở: <em>"Đọc lướt văn bản, nhưng phải đọc CHẬM từng chữ trong câu hỏi đề thi!"</em></p>
+    </div>
+
+    <div class="footer">
+        Sách giáo khoa Speed Reading 9 - Bứt tốc tư duy, Chinh phục kỳ thi | Trang 6
+    </div>
+
+</body>
+</html>

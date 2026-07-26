@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Sử Dụng - KingHome Script</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Be Vietnam Pro"', 'sans-serif'] },
+                    colors: { brand: { 500: '#22c55e', 600: '#16a34a', 700: '#15803d' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #334155; }
+        .step-number { 
+            width: 28px; height: 28px; background: #16a34a; color: white; 
+            border-radius: 50%; display: inline-flex; align-items: center; 
+            justify-content: center; font-weight: bold; font-size: 14px; margin-right: 8px;
+        }
+        h2 { color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; margin-top: 40px; font-size: 1.5rem; font-weight: 700; }
+        h3 { color: #1e293b; font-size: 1.15rem; font-weight: 600; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; }
+        .feature-box { background: white; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #c026d3; font-family: monospace; font-weight: bold; }
+        .highlight { color: #16a34a; font-weight: 600; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Header -->
+    <header class="bg-brand-600 text-white py-12 px-6 text-center shadow-lg">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-2xl mb-6 backdrop-blur-sm">
+                <i class="fa-solid fa-book-open text-4xl"></i>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">Hướng Dẫn Sử Dụng KingHome Script</h1>
+            <p class="text-lg text-brand-100 max-w-2xl mx-auto">Tài liệu hướng dẫn quy trình quản lý, soạn thảo kịch bản và theo dõi hiệu suất dành cho đội ngũ Script Team.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 py-10">
+
+        <!-- Section 1: Truy cập -->
+        <section id="access">
+            <h2>1. Truy Cập & Đăng Nhập Hệ Thống</h2>
+            <div class="feature-box">
+                <h3 class="text-brand-600"><i class="fa-solid fa-shield-halved mr-2"></i> Bước 1: Vượt qua lớp bảo mật (Gatekeeper)</h3>
+                <p class="mb-2">Hệ thống được bảo vệ bởi một lớp mật khẩu chung để tránh truy cập trái phép từ bên ngoài.</p>
+                <ul class="list-disc pl-6 space-y-2 text-sm">
+                    <li>Khi truy cập lần đầu, màn hình sẽ yêu cầu mật khẩu.</li>
+                    <li>Mật khẩu truy cập hệ thống: <code>Kinghome@2026</code></li>
+                    <li><em>Lưu ý: Mật khẩu này chỉ cần nhập 1 lần trên mỗi thiết bị.</em></li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3 class="text-brand-600"><i class="fa-solid fa-user-lock mr-2"></i> Bước 2: Đăng nhập tài khoản cá nhân</h3>
+                <p class="mb-2">Sau khi vượt qua Gatekeeper, nhân sự cần đăng nhập bằng Email cá nhân để hệ thống ghi nhận lịch sử làm việc.</p>
+                <ul class="list-disc pl-6 space-y-2 text-sm">
+                    <li><strong>Đăng nhập:</strong> Nhập Email và Mật khẩu nếu đã có tài khoản.</li>
+                    <li><strong>Đăng ký:</strong> Nếu chưa có tài khoản, nhập Email/Mật khẩu và nhấn nút <span class="font-semibold text-slate-600">Đăng ký tài khoản mới</span>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 2: Dashboard -->
+        <section id="dashboard">
+            <h2>2. Quản Lý Kịch Bản (Dashboard)</h2>
+            <p class="mb-4 text-slate-600">Đây là màn hình chính hiển thị toàn bộ công việc của nhóm.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="feature-box">
+                    <h3><span class="step-number">1</span> Bộ Lọc Trạng Thái</h3>
+                    <p class="text-sm">Sử dụng các tab trên cùng để lọc nhanh kịch bản:</p>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <span class="px-2 py-1 bg-slate-100 text-xs rounded border">Tất cả</span>
+                        <span class="px-2 py-1 bg-slate-100 text-xs rounded border">Kịch bản</span>
+                        <span class="px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded border">Đang dựng</span>
+                        <span class="px-2 py-1 bg-green-50 text-green-600 text-xs rounded border">Hoàn thành</span>
+                    </div>
+                </div>
+                <div class="feature-box">
+                    <h3><span class="step-number">2</span> Tạo Mới & Xóa</h3>
+                    <ul class="text-sm list-disc pl-5 space-y-2">
+                        <li>Nhấn nút <strong><i class="fa-solid fa-plus text-brand-600"></i> Tạo mới</strong> để bắt đầu một kịch bản trống.</li>
+                        <li>Di chuột vào thẻ kịch bản để hiện nút <strong><i class="fa-regular fa-trash-can text-red-500"></i> Xóa</strong> (Góc trên phải).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Editor -->
+        <section id="editor">
+            <h2>3. Soạn Thảo & Tương Tác</h2>
+            <div class="feature-box border-l-4 border-l-brand-500">
+                <h3 class="mt-0"><i class="fa-solid fa-pen-nib mr-2 text-brand-600"></i> Giao diện soạn thảo</h3>
+                <p class="mb-4 text-sm">Giao diện tập trung vào việc viết nội dung với các trường thông tin quan trọng:</p>
+                
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center text-xs shrink-0 font-bold">1</div>
+                        <div><strong>Thông tin cơ bản:</strong> Nhập Tiêu đề, Tên người phụ trách (Assignee) và chọn Trạng thái (Script/Editing/Completed...).</div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center text-xs shrink-0 font-bold">2</div>
+                        <div><strong>Link tài nguyên:</strong>
+                            <ul class="list-disc pl-4 mt-1 text-sm text-slate-600">
+                                <li>Link Source: Dán link tài liệu gốc (Google Doc, Web...).</li>
+                                <li>Link Video: Dán link sản phẩm đã hoàn thiện (Youtube, TikTok...).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center text-xs shrink-0 font-bold">3</div>
+                        <div><strong>Tính năng Auto-Save:</strong> Hệ thống <span class="text-brand-600 font-bold">Tự động lưu</span> sau 2 giây khi bạn ngừng gõ phím. Trạng thái lưu hiển thị ở góc trên bên phải.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3><i class="fa-regular fa-comments mr-2 text-blue-600"></i> Trao đổi & Bình luận (Chat)</h3>
+                <p class="text-sm mb-2">Cuối trang soạn thảo là khu vực thảo luận dành cho team:</p>
+                <ul class="list-disc pl-6 text-sm space-y-1">
+                    <li>Viết bình luận để góp ý kịch bản.</li>
+                    <li>Sử dụng cú pháp <code>@Ten</code> để nhắc tên người khác (Hệ thống sẽ highlight màu xanh).</li>
+                    <li>Lịch sử chat được lưu vĩnh viễn theo kịch bản.</li>
+                </ul>
+            </div>
+
+            <div class="feature-box bg-slate-50">
+                <h3><i class="fa-regular fa-file-pdf mr-2 text-red-600"></i> Xuất File PDF</h3>
+                <p class="text-sm">Để gửi kịch bản cho sếp duyệt hoặc gửi cho bộ phận dựng video:</p>
+                <p class="text-sm mt-1">Nhấn nút <strong>Xuất PDF</strong> trên thanh công cụ. Hệ thống sẽ tự động tạo file PDF đẹp mắt chứa toàn bộ nội dung và link đính kèm.</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Reports -->
+        <section id="reports">
+            <h2>4. Xem Báo Cáo (Dành cho Quản lý)</h2>
+            <p class="mb-4 text-slate-600">Nhấn vào nút <strong><i class="fa-solid fa-chart-pie"></i> Báo cáo</strong> trên thanh menu để truy cập.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-lg border shadow-sm text-center">
+                    <div class="text-3xl text-brand-600 mb-2"><i class="fa-solid fa-filter"></i></div>
+                    <div class="font-bold">Bộ lọc thời gian</div>
+                    <p class="text-xs text-slate-500 mt-1">Xem theo Ngày / Tuần / Tháng</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border shadow-sm text-center">
+                    <div class="text-3xl text-blue-600 mb-2"><i class="fa-solid fa-trophy"></i></div>
+                    <div class="font-bold">KPI Nhân sự</div>
+                    <p class="text-xs text-slate-500 mt-1">Xem ai là người tạo nhiều kịch bản nhất</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border shadow-sm text-center">
+                    <div class="text-3xl text-purple-600 mb-2"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="font-bold">Chi tiết tiến độ</div>
+                    <p class="text-xs text-slate-500 mt-1">Bảng danh sách chi tiết trạng thái từng bài</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 py-8 text-center text-sm">
+        <p>© 2026 KingHome Script Team Documentation.</p>
+        <p class="mt-2">Hỗ trợ kỹ thuật: Liên hệ Admin hệ thống.</p>
+    </footer>
+
+</body>
+</html>

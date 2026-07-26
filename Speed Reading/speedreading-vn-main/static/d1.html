@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Chiến Binh: Ngày 1 - 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0f172a; /* Slate 900 base */
+            color: #e0e0e0;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .step-card {
+            transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.07);
+        }
+        .day-1-hover:hover {
+            box-shadow: 0 10px 20px rgba(234, 179, 8, 0.15);
+            border-color: #eab308;
+        }
+        .day-2-hover:hover {
+            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.15); /* Cyan glow */
+            border-color: #06b6d4;
+        }
+        .day-3-hover:hover {
+            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.25); /* Purple Electric glow */
+            border-color: #a855f7;
+        }
+        .day-4-hover:hover {
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.25); /* Emerald glow */
+            border-color: #10b981;
+        }
+        .day-5-hover:hover {
+            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.25); /* Pink glow */
+            border-color: #ec4899;
+        }
+        
+        .gradient-text-d1 {
+            background: linear-gradient(to right, #fbbf24, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-text-d2 {
+            background: linear-gradient(to right, #22d3ee, #3b82f6); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-text-d3 {
+            background: linear-gradient(to right, #d8b4fe, #a855f7, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-text-d4 {
+            background: linear-gradient(to right, #34d399, #10b981, #f97316); /* Emerald to Orange */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-text-d5 {
+            background: linear-gradient(to right, #ec4899, #d946ef, #6366f1); /* Pink to Indigo */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tab Styles */
+        .tab-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-bottom: 2px solid;
+        }
+        .tab-btn.active.day1 { border-color: #eab308; }
+        .tab-btn.active.day2 { border-color: #06b6d4; }
+        .tab-btn.active.day3 { border-color: #a855f7; }
+        .tab-btn.active.day4 { border-color: #10b981; }
+        .tab-btn.active.day5 { border-color: #ec4899; }
+        
+        .tab-btn:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .hidden-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .visible-content {
+            display: block;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Shake animation for Day 3 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+        .shake-hover:hover .shake-icon {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            color: #fbbf24; /* Turn yellow on hover */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 bg-[url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat bg-fixed relative">
+    
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-slate-900/90 z-0"></div>
+
+    <!-- Main Container -->
+    <div class="max-w-6xl w-full bg-slate-900/80 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden relative z-10 backdrop-blur-md mt-6 mb-10">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-700/50 bg-black/20 overflow-x-auto scrollbar-hide">
+            <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn day1 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-sun mr-2"></i> Ngày 1
+            </button>
+            <button onclick="switchTab('day2')" id="tab-day2" class="tab-btn day2 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-skull-crossbones mr-2"></i> Ngày 2
+            </button>
+            <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn day3 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-bolt mr-2"></i> Ngày 3
+            </button>
+            <button onclick="switchTab('day4')" id="tab-day4" class="tab-btn day4 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-microscope mr-2"></i> Ngày 4
+            </button>
+            <button onclick="switchTab('day5')" id="tab-day5" class="tab-btn day5 active flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-bullhorn mr-2"></i> Ngày 5
+            </button>
+        </div>
+
+        <!-- DAY 1 CONTENT -->
+        <div id="content-day1" class="hidden-content">
+            <!-- Background Accents Day 1 -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 opacity-50"></div>
+            
+            <!-- Header Day 1 -->
+            <div class="text-center pt-8 pb-4 px-6">
+                <div class="inline-block px-4 py-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-xs font-bold tracking-widest mb-4 brand-font">
+                    Khởi động Chiến binh
+                </div>
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-2 tracking-wide">
+                    NHIỆM VỤ <span class="gradient-text-d1">NGÀY 1</span>
+                </h1>
+                <h2 class="text-xl text-gray-400 font-light tracking-wider brand-font">
+                    GIỜ QUYỀN LỰC
+                </h2>
+            </div>
+
+            <!-- Content Grid Day 1 -->
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- STEP 1 -->
+                <div class="step-card day-1-hover glass-panel p-6 rounded-2xl border-t-4 border-blue-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg shadow-blue-900/50">1</div>
+                    <div class="text-center mb-4 mt-2">
+                        <i class="fas fa-lungs text-4xl text-blue-400 mb-2"></i>
+                        <h3 class="text-lg text-blue-400 font-bold">Kích Hoạt Cơ Thể</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">5 Phút • Thở 1-4-2</p>
+                    </div>
+                    <ul class="text-sm text-gray-300 space-y-1 list-none">
+                        <li class="flex justify-between border-b border-gray-700/50 pb-1"><span>Hít vào:</span> <span class="text-white font-bold">4s</span></li>
+                        <li class="flex justify-between border-b border-gray-700/50 pb-1"><span>Nín thở:</span> <span class="text-white font-bold">16s</span></li>
+                        <li class="flex justify-between"><span>Thở ra:</span> <span class="text-white font-bold">8s</span></li>
+                    </ul>
+                </div>
+
+                <!-- STEP 2 -->
+                <div class="step-card day-1-hover glass-panel p-6 rounded-2xl border-t-4 border-green-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg shadow-green-900/50">2</div>
+                    <div class="text-center mb-4 mt-2">
+                        <i class="fas fa-heart text-4xl text-green-400 mb-2"></i>
+                        <h3 class="text-lg text-green-400 font-bold">Lòng Biết Ơn</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">5 Phút • Cảm nhận</p>
+                    </div>
+                    <div class="text-sm text-gray-300">
+                        <p class="mb-2 italic text-center">"Đặt tay lên tim & nghĩ về 3 điều:"</p>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            <span class="px-2 py-1 bg-green-900/30 rounded text-xs text-green-300 border border-green-700/30">Điều nhỏ bé</span>
+                            <span class="px-2 py-1 bg-green-900/30 rounded text-xs text-green-300 border border-green-700/30">Người thân</span>
+                            <span class="px-2 py-1 bg-green-900/30 rounded text-xs text-green-300 border border-green-700/30">Cơ hội</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3 -->
+                <div class="step-card day-1-hover glass-panel p-6 rounded-2xl border-t-4 border-red-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg shadow-red-900/50">3</div>
+                    <div class="text-center mb-4 mt-2">
+                        <i class="fas fa-bullseye text-4xl text-red-400 mb-2"></i>
+                        <h3 class="text-lg text-red-400 font-bold">Định Hướng Tâm Trí</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">10 Phút • 3 Kết Quả</p>
+                    </div>
+                    <p class="text-sm text-gray-300 text-center mb-2">
+                        Viết xuống <b class="text-white">3 KẾT QUẢ</b> quan trọng nhất phải đạt được hôm nay.
+                    </p>
+                    <div class="h-1 w-full bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-50"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 2 CONTENT -->
+        <div id="content-day2" class="hidden-content">
+             <!-- Background Accents Day 2 -->
+             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-600 via-blue-500 to-purple-600 opacity-50"></div>
+
+            <!-- Header Day 2 -->
+            <div class="text-center pt-8 pb-4 px-6 relative">
+                 <div class="absolute top-10 right-10 hidden md:block">
+                    <i class="fas fa-biohazard text-6xl text-cyan-500/10"></i>
+                </div>
+                <div class="inline-block px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-bold tracking-widest mb-4 brand-font">
+                    Thanh lọc Tâm trí
+                </div>
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-2 tracking-wide">
+                    NHIỆM VỤ <span class="gradient-text-d2">NGÀY 2</span>
+                </h1>
+                <h2 class="text-xl text-gray-400 font-light tracking-wider brand-font">
+                    24 GIỜ "ĂN KIÊNG" TINH THẦN
+                </h2>
+                <p class="mt-4 text-gray-400 italic max-w-2xl mx-auto text-sm">
+                    "Vá lại những lỗ thủng năng lượng. Đừng để rác rưởi đi vào não bộ của bạn."
+                </p>
+            </div>
+
+            <!-- Main Content Grid Day 2 -->
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- LUẬT 1 -->
+                <div class="step-card day-2-hover glass-panel p-6 rounded-2xl border-t-4 border-pink-500 relative flex flex-col">
+                    <div class="absolute -top-3 left-4 bg-pink-600 px-3 py-1 text-xs font-bold text-white rounded shadow-lg shadow-pink-900/50">LUẬT #1</div>
+                    <div class="text-center mb-4 mt-4">
+                        <i class="fas fa-ban text-4xl text-pink-400 mb-2"></i>
+                        <h3 class="text-lg text-pink-400 font-bold uppercase">Cấm "Mời Trà"</h3>
+                    </div>
+                    <div class="text-sm text-gray-300 flex-grow">
+                        <p class="mb-3">Suy nghĩ tiêu cực sẽ đến. <span class="text-pink-300">Đừng giữ nó lại!</span></p>
+                        <div class="bg-pink-900/20 p-3 rounded border border-pink-500/20 text-center">
+                            <span class="block text-2xl font-bold text-white mb-1">2 Phút</span>
+                            <span class="text-xs text-gray-400">Thời gian tối đa để cắt đứt mạch suy nghĩ đó.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LUẬT 2 -->
+                <div class="step-card day-2-hover glass-panel p-6 rounded-2xl border-t-4 border-cyan-500 relative flex flex-col">
+                    <div class="absolute -top-3 left-4 bg-cyan-600 px-3 py-1 text-xs font-bold text-white rounded shadow-lg shadow-cyan-900/50">LUẬT #2</div>
+                    <div class="text-center mb-4 mt-4">
+                        <i class="fas fa-satellite-dish text-4xl text-cyan-400 mb-2"></i>
+                        <h3 class="text-lg text-cyan-400 font-bold uppercase">Đổi Kênh</h3>
+                    </div>
+                    <div class="text-sm text-gray-300 flex-grow">
+                        <p class="mb-3">Khi lo lắng/bực bội, hãy dùng "Vũ khí chuyển đổi" bằng câu hỏi:</p>
+                        <ul class="space-y-2 text-xs">
+                            <li class="flex items-start"><i class="fas fa-chevron-right text-cyan-500 mt-1 mr-2"></i> <span>"Có gì tốt trong chuyện này?"</span></li>
+                            <li class="flex items-start"><i class="fas fa-chevron-right text-cyan-500 mt-1 mr-2"></i> <span>"Làm sao giải quyết tốt nhất ngay bây giờ?"</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- LUẬT 3 -->
+                <div class="step-card day-2-hover glass-panel p-6 rounded-2xl border-t-4 border-indigo-500 relative flex flex-col">
+                    <div class="absolute -top-3 left-4 bg-indigo-600 px-3 py-1 text-xs font-bold text-white rounded shadow-lg shadow-indigo-900/50">LUẬT #3</div>
+                    <div class="text-center mb-4 mt-4">
+                        <i class="fas fa-comment-slash text-4xl text-indigo-400 mb-2"></i>
+                        <h3 class="text-lg text-indigo-400 font-bold uppercase">Tuyệt Đối Không Than</h3>
+                    </div>
+                    <div class="text-sm text-gray-300 flex-grow">
+                        <p class="mb-3">Cấm khẩu với mọi lời than vãn. Kẹt xe? Nóng? Sếp mắng?</p>
+                        <div class="grid grid-cols-2 gap-2 text-center text-[10px] uppercase font-bold tracking-wider">
+                            <div class="bg-gray-800 p-2 rounded text-red-400"><i class="fas fa-times mr-1"></i> Than vãn</div>
+                            <div class="bg-indigo-900/40 p-2 rounded text-indigo-300 border border-indigo-500/30"><i class="fas fa-check mr-1"></i> Giải pháp</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool & Action Section Day 2 -->
+            <div class="px-6 md:px-8 pb-8">
+                <div class="glass-panel rounded-2xl p-6 md:p-8 border-l-4 border-yellow-500 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-yellow-500/10 to-transparent pointer-events-none"></div>
+                    <div class="flex-shrink-0 bg-yellow-500/20 p-4 rounded-full border border-yellow-500/50">
+                        <i class="fas fa-ring text-3xl text-yellow-400"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-xl text-yellow-500 font-bold mb-1">CÔNG CỤ HỖ TRỢ: CHIẾC CHUN THẦN THÁNH</h4>
+                        <p class="text-sm text-gray-300 mb-2">Đeo một chiếc chun vào cổ tay. Khi bắt gặp mình suy nghĩ tiêu cực quá 2 phút:</p>
+                        <p class="text-white font-bold flex items-center">
+                            <i class="fas fa-hand-point-right text-yellow-500 mr-2"></i>
+                            Kéo & Búng mạnh! (Đau để tỉnh) &rarr; Nói: "Đổi kênh!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 3 CONTENT -->
+        <div id="content-day3" class="hidden-content">
+             <!-- Background Accents Day 3 -->
+             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 via-yellow-400 to-purple-600 opacity-50"></div>
+             
+             <!-- Electric bolt bg -->
+             <div class="absolute -right-20 top-40 w-64 h-64 bg-purple-500 rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
+
+            <!-- Header Day 3 -->
+            <div class="text-center pt-8 pb-4 px-6 relative">
+                <div class="inline-block px-4 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-bold tracking-widest mb-4 brand-font">
+                    Phá vỡ Mô thức
+                </div>
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-2 tracking-wide">
+                    NHIỆM VỤ <span class="gradient-text-d3">NGÀY 3</span>
+                </h1>
+                <h2 class="text-xl text-gray-400 font-light tracking-wider brand-font">
+                    CÚ SỐC THỂ CHẤT
+                </h2>
+                <p class="mt-4 text-gray-400 italic max-w-2xl mx-auto text-sm">
+                    "Bạn không thể dùng suy nghĩ để chống lại suy nghĩ. Hãy dùng HÀNH ĐỘNG."
+                </p>
+            </div>
+
+            <!-- Formula: 3 Crazy Seconds -->
+            <div class="px-6 md:px-8 mb-6">
+                <div class="text-center mb-6">
+                    <h3 class="text-yellow-400 brand-font text-2xl uppercase tracking-widest border-b border-gray-700 inline-block pb-2">
+                        Công thức: 3 Giây Điên Rồ
+                    </h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- BƯỚC 1 -->
+                    <div class="step-card day-3-hover glass-panel p-6 rounded-2xl border-t-4 border-gray-500 relative flex flex-col shake-hover">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-600 px-3 py-1 text-xs font-bold text-white rounded shadow-lg">BƯỚC 1</div>
+                        <div class="text-center mb-4 mt-4">
+                            <i class="fas fa-hand-paper text-4xl text-gray-400 mb-2 shake-icon"></i>
+                            <h3 class="text-lg text-gray-300 font-bold uppercase">Nhận Diện</h3>
+                        </div>
+                        <div class="text-sm text-gray-300 flex-grow text-center">
+                            <p class="mb-3">Khi thấy lười biếng hoặc thèm muốn nổi lên...</p>
+                            <div class="bg-gray-800 p-3 rounded border border-gray-600/50">
+                                <span class="text-xs text-gray-400 uppercase">Hô to trong đầu:</span>
+                                <span class="block text-2xl font-black text-white mt-1">"DỪNG LẠI!"</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 2 (Main) -->
+                    <div class="step-card day-3-hover glass-panel p-6 rounded-2xl border-t-4 border-yellow-500 relative flex flex-col transform md:-translate-y-4 z-10 bg-slate-800/50 shake-hover">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-600 px-3 py-1 text-xs font-bold text-black rounded shadow-lg shadow-yellow-500/50">QUAN TRỌNG NHẤT</div>
+                        <div class="text-center mb-4 mt-4">
+                            <i class="fas fa-bolt text-5xl text-yellow-400 mb-2 shake-icon filter drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]"></i>
+                            <h3 class="text-xl text-yellow-400 font-bold uppercase">Phá Vỡ Mô Thức</h3>
+                        </div>
+                        <div class="text-sm text-gray-300 flex-grow">
+                            <p class="mb-3 text-center italic">Làm gì đó "điên rồ" để sốc hệ thần kinh:</p>
+                            <ul class="space-y-2 text-xs">
+                                <li class="flex items-center bg-white/5 p-2 rounded"><i class="fas fa-volume-up text-yellow-500 mr-3"></i> Hét "YES!" hoặc gầm gừ</li>
+                                <li class="flex items-center bg-white/5 p-2 rounded"><i class="fas fa-sign-language text-yellow-500 mr-3"></i> Vỗ tay "BỐP" thật mạnh</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 3 -->
+                    <div class="step-card day-3-hover glass-panel p-6 rounded-2xl border-t-4 border-purple-500 relative flex flex-col shake-hover">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-600 px-3 py-1 text-xs font-bold text-white rounded shadow-lg">BƯỚC 3</div>
+                        <div class="text-center mb-4 mt-4">
+                            <i class="fas fa-rocket text-4xl text-purple-400 mb-2 shake-icon"></i>
+                            <h3 class="text-lg text-purple-400 font-bold uppercase">Hành Động Mới</h3>
+                        </div>
+                        <div class="text-sm text-gray-300 flex-grow text-center">
+                            <p class="mb-3">Bạn có <span class="text-purple-400 font-bold">5 GIÂY</span> cửa sổ vàng.</p>
+                            <div class="space-y-2 text-xs text-left pl-4">
+                                <p><i class="fas fa-check text-green-500 mr-1"></i> Vỗ tay xong &rarr; Ngồi vào bàn.</p>
+                                <p><i class="fas fa-check text-green-500 mr-1"></i> Hét xong &rarr; Xỏ giày chạy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practical Exercise Day 3 -->
+            <div class="px-6 md:px-8 pb-8">
+                <div class="glass-panel rounded-2xl p-6 border border-purple-500/30 bg-purple-900/10">
+                    <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+                        <div class="bg-purple-600 p-3 rounded-lg shadow-lg shadow-purple-900/50">
+                            <i class="fas fa-crosshairs text-2xl text-white"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="text-lg font-bold text-white uppercase mb-1">BÀI TẬP THỰC CHIẾN</h4>
+                            <p class="text-sm text-gray-300">
+                                <span class="text-yellow-400 italic">Mệnh lệnh:</span> Áp dụng "Cú sốc thể chất" ít nhất <b class="text-white">3 LẦN</b> hôm nay khi thói quen xấu xuất hiện.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 4 CONTENT -->
+        <div id="content-day4" class="hidden-content">
+            <!-- Background Accents Day 4 -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 via-teal-500 to-orange-500 opacity-50"></div>
+            
+            <!-- Surgeon Light Effect -->
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[500px] h-[300px] bg-emerald-500/10 blur-[100px] pointer-events-none rounded-full"></div>
+
+            <!-- Header Day 4 -->
+            <div class="text-center pt-8 pb-4 px-6 relative">
+                 <div class="absolute top-10 right-10 hidden md:block opacity-20">
+                    <i class="fas fa-notes-medical text-6xl text-emerald-400"></i>
+                </div>
+                <div class="inline-block px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold tracking-widest mb-4 brand-font">
+                    Giải Phẫu Tâm Trí
+                </div>
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-2 tracking-wide">
+                    NHIỆM VỤ <span class="gradient-text-d4">NGÀY 4</span>
+                </h1>
+                <h2 class="text-xl text-gray-400 font-light tracking-wider brand-font">
+                    CUỘC PHẪU THUẬT NIỀM TIN
+                </h2>
+                <p class="mt-4 text-gray-400 italic max-w-2xl mx-auto text-sm">
+                    "Cầm cưa và cưa đứt những cái chân bàn mục nát đang giữ chân bạn."
+                </p>
+            </div>
+
+            <!-- 4 STEPS SURGERY -->
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- STEP 1: Identify -->
+                <div class="step-card day-4-hover glass-panel p-6 rounded-2xl border-l-4 border-gray-400 flex flex-col h-full">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-gray-700/50 p-3 rounded-lg mr-3">
+                            <i class="fas fa-search text-2xl text-gray-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-200 uppercase">1. Lôi Kẻ Thù Ra Ánh Sáng</h3>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-3">Viết xuống 1 niềm tin giới hạn lớn nhất đang kìm hãm bạn ngay lúc này.</p>
+                    <div class="bg-black/30 p-3 rounded text-xs text-gray-500 italic border border-gray-700">
+                        "Tôi quá già...", "Tôi không có khiếu...", "Tôi không đủ giỏi..."
+                    </div>
+                </div>
+
+                <!-- STEP 2: Doubt -->
+                <div class="step-card day-4-hover glass-panel p-6 rounded-2xl border-l-4 border-emerald-500 flex flex-col h-full">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-emerald-900/50 p-3 rounded-lg mr-3">
+                            <i class="fas fa-question text-2xl text-emerald-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-emerald-400 uppercase">2. Rung Lắc Chân Bàn</h3>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-2">Tra khảo nó bằng 3 câu hỏi:</p>
+                    <ul class="text-xs text-gray-300 space-y-2">
+                        <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-2"></i> Nó có ĐÚNG 100% mọi lúc không?</li>
+                        <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-2"></i> Là của mình hay copy từ người khác?</li>
+                        <li class="flex items-start"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-2"></i> Không làm được hay CHƯA làm?</li>
+                    </ul>
+                </div>
+
+                <!-- STEP 3: Pain (Important) -->
+                <div class="step-card day-4-hover glass-panel p-6 rounded-2xl border-l-4 border-red-600 flex flex-col h-full relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-24 h-24 bg-red-600/10 rounded-bl-full pointer-events-none"></div>
+                    <div class="flex items-center mb-3">
+                        <div class="bg-red-900/30 p-3 rounded-lg mr-3">
+                            <i class="fas fa-fire-alt text-2xl text-red-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-red-500 uppercase">3. Gắn Thêm Nỗi Đau</h3>
+                    </div>
+                    <p class="text-sm text-gray-300 mb-3">Đây là bước quyết định để não bộ buông bỏ.</p>
+                    <div class="bg-red-900/20 border border-red-500/20 p-3 rounded text-center">
+                        <p class="text-xs text-red-300 uppercase font-bold mb-1">Hỏi chính mình:</p>
+                        <p class="text-sm text-white italic">"5-10 năm nữa, mình sẽ mất mát những gì nếu cứ giữ niềm tin ngu ngốc này?"</p>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Install New Belief -->
+                <div class="step-card day-4-hover glass-panel p-6 rounded-2xl border-l-4 border-orange-500 flex flex-col h-full bg-gradient-to-br from-slate-800 to-slate-900">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-orange-900/30 p-3 rounded-lg mr-3">
+                            <i class="fas fa-seedling text-2xl text-orange-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-orange-400 uppercase">4. Cài Đặt Niềm Tin Mới</h3>
+                    </div>
+                    <div class="flex items-center justify-between text-xs mb-2">
+                        <span class="text-gray-500 line-through">"Tôi không làm được"</span>
+                        <i class="fas fa-arrow-right text-orange-500"></i>
+                        <span class="text-white font-bold">"Tôi học được mọi thứ"</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">Tìm 3 bằng chứng để củng cố cho niềm tin mới này ngay lập tức.</p>
+                </div>
+            </div>
+
+            <!-- Action Section Day 4 -->
+            <div class="px-6 md:px-8 pb-8">
+                <div class="bg-gradient-to-r from-emerald-900/40 to-slate-900 border border-emerald-500/30 rounded-xl p-6 text-center relative overflow-hidden group hover:border-emerald-400/50 transition duration-300">
+                    <div class="absolute inset-0 bg-emerald-500/5 group-hover:bg-emerald-500/10 transition duration-500"></div>
+                    <h4 class="text-gray-400 text-xs uppercase tracking-[0.2em] mb-2 relative z-10">Câu thần chú hành động</h4>
+                    <p class="text-xl md:text-2xl font-bold text-white relative z-10 brand-font">
+                        "Đó là lời nói dối!<br>
+                        <span class="text-emerald-400">Sự thật là:</span> TÔI CÓ THỂ HỌC ĐƯỢC MỌI THỨ TÔI CẦN."
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 5 CONTENT (NEW) -->
+        <div id="content-day5" class="visible-content">
+            <!-- Background Accents Day 5 -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-600 via-purple-500 to-indigo-600 opacity-50"></div>
+            
+            <!-- Passion Glow -->
+            <div class="absolute top-20 right-0 w-[400px] h-[400px] bg-pink-500/10 blur-[120px] pointer-events-none rounded-full"></div>
+
+            <!-- Header Day 5 -->
+            <div class="text-center pt-8 pb-4 px-6 relative">
+                 <div class="absolute top-10 left-10 hidden md:block opacity-20">
+                    <i class="fas fa-bullhorn text-6xl text-pink-400 transform -rotate-12"></i>
+                </div>
+                <div class="inline-block px-4 py-1 rounded-full border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs font-bold tracking-widest mb-4 brand-font">
+                    Phẫu Thuật Ngôn Từ
+                </div>
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-2 tracking-wide">
+                    NHIỆM VỤ <span class="gradient-text-d5">NGÀY 5</span>
+                </h1>
+                <h2 class="text-xl text-gray-400 font-light tracking-wider brand-font">
+                    TỪ ĐIỂN CỦA NGƯỜI KHỔNG LỒ
+                </h2>
+                <p class="mt-4 text-gray-400 italic max-w-2xl mx-auto text-sm">
+                    "Ngôn từ không chỉ mô tả thực tế, ngôn từ TẠO RA thực tế."
+                </p>
+            </div>
+
+            <!-- Transformation Grid -->
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- DOWNGRADE -->
+                <div class="step-card day-5-hover glass-panel p-6 rounded-2xl border-t-4 border-gray-400 relative">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="bg-gray-700/50 w-12 h-12 rounded-full flex items-center justify-center border border-gray-600">
+                            <i class="fas fa-arrow-down text-xl text-gray-400"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-center text-lg font-bold text-gray-300 uppercase mb-4">Hạ Thấp Tiêu Cực</h3>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="bg-black/40 p-3 rounded-lg border border-gray-800">
+                            <p class="text-gray-500 text-xs line-through mb-1">"Tôi chết mệt / kiệt sức"</p>
+                            <p class="text-blue-300 font-bold"><i class="fas fa-check mr-1 text-blue-500"></i> "Tôi cần nạp lại pin."</p>
+                        </div>
+                        <div class="bg-black/40 p-3 rounded-lg border border-gray-800">
+                            <p class="text-gray-500 text-xs line-through mb-1">"Nó làm tôi điên máu"</p>
+                            <p class="text-blue-300 font-bold"><i class="fas fa-check mr-1 text-blue-500"></i> "Giúp tôi luyện kiên nhẫn."</p>
+                        </div>
+                        <div class="bg-black/40 p-3 rounded-lg border border-gray-800">
+                            <p class="text-gray-500 text-xs line-through mb-1">"Tôi thất bại rồi"</p>
+                            <p class="text-blue-300 font-bold"><i class="fas fa-check mr-1 text-blue-500"></i> "Tôi vừa học một bài học."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UPGRADE -->
+                <div class="step-card day-5-hover glass-panel p-6 rounded-2xl border-t-4 border-pink-500 relative bg-gradient-to-b from-slate-900 to-pink-900/20">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="bg-pink-600 w-12 h-12 rounded-full flex items-center justify-center shadow-lg shadow-pink-600/50">
+                            <i class="fas fa-arrow-up text-xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-center text-lg font-bold text-pink-400 uppercase mb-4">Phóng Đại Tích Cực</h3>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="bg-pink-900/20 p-3 rounded-lg border border-pink-500/30">
+                            <p class="text-gray-400 text-xs mb-1">Thay vì "Cũng ổn/Bình thường":</p>
+                            <p class="text-white font-bold text-lg brand-font tracking-wide">"TUYỆT VỜI ÔNG MẶT TRỜI!"</p>
+                        </div>
+                        <div class="bg-pink-900/20 p-3 rounded-lg border border-pink-500/30">
+                            <p class="text-gray-400 text-xs mb-1">Thay vì "Tôi thích nó":</p>
+                            <p class="text-white font-bold text-lg brand-font tracking-wide">"TÔI YÊU NÓ ĐIÊN CUỒNG!"</p>
+                        </div>
+                         <div class="bg-pink-900/20 p-3 rounded-lg border border-pink-500/30">
+                            <p class="text-gray-400 text-xs mb-1">Thay vì "Làm tốt đấy":</p>
+                            <p class="text-white font-bold text-lg brand-font tracking-wide">"QUÁ XUẤT SẮC! PHI THƯỜNG!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORBIDDEN ZONE -->
+            <div class="px-6 md:px-8 mb-6">
+                <div class="bg-red-950/50 border-2 border-red-600/50 border-dashed rounded-xl p-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest">Khu Vực Cấm 24H</div>
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="text-center md:text-left">
+                            <h4 class="text-red-500 font-bold uppercase mb-2"><i class="fas fa-ban mr-2"></i>Tuyệt đối không nói/nghĩ:</h4>
+                            <div class="flex gap-4 justify-center md:justify-start">
+                                <span class="bg-red-900/80 text-white px-4 py-2 rounded font-bold line-through decoration-red-500 decoration-2">MỆT</span>
+                                <span class="bg-red-900/80 text-white px-4 py-2 rounded font-bold line-through decoration-red-500 decoration-2">CHÁN</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-black/50 p-4 rounded-lg border border-red-500/30 text-center min-w-[200px]">
+                            <p class="text-gray-400 text-xs uppercase mb-1">Hình phạt vi phạm</p>
+                            <p class="text-white font-bold"><i class="fas fa-running text-red-500 mr-2"></i> 10 Hít đất / 20 Squat</p>
+                            <p class="text-[10px] text-gray-500 italic mt-1">(Ngay lập tức!)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Prompt Day 5 -->
+            <div class="px-6 md:px-8 pb-8 text-center">
+                 <p class="text-gray-400 mb-2 text-sm italic">Bắt đầu ngay bây giờ. Hôm nay bạn cảm thấy thế nào?</p>
+                <div class="inline-block relative group cursor-pointer">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-pink-600 to-indigo-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                    <button class="relative px-8 py-3 bg-black rounded-full leading-none flex items-center divide-x divide-gray-600">
+                        <span class="flex items-center space-x-2">
+                            <span class="text-pink-400 pr-2"><i class="fas fa-comment-alt"></i></span>
+                            <span class="text-white font-bold brand-font text-lg tracking-wider">TÔI ĐANG TRÀN ĐẦY SINH LỰC!</span>
+                        </span>
+                    </button>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <p class="text-xs text-gray-500 uppercase tracking-[0.2em]">Warrior Mindset • Day 05</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(day) {
+            // Remove active class from buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            document.getElementById('tab-' + day).classList.add('active');
+            
+            // Hide all content
+            const days = ['day1', 'day2', 'day3', 'day4', 'day5'];
+            
+            days.forEach(d => {
+                const content = document.getElementById('content-' + d);
+                if (d === day) {
+                    content.classList.remove('hidden-content');
+                    content.classList.add('visible-content');
+                } else {
+                    content.classList.remove('visible-content');
+                    content.classList.add('hidden-content');
+                }
+            });
+        }
+        
+        // Default showing Day 5
+    </script>
+</body>
+</html>

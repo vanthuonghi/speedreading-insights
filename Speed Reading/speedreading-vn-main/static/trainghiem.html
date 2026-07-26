@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading - Công Cụ Luyện Đọc Nhanh Toàn Diện</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS Configuration for custom branding theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Đồng bộ màu cam và xanh đen thương hiệu của speedreading.vn
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316', // Màu cam sáng thương hiệu
+                            600: '#ea580c', // Màu cam chủ đạo cho nút nhấn/trạng thái active
+                            700: '#c2410c', // Màu cam đậm
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons for high-quality visuals -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        /* Pulse Animation for Focus point */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .pulse-focus {
+            animation: pulse-soft 2s infinite;
+        }
+        /* Highlight transition */
+        .word-highlight {
+            transition: all 0.15s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 min-h-screen font-sans flex flex-col transition-colors duration-300">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-transparent p-1 rounded-xl flex items-center">
+                    <!-- Tích hợp logo chính thức của SpeedReading.vn kèm bộ tự động sửa lỗi -->
+                    <img id="brand-logo" src="https://img.speedreading.vn/logo.png" alt="SpeedReading.vn" class="h-10 w-auto object-contain" onerror="this.onerror=null; this.src='https://placehold.co/120x40/ea580c/ffffff?text=SpeedReading';">
+                </div>
+                <div>
+                    <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-brand-600 to-amber-500 bg-clip-text text-transparent hidden sm:inline-block">SpeedRead Pro</span>
+                    <span class="ml-2 text-xs bg-brand-100 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300 px-2 py-0.5 rounded-full font-medium">Học sinh & Lớp học</span>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex space-x-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl">
+                <button onclick="switchTab('rsvp')" class="nav-btn active px-4 py-2 text-sm font-medium rounded-lg transition-all" data-tab="rsvp">Đọc Cụm Từ</button>
+                <button onclick="switchTab('enemies')" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg transition-all text-slate-600 dark:text-slate-400" data-tab="enemies">Kẻ Thù Tốc Độ</button>
+                <button onclick="switchTab('test')" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg transition-all text-slate-600 dark:text-slate-400" data-tab="test">Đo Tốc Độ (WPM)</button>
+                <button onclick="switchTab('gym')" class="nav-btn px-4 py-2 text-sm font-medium rounded-lg transition-all text-slate-600 dark:text-slate-400" data-tab="gym">Trạm Luyện Mắt</button>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleDarkMode()" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i data-lucide="sun" id="theme-icon-light" class="w-5 h-5 hidden"></i>
+                    <i data-lucide="moon" id="theme-icon-dark" class="w-5 h-5"></i>
+                </button>
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-2 space-y-1">
+            <button onclick="switchTab('rsvp'); toggleMobileMenu()" class="w-full text-left px-3 py-2 text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 block">Đọc Cụm Từ</button>
+            <button onclick="switchTab('enemies'); toggleMobileMenu()" class="w-full text-left px-3 py-2 text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 block">Kẻ Thù Tốc Độ</button>
+            <button onclick="switchTab('test'); toggleMobileMenu()" class="w-full text-left px-3 py-2 text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 block">Đo Tốc Độ (WPM)</button>
+            <button onclick="switchTab('gym'); toggleMobileMenu()" class="w-full text-left px-3 py-2 text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 block">Trạm Luyện Mắt</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- MODULE 1: ĐỌC CỤM TỪ (RSVP & CHUNKING) -->
+        <section id="tab-rsvp" class="tab-content block space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Controls Side panel -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
+                    <div class="flex items-center space-x-2 text-brand-600">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                        <h2 class="font-bold text-lg text-slate-800 dark:text-white">Cấu hình Đọc Cụm Từ</h2>
+                    </div>
+
+                    <!-- Chunk Size Selector -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400">Số lượng từ mỗi cụm (Chunk Size)</label>
+                        <div class="grid grid-cols-5 gap-2">
+                            <button onclick="setChunkSize(1)" class="chunk-btn py-2 text-sm font-semibold rounded-lg border transition active-chunk border-brand-500 bg-brand-50 dark:bg-brand-950/40 text-brand-600" id="btn-chunk-1">1Từ</button>
+                            <button onclick="setChunkSize(2)" class="chunk-btn py-2 text-sm font-semibold rounded-lg border transition border-slate-200 dark:border-slate-800 hover:bg-slate-50" id="btn-chunk-2">2Từ</button>
+                            <button onclick="setChunkSize(3)" class="chunk-btn py-2 text-sm font-semibold rounded-lg border transition border-slate-200 dark:border-slate-800 hover:bg-slate-50" id="btn-chunk-3">3Từ</button>
+                            <button onclick="setChunkSize(4)" class="chunk-btn py-2 text-sm font-semibold rounded-lg border transition border-slate-200 dark:border-slate-800 hover:bg-slate-50" id="btn-chunk-4">4Từ</button>
+                            <button onclick="setChunkSize(5)" class="chunk-btn py-2 text-sm font-semibold rounded-lg border transition border-slate-200 dark:border-slate-800 hover:bg-slate-50" id="btn-chunk-5">5Từ</button>
+                        </div>
+                    </div>
+
+                    <!-- Speed Selector -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm font-medium text-slate-600 dark:text-slate-400">
+                            <span>Tốc độ đọc (WPM)</span>
+                            <span class="text-brand-600 dark:text-brand-400 font-mono" id="val-speed-rsvp">300 WPM</span>
+                        </div>
+                        <input type="range" id="input-speed-rsvp" min="100" max="1000" step="50" value="300" oninput="updateRSVPSpeed(this.value)" class="w-full accent-brand-600">
+                        <div class="flex justify-between text-xs text-slate-400 font-mono">
+                            <span>100 WPM (Chậm)</span>
+                            <span>1000 WPM (Cực nhanh)</span>
+                        </div>
+                    </div>
+
+                    <!-- Mode Toggle (RSVP vs Static Chunk Highlight) -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400">Phương thức hiển thị</label>
+                        <select id="rsvp-mode" onchange="toggleRSVPRenderMode()" class="w-full p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="rsvp">Chớp từ nhanh (RSVP - Tập trung cực độ)</option>
+                            <option value="highlight">Bôi đậm cụm từ trên văn bản tĩnh</option>
+                        </select>
+                    </div>
+
+                    <!-- Text input area -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-slate-600 dark:text-slate-400">Văn bản luyện tập</label>
+                        <textarea id="rsvp-text" rows="5" class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 leading-relaxed" placeholder="Nhập hoặc dán văn bản của bạn tại đây...">Phương pháp đọc nhanh (Speed Reading) không chỉ giúp bạn đọc nhanh hơn mà còn cải thiện khả năng tập trung, hiểu và xử lý thông tin một cách có hệ thống. Khi luyện tập phương pháp RSVP, mắt của bạn sẽ cố định tại một điểm trung tâm và tiếp nhận thông tin theo từng cụm từ thay vì di chuyển liên tục từ trái qua phải.</textarea>
+                    </div>
+                </div>
+
+                <!-- Reading Canvas Panel -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between min-h-[450px]">
+                    <!-- Preview Title -->
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                        <span class="text-xs font-semibold tracking-wider text-slate-400 uppercase">Màn hình mô phỏng trải nghiệm</span>
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Render Container -->
+                    <div class="flex-grow flex items-center justify-center py-12">
+                        <!-- RSVP Mode Screen (Default) -->
+                        <div id="screen-rsvp" class="text-center space-y-4">
+                            <!-- Visual Anchor Line -->
+                            <div class="relative py-8 px-4 border-y border-slate-100 dark:border-slate-800 min-w-[300px] sm:min-w-[450px]">
+                                <!-- Top and Bottom Center Focus Indicators -->
+                                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-3 bg-brand-600"></div>
+                                <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-1 h-3 bg-brand-600"></div>
+                                
+                                <div id="rsvp-word-output" class="text-3xl sm:text-5xl font-bold tracking-tight text-slate-800 dark:text-white font-sans transition-all duration-75">
+                                    Bấm <span class="text-brand-500">Bắt đầu</span> để tập
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400">Giữ mắt bạn tập trung vào vạch kẻ màu cam ở giữa màn hình.</p>
+                        </div>
+
+                        <!-- Static Chunk Highlight Mode Screen (Hidden by default) -->
+                        <div id="screen-highlight" class="hidden w-full max-w-2xl px-4 py-2 text-lg sm:text-xl leading-relaxed text-slate-500 dark:text-slate-400 transition-all text-justify font-sans" style="word-spacing: 0.1em;">
+                            Văn bản đang tải...
+                        </div>
+                    </div>
+
+                    <!-- Reading Progress Bar -->
+                    <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden mb-6">
+                        <div id="rsvp-progress" class="bg-brand-600 h-full w-0 transition-all duration-100"></div>
+                    </div>
+
+                    <!-- Action Control Buttons -->
+                    <div class="flex flex-wrap justify-between items-center gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                        <div class="flex space-x-2">
+                            <button id="btn-rsvp-play" onclick="toggleRSVPPlay()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md shadow-brand-500/10 flex items-center space-x-2 transition">
+                                <i data-lucide="play" class="w-4 h-4" id="rsvp-play-icon"></i>
+                                <span id="rsvp-play-text">Bắt đầu tập</span>
+                            </button>
+                            <button onclick="resetRSVP()" class="px-5 py-2.5 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl font-medium transition flex items-center space-x-2">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                                <span>Làm mới</span>
+                            </button>
+                        </div>
+                        <div class="text-xs font-mono text-slate-400" id="rsvp-status-lbl">
+                            Trạng thái: Đang dừng | Tiến trình: 0%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 2: KẺ THÙ TỐC ĐỘ ĐỌC (UNDERSTANDING OBSTACLES) -->
+        <section id="tab-enemies" class="tab-content hidden space-y-6">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">Kẻ Thù Của Tốc Độ Đọc</h2>
+                <p class="text-slate-500 text-sm sm:text-base">Học sinh thường mắc phải 3 thói quen xấu dưới đây dẫn tới việc đọc chậm nhưng tỷ lệ hiểu bài vẫn không cao. Hãy bấm vào từng thẻ mô phỏng để trải nghiệm thực tế.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Thói quen 1: Đọc Thầm -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300 rounded-full">Kẻ thù số 1</span>
+                            <i data-lucide="volume-2" class="w-5 h-5 text-brand-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">Thói Quen Đọc Thầm (Subvocalization)</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            Là việc bạn phát âm thầm từng từ trong đầu khi đọc. Thói quen này kéo tốc độ đọc của bạn xuống bằng với tốc độ nói bình thường (chỉ khoảng 150-250 từ/phút).
+                        </p>
+                    </div>
+
+                    <!-- Interactive Area -->
+                    <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl space-y-3 text-xs">
+                        <p class="font-semibold text-slate-700 dark:text-slate-300">Nhấn nút phát âm và xem chữ cuộn tương ứng:</p>
+                        <div class="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-100 dark:border-slate-800 font-mono text-center relative overflow-hidden h-12 flex items-center justify-center">
+                            <span id="subvocal-text" class="text-slate-400">Đọc thầm sẽ phát ra tiếng ở đây...</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <button onclick="triggerSubvocalization()" id="btn-subvocal" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-semibold transition flex items-center justify-center space-x-1.5">
+                                <i data-lucide="play-circle" class="w-4 h-4"></i>
+                                <span>Thử nghiệm đọc thầm</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thói quen 2: Đọc Lùi -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300 rounded-full">Kẻ thù số 2</span>
+                            <i data-lucide="arrow-left-right" class="w-5 h-5 text-brand-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">Thói Quen Đọc Lùi (Regression)</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            Mắt vô thức nhảy ngược lại các từ vừa đọc để tìm kiếm sự an tâm. Thói quen này làm gián đoạn luồng tư duy logic và gây mất nhiều thời gian hơn.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Area -->
+                    <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl space-y-3 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-slate-700 dark:text-slate-300">Làm mờ phần đã đọc qua:</span>
+                            <span class="text-[10px] font-mono text-brand-500 animate-pulse" id="regression-status">Chặn đang tắt</span>
+                        </div>
+                        <!-- Demo Container -->
+                        <div class="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-100 dark:border-slate-800 text-sm leading-relaxed text-justify h-28 overflow-y-auto" id="regression-demo-box">
+                            Nhấp thử nghiệm dưới đây để kích hoạt ngăn chặn đọc lùi. Phần chữ bạn đã đọc qua sẽ tự động mờ đi hoàn toàn, giúp tập trung tiến về phía trước.
+                        </div>
+                        <button onclick="toggleRegressionDemo()" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg transition flex items-center justify-center space-x-1.5">
+                            <i data-lucide="eye-off" class="w-4 h-4"></i>
+                            <span>Bật/Tắt chế độ chặn Đọc Lùi</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Thói quen 3: Tầm Nhìn Hẹp -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300 rounded-full">Kẻ thù số 3</span>
+                            <i data-lucide="scan-eye" class="w-5 h-5 text-brand-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">Tầm Nhìn Ngoại Vi Hẹp (Narrow Vision)</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            Chỉ tập trung vào 1 từ duy nhất khi nhìn. Việc mở rộng tầm nhìn giúp mắt chụp ảnh lại (Saccade) đồng thời nhiều từ xung quanh tiêu điểm.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Area -->
+                    <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl space-y-3 text-xs">
+                        <span class="font-semibold text-slate-700 dark:text-slate-300 block">Trải nghiệm mô phỏng Spotlight tầm nhìn:</span>
+                        
+                        <!-- Spotlight Container -->
+                        <div class="relative bg-black text-slate-600 rounded-lg h-24 overflow-hidden border border-slate-800 cursor-crosshair flex items-center justify-center select-none" id="spotlight-container" onmousemove="moveSpotlight(event)" onmouseleave="resetSpotlight()">
+                            <p class="text-center text-[10px] uppercase font-bold text-brand-500 absolute pointer-events-none">Di chuột vào đây để trải nghiệm</p>
+                            <!-- Text overlay -->
+                            <div class="p-3 text-xs leading-normal leading-relaxed text-justify w-full text-slate-700 dark:text-slate-500 pointer-events-none" id="spotlight-text-target">
+                                Bạn đang luyện mắt mở rộng biên độ ngoại vi thu thập 5 từ một lúc thay vì chỉ nhìn thấy một từ đơn độc.
+                            </div>
+                            <!-- Mask Overlay -->
+                            <div class="absolute inset-0 bg-slate-950 pointer-events-none mix-blend-multiply" id="spotlight-mask"></div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="setSpotlightSize('narrow')" class="flex-1 py-1 px-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-[10px] font-bold transition">1 Từ (Hẹp)</button>
+                            <button onclick="setSpotlightSize('wide')" class="flex-1 py-1 px-2 bg-brand-600 text-white rounded text-[10px] font-bold transition">Cụm từ (Rộng)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 3: ĐO TỐC ĐỘ ĐỌC (WPM CLASSROOM TRACKER) -->
+        <section id="tab-test" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Text Container & Test Screen -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 space-y-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="gauge" class="w-5 h-5 text-brand-600"></i>
+                            <h3 class="font-bold text-lg">Bài kiểm tra tốc độ đọc cả lớp</h3>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs text-slate-400 font-mono">
+                            <span id="test-word-count">Tổng số: 220 từ</span>
+                        </div>
+                    </div>
+
+                    <!-- Reading Board or Quiz Board -->
+                    <div class="flex-grow">
+                        <!-- Reading Screen -->
+                        <div id="test-read-screen" class="space-y-4">
+                            <div class="prose max-w-none dark:prose-invert">
+                                <p id="test-text-content" class="text-base sm:text-lg leading-relaxed text-slate-700 dark:text-slate-300 text-justify font-serif select-none">
+                                    Thế giới động vật hoang dã chứa đựng vô vàn những điều kỳ thú và bí ẩn mà con người chưa khám phá hết. Từ sâu trong rừng thẳm Amazon cho đến đỉnh núi băng giá Everest, sự sinh tồn luôn yêu cầu các loài sinh vật phải liên tục tiến hóa để thích nghi với môi trường sống khắc nghiệt. Sự phát triển này thúc đẩy đa dạng sinh học vô cùng phong phú. Việc đọc sách khoa học không những bồi dưỡng kiến thức, kích thích tư duy logic mà còn rèn luyện khả năng tập trung sâu sắc. Tuy nhiên, tốc độ tiếp thu kiến thức của chúng ta bị hạn chế nhiều bởi phương thức đọc cũ kỹ từ thuở học tiểu học. Luyện tập tăng tốc độ đọc hàng ngày giúp học sinh tiết kiệm được hàng trăm giờ học tập mệt mỏi, ghi nhớ tốt hơn nhờ tư duy hình ảnh thay vì đọc thầm thành tiếng từng từ. Đọc nhanh thực tế là một quá trình lọc thông tin chọn lọc của não bộ, bỏ qua các liên từ vô nghĩa và tập trung hoàn toàn vào danh từ, động từ lõi.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Screen (Hidden until finished reading) -->
+                        <div id="test-quiz-screen" class="hidden space-y-6">
+                            <div class="bg-brand-50 dark:bg-brand-950/40 p-4 rounded-xl border border-brand-100 dark:border-brand-900">
+                                <h4 class="font-bold text-brand-800 dark:text-brand-300 text-sm flex items-center gap-1.5">
+                                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                                    Kiểm tra mức độ hiểu (Comprehension Quiz)
+                                </h4>
+                                <p class="text-xs text-slate-500 mt-1">Trả lời câu hỏi trắc nghiệm dưới đây để thẩm định độ tin cậy của bài thi đọc nhanh của bạn.</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <p class="font-bold text-slate-800 dark:text-slate-200">Câu 1: Theo bài đọc trên, phương thức đọc cũ kỹ hạn chế điều gì?</p>
+                                <div class="grid grid-cols-1 gap-2.5">
+                                    <button onclick="selectAnswer(1, false)" class="quiz-option text-left p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-sm">A. Khả năng di chuyển ngoài trời</button>
+                                    <button onclick="selectAnswer(1, true)" class="quiz-option text-left p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-sm">B. Tốc độ tiếp thu kiến thức của chúng ta</button>
+                                    <button onclick="selectAnswer(1, false)" class="quiz-option text-left p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-sm">C. Đa dạng sinh học của núi Everest</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Bar Control -->
+                    <div class="flex justify-between items-center border-t border-slate-100 dark:border-slate-800 pt-4 mt-6">
+                        <div class="flex items-center space-x-4">
+                            <span id="test-timer-lbl" class="font-mono text-xl font-bold text-brand-600 dark:text-brand-400">00:00:00</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="btn-test-action" onclick="toggleTestState()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md shadow-brand-500/15 flex items-center space-x-2 transition">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span>Bắt đầu đọc</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classroom & Leaderboard Panel -->
+                <div class="space-y-6">
+                    <!-- Classroom Lobby Settings -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+                        <div class="flex items-center space-x-2 text-slate-800 dark:text-white">
+                            <i data-lucide="users" class="w-5 h-5 text-brand-600"></i>
+                            <h3 class="font-bold text-lg">Chế độ lớp học</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">Nhập tên của bạn để lưu kết quả vào Bảng xếp hạng của lớp học trong phiên này.</p>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Tên học sinh</label>
+                                <input type="text" id="student-name" value="Học sinh vô danh" class="w-full p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Leaderboard list -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="trophy" class="w-5 h-5 text-yellow-500"></i>
+                                <h3 class="font-bold text-base">Bảng Xếp Hạng Lớp</h3>
+                            </div>
+                            <span class="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-mono" id="leaderboard-count">0 kết quả</span>
+                        </div>
+
+                        <!-- Table scroll content -->
+                        <div class="overflow-y-auto max-h-[220px] pr-1">
+                            <table class="w-full text-xs text-left">
+                                <thead class="text-slate-400 uppercase font-mono border-b border-slate-100 dark:border-slate-800">
+                                    <tr>
+                                        <th class="py-2">Hạng</th>
+                                        <th class="py-2">Tên</th>
+                                        <th class="py-2 text-right">WPM / Hiểu</th>
+                                        <th class="py-2 text-right text-brand-500">ERR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body" class="divide-y divide-slate-100 dark:divide-slate-800/50">
+                                    <!-- No data fall-back -->
+                                    <tr id="leaderboard-empty">
+                                        <td colspan="4" class="py-8 text-center text-slate-400">Chưa có ai hoàn thành bài kiểm tra. Hãy là người đầu tiên!</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 4: TRẠM LUYỆN MẮT (EYE GYMNASTICS) -->
+        <section id="tab-gym" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Training Menu Navigation -->
+                <div class="lg:col-span-3 space-y-3">
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="font-bold text-sm text-slate-400 uppercase tracking-wider mb-2">Chọn Bài Tập Mắt</h4>
+                        <div class="space-y-1">
+                            <button onclick="switchGymSubMode('schulte')" class="gym-nav-btn active w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-semibold transition active-gym" data-gym="schulte">
+                                <span class="flex items-center gap-2"><i data-lucide="grid-3x3" class="w-4 h-4 text-brand-600"></i>Bảng Schulte</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-65"></i>
+                            </button>
+                            <button onclick="switchGymSubMode('saccade')" class="gym-nav-btn w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-semibold transition text-slate-600 dark:text-slate-400" data-gym="saccade">
+                                <span class="flex items-center gap-2"><i data-lucide="move-horizontal" class="w-4 h-4 text-brand-600"></i>Mắt nhảy Saccade</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-65"></i>
+                            </button>
+                            <button onclick="switchGymSubMode('expand')" class="gym-nav-btn w-full flex items-center justify-between p-2.5 rounded-lg text-sm font-semibold transition text-slate-600 dark:text-slate-400" data-gym="expand">
+                                <span class="flex items-center gap-2"><i data-lucide="expand" class="w-4 h-4 text-brand-600"></i>Mở rộng góc nhìn</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-65"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Config Card based on active Gym mode -->
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+                        <h4 class="font-bold text-sm text-slate-400 uppercase tracking-wider">Cấu Hình Bài Tập</h4>
+                        
+                        <!-- Schulte Configs -->
+                        <div id="cfg-schulte" class="space-y-3">
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-slate-500">Cấp độ Ma Trận</label>
+                                <select id="schulte-size" onchange="initSchulteTable()" class="w-full p-2 border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 rounded-lg text-xs">
+                                    <option value="3">3 x 3 (Cơ bản)</option>
+                                    <option value="4">4 x 4 (Thử thách)</option>
+                                    <option value="5" selected>5 x 5 (Chuẩn quốc tế)</option>
+                                </select>
+                            </div>
+                            <button onclick="initSchulteTable()" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                                <i data-lucide="refresh-cw" class="w-3 h-3"></i> Tải lại bảng mới
+                            </button>
+                        </div>
+
+                        <!-- Saccade Configs -->
+                        <div id="cfg-saccade" class="hidden space-y-3">
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-slate-500 flex justify-between">Tốc độ chuyển động <span id="lbl-saccade-speed" class="font-mono text-brand-500">500ms</span></label>
+                                <input type="range" id="val-saccade-speed" min="150" max="1500" step="50" value="500" oninput="changeSaccadeSpeed(this.value)" class="w-full accent-brand-600">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-slate-500 flex justify-between">Khoảng rộng nhảy <span id="lbl-saccade-width" class="font-mono text-brand-500">70%</span></label>
+                                <input type="range" id="val-saccade-width" min="40" max="95" step="5" value="70" oninput="changeSaccadeWidth(this.value)" class="w-full accent-brand-600">
+                            </div>
+                        </div>
+
+                        <!-- Expand Vision Configs -->
+                        <div id="cfg-expand" class="hidden space-y-3">
+                            <button onclick="startExpandGame()" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                                <i data-lucide="play" class="w-3 h-3"></i>Bắt đầu kiểm tra
+                            </button>
+                            <p class="text-[10px] text-slate-400">Tập trung nhìn vào chấm xanh lá ở giữa màn hình. Hãy nhấp chọn nhanh ký tự đỏ ngẫu nhiên vừa xuất hiện cực ngắn ở rìa xung quanh.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Canvas Frame -->
+                <div class="lg:col-span-9 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 min-h-[420px] flex flex-col justify-between relative overflow-hidden">
+                    
+                    <!-- Gym Screen Output -->
+                    <div class="flex-grow flex items-center justify-center py-4 w-full h-full">
+                        
+                        <!-- 1. SCHULTE SCREEN -->
+                        <div id="gym-screen-schulte" class="w-full max-w-sm space-y-4">
+                            <div class="flex justify-between items-center text-xs font-mono">
+                                <span class="text-slate-400" id="schulte-step-lbl">Mục tiêu: Bấm số 1</span>
+                                <span class="text-brand-600 font-bold" id="schulte-timer-lbl">00.0s</span>
+                            </div>
+                            <!-- Board Wrapper -->
+                            <div id="schulte-board" class="grid gap-1.5 bg-slate-100 dark:bg-slate-950 p-2 rounded-xl border border-slate-200 dark:border-slate-800">
+                                <!-- Schulte items rendered dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- 2. SACCADE SCREEN -->
+                        <div id="gym-screen-saccade" class="hidden w-full h-full min-h-[300px] flex flex-col items-center justify-center relative">
+                            <!-- High Perf HTML5 Canvas for drawing animation dots -->
+                            <canvas id="saccade-canvas" class="w-full h-64 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950"></canvas>
+                            <button id="btn-saccade-toggle" onclick="toggleSaccadeAnimation()" class="mt-4 px-4 py-2 bg-brand-600 text-white rounded-lg text-xs font-semibold hover:bg-brand-700 transition">
+                                Bắt đầu nhảy
+                            </button>
+                        </div>
+
+                        <!-- 3. EXPAND SCREEN -->
+                        <div id="gym-screen-expand" class="hidden w-full max-w-md h-full min-h-[300px] flex flex-col justify-between items-center">
+                            <div class="relative w-full h-64 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950 flex items-center justify-center overflow-hidden" id="expand-box">
+                                <!-- Center green point -->
+                                <div class="w-4 h-4 rounded-full bg-emerald-500 relative z-10" id="expand-center-dot"></div>
+                                <!-- Target item (Dynamic positional generated by JS) -->
+                                <div id="expand-target" class="absolute hidden bg-brand-600 text-white text-xs font-bold px-2 py-1 rounded select-none cursor-pointer z-10">X</div>
+                            </div>
+                            <div class="text-center mt-3 text-xs text-slate-400" id="expand-score-lbl">
+                                Điểm số: 0 | Tỷ lệ trúng: 0%
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Gym Actions Info -->
+                    <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-medium" id="gym-desc-lbl">Nâng cao hiệu năng tốc độ xử lý bán cầu não, cải thiện thăng bằng mắt.</span>
+                        <div class="flex items-center space-x-1 font-mono text-slate-400">
+                            <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                            <span>Luyện tập 10-15 phút/ngày</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-4">
+            <div>
+                <p>&copy; 2026 SpeedRead Pro. Thiết kế chuyên sâu cho Luyện Đọc Nhanh và Mở Rộng Góc Nhìn Ngoại Vi.</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:underline">Điều khoản sử dụng</a>
+                <a href="#" class="hover:underline">Chính sách bảo mật</a>
+                <a href="#" class="hover:underline">Báo lỗi kỹ thuật</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC - ALL IN ONE -->
+    <script>
+        // ================= GLOBAL STATE =================
+        let currentTab = 'rsvp';
+        let isDarkMode = false;
+
+        // ================= CUSTOM COMPONENT: IN-APP TOAST NOTIFICATION =================
+        // Thay thế hoàn toàn hàm alert() cũ gây gián đoạn trải nghiệm của người dùng
+        function showNotification(title, message, type = 'success') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed bottom-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full px-4';
+                document.body.appendChild(container);
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'bg-white dark:bg-slate-900 border-l-4 border-brand-500 p-4 rounded-r-xl shadow-lg transform translate-y-2 opacity-0 transition-all duration-300 flex items-start space-x-3';
+            
+            let icon = 'info';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'alert-triangle';
+            
+            toast.innerHTML = `
+                <div class="text-brand-600 dark:text-brand-400">
+                    <i data-lucide="${icon}" class="w-5 h-5"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-white">${title}</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${message}</p>
+                </div>
+                <button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" onclick="this.parentElement.parentElement.remove()">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        // ================= MAIN TABS LOGIC =================
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if (activeTab) activeTab.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('active', 'bg-white', 'dark:bg-slate-900', 'text-brand-600', 'shadow-sm');
+                    btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+                } else {
+                    btn.classList.remove('active', 'bg-white', 'dark:bg-slate-900', 'text-brand-600', 'shadow-sm');
+                    btn.classList.add('text-slate-600', 'dark:text-slate-400');
+                }
+            });
+
+            if (tabId === 'gym') {
+                initSchulteTable();
+            } else {
+                stopSaccadeAnimation();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            const doc = document.documentElement;
+            const sunIcon = document.getElementById('theme-icon-light');
+            const moonIcon = document.getElementById('theme-icon-dark');
+            
+            if (isDarkMode) {
+                doc.classList.add('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                doc.classList.remove('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        // ================= STREAMING_CHUNK: Module 1 RSVP Simulator JS Logic =================
+        // ================= MODULE 1: RSVP & CHUNKING LOGIC =================
+        let rsvpTimer = null;
+        let rsvpIsPlaying = false;
+        let rsvpWords = [];
+        let rsvpCurrentIndex = 0;
+        let rsvpChunkSize = 1;
+        let rsvpSpeedWPM = 300;
+        let rsvpRenderMode = 'rsvp'; 
+
+        function setChunkSize(size) {
+            rsvpChunkSize = size;
+            document.querySelectorAll('.chunk-btn').forEach(btn => {
+                btn.classList.remove('border-brand-500', 'bg-brand-50', 'dark:bg-brand-950/40', 'text-brand-600');
+                btn.classList.add('border-slate-200', 'dark:border-slate-800');
+            });
+            const activeBtn = document.getElementById(`btn-chunk-${size}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-slate-200', 'dark:border-slate-800');
+                activeBtn.classList.add('border-brand-500', 'bg-brand-50', 'dark:bg-brand-950/40', 'text-brand-600');
+            }
+            prepareRSVPWords();
+            if (rsvpRenderMode === 'highlight') {
+                renderStaticHighlights();
+            }
+        }
+
+        function updateRSVPSpeed(val) {
+            rsvpSpeedWPM = parseInt(val);
+            document.getElementById('val-speed-rsvp').innerText = `${val} WPM`;
+            if (rsvpIsPlaying) {
+                pauseRSVP();
+                playRSVP();
+            }
+        }
+
+        function toggleRSVPRenderMode() {
+            rsvpRenderMode = document.getElementById('rsvp-mode').value;
+            const rsvpScreen = document.getElementById('screen-rsvp');
+            const highlightScreen = document.getElementById('screen-highlight');
+
+            if (rsvpRenderMode === 'rsvp') {
+                rsvpScreen.classList.remove('hidden');
+                highlightScreen.classList.add('hidden');
+            } else {
+                rsvpScreen.classList.add('hidden');
+                highlightScreen.classList.remove('hidden');
+                renderStaticHighlights();
+            }
+        }
+
+        function prepareRSVPWords() {
+            const rawText = document.getElementById('rsvp-text').value;
+            const rawWords = rawText.replace(/\s+/g, ' ').trim().split(' ');
+            
+            rsvpWords = [];
+            for (let i = 0; i < rawWords.length; i += rsvpChunkSize) {
+                const chunk = rawWords.slice(i, i + rsvpChunkSize).join(' ');
+                rsvpWords.push(chunk);
+            }
+            rsvpCurrentIndex = Math.min(rsvpCurrentIndex, rsvpWords.length - 1);
+            updateRSVPProgressUI();
+        }
+
+        function renderStaticHighlights() {
+            prepareRSVPWords();
+            const highlightScreen = document.getElementById('screen-highlight');
+            highlightScreen.innerHTML = '';
+
+            rsvpWords.forEach((chunk, index) => {
+                const span = document.createElement('span');
+                span.innerText = chunk + ' ';
+                span.className = `word-highlight inline-block px-1 rounded cursor-pointer transition-colors duration-150 ${index === rsvpCurrentIndex ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-100 dark:hover:bg-slate-800'}`;
+                span.onclick = () => {
+                    rsvpCurrentIndex = index;
+                    renderStaticHighlights();
+                    updateRSVPProgressUI();
+                };
+                highlightScreen.appendChild(span);
+            });
+        }
+
+        function toggleRSVPPlay() {
+            if (rsvpIsPlaying) {
+                pauseRSVP();
+            } else {
+                playRSVP();
+            }
+        }
+
+        function playRSVP() {
+            prepareRSVPWords();
+            if (rsvpWords.length === 0) return;
+
+            rsvpIsPlaying = true;
+            document.getElementById('rsvp-play-text').innerText = 'Tạm dừng';
+            document.getElementById('rsvp-play-icon').setAttribute('data-lucide', 'pause');
+            lucide.createIcons();
+
+            const chunkSpeedWPM = rsvpSpeedWPM / rsvpChunkSize;
+            const intervalMs = (60 / chunkSpeedWPM) * 1000;
+
+            rsvpTimer = setInterval(() => {
+                if (rsvpCurrentIndex >= rsvpWords.length) {
+                    clearInterval(rsvpTimer);
+                    rsvpIsPlaying = false;
+                    document.getElementById('rsvp-play-text').innerText = 'Bắt đầu tập';
+                    document.getElementById('rsvp-play-icon').setAttribute('data-lucide', 'play');
+                    lucide.createIcons();
+                    return;
+                }
+
+                const currentChunk = rsvpWords[rsvpCurrentIndex];
+                
+                if (rsvpRenderMode === 'rsvp') {
+                    document.getElementById('rsvp-word-output').innerHTML = getOrpMarkup(currentChunk);
+                } else {
+                    renderStaticHighlights();
+                }
+
+                rsvpCurrentIndex++;
+                updateRSVPProgressUI();
+            }, intervalMs);
+        }
+
+        function pauseRSVP() {
+            clearInterval(rsvpTimer);
+            rsvpIsPlaying = false;
+            document.getElementById('rsvp-play-text').innerText = 'Tiếp tục';
+            document.getElementById('rsvp-play-icon').setAttribute('data-lucide', 'play');
+            lucide.createIcons();
+            document.getElementById('rsvp-status-lbl').innerText = `Trạng thái: Tạm dừng | Tiến trình: ${getRSVPPercentage()}%`;
+        }
+
+        function resetRSVP() {
+            clearInterval(rsvpTimer);
+            rsvpIsPlaying = false;
+            rsvpCurrentIndex = 0;
+            document.getElementById('rsvp-play-text').innerText = 'Bắt đầu tập';
+            document.getElementById('rsvp-play-icon').setAttribute('data-lucide', 'play');
+            lucide.createIcons();
+            
+            if (rsvpRenderMode === 'rsvp') {
+                document.getElementById('rsvp-word-output').innerHTML = 'Bấm <span class="text-brand-500">Bắt đầu</span> để tập';
+            } else {
+                renderStaticHighlights();
+            }
+            updateRSVPProgressUI();
+        }
+
+        function getRSVPPercentage() {
+            if (rsvpWords.length === 0) return 0;
+            return Math.round((rsvpCurrentIndex / rsvpWords.length) * 100);
+        }
+
+        function updateRSVPProgressUI() {
+            const percent = getRSVPPercentage();
+            document.getElementById('rsvp-progress').style.width = `${percent}%`;
+            document.getElementById('rsvp-status-lbl').innerText = `Trạng thái: ${rsvpIsPlaying ? 'Đang chạy' : 'Đang dừng'} | Tiến trình: ${percent}%`;
+        }
+
+        function getOrpMarkup(word) {
+            if (!word) return '';
+            const wordsList = word.split(' ');
+            if (wordsList.length > 1) {
+                const midIndex = Math.floor(wordsList.length / 2);
+                return wordsList.map((w, idx) => {
+                    if (idx === midIndex) {
+                        return `<span class="text-brand-600 dark:text-brand-400 font-extrabold underline decoration-brand-500">${w}</span>`;
+                    }
+                    return w;
+                }).join(' ');
+            }
+
+            const len = word.length;
+            let targetIdx = 0;
+            if (len <= 1) targetIdx = 0;
+            else if (len <= 5) targetIdx = 1;
+            else if (len <= 9) targetIdx = 2;
+            else if (len <= 13) targetIdx = 3;
+            else targetIdx = 4;
+
+            const partLeft = word.substring(0, targetIdx);
+            const midChar = word.charAt(targetIdx);
+            const partRight = word.substring(targetIdx + 1);
+
+            return `${partLeft}<span class="text-brand-600 font-extrabold relative">${midChar}<span class="absolute left-1/2 bottom-[-8px] -translate-x-1/2 text-[10px] text-brand-600 pulse-focus font-normal">•</span></span>${partRight}`;
+        }
+
+
+        // ================= STREAMING_CHUNK: Module 2 Obstacles JS Logic =================
+        // ================= MODULE 2: KẺ THÙ TỐC ĐỘ (UNDERSTANDING ENEMIES) =================
+        let subvocalUtterance = null;
+        let speechTimer = null;
+        
+        function triggerSubvocalization() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                const demoText = "Đọc thầm... giới hạn... tốc độ... đọc của... bạn... bằng tốc độ... nói...";
+                const textOutput = document.getElementById('subvocal-text');
+                
+                subvocalUtterance = new SpeechSynthesisUtterance(demoText);
+                subvocalUtterance.lang = 'vi-VN';
+                subvocalUtterance.rate = 0.7; 
+
+                const words = demoText.split(' ');
+                let idx = 0;
+                
+                subvocalUtterance.onboundary = function(event) {
+                    if (event.name === 'word') {
+                        textOutput.innerText = words.slice(0, idx + 1).join(' ');
+                        idx++;
+                    }
+                };
+
+                subvocalUtterance.onend = function() {
+                    textOutput.innerText = "Trải nghiệm kết thúc! Thói quen này làm bạn cực kỳ tốn thời gian.";
+                };
+
+                window.speechSynthesis.speak(subvocalUtterance);
+            } else {
+                document.getElementById('subvocal-text').innerText = "Trình duyệt của bạn không hỗ trợ Web Speech API.";
+            }
+        }
+
+        let isRegressionActive = false;
+        function toggleRegressionDemo() {
+            isRegressionActive = !isRegressionActive;
+            const container = document.getElementById('regression-demo-box');
+            const statusLabel = document.getElementById('regression-status');
+
+            if (isRegressionActive) {
+                statusLabel.innerText = "Chặn đang bật";
+                statusLabel.className = "text-[10px] font-mono text-emerald-500 font-bold";
+                
+                const originalText = "Phương pháp chặn đọc lùi giúp tăng cường tốc độ mắt và hiệu suất ghi nhớ tốt gấp ba lần thông thường.";
+                const arr = originalText.split(' ');
+                container.innerHTML = '';
+                
+                arr.forEach((word, idx) => {
+                    const span = document.createElement('span');
+                    span.innerText = word + ' ';
+                    span.className = 'inline-block transition-all duration-300 mr-1';
+                    span.setAttribute('id', `rg-word-${idx}`);
+                    container.appendChild(span);
+                });
+
+                let activeWordIdx = 0;
+                clearInterval(speechTimer);
+                speechTimer = setInterval(() => {
+                    if (activeWordIdx >= arr.length) {
+                        clearInterval(speechTimer);
+                        return;
+                    }
+                    const currentEl = document.getElementById(`rg-word-${activeWordIdx}`);
+                    if (currentEl) currentEl.className = 'inline-block text-brand-600 font-bold text-base mr-1';
+                    
+                    if (activeWordIdx > 0) {
+                        const prevEl = document.getElementById(`rg-word-${activeWordIdx - 1}`);
+                        if (prevEl) prevEl.className = 'inline-block text-slate-300 dark:text-slate-800 blur-[2px] pointer-events-none scale-95 mr-1';
+                    }
+                    activeWordIdx++;
+                }, 350);
+
+            } else {
+                statusLabel.innerText = "Chặn đang tắt";
+                statusLabel.className = "text-[10px] font-mono text-brand-500";
+                clearInterval(speechTimer);
+                container.innerHTML = "Nhấp thử nghiệm dưới đây để kích hoạt ngăn chặn đọc lùi. Phần chữ bạn đã đọc qua sẽ tự động mờ đi hoàn toàn, giúp tập trung tiến về phía trước.";
+            }
+        }
+
+        let spotlightWidth = 75; 
+        function moveSpotlight(e) {
+            const container = document.getElementById('spotlight-container');
+            const mask = document.getElementById('spotlight-mask');
+            const rect = container.getBoundingClientRect();
+            
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            mask.style.background = `radial-gradient(circle ${spotlightWidth}px at ${x}px ${y}px, transparent 100%, rgba(15, 23, 42, 0.98) 100%)`;
+            mask.style.mixBlendMode = 'normal';
+        }
+
+        function resetSpotlight() {
+            const mask = document.getElementById('spotlight-mask');
+            mask.style.background = '#020617';
+            mask.style.mixBlendMode = 'normal';
+        }
+
+        function setSpotlightSize(mode) {
+            spotlightWidth = mode === 'narrow' ? 40 : 120;
+        }
+
+
+        // ================= STREAMING_CHUNK: Module 3 Classroom Tracker JS Logic =================
+        // ================= MODULE 3: ĐO TỐC ĐỘ ĐỌC CẢ LỚP (WPM & ERR TRACKER) =================
+        let testStartTime = 0;
+        let testTimerInterval = null;
+        let testState = 'idle'; 
+        let testAnswerCorrect = false;
+        let testFinalWPM = 0;
+
+        function toggleTestState() {
+            const actBtn = document.getElementById('btn-test-action');
+            if (testState === 'idle') {
+                testState = 'reading';
+                testStartTime = performance.now();
+                actBtn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i><span>Xong! Bấm để làm quiz</span>`;
+                lucide.createIcons();
+                
+                testTimerInterval = setInterval(() => {
+                    const elapsed = (performance.now() - testStartTime) / 1000;
+                    const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                    const secs = Math.floor(elapsed % 60).toString().padStart(2, '0');
+                    const ms = Math.floor((elapsed % 1) * 100).toString().padStart(2, '0');
+                    document.getElementById('test-timer-lbl').innerText = `${mins}:${secs}:${ms}`;
+                }, 10);
+            } else if (testState === 'reading') {
+                clearInterval(testTimerInterval);
+                const totalSeconds = (performance.now() - testStartTime) / 1000;
+                
+                const wordCount = document.getElementById('test-text-content').innerText.trim().split(/\s+/).length;
+                testFinalWPM = Math.round((wordCount / totalSeconds) * 60);
+
+                testState = 'quiz';
+                document.getElementById('test-read-screen').classList.add('hidden');
+                document.getElementById('test-quiz-screen').classList.remove('hidden');
+                actBtn.innerHTML = `<i data-lucide="award" class="w-4 h-4"></i><span>Xem kết quả</span>`;
+                lucide.createIcons();
+            } else if (testState === 'quiz') {
+                testState = 'done';
+                const comprehensionRate = testAnswerCorrect ? 100 : 0;
+                const err = Math.round(testFinalWPM * (comprehensionRate / 100));
+
+                const name = document.getElementById('student-name').value || "Học sinh ẩn danh";
+                addToLeaderboard(name, testFinalWPM, comprehensionRate, err);
+
+                // Dùng Custom Notification thay thế cho hàm alert() mặc định
+                showNotification(
+                    'Kết Quả Đọc Hiểu', 
+                    `Học sinh: ${name} | Tốc độ: ${testFinalWPM} WPM | Độ hiểu bài: ${comprehensionRate}% | Chỉ số ERR: ${err} WPM`, 
+                    'success'
+                );
+                
+                resetReadingTest();
+            }
+        }
+
+        function selectAnswer(qNum, isCorrect) {
+            testAnswerCorrect = isCorrect;
+            document.querySelectorAll('.quiz-option').forEach(btn => {
+                btn.classList.remove('border-brand-500', 'bg-brand-50', 'text-brand-600', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+            });
+            event.target.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700', 'font-semibold');
+        }
+
+        function resetReadingTest() {
+            testState = 'idle';
+            clearInterval(testTimerInterval);
+            document.getElementById('test-timer-lbl').innerText = "00:00:00";
+            document.getElementById('test-read-screen').classList.remove('hidden');
+            document.getElementById('test-quiz-screen').classList.add('hidden');
+            document.getElementById('btn-test-action').innerHTML = `<i data-lucide="play" class="w-4 h-4"></i><span>Bắt đầu đọc</span>`;
+            lucide.createIcons();
+            testAnswerCorrect = false;
+        }
+
+        function addToLeaderboard(name, wpm, comp, err) {
+            const leaderboardEmpty = document.getElementById('leaderboard-empty');
+            if (leaderboardEmpty) leaderboardEmpty.remove();
+
+            const tbody = document.getElementById('leaderboard-body');
+            const rowCount = tbody.children.length;
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors duration-150';
+            tr.innerHTML = `
+                <td class="py-2.5 font-bold font-mono text-slate-500">${rowCount + 1}</td>
+                <td class="py-2.5 font-semibold text-slate-700 dark:text-slate-300 text-ellipsis overflow-hidden max-w-[120px]">${name}</td>
+                <td class="py-2.5 text-right font-mono">${wpm} WPM / ${comp}%</td>
+                <td class="py-2.5 text-right font-bold text-brand-600 dark:text-brand-400 font-mono">${err} ERR</td>
+            `;
+
+            tbody.appendChild(tr);
+            sortTable();
+
+            document.getElementById('leaderboard-count').innerText = `${tbody.children.length} kết quả`;
+        }
+
+        function sortTable() {
+            const tbody = document.getElementById('leaderboard-body');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                const errA = parseInt(a.cells[3].innerText);
+                const errB = parseInt(b.cells[3].innerText);
+                return errB - errA;
+            });
+
+            rows.forEach((row, index) => {
+                row.cells[0].innerText = index + 1;
+                tbody.appendChild(row);
+            });
+        }
+
+
+        // ================= STREAMING_CHUNK: Module 4 Eye Gymnastics JS Logic =================
+        // ================= MODULE 4: EYE GYMNASTICS TRAINING (TRẠM TẬP LUYỆN MẮT) =================
+        let activeGymSubMode = 'schulte';
+
+        function switchGymSubMode(modeId) {
+            activeGymSubMode = modeId;
+            document.querySelectorAll('[id^="gym-screen-"]').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="cfg-"]').forEach(el => el.classList.add('hidden'));
+            
+            document.getElementById(`gym-screen-${modeId}`).classList.remove('hidden');
+            document.getElementById(`cfg-${modeId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.gym-nav-btn').forEach(btn => {
+                if (btn.getAttribute('data-gym') === modeId) {
+                    btn.classList.add('active-gym', 'bg-slate-100', 'dark:bg-slate-800', 'text-brand-600');
+                    btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+                } else {
+                    btn.classList.remove('active-gym', 'bg-slate-100', 'dark:bg-slate-800', 'text-brand-600');
+                    btn.classList.add('text-slate-600', 'dark:text-slate-400');
+                }
+            });
+
+            if (modeId === 'schulte') {
+                initSchulteTable();
+                stopSaccadeAnimation();
+            } else if (modeId === 'saccade') {
+                initSaccadeCanvas();
+            } else if (modeId === 'expand') {
+                stopSaccadeAnimation();
+                initExpandVision();
+            }
+        }
+
+        // 1. Schulte Table Generator
+        let schulteCurrentTarget = 1;
+        let schulteTimer = null;
+        let schulteStartMs = 0;
+
+        function initSchulteTable() {
+            const board = document.getElementById('schulte-board');
+            const size = parseInt(document.getElementById('schulte-size').value);
+            const totalCells = size * size;
+            
+            schulteCurrentTarget = 1;
+            clearInterval(schulteTimer);
+            document.getElementById('schulte-timer-lbl').innerText = "00.0s";
+            document.getElementById('schulte-step-lbl').innerText = "Mục tiêu: Bấm số 1";
+
+            board.style.gridTemplateColumns = `repeat(${size}, minmax(0, 1fr))`;
+            board.innerHTML = '';
+
+            let nums = Array.from({ length: totalCells }, (_, i) => i + 1);
+            
+            for (let i = nums.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [nums[i], nums[j]] = [nums[j], nums[i]];
+            }
+
+            nums.forEach(num => {
+                const cell = document.createElement('button');
+                cell.innerText = num;
+                cell.className = 'aspect-square flex items-center justify-center font-bold text-lg sm:text-xl rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-brand-50 dark:hover:bg-brand-950/20 active:scale-95 transition-all focus:outline-none';
+                cell.onclick = () => onSchulteCellClick(num, cell);
+                board.appendChild(cell);
+            });
+        }
+
+        function onSchulteCellClick(num, element) {
+            if (num === schulteCurrentTarget) {
+                if (schulteCurrentTarget === 1) {
+                    schulteStartMs = performance.now();
+                    schulteTimer = setInterval(() => {
+                        const elapsed = (performance.now() - schulteStartMs) / 1000;
+                        document.getElementById('schulte-timer-lbl').innerText = `${elapsed.toFixed(1)}s`;
+                    }, 100);
+                }
+
+                element.classList.add('bg-emerald-500', 'text-white', 'pointer-events-none');
+                
+                const size = parseInt(document.getElementById('schulte-size').value);
+                const maxVal = size * size;
+
+                if (schulteCurrentTarget === maxVal) {
+                    clearInterval(schulteTimer);
+                    const finalTime = ((performance.now() - schulteStartMs) / 1000).toFixed(2);
+                    document.getElementById('schulte-step-lbl').innerText = `Hoàn thành xuất sắc!`;
+                    
+                    showNotification('Chúc mừng!', `Bạn đã hoàn thành bảng Schulte trong ${finalTime} giây.`, 'success');
+                } else {
+                    schulteCurrentTarget++;
+                    document.getElementById('schulte-step-lbl').innerText = `Mục tiêu: Bấm số ${schulteCurrentTarget}`;
+                }
+            } else {
+                element.classList.add('bg-red-500', 'text-white');
+                setTimeout(() => {
+                    element.classList.remove('bg-red-500', 'text-white');
+                }, 150);
+            }
+        }
+
+
+        // 2. Saccade Canvas Dots Animation
+        let saccadeCanvas = null;
+        let saccadeCtx = null;
+        let saccadeAnimationId = null;
+        let saccadeIsRunning = false;
+        let saccadeTargetLeft = true;
+        let saccadeLastTick = 0;
+        let saccadeInterval = 500; 
+        let saccadeWidthPct = 0.70; 
+
+        function initSaccadeCanvas() {
+            saccadeCanvas = document.getElementById('saccade-canvas');
+            saccadeCtx = saccadeCanvas.getContext('2d');
+            resizeSaccadeCanvas();
+            window.addEventListener('resize', resizeSaccadeCanvas);
+            drawSaccadeFrame();
+        }
+
+        function resizeSaccadeCanvas() {
+            if (!saccadeCanvas) return;
+            const container = saccadeCanvas.parentElement;
+            saccadeCanvas.width = container.clientWidth;
+            saccadeCanvas.height = 240;
+            drawSaccadeFrame();
+        }
+
+        function toggleSaccadeAnimation() {
+            const btn = document.getElementById('btn-saccade-toggle');
+            if (saccadeIsRunning) {
+                stopSaccadeAnimation();
+                btn.innerText = "Bắt đầu nhảy";
+                btn.className = "mt-4 px-4 py-2 bg-brand-600 text-white rounded-lg text-xs font-semibold hover:bg-brand-700 transition";
+            } else {
+                saccadeIsRunning = true;
+                saccadeLastTick = performance.now();
+                btn.innerText = "Dừng nhảy";
+                btn.className = "mt-4 px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700 transition";
+                saccadeLoop();
+            }
+        }
+
+        function stopSaccadeAnimation() {
+            saccadeIsRunning = false;
+            if (saccadeAnimationId) {
+                cancelAnimationFrame(saccadeAnimationId);
+            }
+        }
+
+        function changeSaccadeSpeed(val) {
+            saccadeInterval = parseInt(val);
+            document.getElementById('lbl-saccade-speed').innerText = `${val}ms`;
+        }
+
+        function changeSaccadeWidth(val) {
+            saccadeWidthPct = parseInt(val) / 100;
+            document.getElementById('lbl-saccade-width').innerText = `${val}%`;
+            drawSaccadeFrame();
+        }
+
+        function saccadeLoop() {
+            if (!saccadeIsRunning) return;
+            const now = performance.now();
+            if (now - saccadeLastTick >= saccadeInterval) {
+                saccadeTargetLeft = !saccadeTargetLeft;
+                saccadeLastTick = now;
+                drawSaccadeFrame();
+            }
+            saccadeAnimationId = requestAnimationFrame(saccadeLoop);
+        }
+
+        function drawSaccadeFrame() {
+            if (!saccadeCtx) return;
+            const w = saccadeCanvas.width;
+            const h = saccadeCanvas.height;
+
+            saccadeCtx.clearRect(0, 0, w, h);
+
+            saccadeCtx.strokeStyle = isDarkMode ? '#1e293b' : '#e2e8f0';
+            saccadeCtx.lineWidth = 1;
+            saccadeCtx.beginPath();
+            saccadeCtx.moveTo(w / 2, h / 2 - 15);
+            saccadeCtx.lineTo(w / 2, h / 2 + 15);
+            saccadeCtx.moveTo(w / 2 - 15, h / 2);
+            saccadeCtx.lineTo(w / 2 + 15, h / 2);
+            saccadeCtx.stroke();
+
+            const boundaryX = (w * (1 - saccadeWidthPct)) / 2;
+            const leftTargetX = boundaryX;
+            const rightTargetX = w - boundaryX;
+            const targetY = h / 2;
+
+            saccadeCtx.fillStyle = isDarkMode ? '#334155' : '#cbd5e1';
+            saccadeCtx.beginPath();
+            saccadeCtx.arc(leftTargetX, targetY, 8, 0, Math.PI * 2);
+            saccadeCtx.arc(rightTargetX, targetY, 8, 0, Math.PI * 2);
+            saccadeCtx.fill();
+
+            const activeX = saccadeTargetLeft ? leftTargetX : rightTargetX;
+            saccadeCtx.fillStyle = '#ea580c'; // Đổi màu điểm nhảy sang màu cam thương hiệu
+            saccadeCtx.beginPath();
+            saccadeCtx.arc(activeX, targetY, 12, 0, Math.PI * 2);
+            saccadeCtx.fill();
+            
+            saccadeCtx.strokeStyle = 'rgba(234, 88, 12, 0.4)';
+            saccadeCtx.lineWidth = 4;
+            saccadeCtx.beginPath();
+            saccadeCtx.arc(activeX, targetY, 17, 0, Math.PI * 2);
+            saccadeCtx.stroke();
+        }
+
+
+        // ================= STREAMING_CHUNK: Module 4 Expand Peripheral Vision Logic =================
+        // 3. Expand Vision Test
+        let expandScore = 0;
+        let expandAttempts = 0;
+        let expandActiveChar = '';
+
+        function initExpandVision() {
+            expandScore = 0;
+            expandAttempts = 0;
+            document.getElementById('expand-score-lbl').innerText = "Chưa kích hoạt. Hãy nhấn Bắt đầu để kiểm tra.";
+            document.getElementById('expand-target').classList.add('hidden');
+            const overlay = document.getElementById('expand-choices-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        function startExpandGame() {
+            expandScore = 0;
+            expandAttempts = 0;
+            nextExpandRound();
+        }
+
+        function nextExpandRound() {
+            const target = document.getElementById('expand-target');
+            const box = document.getElementById('expand-box');
+            
+            target.classList.add('hidden');
+            const overlay = document.getElementById('expand-choices-overlay');
+            if (overlay) overlay.remove();
+            
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            expandActiveChar = chars.charAt(Math.floor(Math.random() * chars.length));
+            target.innerText = expandActiveChar;
+
+            const margin = 20;
+            const w = box.clientWidth;
+            const h = box.clientHeight;
+            
+            const side = Math.floor(Math.random() * 4);
+            let x = 0, y = 0;
+
+            if (side === 0) { 
+                x = Math.random() * (w - 40) + 20;
+                y = margin;
+            } else if (side === 1) { 
+                x = w - margin - 40;
+                y = Math.random() * (h - 40) + 20;
+            } else if (side === 2) { 
+                x = Math.random() * (w - 40) + 20;
+                y = h - margin - 40;
+            } else { 
+                x = margin;
+                y = Math.random() * (h - 40) + 20;
+            }
+
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+
+            setTimeout(() => {
+                target.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    target.classList.add('hidden');
+                    promptUserForCharacterInteractive();
+                }, 300);
+            }, Math.random() * 1500 + 500); 
+        }
+
+        // Custom overlay trắc nghiệm tương tác cao - loại bỏ hoàn toàn các hàm prompt() gây chậm trễ
+        function promptUserForCharacterInteractive() {
+            const box = document.getElementById('expand-box');
+            
+            document.getElementById('expand-center-dot').classList.add('hidden');
+            
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let choices = [expandActiveChar];
+            while (choices.length < 4) {
+                const randChar = chars.charAt(Math.floor(Math.random() * chars.length));
+                if (!choices.includes(randChar)) {
+                    choices.push(randChar);
+                }
+            }
+            choices.sort(() => Math.random() - 0.5);
+            
+            const overlay = document.createElement('div');
+            overlay.id = 'expand-choices-overlay';
+            overlay.className = 'absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center space-y-4 z-20 transition-all p-4 rounded-xl';
+            overlay.innerHTML = `
+                <p class="text-white text-sm font-semibold tracking-wide text-center">Bạn vừa nhìn thấy ký tự nào xuất hiện?</p>
+                <div class="grid grid-cols-2 gap-3 w-full max-w-[240px]">
+                    ${choices.map(c => `
+                        <button onclick="submitExpandAnswer('${c}')" class="py-3 px-4 bg-slate-800 hover:bg-brand-600 active:scale-95 text-white font-extrabold rounded-xl border border-slate-700 transition text-lg">
+                            ${c}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            box.appendChild(overlay);
+        }
+
+        function submitExpandAnswer(selectedChar) {
+            const overlay = document.getElementById('expand-choices-overlay');
+            if (overlay) overlay.remove();
+            
+            document.getElementById('expand-center-dot').classList.remove('hidden');
+            
+            expandAttempts++;
+            if (selectedChar === expandActiveChar) {
+                expandScore++;
+                showNotification('Tuyệt vời!', `Góc ngoại vi thu nhận chính xác: Ký tự ${expandActiveChar}`, 'success');
+            } else {
+                showNotification('Chưa chính xác', `Ký tự chính xác lúc đó là: ${expandActiveChar}`, 'error');
+            }
+
+            const accuracy = Math.round((expandScore / expandAttempts) * 100);
+            document.getElementById('expand-score-lbl').innerText = `Điểm số: ${expandScore}/${expandAttempts} | Tỷ lệ trúng: ${accuracy}%`;
+
+            if (expandAttempts < 5) {
+                setTimeout(nextExpandRound, 1200);
+            } else {
+                showNotification('Kết thúc bài tập', `Bạn đạt số điểm: ${expandScore}/5 (${accuracy}%)`, 'success');
+                initExpandVision();
+            }
+        }
+
+
+        // ================= WINDOW ONLOAD INITS =================
+        window.onload = function() {
+            lucide.createIcons();
+            prepareRSVPWords();
+        };
+
+    </script>
+</body>
+</html>

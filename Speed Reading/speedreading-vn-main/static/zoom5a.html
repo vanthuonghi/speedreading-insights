@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Thông Minh - Siêu Cấp Đọc Nhanh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        game: {
+                            white: '#ffffff',
+                            bg: '#fff5f5',
+                            red: '#e11d48',
+                            darkRed: '#9f1239',
+                            yellow: '#facc15',
+                            dark: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fff5f5;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        
+        /* Phong cách nút và bảng kiểu Trò chơi (Retro Arcade 2D) */
+        .game-card {
+            background: #ffffff;
+            border: 4px solid #e11d48;
+            box-shadow: 6px 6px 0px #9f1239;
+            border-radius: 20px;
+        }
+
+        .game-btn-red {
+            background: #e11d48;
+            border: 3px solid #1e293b;
+            box-shadow: 0px 6px 0px #9f1239;
+            transform: translateY(-2px);
+            transition: all 0.1s ease;
+        }
+        .game-btn-red:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px #9f1239;
+        }
+
+        .game-btn-yellow {
+            background: #facc15;
+            border: 3px solid #1e293b;
+            box-shadow: 0px 6px 0px #ca8a04;
+            transform: translateY(-2px);
+            transition: all 0.1s ease;
+        }
+        .game-btn-yellow:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px #ca8a04;
+        }
+
+        .reader-display {
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #ffffff;
+            border: 4px dashed #e11d48;
+        }
+
+        .focus-guide {
+            position: absolute;
+            height: 100%;
+            width: 3px;
+            background-color: rgba(225, 29, 72, 0.15);
+            top: 0;
+            z-index: 1;
+        }
+        
+        .word-chunk {
+            position: relative;
+            z-index: 10;
+            font-weight: 900;
+            letter-spacing: -0.01em;
+        }
+
+        .highlight-scroll-container {
+            scroll-behavior: smooth;
+        }
+
+        #rpm-bar {
+            transition: width 0.3s ease-out, background-color 0.3s ease;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            border-radius: 8px;
+            background: #e11d48;
+            border: 3px solid #1e293b;
+            cursor: pointer;
+            margin-top: -10px; 
+            box-shadow: 0px 3px 0px #9f1239;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 12px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border: 3px solid #1e293b;
+            border-radius: 6px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Floating Background Music Control (Game Style) -->
+    <div class="fixed bottom-4 right-4 z-[100] flex items-center gap-2">
+        <button id="bgm-toggle" onclick="toggleBackgroundMusic()" class="game-btn-yellow text-gray-950 font-black rounded-xl px-5 py-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+            <i class="fa-solid fa-gamepad text-lg animate-bounce"></i>
+            <span id="bgm-text">Nhạc trò chơi: TẮT</span>
+        </button>
+    </div>
+
+    <!-- Background Confetti Canvas -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-[90] hidden"></canvas>
+
+    <!-- Header phong cách đấu trường đỏ trắng -->
+    <header class="bg-gradient-to-r from-red-600 to-rose-500 border-b-8 border-gray-900 py-5 px-6 flex justify-center items-center shadow-xl shrink-0 relative">
+        <div class="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:40px_40px]"></div>
+        <div class="flex items-center gap-4 relative z-10">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading" class="h-12 w-auto rounded-xl border-4 border-white bg-white p-1 shadow-md">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow-[0_4px_0_#9f1239]">
+                🎯 ĐẤU TRƯỜNG THÔNG MINH 🎯
+            </h1>
+        </div>
+    </header>
+
+    <main class="flex-grow relative flex flex-col items-center justify-start p-4 md:p-6 overflow-y-auto w-full">
+        
+        <section class="w-full max-w-5xl mx-auto flex flex-col py-2">
+            
+            <!-- Setup & Selection (Game UI) -->
+            <div class="game-card p-5 mb-6 flex flex-col md:flex-row gap-6 items-center justify-between z-20">
+                <div class="flex-grow w-full md:w-auto">
+                    <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">⚡ BƯỚC 1: CHỌN THỬ THÁCH ĐỌC SÂU</label>
+                    <select id="text-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold focus:ring-4 focus:ring-rose-300 outline-none cursor-pointer" onchange="loadSelectedText()">
+                        <option value="0">Bài 1: Sách Là Giải Pháp Định Hình</option>
+                        <option value="1">Bài 2: Đúng Công Thức Sửa Lỗi Sai</option>
+                        <option value="2">Bài 3: Nhóm Đối Tượng Mục Tiêu</option>
+                        <option value="3">Bài 4: Khám Phá Góc Nhìn Tác Giả</option>
+                        <option value="4">Bài 5: Tinh Hoa Từ Bậc Thầy</option>
+                        <option value="5">Bài 6: Bộ Tiêu Chí Chọn Sách</option>
+                        <option value="6">Bài 7: Kỹ Thuật Skimming Siêu Tốc</option>
+                        <option value="7">Bài 8: Giải Quyết Nhu Cầu Hiện Tại</option>
+                        <option value="8">Bài 9: Kiến Tạo Năng Lực Tự Học</option>
+                        <option value="9">Bài 10: Đọc Sách Để Tự Chủ</option>
+                    </select>
+                </div>
+                
+                <div class="w-full md:w-auto flex gap-4">
+                    <div class="flex-1 min-w-[180px]">
+                        <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">🛡️ CHẾ ĐỘ CHƠI</label>
+                        <select id="mode-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold outline-none cursor-pointer" onchange="loadSelectedText()">
+                            <option value="rsvp" selected>Chớp Chữ Trung Tâm (RSVP)</option>
+                            <option value="highlight">Quét Sáng Cụm Từ (Highlight)</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[130px]">
+                        <label class="block text-sm font-black text-rose-700 uppercase tracking-wide mb-2">⭐ SỐ TỪ/NHỊP</label>
+                        <select id="chunk-selector" class="w-full bg-white border-3 border-gray-900 rounded-xl p-3 text-gray-900 font-bold outline-none cursor-pointer" onchange="loadSelectedText()">
+                            <option value="1">1 Từ</option>
+                            <option value="2" selected>2 Từ</option>
+                            <option value="3">3 Từ</option>
+                            <option value="4">4 Từ</option>
+                            <option value="5">5 Từ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard / RPM Meter (Game Style) -->
+            <div class="game-card p-6 mb-6 flex-grow flex flex-col relative overflow-hidden">
+                <div class="flex justify-between items-end mb-3 relative z-10">
+                    <div class="uppercase tracking-wider text-base font-black text-rose-600 flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-high animate-pulse"></i> TỐC ĐỘ CHIẾN ĐẤU (RPM)
+                    </div>
+                    <div class="text-5xl font-black tabular-nums text-gray-900 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.1)]" id="wpm-display">250 <span class="text-lg text-gray-500 font-bold">WPM</span></div>
+                </div>
+                
+                <!-- RPM Bar -->
+                <div class="w-full bg-gray-100 h-7 rounded-xl border-4 border-gray-900 mb-6 relative z-10 overflow-hidden shadow-inner">
+                    <div id="rpm-bar" class="h-full bg-rose-500 rounded-l-lg w-[20%] border-r-4 border-gray-900 transition-all duration-300"></div>
+                </div>
+
+                <!-- MAIN READER DISPLAY SCREEN -->
+                <div class="flex-grow reader-display rounded-2xl shadow-inner overflow-hidden relative z-10 p-4">
+                    <div class="focus-guide left-1/3" id="guide-left"></div>
+                    <div class="focus-guide right-1/3" id="guide-right"></div>
+                    
+                    <div id="reader-word" class="word-chunk text-5xl md:text-6xl text-center px-4 w-full break-words text-rose-600 font-black drop-shadow-[2px_2px_0px_rgba(0,0,0,0.05)] highlight-scroll-container">
+                        BẤM KHỞI ĐỘNG!
+                    </div>
+
+                    <!-- Progress Bar for Reading -->
+                    <div class="absolute bottom-0 left-0 h-3 bg-gray-200 w-full border-t-2 border-gray-900">
+                        <div id="reading-progress" class="h-full bg-gradient-to-r from-rose-500 to-yellow-400 w-0 transition-all duration-100 border-r-2 border-gray-900"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls (Game Style Buttons) -->
+            <div class="game-card p-6 flex flex-col md:flex-row items-center gap-8 z-20">
+                <div class="flex gap-4 shrink-0 justify-center w-full md:w-auto">
+                    <button id="btn-play" onclick="togglePlay()" class="w-24 h-24 rounded-2xl game-btn-red text-white flex flex-col items-center justify-center gap-1 shadow-lg transition-all border-4 border-gray-900">
+                        <i class="fa-solid fa-play text-3xl" id="icon-play"></i>
+                        <span class="text-xs font-black uppercase" id="text-play">CHƠI</span>
+                    </button>
+                    <button onclick="resetReader()" class="w-16 h-16 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-900 border-4 border-gray-900 flex items-center justify-center text-xl transition-all shadow-[0_4px_0_#1e293b] active:translate-y-1 active:shadow-none my-auto">
+                        <i class="fa-solid fa-rotate-right font-bold"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-grow w-full flex flex-col gap-3">
+                    <div class="flex justify-between text-sm font-black text-gray-700 px-1">
+                        <span class="flex items-center gap-1">🐢 Tập sự (250)</span>
+                        <span class="text-rose-600 flex items-center gap-1">⚡ Cao thủ (650) 🔥</span>
+                    </div>
+                    <input type="range" id="wpm-slider" min="250" max="650" step="100" value="250" oninput="updateWPM(this.value)" class="w-full mb-2">
+                    
+                    <div class="flex justify-between gap-3">
+                        <button onclick="document.getElementById('wpm-slider').value=250; updateWPM(250)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.1 (250)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=350; updateWPM(350)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.2 (350)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=450; updateWPM(450)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.3 (450)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=550; updateWPM(550)" class="flex-1 bg-white hover:bg-rose-50 py-2.5 rounded-xl text-sm font-black transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none text-gray-800">Lv.4 (550)</button>
+                        <button onclick="document.getElementById('wpm-slider').value=650; updateWPM(650)" class="flex-1 bg-rose-100 hover:bg-rose-200 py-2.5 rounded-xl text-sm font-black text-rose-700 transition border-3 border-gray-900 shadow-[0_3px_0_#1e293b] active:translate-y-1 active:shadow-none">MAX (650)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ MODAL (Game-style Pop-up) -->
+        <div id="question-modal" class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300 overflow-y-auto py-10">
+            <div class="bg-white border-4 border-gray-900 rounded-3xl p-6 md:p-8 max-w-3xl w-full mx-4 shadow-[8px_8px_0px_#1e293b] transform scale-95 transition-transform duration-300 relative my-auto" id="modal-content-box"></div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- NỘI DUNG 10 BÀI ĐỌC SÂU SẮC ---
+        const texts = [
+            "Giải nghĩa: Sách không phải là vật trang trí hay công cụ để khoe khoang học thức. Thực chất, mỗi cuốn sách được tác giả sinh ra để giải quyết một nỗi đau, một bài toán cụ thể cho người đọc. Ví dụ: Nếu bạn đang cháy túi và không biết quản lý chi tiện, hãy tìm sách về tài chính cá nhân thay vì đọc tiểu thuyết tình cảm. Đừng mua sách chỉ vì cái bìa đẹp. Thông điệp: Đọc đúng sách giống như gãi đúng chỗ ngứa. Tri thức chỉ phát huy sức mạnh khi nó giải quyết được vấn đề thực tế của bạn.",
+            
+            "Giải nghĩa: Không ai sinh ra đã hoàn hảo và mọi thành công đều có dấu vết. Sách cung cấp những công thức đã được đúc kết từ hàng vạn lần thử sai xương máu của người đi trước. Ví dụ: Thay vì bạn phải tự mình mất 5 năm để khởi nghiệp thất bại và nợ nần, bạn hoàn toàn có thể học được mô hình kinh doanh tinh gọn chỉ qua vài trang sách. Thông điệp: Đừng lấy thời gian và tiền bạc của mình ra làm phép thử. Hãy mượn trí tuệ của người khác để đi nhanh và an toàn hơn.",
+            
+            "Giải nghĩa: Một đôi giày tuyệt đẹp không thể vừa với mọi kích cỡ chân. Sách cũng vậy, không có cuốn sách nào dành cho tất cả mọi người. Tác giả luôn nhắm đến một nhóm độc giả với trình độ và nhu cầu nhất định. Ví dụ: Sách phân tích vật lý lượng tử chuyên sâu sẽ là cực hình đối với một học sinh tiểu học, nhưng lại là kho báu với nhà nghiên cứu. Thông điệp: Trước khi lật trang đầu tiên, hãy định vị bản thân. Chọn sách sai đối tượng chỉ khiến bạn sinh ra tự ti và chán ghét việc đọc.",
+            
+            "Giải nghĩa: Đọc sách thực chất là một cuộc đối thoại ngầm xuyên không gian và thời gian. Sách chính là tấm gương phản chiếu sắc nét nhất tư duy và bối cảnh sống của tác giả. Ví dụ: Khi bạn đọc sách đầu tư của Warren Buffett, bạn phải hiểu rõ bối cảnh thị trường chứng khoán vào thời đại ông sống, trải nghiệm tuổi thơ của ông để thấu hiểu vì sao ông luôn ưu tiên giá trị dài hạn. Thông điệp: Đừng chỉ đọc chữ bề mặt. Hãy kết nối với cuộc đời tác giả để mở khóa những tầng tri thức ẩn sâu nhất.",
+            
+            "Giải nghĩa: Những bậc thầy tinh anh nhất thế giới đã gói ghém cả cuộc đời, tâm huyết và mồ hôi nước mắt của họ vào trong vài trăm trang giấy. Trải nghiệm của họ chính là tài sản vô giá mà bạn có thể mua được với giá rất rẻ. Ví dụ: Đọc hồi ký của những nhà lãnh đạo kiệt xuất giúp bạn có cơ hội nhìn nhận thế giới qua lăng kính của giới tinh hoa, học cách họ đối mặt với khủng hoảng. Thông điệp: Đứng trên vai những người khổng lồ là cách nhanh nhất để bạn vươn tới đỉnh cao.",
+            
+            "Giải nghĩa: Mua sách theo cảm tính hoặc chạy theo xu hướng đám đông là cách nhanh nhất để đốt tiền và lãng phí thời gian. Hãy thiết lập một bộ lọc khắt khe dựa trên mục tiêu thực tế của bạn. Ví dụ: Nếu kỹ năng giao tiếp của bạn đang cực kỳ yếu và ảnh hưởng trực tiếp đến thu nhập, hãy bỏ qua mọi cuốn tiểu thuyết giả tưởng dù nó đang bán chạy Top 1. Thông điệp: Hãy tiêu dùng tri thức một cách tỉnh táo. Mua thứ bạn cần dùng, đừng mua thứ người khác bảo hay.",
+            
+            "Giải nghĩa: Thời gian của bạn là vàng bạc. Hãy sử dụng kỹ thuật Skimming lướt nhanh trong 10 phút đầu để đánh giá tổng quan xem cuốn sách có thực sự xứng đáng để bạn dành hàng giờ đọc sâu hay không. Ví dụ: Cầm sách lên, quét nhanh mục lục, đọc lời tựa và tìm kiếm các từ khóa quan trọng. Lọc ra đúng chương giải quyết vấn đề của bạn và mạnh dạn bỏ qua những phần râu ria dài dòng. Thông điệp: Đọc thông minh là biết chọn lọc thông tin, tuyệt đối không đọc mù quáng từ đầu đến cuối.",
+            
+            "Giải nghĩa: Cuốn sách hay nhất trên thế giới chính là cuốn sách mà bạn đang cần nhất ngay lúc này. Đừng có tư duy tích trữ tri thức để dành cho tương lai. Ví dụ: Nếu bạn đang bị đau dạ dày dữ dội, bạn phải tìm sách hướng dẫn chữa bệnh ngay lập tức, chứ đừng ngồi học cách thiết kế nội thất nhà cửa lúc này. Ưu tiên giải quyết ngọn lửa đang cháy trước. Thông điệp: Đọc để dùng ngay lập tức. Tri thức cất trong tủ kính chỉ là những tờ giấy lộn vô giá trị.",
+            
+            "Giải nghĩa: Bất kỳ trường học nào cũng có ngày tốt nghiệp, nhưng hành trình tự học là chuyện của cả một đời người. Sách chính là người thầy vĩ đại, tận tụy và không bao giờ vắng mặt. Ví dụ: Dù bạn xuất phát điểm thấp đến đâu, bạn hoàn toàn có thể tự học bất cứ kỹ năng mới nào, từ lập trình AI, bán hàng cho đến nấu ăn, chỉ cần bạn biết cách khai thác tri thức từ sách. Thông điệp: Tự học là siêu năng lực mạnh mẽ nhất. Người biết tự học sẽ không bao giờ sợ bị thời đại bỏ lại phía sau.",
+            
+            "Giải nghĩa: Có một sự thật phũ phàng: Đọc một vạn cuốn sách không bằng một lần bạn thực sự xắn tay áo lên hành động. Biến chữ nghĩa thành kết quả thực tiễn mới là cách để bạn làm chủ cuộc đời. Ví dụ: Khi bạn vừa đọc xong một cuốn sách về quản lý thời gian, việc đầu tiên cần làm là lập ngay một lịch trình làm việc tối ưu cho ngày mai, chứ không phải gấp sách lại và tiếp tục lướt điện thoại. Thông điệp: Tri thức chỉ thực sự có sức mạnh khi nó được ứng dụng. Đọc xong phải làm!"
+        ];
+
+        // --- HỆ THỐNG CÂU HỎI TRẮC NGHIỆM ĐỒNG BỘ ---
+        const questionsData = [
+            {
+                icon: "fa-bullseye", iconColor: "text-rose-600", title: "Bản Chất Giải Pháp",
+                question: "Dựa vào thông điệp bài học, cách tốt nhất để chọn sách là gì?",
+                options: ["Chọn sách có bìa đẹp để trang trí tủ sách.", "Chọn đúng sách giải quyết vấn đề thực tế giống như gãi đúng chỗ ngứa.", "Chọn tiểu thuyết tình cảm để giải trí khi hết tiền."], correctOption: 1,
+                actionTitle: "Tư duy đúng", actionColor: "text-rose-600", actionBorder: "border-rose-500", actionBg: "bg-rose-50",
+                actionText: "Tri thức chỉ phát huy sức mạnh khi xử lý được nỗi đau hiện tại của bạn. Luôn chọn sách vì tính ứng dụng."
+            },
+            {
+                icon: "fa-wrench", iconColor: "text-amber-500", title: "Mượn Trí Tuệ",
+                question: "Tại sao không nên tự mình thử sai mà nên học từ sách?",
+                options: ["Vì đọc sách giúp bạn nhìn có vẻ trí thức hơn.", "Để mượn trí tuệ của người khác, đi nhanh hơn và tránh mất 5 năm khởi nghiệp thất bại.", "Vì sách luôn rẻ hơn việc tự làm."], correctOption: 1,
+                actionTitle: "Hành động tối ưu", actionColor: "text-amber-600", actionBorder: "border-amber-500", actionBg: "bg-amber-50",
+                actionText: "Người thông minh học từ sai lầm của chính mình, người xuất chúng học từ sai lầm của người khác đúc kết trong sách."
+            },
+            {
+                icon: "fa-shoe-prints", iconColor: "text-emerald-500", title: "Định Vị Bản Thân",
+                question: "Ví dụ 'sách lượng tử không dành cho học sinh tiểu học' nhằm nhấn mạnh điều gì?",
+                options: ["Sách lượng tử rất đắt tiền.", "Cần định vị bản thân và chọn sách đúng với trình độ, nhu cầu của mình.", "Học sinh tiểu học không nên đọc sách."], correctOption: 1,
+                actionTitle: "Lọc đối tượng", actionColor: "text-emerald-600", actionBorder: "border-emerald-500", actionBg: "bg-emerald-50",
+                actionText: "Đừng tự làm khó bản thân. Hãy chọn chiếc áo tri thức vừa vặn nhất với tư duy hiện tại của bạn."
+            },
+            {
+                icon: "fa-comments", iconColor: "text-cyan-500", title: "Kết Nối Tác Giả",
+                question: "Để thấu hiểu bài học từ Warren Buffett, bạn cần làm gì?",
+                options: ["Mua tất cả sách của ông ấy.", "Hiểu rõ bối cảnh thị trường chứng khoán và trải nghiệm sống thời đại của ông.", "Bắt chước cách ăn mặc của ông ấy."], correctOption: 1,
+                actionTitle: "Đọc xuyên thấu", actionColor: "text-cyan-600", actionBorder: "border-cyan-500", actionBg: "bg-cyan-50",
+                actionText: "Sách là con người tác giả thu nhỏ. Thấu hiểu tác giả là chiếc chìa khóa vạn năng để mở khóa tri thức."
+            },
+            {
+                icon: "fa-mountain-sun", iconColor: "text-amber-500", title: "Người Khổng Lồ",
+                question: "Đọc hồi ký của những nhà lãnh đạo kiệt xuất mang lại giá trị cốt lõi nào?",
+                options: ["Giúp bạn nhìn thế giới qua lăng kính tinh anh và học cách họ đối mặt khủng hoảng.", "Biết được nhiều câu chuyện bí mật đời tư.", "Giúp bạn dễ ngủ hơn vào ban đêm."], correctOption: 0,
+                actionTitle: "Nâng cấp tư duy", actionColor: "text-amber-600", actionBorder: "border-amber-500", actionBg: "bg-amber-50",
+                actionText: "Đứng trên vai người khổng lồ. Mua trải nghiệm cả đời của người xuất chúng với giá của một bữa sáng."
+            },
+            {
+                icon: "fa-filter-circle-dollar", iconColor: "text-rose-500", title: "Tiêu Dùng Tỉnh Táo",
+                question: "Nếu kỹ năng giao tiếp đang yếu, bài học khuyên bạn điều gì?",
+                options: ["Mua sách tiểu thuyết giả tưởng đang bán chạy Top 1.", "Thiết lập bộ lọc khắt khe, bỏ qua sách xu hướng để chọn đúng sách dạy giao tiếp.", "Đọc tin tức trên mạng xã hội."], correctOption: 1,
+                actionTitle: "Mục tiêu rõ ràng", actionColor: "text-rose-600", actionBorder: "border-rose-500", actionBg: "bg-rose-50",
+                actionText: "Tuyệt đối không mua sách theo đám đông. Tiền và thời gian của bạn phải phục vụ cho mục tiêu của chính bạn."
+            },
+            {
+                icon: "fa-stopwatch", iconColor: "text-orange-500", title: "Đọc Thông Minh",
+                question: "Kỹ thuật Skimming khuyên bạn nên làm gì với những phần râu ria dài dòng?",
+                options: ["Mạnh dạn bỏ qua để tập trung tìm chương giải quyết vấn đề.", "Đọc chậm lại để cố gắng hiểu hết.", "Đọc lại hai lần để chắc chắn không bỏ sót."], correctOption: 0,
+                actionTitle: "Tối ưu thời gian", actionColor: "text-orange-600", actionBorder: "border-orange-500", actionBg: "bg-orange-50",
+                actionText: "Bạn không nợ tác giả việc phải đọc từng chữ. Hãy mạnh dạn lướt qua rác để nhặt lấy kim cương."
+            },
+            {
+                icon: "fa-fire-extinguisher", iconColor: "text-red-500", title: "Chữa Cháy Hiện Tại",
+                question: "Ví dụ 'đang đau dạ dày' mang thông điệp gì về cách chọn sách?",
+                options: ["Phải ưu tiên học cách thiết kế nhà cửa.", "Phải đọc để dùng ngay lập tức, ưu tiên giải quyết vấn đề cấp bách (đau dạ dày) trước.", "Nên tích trữ sách để dành đọc dần."], correctOption: 1,
+                actionTitle: "Thực chiến", actionColor: "text-red-600", actionBorder: "border-red-500", actionBg: "bg-red-50",
+                actionText: "Đừng tích trữ tri thức. Hãy biến việc đọc thành hành động dập tắt ngay ngọn lửa đang cháy trong công việc của bạn."
+            },
+            {
+                icon: "fa-rocket", iconColor: "text-indigo-500", title: "Siêu Năng Lực",
+                question: "Sách giúp bạn phát triển siêu năng lực nào để không bị thời đại bỏ lại?",
+                options: ["Năng lực ghi nhớ hình ảnh.", "Năng lực tự học bất cứ kỹ năng mới nào, từ AI đến bán hàng.", "Năng lực đánh máy nhanh."], correctOption: 1,
+                actionTitle: "Kiến tạo bản thân", actionColor: "text-indigo-600", actionBorder: "border-indigo-500", actionBg: "bg-indigo-50",
+                actionText: "Tự học là kỹ năng vua. Sở hữu năng lực tự học qua sách, bạn nắm trong tay quyền lực làm chủ tương lai."
+            },
+            {
+                icon: "fa-hand-fist", iconColor: "text-teal-500", title: "Hành Động",
+                question: "Điều cần làm ngay sau khi đọc xong một cuốn sách về quản lý thời gian là gì?",
+                options: ["Gấp sách lại và lướt điện thoại thư giãn.", "Lập ngay một lịch trình làm việc tối ưu cho ngày mai.", "Khoe lên mạng xã hội rằng mình vừa đọc xong sách."], correctOption: 1,
+                actionTitle: "Tự chủ cuộc đời", actionColor: "text-teal-600", actionBorder: "border-teal-500", actionBg: "bg-teal-50",
+                actionText: "Chữ nằm trên giấy là tri thức chết. Chữ biến thành hành động mới tạo ra kết quả và tiền bạc. Đọc xong phải làm!"
+            }
+        ];
+
+        // --- AUDIO ENGINE (MAJOR CHORDS VUI TƯƠI & METRONOME SÁNG) ---
+        class WebAudioEngine {
+            constructor() {
+                this.ctx = null;
+                this.bgmPlaying = false;
+                this.schedulerTimer = null;
+                this.currentStep = 0;
+                this.chords = [
+                    [130.81, 164.81, 196.00], // C Major
+                    [174.61, 220.00, 261.63], // F Major
+                    [196.00, 246.94, 293.66], // G Major
+                    [130.81, 164.81, 196.00]  // C Major
+                ];
+            }
+            init() { if (!this.ctx) { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } }
+            
+            playTick() {
+                this.init(); if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(880, now); // Cao, nhịp vui tai
+                gain.gain.setValueAtTime(0.02, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.06);
+            }
+
+            playSFX(type) {
+                this.init(); if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime;
+                if (type === 'correct') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.08, now + idx * 0.06); gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.15);
+                        osc.connect(gain); gain.connect(this.ctx.destination); osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.2);
+                    });
+                } else if (type === 'incorrect') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'square'; osc.frequency.setValueAtTime(280.00, now); osc.frequency.linearRampToValueAtTime(140.00, now + 0.25);
+                    gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(1000.00, now); gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.05);
+                }
+            }
+            startBGM() { this.init(); if (this.ctx.state === 'suspended') this.ctx.resume(); this.bgmPlaying = true; this.currentStep = 0; this.runBgmLoop(); }
+            stopBGM() { this.bgmPlaying = false; clearTimeout(this.schedulerTimer); }
+            
+            runBgmLoop() {
+                if (!this.bgmPlaying) return;
+                const chordIndex = Math.floor(this.currentStep / 4) % this.chords.length;
+                const noteIndex = this.currentStep % 3;
+                const baseFreq = this.chords[chordIndex][noteIndex] * 2.0;
+                
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain(); const filter = this.ctx.createBiquadFilter();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(baseFreq, this.ctx.currentTime);
+                filter.type = 'lowpass'; filter.frequency.setValueAtTime(1400, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.015, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.4);
+                
+                osc.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.5);
+                this.currentStep++; this.schedulerTimer = setTimeout(() => this.runBgmLoop(), 280); // Nhịp game nhanh, vui
+            }
+        }
+        const audio = new WebAudioEngine();
+        
+        function toggleBackgroundMusic() {
+            const toggleBtn = document.getElementById('bgm-toggle'); const toggleText = document.getElementById('bgm-text');
+            if (!audio.bgmPlaying) {
+                audio.startBGM(); toggleText.innerText = "Nhạc trò chơi: BẬT"; toggleBtn.classList.replace('game-btn-yellow', 'game-btn-red'); toggleBtn.classList.add('text-white'); audio.playSFX('click');
+            } else {
+                audio.stopBGM(); toggleText.innerText = "Nhạc trò chơi: TẮT"; toggleBtn.classList.replace('game-btn-red', 'game-btn-yellow'); toggleBtn.classList.remove('text-white');
+            }
+        }
+
+        // --- CONFETTI EFFECT ---
+        const canvas = document.getElementById('confetti-canvas'); const ctx = canvas.getContext('2d');
+        let confettiParticles = []; let confettiAnimationId = null;
+        function resizeConfettiCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeConfettiCanvas);
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = canvas.height + 20; this.size = Math.random() * 12 + 6;
+                this.speedX = Math.random() * 10 - 5; this.speedY = -Math.random() * 20 - 10; this.gravity = 0.45;
+                this.color = `hsl(${Math.random() * 360}, 100%, 55%)`; this.rotation = Math.random() * 360; this.rotationSpeed = Math.random() * 20 - 10;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.speedY += this.gravity; this.rotation += this.rotationSpeed; }
+            draw() {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color; ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size); ctx.restore();
+            }
+        }
+        function spawnConfetti() {
+            canvas.classList.remove('hidden'); resizeConfettiCanvas(); confettiParticles = [];
+            for (let i = 0; i < 100; i++) { confettiParticles.push(new ConfettiParticle()); }
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId); animateConfetti();
+        }
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles.forEach((p, idx) => { p.update(); p.draw(); if (p.y > canvas.height + 50) { confettiParticles.splice(idx, 1); } });
+            if (confettiParticles.length > 0) { confettiAnimationId = requestAnimationFrame(animateConfetti); } else { canvas.classList.add('hidden'); }
+        }
+
+        // --- GAME ENGINE STATE ---
+        let currentWPM = 250; let isPlaying = false; let wordsArray = []; let rawWordsArray = []; let currentChunkIndex = 0; let playInterval = null; let readingMode = 'rsvp';
+        const domWord = document.getElementById('reader-word'); const domProgress = document.getElementById('reading-progress'); const domPlayBtn = document.getElementById('btn-play'); const domPlayIcon = document.getElementById('icon-play'); const domPlayText = document.getElementById('text-play'); const domWpmDisplay = document.getElementById('wpm-display'); const domRpmBar = document.getElementById('rpm-bar');
+
+        function getChunkSize() { return parseInt(document.getElementById('chunk-selector').value); }
+
+        function loadSelectedText() {
+            const textIndex = document.getElementById('text-selector').value;
+            rawWordsArray = texts[textIndex].trim().split(/\s+/);
+            readingMode = document.getElementById('mode-selector').value;
+            
+            const guideLeft = document.getElementById('guide-left'); const guideRight = document.getElementById('guide-right');
+            if (readingMode === 'highlight') { guideLeft.style.display = 'none'; guideRight.style.display = 'none'; } 
+            else { guideLeft.style.display = 'block'; guideRight.style.display = 'block'; }
+            resetReader();
+        }
+
+        function updateWPM(value) {
+            currentWPM = parseInt(value);
+            domWpmDisplay.innerHTML = `${currentWPM} <span class="text-lg text-gray-500 font-bold">WPM</span>`;
+            const percentage = ((currentWPM - 250) / 400) * 100; domRpmBar.style.width = `${percentage}%`;
+            
+            let color = '#facc15'; // Vàng
+            if (currentWPM >= 450) { color = '#e11d48'; } // Đỏ rực khi quá nhanh
+            domRpmBar.style.backgroundColor = color;
+            if (isPlaying) { clearInterval(playInterval); startInterval(); }
+        }
+
+        function resetReader() {
+            if (isPlaying) togglePlay();
+            currentChunkIndex = 0; domProgress.style.width = '0%';
+            const chunkSize = getChunkSize();
+
+            if (readingMode === 'rsvp') {
+                wordsArray = [];
+                for (let i = 0; i < rawWordsArray.length; i += chunkSize) {
+                    wordsArray.push(rawWordsArray.slice(i, i + chunkSize).join(' '));
+                }
+                domWord.className = "word-chunk text-4xl md:text-6xl text-center px-4 w-full break-words text-rose-600 font-black highlight-scroll-container";
+                domWord.innerHTML = "SẴN SÀNG!";
+            } else {
+                wordsArray = rawWordsArray;
+                domWord.className = "text-xl md:text-2xl text-left px-6 py-6 w-full text-gray-400 font-bold leading-relaxed overflow-y-auto max-h-[350px] highlight-scroll-container bg-gray-50 rounded-xl border-2 border-gray-300";
+                domWord.innerHTML = rawWordsArray.map((w, idx) => `<span id="word-${idx}" class="transition-colors duration-100">${w}</span>`).join(' ');
+            }
+        }
+
+        function togglePlay() {
+            audio.playSFX('click');
+            if (wordsArray.length === 0) loadSelectedText();
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                domPlayIcon.className = "fa-solid fa-pause text-3xl"; domPlayText.innerText = "DỪNG";
+                domPlayBtn.className = "w-24 h-24 rounded-2xl game-btn-yellow text-gray-950 flex flex-col items-center justify-center gap-1 shadow-lg border-4 border-gray-900";
+                if (currentChunkIndex >= wordsArray.length) currentChunkIndex = 0;
+                startInterval();
+            } else {
+                domPlayIcon.className = "fa-solid fa-play text-3xl"; domPlayText.innerText = "CHƠI";
+                domPlayBtn.className = "w-24 h-24 rounded-2xl game-btn-red text-white flex flex-col items-center justify-center gap-1 shadow-lg border-4 border-gray-900";
+                clearInterval(playInterval);
+            }
+        }
+
+        function startInterval() {
+            const chunkSize = getChunkSize();
+            const delay = (60000 / currentWPM) * chunkSize; 
+            
+            playInterval = setInterval(() => {
+                if (readingMode === 'rsvp') {
+                    if (currentChunkIndex < wordsArray.length) {
+                        audio.playTick();
+                        domWord.innerText = wordsArray[currentChunkIndex];
+                        domProgress.style.width = `${((currentChunkIndex + 1) / wordsArray.length) * 100}%`;
+                        currentChunkIndex++;
+                    } else { showCompletionScreen(); }
+                } else {
+                    if (currentChunkIndex < wordsArray.length) {
+                        audio.playTick();
+                        domWord.querySelectorAll('.bg-rose-600').forEach(el => {
+                            el.className = "transition-colors duration-100 text-gray-400 font-semibold";
+                        });
+                        
+                        let lastSpan = null;
+                        for (let i = 0; i < chunkSize; i++) {
+                            const targetIdx = currentChunkIndex + i;
+                            if (targetIdx < wordsArray.length) {
+                                const span = document.getElementById(`word-${targetIdx}`);
+                                if (span) {
+                                    span.className = "text-white font-black bg-rose-600 rounded-md px-1.5 py-0.5 shadow-sm";
+                                    lastSpan = span;
+                                }
+                            }
+                        }
+                        if (lastSpan) lastSpan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        domProgress.style.width = `${(Math.min(currentChunkIndex + chunkSize, wordsArray.length) / wordsArray.length) * 100}%`;
+                        currentChunkIndex += chunkSize;
+                    } else { showCompletionScreen(); }
+                }
+            }, delay);
+        }
+
+        function showCompletionScreen() {
+            togglePlay();
+            domWord.className = "word-chunk text-center px-4 w-full text-rose-600 flex items-center justify-center";
+            domWord.innerHTML = `
+                <div class='flex flex-col items-center justify-center gap-6'>
+                    <span class='text-4xl md:text-5xl text-rose-600 font-black tracking-wider animate-pulse mt-10 md:mt-0'>🎉 CHIẾN THẮNG! 🎉</span>
+                    <button onclick='showQuestion()' class='game-btn-yellow text-gray-950 font-black text-2xl px-10 py-5 rounded-2xl shadow-xl hover:scale-105 transition-all transform animate-bounce border-4 border-gray-900'>
+                        🔑 GIẢI MÃ BÀI HỌC
+                    </button>
+                </div>`;
+        }
+
+        function checkAnswer(btn, optionIndex, correctIndex) {
+            const parent = btn.parentElement; parent.querySelectorAll('button').forEach(b => { b.disabled = true; b.className = "w-full text-left bg-gray-100 text-gray-400 font-bold p-5 rounded-xl border-3 border-gray-300 cursor-not-allowed mb-4 flex items-center"; });
+            if (optionIndex === correctIndex) {
+                audio.playSFX('correct'); spawnConfetti();
+                btn.className = "w-full text-left bg-emerald-100 text-emerald-800 font-black p-5 rounded-xl border-4 border-emerald-500 mb-4 flex items-center shadow-md";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-emerald-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-check"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+            } else {
+                audio.playSFX('incorrect');
+                const modalBox = document.getElementById('modal-content-box'); modalBox.classList.add('animate-shake'); setTimeout(() => modalBox.classList.remove('animate-shake'), 400);
+                btn.className = "w-full text-left bg-rose-100 text-rose-800 font-black p-5 rounded-xl border-4 border-rose-500 mb-4 flex items-center shadow-md";
+                btn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-rose-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-xmark"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+                const correctBtn = parent.querySelectorAll('button')[correctIndex];
+                correctBtn.className = "w-full text-left bg-emerald-100 text-emerald-800 font-black p-5 rounded-xl border-4 border-emerald-500 mb-4 flex items-center shadow-md";
+                correctBtn.innerHTML = `<span class="w-10 h-10 rounded-xl bg-emerald-500 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-white text-xl"><i class="fa-solid fa-check"></i></span>` + correctBtn.innerHTML.substring(correctBtn.innerHTML.indexOf('</span>') + 7);
+            }
+            document.getElementById('action-section').classList.remove('hidden'); document.getElementById('action-section').classList.add('animate-fade-in-up');
+        }
+
+        function showQuestion() {
+            audio.playSFX('click');
+            const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            const textIndex = document.getElementById('text-selector').value; const data = questionsData[textIndex];
+            
+            let optionsHtml = ''; const letters = ['💥 A', '⚡ B', '🔥 C'];
+            data.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="checkAnswer(this, ${idx}, ${data.correctOption})" class="w-full text-left bg-white hover:bg-rose-50 text-gray-900 font-black p-5 rounded-2xl border-3 border-gray-900 transition-all mb-4 flex items-center shadow-[0_4px_0_#1e293b] active:translate-y-1 active:shadow-none text-lg">
+                        <span class="w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-900 flex items-center justify-center mr-4 font-black text-rose-600 shrink-0 shadow-sm">${letters[idx]}</span>
+                        <span class="flex-1">${opt}</span>
+                    </button>`;
+            });
+            
+            contentBox.innerHTML = `
+                <div class="text-center">
+                    <div class="text-6xl ${data.iconColor} mb-2"><i class="fa-solid ${data.icon}"></i></div>
+                    <h2 class="text-3xl font-black text-gray-900 mb-6 uppercase tracking-wide">${data.title}</h2>
+                    <div class="bg-rose-50 p-6 rounded-2xl border-3 border-gray-900 mb-6 text-left">
+                        <p class="text-xl md:text-2xl text-rose-700 mb-6 font-black leading-relaxed">❓ ${data.question}</p>
+                        <div class="flex flex-col">${optionsHtml}</div>
+                        <div id="action-section" class="hidden mt-6 ${data.actionBg} p-5 rounded-2xl border-3 border-gray-900 shadow-inner">
+                            <p class="${data.actionColor} text-lg font-black uppercase mb-2">⭐ ${data.actionTitle}:</p>
+                            <p class="text-gray-800 font-bold text-base leading-relaxed">${data.actionText}</p>
+                        </div>
+                    </div>
+                    <button onclick="closeQuestion()" class="game-btn-red text-white px-10 py-4 rounded-xl font-black transition-all text-xl w-full md:w-auto border-3 border-gray-900">TIẾP TỤC TRẬN ĐẤU</button>
+                </div>`;
+            modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('opacity-0'); contentBox.classList.replace('scale-95', 'scale-100'); }, 10);
+        }
+
+        function closeQuestion() {
+            audio.playSFX('click'); const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            modal.classList.add('opacity-0'); contentBox.classList.replace('scale-100', 'scale-95'); setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        window.onload = () => { loadSelectedText(); updateWPM(250); };
+    </script>
+</body>
+</html>

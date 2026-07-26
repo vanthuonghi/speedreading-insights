@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Đọc Nhanh - Kỷ Nguyên Đọc Siêu Tốc</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red: #DC2626;
+            --primary-red-hover: #B91C1C;
+            --primary-red-light: #FEE2E2;
+            --game-gold: #F59E0B;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FFFFFF;
+            color: #1E293B;
+        }
+
+        .font-mono-game {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* Tối ưu hóa thanh cuộn Gaming */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #DC2626;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B91C1C;
+        }
+
+        /* --- HOA VĂN VÀ HIỆU ỨNG TRÒ CHƠI (GAMING PATTERNS) --- */
+        /* Nền chấm lưới Retro Dot */
+        .retro-dot-bg {
+            background-image: radial-gradient(#DC2626 1px, transparent 1px);
+            background-size: 16px 16px;
+            background-opacity: 0.15;
+        }
+
+        /* Đường kẻ sọc đỏ-trắng phong cách đua xe/thể thao điện tử */
+        .game-stripes {
+            background: repeating-linear-gradient(
+                -45deg,
+                #DC2626,
+                #DC2626 8px,
+                #EF4444 8px,
+                #EF4444 16px
+            );
+        }
+
+        /* Viền phát sáng phong cách Gaming Tech */
+        .neon-red-border {
+            border: 2px solid #DC2626;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.15);
+        }
+
+        .neon-red-glow-active {
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.35);
+            border-color: #DC2626;
+        }
+
+        /* Góc cắt Gaming (Beveled corners) */
+        .gaming-card {
+            position: relative;
+            background: #FFFFFF;
+            border: 2px solid #DC2626;
+            border-radius: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gaming-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0px 0px #DC2626;
+        }
+
+        .gaming-card-active {
+            border-color: #DC2626;
+            background-color: #FFF5F5;
+            box-shadow: 4px 4px 0px 0px #DC2626;
+        }
+
+        /* Mindmap Gaming Node */
+        .mindmap-wrapper { 
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: center; 
+            width: 100%; 
+            padding: 10px; 
+            overflow-x: auto; 
+        }
+        .mindmap-root { 
+            background: #DC2626; 
+            color: white; 
+            padding: 12px 24px; 
+            border-radius: 4px; 
+            font-size: 1.1rem; 
+            font-weight: 800; 
+            border: 3px solid #1E293B;
+            box-shadow: 4px 4px 0px 0px #1E293B;
+            outline: none; 
+            text-align: center; 
+            min-width: 220px; 
+            z-index: 2; 
+            cursor: text; 
+        }
+        .mindmap-branches { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            position: relative; 
+            padding-left: 40px; 
+            list-style: none; 
+            text-align: left; 
+            margin-top: 20px; 
+        }
+        
+        /* Đường nối mang phong cách bảng mạch game */
+        .mindmap-branches::before { 
+            content: ''; 
+            position: absolute; 
+            top: 20px; 
+            bottom: 20px; 
+            left: 0; 
+            width: 3px; 
+            background: #DC2626; 
+            border-radius: 5px; 
+        }
+        
+        .mindmap-branch { 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .mindmap-branch::before { 
+            content: ''; 
+            position: absolute; 
+            left: -40px; 
+            top: 20px; 
+            width: 40px; 
+            height: 3px; 
+            background: #DC2626; 
+        }
+        
+        .root-connector { 
+            width: 3px; 
+            height: 25px; 
+            background: #DC2626; 
+        }
+        
+        .node-wrapper { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            position: relative; 
+            z-index: 2; 
+        }
+        
+        .mindmap-node { 
+            background: #FFFFFF; 
+            border: 2px solid #DC2626; 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+            color: #1E293B; 
+            font-weight: 700; 
+            font-size: 0.95rem; 
+            box-shadow: 2px 2px 0px 0px #DC2626; 
+            outline: none; 
+            min-width: 200px; 
+            transition: all 0.2s ease; 
+            cursor: text; 
+        }
+        .mindmap-node:focus { 
+            background-color: #FFF5F5;
+            box-shadow: 4px 4px 0px 0px #DC2626; 
+            transform: scale(1.02); 
+        }
+        .mindmap-node[data-placeholder]:empty:before { 
+            content: attr(data-placeholder); 
+            color: #94A3B8; 
+            font-style: italic; 
+            font-weight: 400; 
+        }
+
+        .add-sub-btn { 
+            width: 24px; 
+            height: 24px; 
+            border-radius: 4px; 
+            border: 2px solid #DC2626; 
+            background: #FFFFFF; 
+            color: #DC2626; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: all 0.15s; 
+            outline: none; 
+        }
+        .add-sub-btn:hover { 
+            background: #DC2626; 
+            color: white; 
+        }
+
+        .mindmap-sub-branches { 
+            list-style: none; 
+            padding-left: 40px; 
+            margin-top: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            position: relative; 
+            display: none; 
+        }
+        .mindmap-sub-branches.active { 
+            display: flex; 
+        }
+        .mindmap-sub-branches::before { 
+            content: ''; 
+            position: absolute; 
+            left: 15px; 
+            top: -10px; 
+            bottom: 15px; 
+            width: 2px; 
+            background: #DC2626; 
+            opacity: 0.5;
+        }
+        
+        .mindmap-sub-branch { 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+        }
+        .mindmap-sub-branch::before { 
+            content: ''; 
+            position: absolute; 
+            left: -25px; 
+            top: 50%; 
+            width: 25px; 
+            height: 2px; 
+            background: #DC2626; 
+            opacity: 0.5;
+        }
+        
+        .mindmap-sub-node { 
+            background: #FFF5F5; 
+            border: 1.5px dashed #DC2626; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            font-size: 0.85rem; 
+            color: #1E293B; 
+            outline: none; 
+            min-width: 160px; 
+            font-weight: 500;
+        }
+        .mindmap-sub-node:focus { 
+            background: #FFFFFF; 
+            border-style: solid; 
+            box-shadow: 2px 2px 0px #DC2626; 
+        }
+
+        .add-branch-btn { 
+            background: transparent; 
+            border: 2px dashed #DC2626; 
+            color: #DC2626; 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            outline: none; 
+            transition: all 0.2s; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            margin-top: 5px; 
+        }
+        .add-branch-btn:hover { 
+            background: #FFF5F5; 
+            box-shadow: 2px 2px 0px 0px #DC2626;
+        }
+
+        /* Khung phản hồi có khả năng chỉnh sửa */
+        .editable-text {
+            outline: none;
+            transition: all 0.2s;
+            border: 1px dashed transparent;
+        }
+        .editable-text:hover {
+            border-color: #DC2626;
+            background-color: #FFF5F5;
+            cursor: text;
+        }
+        .editable-text:focus {
+            border-color: #DC2626;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+        }
+    </style>
+</head>
+<body class="h-screen overflow-hidden flex flex-col antialiased bg-white select-none">
+
+    <!-- Gaming Top Bar HUD -->
+    <div class="h-1 bg-gradient-to-r from-red-600 via-orange-500 to-red-600 w-full game-stripes"></div>
+    <header class="bg-white border-b-2 border-red-600 px-4 py-3 shrink-0 flex items-center justify-between shadow-sm relative z-10">
+        <!-- Logo & Website Title -->
+        <div class="flex items-center gap-4">
+            <div class="p-1 bg-red-100 rounded-md border border-red-200">
+                <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading Logo" class="h-10 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/120x40/DC2626/ffffff?text=SPEED+READING'">
+            </div>
+            <div class="hidden sm:block">
+                <h1 id="header-title" class="text-base font-extrabold text-red-600 tracking-tight uppercase flex items-center gap-2">
+                    <span class="inline-block w-2.5 h-2.5 bg-red-600 animate-pulse rounded-full"></span>
+                    Đấu Trường Luyện Đọc • Chặng 1: Ý Hay
+                </h1>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Học Viện Đọc Nhanh Siêu Tốc & Đúc Kết Tối Giản</p>
+            </div>
+        </div>
+
+        <!-- Real-time Gamer Status HUD -->
+        <div class="flex items-center gap-4">
+            <!-- Reader level -->
+            <div class="bg-red-50 border-2 border-red-600 px-3 py-1.5 rounded flex items-center gap-2.5 shadow-sm">
+                <span class="text-xs font-bold text-red-600 uppercase tracking-widest font-mono-game">LV.</span>
+                <span id="player-level" class="text-lg font-extrabold text-red-600 font-mono-game leading-none">01</span>
+                <div class="h-4 w-px bg-red-200"></div>
+                <div class="flex flex-col">
+                    <span class="text-[9px] text-gray-500 font-bold uppercase leading-none">Focus XP</span>
+                    <div class="w-20 bg-gray-200 h-1.5 rounded-full overflow-hidden mt-1">
+                        <div id="player-xp-bar" class="bg-red-600 h-full w-[15%] transition-all duration-300"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Focus streak -->
+            <div class="bg-amber-50 border-2 border-amber-500 px-3 py-1.5 rounded flex items-center gap-2 shadow-sm">
+                <span class="text-xs">🔥</span>
+                <div class="flex flex-col text-left">
+                    <span class="text-[8px] text-amber-700 font-extrabold uppercase leading-none">Tập trung</span>
+                    <span class="text-xs font-black text-amber-700 font-mono-game leading-none mt-1">STREAK: x1</span>
+                </div>
+            </div>
+
+            <!-- Volume toggle sound effect -->
+            <button onclick="toggleMute()" id="sound-btn" class="p-2 rounded border-2 border-gray-300 hover:border-red-600 text-gray-500 hover:text-red-600 transition-all" title="Bật/Tắt âm thanh thông báo">
+                <svg id="volume-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.75l-3-3H5.25A2.25 2.25 0 013 13.5v-3a2.25 2.25 0 012.25-2.25H9l3-3V18.75z"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Zoom Sessions Navigation Bar -->
+    <div class="bg-white border-b border-gray-200 px-4 py-2 shrink-0 overflow-x-auto flex items-center gap-2 justify-start md:justify-center">
+        <span class="text-[10px] font-black uppercase tracking-wider text-red-600 whitespace-nowrap flex items-center gap-1.5 mr-1">
+            <span class="inline-block w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+            LỚP HỌC ZOOM:
+        </span>
+        <a href="https://speedreading.vn/zoom1" target="_blank" class="px-3 py-1 text-xs font-extrabold rounded border border-red-200 text-gray-700 hover:border-red-600 hover:bg-red-50 transition-all whitespace-nowrap font-mono-game">BUỔI 1</a>
+        <a href="https://speedreading.vn/zoom2" target="_blank" class="px-3 py-1 text-xs font-extrabold rounded border border-red-200 text-gray-700 hover:border-red-600 hover:bg-red-50 transition-all whitespace-nowrap font-mono-game">BUỔI 2</a>
+        <a href="https://speedreading.vn/zoom3" target="_blank" class="px-3 py-1 text-xs font-extrabold rounded border border-red-200 text-gray-700 hover:border-red-600 hover:bg-red-50 transition-all whitespace-nowrap font-mono-game">BUỔI 3</a>
+        <a href="https://speedreading.vn/zoom4" target="_blank" class="px-3 py-1 text-xs font-extrabold rounded border border-red-200 text-gray-700 hover:border-red-600 hover:bg-red-50 transition-all whitespace-nowrap font-mono-game">BUỔI 4</a>
+        <a href="https://speedreading.vn/zoom5" target="_blank" class="px-3 py-1 text-xs font-extrabold rounded border border-red-200 text-gray-700 hover:border-red-600 hover:bg-red-50 transition-all whitespace-nowrap font-mono-game">BUỔI 5</a>
+        <a href="https://speedreading.vn/zoom6" target="_blank" class="px-3 py-1 text-xs font-extrabold rounded border border-red-200 text-gray-700 hover:border-red-600 hover:bg-red-50 transition-all whitespace-nowrap font-mono-game">BUỔI 6</a>
+        <a href="https://speedreading.vn/zoom7" target="_blank" class="px-3 py-1 text-xs font-extrabold rounded border border-red-200 text-gray-700 hover:border-red-600 hover:bg-red-50 transition-all whitespace-nowrap font-mono-game">BUỔI 7</a>
+    </div>
+
+    <!-- Game Progress Map (Milestones) -->
+    <div class="bg-gray-50 px-4 py-2 border-b border-gray-200 flex items-center justify-between text-xs font-bold text-gray-500">
+        <div class="flex items-center gap-2">
+            <span>TIẾN ĐỘ THỬ THÁCH:</span>
+            <div class="flex items-center gap-1.5">
+                <span id="badge-1" class="w-6 h-6 rounded-full border-2 border-red-600 flex items-center justify-center bg-red-600 text-white font-mono-game text-xs shadow-sm">1</span>
+                <span class="text-red-600">Ý Hay</span>
+                <span class="text-gray-300">➔</span>
+                <span id="badge-2" class="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center bg-white text-gray-400 font-mono-game text-xs">2</span>
+                <span>Ép Tốc 3-2-1</span>
+                <span class="text-gray-300">➔</span>
+                <span id="badge-3" class="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center bg-white text-gray-400 font-mono-game text-xs">3</span>
+                <span>Đọc Hiểu Sâu</span>
+                <span class="text-gray-300">➔</span>
+                <span id="badge-4" class="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center bg-white text-gray-400 font-mono-game text-xs">4</span>
+                <span>Hoàn Thành</span>
+            </div>
+        </div>
+        <div class="font-mono-game text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-200 uppercase tracking-widest">
+            Học phần: 60 Phút
+        </div>
+    </div>
+
+    <!-- Interactive Game Board Container (Full Browser Height layout) -->
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- Sidebar điều hướng: Console Panel -->
+        <aside class="w-80 bg-white border-r-2 border-red-600 p-4 flex flex-col gap-3 shrink-0 overflow-y-auto retro-dot-bg">
+            <h2 class="text-xs font-black uppercase tracking-widest text-red-600 px-1 border-b-2 border-red-600 pb-1 flex items-center gap-1.5">
+                <span>🎯</span> BẢNG NHIỆM VỤ GAME
+            </h2>
+            
+            <!-- Stage 1 Button -->
+            <button id="nav-btn-1" class="w-full text-left p-3 rounded border-2 border-red-600 bg-red-50 text-red-700 shadow-[3px_3px_0px_0px_#DC2626] transition-all hover:bg-red-100 flex flex-col gap-1 relative overflow-hidden" onclick="switchStage(1, this)">
+                <div class="absolute right-0 top-0 h-full w-2 game-stripes"></div>
+                <span class="text-[9px] font-black tracking-widest text-red-600 uppercase font-mono-game">ẢI 01 • 15 PHÚT</span>
+                <span class="text-sm font-extrabold flex items-center gap-1.5">
+                    <span>💡</span> 1. Thu Thập Ý Hay
+                </span>
+                <p class="text-[10px] text-gray-500 font-medium">Lập sơ đồ ý chính trước giờ đọc</p>
+            </button>
+            
+            <!-- Stage 2 Button -->
+            <button id="nav-btn-2" class="w-full text-left p-3 rounded border border-gray-300 bg-white hover:border-red-600 hover:bg-red-50/40 text-gray-700 transition-all flex flex-col gap-1" onclick="switchStage(2, this)">
+                <span class="text-[9px] font-black tracking-widest text-gray-400 uppercase font-mono-game">ẢI 02 • 15 PHÚT</span>
+                <span class="text-sm font-extrabold text-gray-800 flex items-center gap-1.5">
+                    <span>⚡</span> 2. Luyện Chỉ Tay 3-2-1
+                </span>
+                <p class="text-[10px] text-gray-500 font-medium">Ép tốc độ mắt vượt ngưỡng</p>
+            </button>
+            
+            <!-- Stage 3 Button -->
+            <button id="nav-btn-3" class="w-full text-left p-3 rounded border border-gray-300 bg-white hover:border-red-600 hover:bg-red-50/40 text-gray-700 transition-all flex flex-col gap-1" onclick="switchStage(3, this)">
+                <span class="text-[9px] font-black tracking-widest text-gray-400 uppercase font-mono-game">ẢI 03 • 15 PHÚT</span>
+                <span class="text-sm font-extrabold text-gray-800 flex items-center gap-1.5">
+                    <span>🧠</span> 3. Đọc Hiểu Đúc Kết Sâu
+                </span>
+                <p class="text-[10px] text-gray-500 font-medium">Bản đồ đúc kết 5 chiều tư duy</p>
+            </button>
+            
+            <!-- Stage 4 Button -->
+            <button id="nav-btn-4" class="w-full text-left p-3 rounded border border-gray-300 bg-white hover:border-red-600 hover:bg-red-50/40 text-gray-700 transition-all flex flex-col gap-1" onclick="switchStage(4, this)">
+                <span class="text-[9px] font-black tracking-widest text-gray-400 uppercase font-mono-game">ẢI 04 • 15 PHÚT</span>
+                <span class="text-sm font-extrabold text-gray-800 flex items-center gap-1.5">
+                    <span>🏆</span> 4. Đúc Kết & Chia Sẻ
+                </span>
+                <p class="text-[10px] text-gray-500 font-medium">Rung chuông ngẫu nhiên báo cáo</p>
+            </button>
+
+            <!-- Quick Links Corner / Gamified Utility Frame -->
+            <div class="mt-auto border-2 border-dashed border-red-600 p-3 bg-red-50/30 rounded relative">
+                <!-- Decorative Retro Corner Marks -->
+                <div class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-red-600"></div>
+                <div class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-red-600"></div>
+                <div class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-red-600"></div>
+                <div class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-red-600"></div>
+
+                <h3 class="text-[11px] font-black text-red-600 uppercase tracking-widest mb-2 flex items-center gap-1">
+                    <span>🛠️</span> TIỆN ÍCH HỖ TRỢ
+                </h3>
+                <div class="flex flex-col gap-1.5">
+                    <a href="https://speedreading.vn/Tool" target="_blank" class="text-xs font-bold text-gray-700 hover:text-red-600 flex items-center gap-1.5 transition-colors p-1 hover:bg-white rounded border border-transparent hover:border-red-200">
+                        <span>🔗</span> Công Cụ Trải Nghiệm
+                    </a>
+                    <a href="https://speedreading.vn/study" target="_blank" class="text-xs font-bold text-gray-700 hover:text-red-600 flex items-center gap-1.5 transition-colors p-1 hover:bg-white rounded border border-transparent hover:border-red-200">
+                        <span>👁️</span> Công Cụ Luyện Mắt
+                    </a>
+                    <a href="https://speedreading.vn/posts/" target="_blank" class="text-xs font-bold text-gray-700 hover:text-red-600 flex items-center gap-1.5 transition-colors p-1 hover:bg-white rounded border border-transparent hover:border-red-200">
+                        <span>📚</span> Tóm Tắt & Review Sách
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Game Workspace (Full browser view with custom scrolling contents) -->
+        <main class="flex-1 bg-white p-6 overflow-y-auto flex flex-col items-center justify-start relative">
+            
+            <!-- Floating Game Grid Pattern Backdrop (Pure CSS visual ornament) -->
+            <div class="absolute inset-0 retro-dot-bg opacity-10 pointer-events-none z-0"></div>
+
+            <div class="w-full max-w-4xl flex flex-col gap-6 relative z-10">
+                
+                <!-- Countdown Timer & Sound Control Panel (Gamer HUD Theme) -->
+                <div class="gaming-card border-2 border-red-600 p-5 rounded-lg bg-white relative overflow-hidden flex flex-col items-center justify-center shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]">
+                    <div class="absolute left-0 top-0 h-full w-2 game-stripes"></div>
+                    
+                    <!-- Retro status bar -->
+                    <div class="w-full flex justify-between items-center px-4 border-b border-gray-100 pb-2.5 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 flex items-center gap-1">
+                            <span class="inline-block w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+                            Nhiệm Vụ Đang Diễn Ra
+                        </span>
+                        <span id="game-status-text" class="text-xs font-bold uppercase tracking-widest font-mono-game text-gray-500">
+                            TRẠNG THÁI: CHỜ KÍCH HOẠT
+                        </span>
+                    </div>
+
+                    <!-- Large Timer Display -->
+                    <div class="text-6xl md:text-7xl font-extrabold tracking-tight text-red-600 font-mono-game my-1 drop-shadow-sm select-none" id="global-timer">
+                        15:00
+                    </div>
+
+                    <!-- Game Control Buttons -->
+                    <div class="flex gap-2 flex-wrap justify-center mt-3">
+                        <button class="px-3 py-1.5 text-xs font-black rounded border-2 border-gray-800 bg-white hover:bg-gray-100 active:translate-y-0.5 shadow-[2px_2px_0px_0px_#1E293B] transition-all font-mono-game" onclick="adjustTime(-60)">
+                            -01:00
+                        </button>
+                        <button id="play-pause-btn" class="px-8 py-2 text-sm font-black rounded border-2 border-red-600 bg-red-600 text-white hover:bg-red-700 active:translate-y-0.5 shadow-[3px_3px_0px_0px_#1E293B] hover:shadow-[1px_1px_0px_0px_#1E293B] transition-all flex items-center gap-2" onclick="toggleTimer()">
+                            <span>▶ START MISSION</span>
+                        </button>
+                        <button class="px-4 py-1.5 text-xs font-black rounded border-2 border-gray-800 bg-white hover:bg-gray-100 active:translate-y-0.5 shadow-[2px_2px_0px_0px_#1E293B] transition-all font-mono-game" onclick="resetTimer(15)">
+                            RESET 15P
+                        </button>
+                        <button class="px-3 py-1.5 text-xs font-black rounded border-2 border-gray-800 bg-white hover:bg-gray-100 active:translate-y-0.5 shadow-[2px_2px_0px_0px_#1E293B] transition-all font-mono-game" onclick="adjustTime(60)">
+                            +01:00
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ================= ẢI 1: THU THẬP Ý HAY ================= -->
+                <div id="stage-1" class="stage-section active w-full">
+                    <div class="bg-red-50/50 border-2 border-red-600/30 rounded p-4 text-center mb-6">
+                        <p class="text-sm font-bold text-gray-700 leading-relaxed">
+                            💡 <span class="text-red-600 font-extrabold">CHIẾN THUẬT:</span> Khảo sát nhanh sách/tài liệu và lập sơ đồ ý tưởng cốt lõi của hôm nay. 
+                            Bấm đúp để chỉnh sửa nội dung, nhấn <span class="bg-white border border-red-400 px-1 py-0.5 rounded font-black text-xs text-red-600">+</span> để tạo ý phụ.
+                        </p>
+                    </div>
+
+                    <!-- Gaming Mindmap Canvas -->
+                    <div class="gaming-card p-6 border-2 border-red-600 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)] bg-white rounded-lg relative overflow-x-auto min-h-[400px]">
+                        <!-- Decorative top accent bar -->
+                        <div class="absolute left-0 top-0 w-full h-1 game-stripes"></div>
+                        
+                        <div class="mindmap-wrapper">
+                            <div class="flex flex-col items-center">
+                                <div class="mindmap-root" contenteditable="true">💡 SÁCH CẦN ĐỌC HÔM NAY</div>
+                                <div class="root-connector"></div>
+                                <ul class="mindmap-branches" id="mindmap-list">
+                                    <li class="mindmap-branch">
+                                        <div class="node-wrapper">
+                                            <div class="mindmap-node" contenteditable="true" data-placeholder="Nhập ý chính...">🎯 Ý chính số 1</div>
+                                            <button class="add-sub-btn" onclick="addSubBranch(this)" title="Thêm ý phụ">+</button>
+                                        </div>
+                                        <ul class="mindmap-sub-branches"></ul>
+                                    </li>
+                                    <li class="mindmap-branch">
+                                        <div class="node-wrapper">
+                                            <div class="mindmap-node" contenteditable="true" data-placeholder="Nhập ý chính...">🔑 Ý chính số 2</div>
+                                            <button class="add-sub-btn" onclick="addSubBranch(this)" title="Thêm ý phụ">+</button>
+                                        </div>
+                                        <ul class="mindmap-sub-branches"></ul>
+                                    </li>
+                                    <li class="mindmap-branch" id="add-btn-wrapper" style="margin-top: 10px;">
+                                        <button class="add-branch-btn" onclick="addMindmapBranch()">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            Thêm Nhánh Chính
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= ẢI 2: ÉP TỐC ĐỘ 3 - 2 - 1 ================= -->
+                <div id="stage-2" class="stage-section hidden w-full">
+                    
+                    <!-- Goal Badge Dashboard -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="col-span-1 md:col-span-3 gaming-card p-4 bg-red-50 border-2 border-red-600 flex items-start gap-3 rounded-lg">
+                            <span class="text-3xl">🛡️</span>
+                            <div>
+                                <h4 class="font-extrabold text-red-600 text-sm tracking-wide uppercase">CHỈ THỊ NHIỆM VỤ: KHAI PHÁ CƠ MẮT SIÊU TỐC</h4>
+                                <p class="text-xs text-gray-700 leading-relaxed mt-1">
+                                    Mục tiêu chính là bắt đôi mắt làm việc ở tốc độ tối cao, vượt hẳn khả năng tiếp thu thường nhật. 
+                                    <strong>Chấp nhận hiểu ít (chỉ cần 30-50%)</strong> ở những chu kỳ ép tốc đầu tiên để phá vỡ quán tính đọc thầm!
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- High score placeholder gamer panel -->
+                        <div class="col-span-1 bg-white border-2 border-gray-800 p-4 rounded-lg flex flex-col items-center justify-center text-center shadow-[3px_3px_0px_0px_#1E293B]">
+                            <span class="text-[9px] font-black tracking-widest text-gray-500 uppercase">MẮT ĐÃ QUÉT</span>
+                            <span class="text-2xl font-black text-red-600 font-mono-game">450+ wpm</span>
+                            <span class="text-[9px] font-bold text-gray-400 uppercase mt-0.5">Tốc độ rèn luyện</span>
+                        </div>
+                    </div>
+
+                    <!-- Video Guide Player Frame with Gaming Bezel -->
+                    <div class="border-4 border-gray-800 bg-black rounded-lg overflow-hidden shadow-[5px_5px_0px_0px_#DC2626] relative mb-6">
+                        <div class="absolute top-0 left-0 right-0 h-2 game-stripes"></div>
+                        <div class="aspect-video w-full">
+                            <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/zACclTU3n08?si=ikSwbTrW_90OhHqG" title="Thực hành đập mắt ép tốc độ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="bg-gray-800 text-white text-[10px] px-3 py-1 font-mono-game flex justify-between">
+                            <span>VIDEO TRAINING: ĐẬP MẮT THEO NHỊP</span>
+                            <span class="text-red-500 animate-pulse">● LIVE STREAM</span>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Pointing Cards Grid -->
+                    <div>
+                        <h3 class="text-xs font-black text-red-600 uppercase tracking-widest mb-4 flex items-center justify-center gap-1.5">
+                            <span>🎯</span> HỆ THỐNG PHƯƠNG PHÁP CHỈ TAY (BẤM ĐỂ TỰ ĐỘNG NẠP THỜI GIAN LUYỆN)
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Card Technique 1 -->
+                            <div id="card-tech-1" class="gaming-card p-4 rounded-lg cursor-pointer flex flex-col justify-between gaming-card-active" onclick="selectTrainingCard(1, 3)">
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded font-mono-game">3 PHÚT</span>
+                                        <span class="text-xl">👉</span>
+                                    </div>
+                                    <h4 class="font-extrabold text-red-600 text-sm mb-1.5 uppercase">Chỉ Tay 1 Dòng</h4>
+                                    <p class="text-[11px] text-gray-600 leading-relaxed">
+                                        Dùng ngón tay/ngòi bút dẫn dắt ánh nhìn trượt thật mượt mà dưới <strong>từng dòng chữ đơn lẻ</strong>. Tay đi trước, mắt bắt nhịp bám đuổi theo sau.
+                                    </p>
+                                </div>
+                                <div class="mt-4 border-t border-red-100 pt-2 text-[10px] font-bold text-red-600 uppercase text-center font-mono-game">
+                                    [ CLICK ĐỂ KÍCH HOẠT ]
+                                </div>
+                            </div>
+
+                            <!-- Card Technique 2 -->
+                            <div id="card-tech-2" class="gaming-card p-4 rounded-lg cursor-pointer flex flex-col justify-between" onclick="selectTrainingCard(2, 2)">
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="bg-gray-800 text-white text-[10px] font-black px-2 py-0.5 rounded font-mono-game">2 PHÚT</span>
+                                        <span class="text-xl">✌️</span>
+                                    </div>
+                                    <h4 class="font-extrabold text-gray-800 text-sm mb-1.5 uppercase">Chỉ Tay Gom Nhóm</h4>
+                                    <p class="text-[11px] text-gray-600 leading-relaxed">
+                                        Lướt tay với biên độ lớn hơn, một nét gom quét <strong>2 dòng văn bản cùng lúc</strong>. Gom trọn các nhóm từ ở giữa mà không cần đọc rời rạc từng chữ.
+                                    </p>
+                                </div>
+                                <div class="mt-4 border-t border-gray-100 pt-2 text-[10px] font-bold text-gray-400 uppercase text-center font-mono-game">
+                                    [ CLICK ĐỂ KÍCH HOẠT ]
+                                </div>
+                            </div>
+
+                            <!-- Card Technique 3 -->
+                            <div id="card-tech-3" class="gaming-card p-4 rounded-lg cursor-pointer flex flex-col justify-between" onclick="selectTrainingCard(3, 1)">
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="bg-gray-800 text-white text-[10px] font-black px-2 py-0.5 rounded font-mono-game">1 PHÚT</span>
+                                        <span class="text-xl">〰️</span>
+                                    </div>
+                                    <h4 class="font-extrabold text-gray-800 text-sm mb-1.5 uppercase">Chỉ Tay Lazy S</h4>
+                                    <p class="text-[11px] text-gray-600 leading-relaxed">
+                                        Dùng tay kéo nhẹ nhàng theo hình <strong>chữ S ngả ngang mềm mại</strong> dọc trục dọc văn bản. Chụp nhanh các cụm từ khóa trung tâm quan trọng.
+                                    </p>
+                                </div>
+                                <div class="mt-4 border-t border-gray-100 pt-2 text-[10px] font-bold text-gray-400 uppercase text-center font-mono-game">
+                                    [ CLICK ĐỂ KÍCH HOẠT ]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= ẢI 3: ĐỌC HIỂU TẬP TRUNG & ĐÚC KẾT SÂU ================= -->
+                <div id="stage-3" class="stage-section hidden w-full">
+                    
+                    <!-- Roadmap Timeline Grid -->
+                    <h3 class="text-xs font-black text-red-600 uppercase tracking-widest text-center mb-4 flex items-center justify-center gap-1.5">
+                        <span>📋</span> CHIẾN LƯỢC ĐỌC CHI TIẾT & CHUYỂN HOÁ TRI THỨC
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <!-- Step 1: Preview -->
+                        <div class="gaming-card p-5 bg-white border-2 border-red-600 shadow-[3px_3px_0px_0px_rgba(220,38,38,1)] flex flex-col relative">
+                            <div class="absolute -top-3 left-4 bg-red-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded uppercase font-mono-game">
+                                BƯỚC 1 • 3 PHÚT
+                            </div>
+                            <div class="flex items-center gap-2 mb-2 mt-2">
+                                <span class="text-2xl">🔍</span>
+                                <h4 class="font-extrabold text-red-600 text-sm uppercase">Xem Trước Tài Liệu</h4>
+                            </div>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                Quét nhanh tiêu đề chương, đề mục lớn nhỏ, sơ đồ, bảng biểu, từ in đậm. Xây dựng bản đồ nhận thức tổng quan trong đầu trước khi đi sâu.
+                            </p>
+                        </div>
+
+                        <!-- Step 2: Detail reading & note taking -->
+                        <div class="gaming-card p-5 bg-white border-2 border-red-600 shadow-[3px_3px_0px_0px_rgba(220,38,38,1)] flex flex-col relative">
+                            <div class="absolute -top-3 left-4 bg-red-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded uppercase font-mono-game">
+                                BƯỚC 2 • 12 PHÚT
+                            </div>
+                            <div class="flex items-center gap-2 mb-2 mt-2">
+                                <span class="text-2xl">✍️</span>
+                                <h4 class="font-extrabold text-red-600 text-sm uppercase">Đọc Sâu & Chép Nhanh</h4>
+                            </div>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                Áp dụng kỹ thuật chỉ tay rèn luyện để rà soát. 
+                                <span class="text-red-600 font-extrabold">Quy tắc vàng:</span> Cứ đọc xong <strong>2-3 trang sách</strong>, hãy dừng lại ghi chép tóm tắt ý chính bằng lời của mình.
+                            </p>
+                        </div>
+
+                        <!-- Step 3: Synthesis -->
+                        <div class="gaming-card p-5 bg-white border-2 border-red-600 shadow-[3px_3px_0px_0px_rgba(220,38,38,1)] flex flex-col relative">
+                            <div class="absolute -top-3 left-4 bg-red-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded uppercase font-mono-game">
+                                BƯỚC 3 • CHUYỂN HOÁ
+                            </div>
+                            <div class="flex items-center gap-2 mb-2 mt-2">
+                                <span class="text-2xl">🌟</span>
+                                <h4 class="font-extrabold text-red-600 text-sm uppercase">Rút Ra Bài Học Sâu</h4>
+                            </div>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                Cuối giờ đọc, tập trung đọc lại những gì đã ghi chép để đúc kết sâu sắc các giá trị chuyển hoá thực tiễn cuộc sống.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 5 Pillars Reflection Console (Gamified design) -->
+                    <div class="gaming-card p-6 border-2 border-red-600 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)] bg-white rounded-lg relative">
+                        <div class="absolute left-0 top-0 w-full h-1.5 game-stripes"></div>
+                        
+                        <h4 class="text-sm font-black text-red-600 uppercase tracking-widest border-b border-red-100 pb-3 mb-6 flex items-center gap-1.5">
+                            <span>🧠</span> KHUNG TƯ DUY ĐÚC KẾT CHIỀU SÂU (5 TRỤ CỘT)
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            
+                            <!-- Pillar 1 -->
+                            <div class="flex gap-3 border-r border-gray-100 pr-2">
+                                <div class="w-10 h-10 rounded border-2 border-red-600 flex items-center justify-center bg-red-50 text-xl font-bold shrink-0">
+                                    ✉️
+                                </div>
+                                <div class="text-left">
+                                    <h5 class="font-extrabold text-sm text-gray-900 leading-snug">Thông Điệp Của Tác Giả</h5>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-normal">
+                                        Đâu là thông điệp cốt lõi, tư duy giá trị nhất mà tác giả muốn bạn thấu cảm qua chương sách vừa đọc?
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Pillar 2 -->
+                            <div class="flex gap-3 border-r border-gray-100 pr-2">
+                                <div class="w-10 h-10 rounded border-2 border-red-600 flex items-center justify-center bg-red-50 text-xl font-bold shrink-0">
+                                    🗽
+                                </div>
+                                <div class="text-left">
+                                    <h5 class="font-extrabold text-sm text-gray-900 leading-snug">Tư Duy Khai Phóng</h5>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-normal">
+                                        Kiến thức này giúp giải phóng những định kiến, lối mòn suy nghĩ nào trong bạn để mở ra cách nhìn rộng lớn mới?
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Pillar 3 -->
+                            <div class="flex gap-3 pr-2">
+                                <div class="w-10 h-10 rounded border-2 border-red-600 flex items-center justify-center bg-red-50 text-xl font-bold shrink-0">
+                                    🧐
+                                </div>
+                                <div class="text-left">
+                                    <h5 class="font-extrabold text-sm text-gray-900 leading-snug">Tư Duy Phản Biện</h5>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-normal">
+                                        Khía cạnh nào trong luận điểm của tác giả chưa hợp lý? Ở hoàn cảnh của tôi cần điều chỉnh ra sao cho thích hợp?
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Pillar 4 -->
+                            <div class="flex gap-3 border-r border-gray-100 pr-2 mt-2 md:mt-0">
+                                <div class="w-10 h-10 rounded border-2 border-red-600 flex items-center justify-center bg-red-50 text-xl font-bold shrink-0">
+                                    🌱
+                                </div>
+                                <div class="text-left">
+                                    <h5 class="font-extrabold text-sm text-gray-900 leading-snug">Liên Hệ Bản Thân</h5>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-normal">
+                                        Đối chiếu bài học với công việc và thực tế hiện tại của bạn. Bạn đã từng mắc lỗi sai gì ở khía cạnh này chưa?
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Pillar 5 -->
+                            <div class="flex gap-3 md:col-span-2 mt-2 md:mt-0 pr-2">
+                                <div class="w-10 h-10 rounded border-2 border-red-600 flex items-center justify-center bg-red-50 text-xl font-bold shrink-0">
+                                    🚀
+                                </div>
+                                <div class="text-left">
+                                    <h5 class="font-extrabold text-sm text-gray-900 leading-snug">Hành Động Chuyển Hoá Thực Tế</h5>
+                                    <p class="text-[11px] text-gray-500 mt-1 leading-normal">
+                                        Quyết định hành động cụ thể, thực tế và có thể đo lường được nào bạn sẽ tự giác áp dụng và thực hiện ngay ngày mai?
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= ẢI 4: CHIA SẺ THÀNH QUẢ & RUNG CHUÔNG PHÁT BIỂU ================= -->
+                <div id="stage-4" class="stage-section hidden w-full">
+                    
+                    <div class="gaming-card p-6 border-2 border-red-600 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)] bg-white rounded-lg relative overflow-hidden mb-6 text-left">
+                        <div class="absolute left-0 top-0 w-full h-1 game-stripes"></div>
+                        
+                        <h3 class="editable-text font-black text-red-600 text-base mb-4 uppercase tracking-wider flex items-center gap-1.5" contenteditable="true">
+                            <span>💡</span> GỢI Ý NỘI DUNG CHIA SẺ VỚI ĐỒNG ĐỘI (BẤM ĐỂ CHỈNH SỬA):
+                        </h3>
+                        
+                        <ul class="editable-text list-decimal pl-5 space-y-3.5 text-sm font-bold text-gray-700" contenteditable="true">
+                            <li>3 Từ khóa đặc sắc / Ý chính đắt giá nhất bạn đúc kết được trong chương sách này?</li>
+                            <li>Trải nghiệm sử dụng kỹ thuật dẫn tay (Chỉ 1 dòng, 2 dòng, Lazy S) hỗ trợ cải tiến tốc độ rà mắt của bạn như thế nào?</li>
+                            <li>Quyết định hành động cụ thể nào bạn cam kết chuyển hoá và áp dụng ngay để chuyển hoá cuộc sống?</li>
+                        </ul>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center gap-4 bg-red-50/40 p-6 rounded border-2 border-dashed border-red-600">
+                        <button class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-black py-4 px-10 rounded border-2 border-gray-800 shadow-[4px_4px_0px_0px_rgba(30,41,59,1)] transition-all flex items-center gap-3 text-lg" onclick="playLuckyBell()">
+                            <span>🔔</span> RUNG CHUÔNG CHỌN TÊN PHÁT BIỂU
+                        </button>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                            Phát âm thanh chuông gọi may mắn ngẫu nhiên để chọn học viên báo cáo!
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Game state variables
+        let timeLeft = 15 * 60; 
+        let timerInterval = null;
+        let isRunning = false;
+        let activeStage = 1;
+        let playerLevel = 1;
+        let playerXP = 15;
+        let isMuted = false;
+
+        // UI references
+        const timerDisplay = document.getElementById('global-timer');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const headerTitle = document.getElementById('header-title');
+        const mainProgress = document.getElementById('main-progress');
+        const levelDisplay = document.getElementById('player-level');
+        const xpBarDisplay = document.getElementById('player-xp-bar');
+        const gameStatusText = document.getElementById('game-status-text');
+
+        // Init Synth AudioContext for sound effects
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Play custom synthesizer audio effects
+        function playSynthSound(freqs, duration, type = 'sine') {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                
+                const osc = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                
+                osc.type = type;
+                
+                if (Array.isArray(freqs)) {
+                    // Sequencer or sweep
+                    freqs.forEach((f, idx) => {
+                        osc.frequency.setValueAtTime(f, now + (idx * (duration / freqs.length)));
+                    });
+                } else {
+                    osc.frequency.setValueAtTime(freqs, now);
+                }
+                
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(0.3, now + 0.05);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+                
+                osc.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                
+                osc.start(now);
+                osc.stop(now + duration);
+            } catch (e) {
+                console.warn("Synth sound failed to play", e);
+            }
+        }
+
+        // Sound triggers
+        function playClickSound() {
+            playSynthSound(440, 0.1, 'triangle');
+        }
+
+        // Level Up Sound trigger
+        function playLevelUpSound() {
+            playSynthSound([261.63, 329.63, 392.00, 523.25], 0.6, 'sine');
+        }
+
+        // Alarm Sound trigger
+        function playAlarmSound() {
+            playSynthSound([523.25, 493.88, 523.25, 493.88, 523.25], 1.2, 'sawtooth');
+        }
+
+        // Lucky Bell trigger
+        function playLuckyBell() {
+            playSynthSound([523.25, 659.25, 783.99, 1046.50, 1318.51], 2.0, 'sine');
+        }
+
+        // Update gamer level and XP display
+        function gainXP(amount) {
+            playerXP += amount;
+            if (playerXP >= 100) {
+                playerXP = playerXP % 100;
+                playerLevel++;
+                levelDisplay.textContent = playerLevel.toString().padStart(2, '0');
+                playLevelUpSound();
+            }
+            xpBarDisplay.style.width = `${playerXP}%`;
+        }
+
+        // Format seconds into MM:SS format
+        function updateDisplay() {
+            if (timeLeft < 0) timeLeft = 0;
+            let m = Math.floor(timeLeft / 60);
+            let s = timeLeft % 60;
+            timerDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            
+            if (timeLeft === 0 && isRunning) {
+                playAlarmSound();
+                toggleTimer();
+                gameStatusText.textContent = "NHIỆM VỤ: HOÀN THÀNH";
+            }
+        }
+
+        // Toggle Timer (Start / Pause)
+        function toggleTimer() {
+            playClickSound();
+            if (isRunning) {
+                clearInterval(timerInterval);
+                playPauseBtn.innerHTML = '<span>▶ TIẾP TỤC BÀI LUYỆN</span>';
+                playPauseBtn.className = "px-8 py-2 text-sm font-black rounded border-2 border-red-600 bg-red-600 text-white hover:bg-red-700 active:translate-y-0.5 shadow-[3px_3px_0px_0px_#1E293B] hover:shadow-[1px_1px_0px_0px_#1E293B] transition-all flex items-center gap-2";
+                gameStatusText.textContent = "TRẠNG THÁI: TẠM DỪNG";
+            } else {
+                if (timeLeft === 0) return; 
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    // Accumulate focus XP as timer ticks
+                    if (timeLeft % 10 === 0) {
+                        gainXP(1);
+                    }
+                }, 1000);
+                playPauseBtn.innerHTML = '<span>⏸ TẠM NGỪNG THỬ THÁCH</span>';
+                playPauseBtn.className = "px-8 py-2 text-sm font-black rounded border-2 border-gray-800 bg-gray-800 text-white hover:bg-gray-900 active:translate-y-0.5 shadow-[3px_3px_0px_0px_#DC2626] hover:shadow-[1px_1px_0px_0px_#DC2626] transition-all flex items-center gap-2";
+                gameStatusText.textContent = "TRẠNG THÁI: ĐANG HOẠT ĐỘNG";
+            }
+            isRunning = !isRunning;
+        }
+
+        // Resets timer back to specific minutes
+        function resetTimer(minutes) {
+            playClickSound();
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = minutes * 60;
+            playPauseBtn.innerHTML = '<span>▶ START MISSION</span>';
+            playPauseBtn.className = "px-8 py-2 text-sm font-black rounded border-2 border-red-600 bg-red-600 text-white hover:bg-red-700 active:translate-y-0.5 shadow-[3px_3px_0px_0px_#1E293B] hover:shadow-[1px_1px_0px_0px_#1E293B] transition-all flex items-center gap-2";
+            gameStatusText.textContent = "TRẠNG THÁI: SẴN SÀNG";
+            updateDisplay();
+        }
+
+        // Adjusts countdown time on click (+/- buttons)
+        function adjustTime(seconds) {
+            playClickSound();
+            timeLeft += seconds;
+            if (timeLeft < 0) timeLeft = 0;
+            updateDisplay();
+        }
+
+        // Mute / Unmute system audio
+        function toggleMute() {
+            isMuted = !isMuted;
+            const volIcon = document.getElementById('volume-icon');
+            if (isMuted) {
+                volIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6L4.5 9H1.5v6h3l4.5 3.75V3.75z"></path>`;
+            } else {
+                volIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.75l-3-3H5.25A2.25 2.25 0 013 13.5v-3a2.25 2.25 0 012.25-2.25H9l3-3V18.75z"></path>`;
+                playClickSound();
+            }
+        }
+
+        // Switch active stage (level/mission progress)
+        function switchStage(stageNum, btnElement) {
+            playLevelUpSound();
+            activeStage = stageNum;
+            
+            // Hide all stages
+            document.querySelectorAll('.stage-section').forEach(sec => sec.classList.add('hidden'));
+            
+            // Clear styles for all sidebar buttons
+            document.querySelectorAll('aside button[id^="nav-btn-"]').forEach(btn => {
+                btn.className = "w-full text-left p-3 rounded border border-gray-300 bg-white hover:border-red-600 hover:bg-red-50/40 text-gray-700 transition-all flex flex-col gap-1";
+                // Strip the stripe div if present
+                const stripes = btn.querySelector('.game-stripes');
+                if (stripes) stripes.remove();
+            });
+            
+            // Show target stage
+            document.getElementById(`stage-${stageNum}`).classList.remove('hidden');
+            
+            // Apply active styles to the pressed button
+            btnElement.className = "w-full text-left p-3 rounded border-2 border-red-600 bg-red-50 text-red-700 shadow-[3px_3px_0px_0px_#DC2626] transition-all hover:bg-red-100 flex flex-col gap-1 relative overflow-hidden";
+            const decorStripe = document.createElement('div');
+            decorStripe.className = "absolute right-0 top-0 h-full w-2 game-stripes";
+            btnElement.appendChild(decorStripe);
+            
+            // Highlight step checkpoints
+            for (let i = 1; i <= 4; i++) {
+                const badge = document.getElementById(`badge-${i}`);
+                if (i <= stageNum) {
+                    badge.className = "w-6 h-6 rounded-full border-2 border-red-600 flex items-center justify-center bg-red-600 text-white font-mono-game text-xs shadow-sm";
+                } else {
+                    badge.className = "w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center bg-white text-gray-400 font-mono-game text-xs";
+                }
+            }
+
+            // Update title
+            const titles = [
+                "Đấu Trường Luyện Đọc • Chặng 1: Ý Hay",
+                "Đấu Trường Luyện Đọc • Chặng 2: Luyện 3-2-1",
+                "Đấu Trường Luyện Đọc • Chặng 3: Đọc Hiểu Đúc Kết Sâu",
+                "Đấu Trường Luyện Đọc • Chặng 4: Đúc Kết & Chia Sẻ"
+            ];
+            headerTitle.textContent = titles[stageNum - 1];
+
+            // Gain XP bonus for changing stages
+            gainXP(20);
+
+            // Set default 15 mins for newly switched stage
+            resetTimer(15);
+        }
+
+        // Active Technique Card logic inside Stage 2
+        function selectTrainingCard(cardIdx, minutes) {
+            playClickSound();
+            
+            // Clear active style for all tech cards
+            document.querySelectorAll('[id^="card-tech-"]').forEach(card => {
+                card.className = "gaming-card p-4 rounded-lg cursor-pointer flex flex-col justify-between";
+                const techBadge = card.querySelector('span.bg-red-600');
+                if (techBadge) {
+                    techBadge.className = "bg-gray-800 text-white text-[10px] font-black px-2 py-0.5 rounded font-mono-game";
+                }
+                const footNotes = card.querySelector('div.text-red-600');
+                if (footNotes) {
+                    footNotes.className = "mt-4 border-t border-gray-100 pt-2 text-[10px] font-bold text-gray-400 uppercase text-center font-mono-game";
+                }
+            });
+
+            // Highlight target tech card
+            const targetCard = document.getElementById(`card-tech-${cardIdx}`);
+            targetCard.className = "gaming-card p-4 rounded-lg cursor-pointer flex flex-col justify-between gaming-card-active";
+            
+            const badge = targetCard.querySelector('span.bg-gray-800');
+            if (badge) {
+                badge.className = "bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded font-mono-game";
+            }
+            
+            const footerText = targetCard.querySelector('div.text-gray-400');
+            if (footerText) {
+                footerText.className = "mt-4 border-t border-red-100 pt-2 text-[10px] font-bold text-red-600 uppercase text-center font-mono-game";
+            }
+
+            // Load timer with corresponding technique minutes
+            resetTimer(minutes);
+        }
+
+        // Mindmap Interaction: Add principal branch node
+        function addMindmapBranch() {
+            playClickSound();
+            const list = document.getElementById('mindmap-list');
+            const addBtnWrapper = document.getElementById('add-btn-wrapper');
+            
+            const newLi = document.createElement('li');
+            newLi.className = 'mindmap-branch';
+            newLi.innerHTML = `
+                <div class="node-wrapper">
+                    <div class="mindmap-node" contenteditable="true" data-placeholder="Nhập ý chính...">✨ Ý chính mới</div>
+                    <button class="add-sub-btn" onclick="addSubBranch(this)" title="Thêm ý phụ">+</button>
+                </div>
+                <ul class="mindmap-sub-branches"></ul>
+            `;
+            
+            list.insertBefore(newLi, addBtnWrapper);
+            newLi.querySelector('.mindmap-node').focus();
+            gainXP(5);
+        }
+
+        // Mindmap Interaction: Add sub branch node
+        function addSubBranch(btn) {
+            playClickSound();
+            const parentBranch = btn.closest('.mindmap-branch');
+            const subBranchesList = parentBranch.querySelector('.mindmap-sub-branches');
+            
+            // Show sub branches
+            subBranchesList.classList.add('active');
+            
+            const newSubLi = document.createElement('li');
+            newSubLi.className = 'mindmap-sub-branch';
+            newSubLi.innerHTML = `<div class="mindmap-sub-node" contenteditable="true" data-placeholder="Nhập ý phụ...">➖ Ý phụ mới</div>`;
+            
+            subBranchesList.appendChild(newSubLi);
+            newSubLi.querySelector('.mindmap-sub-node').focus();
+            gainXP(3);
+        }
+
+        // Preload layout initialization
+        updateDisplay();
+    </script>
+</body>
+</html>

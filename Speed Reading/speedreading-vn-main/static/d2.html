@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Chiến Binh: Giai Đoạn 2 (Ngày 6 - 10)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0f172a; /* Slate 900 base */
+            color: #e0e0e0;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .step-card {
+            transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.07);
+        }
+        
+        /* Specific Glows per Day */
+        .day-6-hover:hover { box-shadow: 0 10px 20px rgba(234, 179, 8, 0.25); border-color: #fbbf24; }
+        .day-7-hover:hover { box-shadow: 0 10px 20px rgba(34, 197, 94, 0.25); border-color: #22c55e; }
+        .day-8-hover:hover { box-shadow: 0 10px 20px rgba(239, 68, 68, 0.25); border-color: #ef4444; }
+        .day-9-hover:hover { box-shadow: 0 10px 20px rgba(168, 85, 247, 0.25); border-color: #a855f7; }
+        .day-10-hover:hover { box-shadow: 0 10px 20px rgba(244, 63, 94, 0.25); border-color: #f43f5e; }
+
+        /* Gradients per Day */
+        .gradient-text-d6 { background: linear-gradient(to right, #fbbf24, #f59e0b, #eab308); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d7 { background: linear-gradient(to right, #4ade80, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d8 { background: linear-gradient(to right, #f87171, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d9 { background: linear-gradient(to right, #c084fc, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text-d10 { background: linear-gradient(to right, #fb7185, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Tab Styles */
+        .tab-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-bottom: 2px solid;
+        }
+        .tab-btn.active.day6 { border-color: #fbbf24; }
+        .tab-btn.active.day7 { border-color: #22c55e; }
+        .tab-btn.active.day8 { border-color: #ef4444; }
+        .tab-btn.active.day9 { border-color: #a855f7; }
+        .tab-btn.active.day10 { border-color: #f43f5e; }
+        
+        .tab-btn:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .hidden-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .visible-content {
+            display: block;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 bg-[url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2074&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat bg-fixed relative">
+    
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-slate-900/90 z-0"></div>
+
+    <!-- Main Container -->
+    <div class="max-w-6xl w-full bg-slate-900/80 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden relative z-10 backdrop-blur-md mt-6 mb-10">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-700/50 bg-black/20 overflow-x-auto scrollbar-hide">
+            <button onclick="switchTab('day6')" id="tab-day6" class="tab-btn day6 active flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-crown mr-2"></i> Ngày 6
+            </button>
+            <button onclick="switchTab('day7')" id="tab-day7" class="tab-btn day7 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-gas-pump mr-2"></i> Ngày 7
+            </button>
+            <button onclick="switchTab('day8')" id="tab-day8" class="tab-btn day8 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-rocket mr-2"></i> Ngày 8
+            </button>
+            <button onclick="switchTab('day9')" id="tab-day9" class="tab-btn day9 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-eye mr-2"></i> Ngày 9
+            </button>
+            <button onclick="switchTab('day10')" id="tab-day10" class="tab-btn day10 flex-1 py-4 px-4 text-center font-bold tracking-widest text-gray-400 hover:text-white brand-font text-sm md:text-lg min-w-[100px]">
+                <i class="fas fa-heart mr-2"></i> Ngày 10
+            </button>
+        </div>
+
+        <!-- DAY 6 CONTENT -->
+        <div id="content-day6" class="visible-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-900 via-amber-500 to-blue-900 opacity-80"></div>
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[600px] h-[400px] bg-amber-500/10 blur-[120px] pointer-events-none rounded-full"></div>
+
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 right-10 hidden md:block opacity-30 animate-pulse"><i class="fas fa-crown text-6xl text-amber-400"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-bold tracking-widest mb-4 brand-font">Tái Định Vị Nhân Dạng</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d6">NGÀY 6</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">KHAI SINH CON NGƯỜI MỚI</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Con người luôn nỗ lực để sống đúng với cái mác mà họ tự dán lên mình. <span class="text-amber-400 font-bold">Hôm nay, chúng ta xé cái mác cũ đó đi.</span>"</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="step-card day-6-hover glass-panel p-8 rounded-2xl border-t-4 border-gray-600 relative flex flex-col bg-gradient-to-b from-gray-900/80 to-black/80">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-700 px-4 py-1 text-xs font-bold text-white rounded shadow-lg uppercase tracking-wider">Bước 1</div>
+                    <div class="text-center mb-6 mt-4"><i class="fas fa-skull text-5xl text-gray-500 mb-3"></i><h3 class="text-xl text-gray-300 font-bold uppercase brand-font">Đám Tang Người Cũ</h3></div>
+                    <div class="text-sm text-gray-400 flex-grow text-center relative">
+                         <div class="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none"><i class="fas fa-times text-[10rem] text-red-900/50"></i></div>
+                        <p class="mb-4 italic text-gray-500">Viết xuống & <span class="text-red-500 font-bold">XÉ NÁT</span>:</p>
+                        <ul class="space-y-3 text-sm line-through text-gray-600 font-serif mb-6"><li>"Tôi là đứa lười biếng"</li><li>"Tôi hay bỏ cuộc"</li></ul>
+                        <div class="border-t border-gray-800 pt-4"><p class="text-red-500 font-bold text-xs mt-1">"ĐÂY KHÔNG PHẢI LÀ TÔI!"</p></div>
+                    </div>
+                </div>
+
+                <div class="step-card day-6-hover glass-panel p-8 rounded-2xl border-t-4 border-amber-500 relative flex flex-col transform md:-translate-y-6 z-10 bg-gradient-to-br from-slate-900 to-blue-900 shadow-2xl shadow-amber-900/20">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-amber-500 px-6 py-1 text-sm font-bold text-black rounded shadow-lg shadow-amber-500/50 uppercase tracking-widest">Quan Trọng Nhất</div>
+                    <div class="text-center mb-6 mt-6"><i class="fas fa-id-card text-6xl text-amber-400 mb-2 filter drop-shadow-[0_0_15px_rgba(251,191,36,0.6)]"></i><h3 class="text-2xl text-amber-400 font-bold uppercase brand-font">Căn Cước Mới</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow"><p class="mb-4 text-center text-sm text-gray-400">Thiết lập lại: <span class="text-white font-bold">"TÔI LÀ AI?"</span></p><div class="space-y-4"><div class="bg-black/40 p-3 rounded-lg border border-amber-500/30 flex items-center"><i class="fas fa-gem text-amber-500 mr-3"></i><span class="text-white font-bold text-sm uppercase">Tôi là nam châm hút tiền</span></div><div class="bg-black/40 p-3 rounded-lg border border-amber-500/30 flex items-center"><i class="fas fa-bolt text-amber-500 mr-3"></i><span class="text-white font-bold text-sm uppercase">Tôi là cỗ máy năng lượng</span></div></div></div>
+                </div>
+
+                <div class="step-card day-6-hover glass-panel p-8 rounded-2xl border-t-4 border-blue-500 relative flex flex-col bg-gradient-to-b from-blue-900/40 to-slate-900">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 px-4 py-1 text-xs font-bold text-white rounded shadow-lg uppercase tracking-wider">Bước 3</div>
+                    <div class="text-center mb-6 mt-4"><i class="fas fa-user-tie text-5xl text-blue-400 mb-3"></i><h3 class="text-xl text-blue-400 font-bold uppercase brand-font">Nhập Vai</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow text-center"><p class="mb-4 italic text-sm text-gray-400">Sống 24h như một <span class="text-white font-bold">"Người Khổng Lồ"</span>.</p><div class="space-y-3 text-sm text-left pl-2 bg-blue-900/10 p-4 rounded-xl border border-blue-500/20"><p><i class="fas fa-walking text-blue-500 w-6 text-center mr-2"></i> Đi thẳng lưng</p><p><i class="fas fa-tshirt text-blue-500 w-6 text-center mr-2"></i> Mặc đẹp nhất</p><p><i class="fas fa-microphone text-blue-500 w-6 text-center mr-2"></i> Nói to, rõ ràng</p></div></div>
+                </div>
+            </div>
+            
+             <div class="px-6 md:px-10 pb-10">
+                <div class="bg-gradient-to-r from-amber-900/60 to-blue-900/60 border border-amber-500/30 rounded-2xl p-6 text-center">
+                    <p class="text-xl font-bold text-white brand-font">"BẠN LÀ NHỮNG GÌ BẠN <span class="text-amber-400">LỰA CHỌN TRỞ THÀNH</span> NGAY LÚC NÀY."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 7 CONTENT -->
+        <div id="content-day7" class="hidden-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-900 via-emerald-500 to-green-900 opacity-80"></div>
+            
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 left-10 hidden md:block opacity-20"><i class="fas fa-battery-full text-6xl text-green-400"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 text-xs font-bold tracking-widest mb-4 brand-font">Trạm Tiếp Nhiên Liệu</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d7">NGÀY 7</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">TỔNG KẾT & NẠP NĂNG LƯỢNG</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Bạn đã hoàn thành Tuần 1. Hôm nay không phải để cày cuốc, mà để LƯU LẠI thay đổi."</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1: Review -->
+                <div class="step-card day-7-hover glass-panel p-6 rounded-2xl border-t-4 border-green-600 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-clipboard-check text-5xl text-green-500 mb-3"></i><h3 class="text-xl text-green-400 font-bold uppercase brand-font">Tổng Kết</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow bg-green-900/10 p-4 rounded-xl border border-green-500/20">
+                        <p class="mb-2 font-bold text-white">Viết xuống sổ tay:</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start"><i class="fas fa-star text-yellow-500 mt-1 mr-2"></i> 3 Chiến thắng nhỏ tuần qua?</li>
+                            <li class="flex items-start"><i class="fas fa-lightbulb text-yellow-500 mt-1 mr-2"></i> 1 Bài học lớn nhất?</li>
+                            <li class="flex items-start"><i class="fas fa-chart-line text-yellow-500 mt-1 mr-2"></i> Chấm điểm năng lượng (1-10)?</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Step 2: Reward -->
+                <div class="step-card day-7-hover glass-panel p-6 rounded-2xl border-t-4 border-yellow-500 relative flex flex-col bg-gradient-to-br from-yellow-900/20 to-slate-900">
+                     <div class="text-center mb-4 mt-2"><i class="fas fa-gift text-5xl text-yellow-400 mb-3"></i><h3 class="text-xl text-yellow-400 font-bold uppercase brand-font">Tự Thưởng</h3></div>
+                     <div class="text-sm text-gray-300 flex-grow text-center">
+                         <p class="italic mb-3">"Não bộ cần phần thưởng để lặp lại hành động."</p>
+                         <div class="grid grid-cols-2 gap-2 text-xs font-bold text-black">
+                             <div class="bg-yellow-500 p-2 rounded">Ăn món ngon</div>
+                             <div class="bg-yellow-500 p-2 rounded">Ngủ nướng</div>
+                             <div class="bg-yellow-500 p-2 rounded">Massage</div>
+                             <div class="bg-yellow-500 p-2 rounded">Xem phim</div>
+                         </div>
+                         <p class="mt-4 text-yellow-200 text-xs">Hãy nói: "Cảm ơn bản thân đã nỗ lực!"</p>
+                     </div>
+                </div>
+                <!-- Step 3: Recharge -->
+                <div class="step-card day-7-hover glass-panel p-6 rounded-2xl border-t-4 border-teal-500 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-bed text-5xl text-teal-400 mb-3"></i><h3 class="text-xl text-teal-400 font-bold uppercase brand-font">Sạc Pin</h3></div>
+                    <div class="text-sm text-gray-300 flex-grow text-center">
+                        <p class="mb-4">Ngày mai chúng ta sẽ bước vào giai đoạn <span class="font-bold text-white">MOMENTUM (Tốc Độ)</span>.</p>
+                        <div class="bg-teal-900/20 p-3 rounded-lg border border-teal-500/30">
+                            <i class="fas fa-moon text-teal-400 mb-2 text-2xl"></i>
+                            <p class="font-bold text-white uppercase">Mệnh lệnh:</p>
+                            <p>Đi ngủ sớm hơn 30 phút tối nay.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="px-6 md:px-10 pb-10 text-center">
+                <p class="text-gray-400 text-sm italic">"Nghỉ ngơi vui vẻ nhé, Chiến binh! Ngày mai chúng ta sẽ <span class="text-white font-bold">BẮN TÊN LỬA</span>."</p>
+            </div>
+        </div>
+
+        <!-- DAY 8 CONTENT -->
+        <div id="content-day8" class="hidden-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-900 via-orange-500 to-red-900 opacity-80"></div>
+            
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 right-10 hidden md:block opacity-20"><i class="fas fa-tachometer-alt text-6xl text-red-500"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-bold tracking-widest mb-4 brand-font">Momentum • Giai Đoạn 2</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d8">NGÀY 8</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">THIẾT KẾ BẢN ĐỒ CHIẾN THẮNG (RPM)</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Đừng bận rộn một cách mù quáng. Đừng làm việc chăm chỉ, hãy làm việc thông minh."</p>
+            </div>
+
+            <div class="p-6 md:p-10">
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-500 relative bg-gradient-to-r from-slate-900 to-red-900/10 mb-8">
+                     <h3 class="text-2xl text-red-500 font-bold uppercase brand-font mb-4 text-center">Công thức R.P.M</h3>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                         <div class="bg-black/40 p-4 rounded-xl border border-red-500/30">
+                             <div class="text-4xl font-black text-white mb-2">R</div>
+                             <p class="text-red-400 font-bold uppercase text-xs">Result (Kết quả)</p>
+                             <p class="text-gray-400 text-xs mt-2 italic">"Tôi muốn ĐẠT ĐƯỢC cụ thể điều gì?"</p>
+                         </div>
+                         <div class="bg-black/40 p-4 rounded-xl border border-red-500/30">
+                             <div class="text-4xl font-black text-white mb-2">P</div>
+                             <p class="text-red-400 font-bold uppercase text-xs">Purpose (Mục đích)</p>
+                             <p class="text-gray-400 text-xs mt-2 italic">"Tại sao tôi PHẢI làm việc này?"</p>
+                         </div>
+                         <div class="bg-black/40 p-4 rounded-xl border border-red-500/30">
+                             <div class="text-4xl font-black text-white mb-2">M</div>
+                             <p class="text-red-400 font-bold uppercase text-xs">Massive Action</p>
+                             <p class="text-gray-400 text-xs mt-2 italic">"Tôi cần làm những gì ngay bây giờ?"</p>
+                         </div>
+                     </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-gray-500">
+                        <h4 class="text-white font-bold uppercase mb-4"><i class="fas fa-edit mr-2 text-gray-400"></i> Bài Tập Thực Chiến</h4>
+                        <p class="text-sm text-gray-300 mb-4">Chọn 1 dự án/vấn đề lớn nhất hôm nay và viết RPM cho nó.</p>
+                        <div class="bg-gray-800 p-4 rounded text-xs text-gray-400 font-mono">
+                            <span class="text-green-400">Ví dụ: Tập thể dục</span><br>
+                            R: Body săn chắc, mặc vừa bộ vest.<br>
+                            P: Tự tin, khỏe mạnh, hấp dẫn.<br>
+                            M: Soạn đồ -> Đăng ký thẻ -> Tập lúc 18h.
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-red-600 bg-red-900/20">
+                         <h4 class="text-red-500 font-bold uppercase mb-4"><i class="fas fa-stopwatch mr-2"></i> Mệnh Lệnh 24H</h4>
+                         <p class="text-sm text-white mb-4">Trước khi làm bất cứ việc gì, hãy dừng lại 3 giây và hỏi:</p>
+                         <p class="text-xl font-bold text-white text-center border-t border-b border-red-500/30 py-4">"KẾT QUẢ mình mong muốn là gì?"</p>
+                         <div class="flex justify-around mt-4 text-xs font-bold uppercase">
+                             <span class="text-gray-500"><i class="fas fa-times mr-1"></i> Vô bổ -> XÓA</span>
+                             <span class="text-red-400"><i class="fas fa-check mr-1"></i> Rõ ràng -> LÀM</span>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAY 9 CONTENT -->
+        <div id="content-day9" class="hidden-content">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-900 via-purple-500 to-indigo-900 opacity-80"></div>
+             <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[600px] h-[400px] bg-purple-500/10 blur-[120px] pointer-events-none rounded-full"></div>
+
+            <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 left-10 hidden md:block opacity-20"><i class="fas fa-eye text-6xl text-purple-400"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-bold tracking-widest mb-4 brand-font">Tên Lửa Dẫn Đường</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d9">NGÀY 9</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">BẢNG TẦM NHÌN (VISION BOARD)</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Biến bộ não thành tên lửa tầm nhiệt. Khóa mục tiêu bằng hình ảnh."</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Why -->
+                <div class="step-card day-9-hover glass-panel p-6 rounded-2xl border-l-4 border-purple-500">
+                     <h3 class="text-xl text-purple-400 font-bold uppercase brand-font mb-4">Tại sao phải làm?</h3>
+                     <p class="text-sm text-gray-300 mb-4">Đây là khoa học lập trình lại tiềm thức (RAS). Nếu không cho não thấy hình ảnh rõ ràng, nó sẽ bị mù trước cơ hội.</p>
+                     <ul class="text-sm space-y-2 text-gray-400">
+                         <li><i class="fas fa-check text-purple-500 mr-2"></i> Không tìm ảnh "cọc tiền" -> Tìm số dư cụ thể.</li>
+                         <li><i class="fas fa-check text-purple-500 mr-2"></i> Không tìm ảnh "xe hơi" -> Tìm đúng mẫu xe/màu xe.</li>
+                     </ul>
+                </div>
+
+                <!-- How -->
+                <div class="step-card day-9-hover glass-panel p-6 rounded-2xl border-l-4 border-indigo-500 bg-gradient-to-br from-slate-900 to-indigo-900/30">
+                     <h3 class="text-xl text-indigo-400 font-bold uppercase brand-font mb-4">Quy Trình 4 Bước</h3>
+                     <ol class="text-sm space-y-3 text-gray-300 list-decimal list-inside">
+                         <li><strong class="text-white">Truy tìm:</strong> Google/Pinterest hình ảnh khao khát nhất.</li>
+                         <li><strong class="text-white">Ghép tranh:</strong> Đặt ảnh BẠN cười tươi ở chính giữa.</li>
+                         <li><strong class="text-white">Ám ảnh:</strong> Cài làm hình nền điện thoại/máy tính.</li>
+                         <li><strong class="text-white">Nghi thức (Quan trọng):</strong> Dành 60s mỗi sáng/tối để NHÌN & CẢM NHẬN như thể đã đạt được.</li>
+                     </ol>
+                </div>
+            </div>
+
+            <div class="px-6 md:px-10 pb-10">
+                 <div class="glass-panel p-8 rounded-2xl border-t-2 border-purple-500 text-center relative overflow-hidden">
+                     <div class="absolute inset-0 bg-purple-500/5 animate-pulse"></div>
+                     <h4 class="text-white font-bold uppercase mb-2 relative z-10"><i class="fas fa-mobile-alt mr-2"></i> Hành Động Ngay</h4>
+                     <p class="text-gray-300 text-sm mb-4 relative z-10">Tìm ít nhất 1 hình ảnh đại diện cho mục tiêu lớn nhất năm nay.</p>
+                     <button class="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full text-sm uppercase transition relative z-10">
+                         Cài làm hình nền ngay lập tức
+                     </button>
+                 </div>
+            </div>
+        </div>
+
+        <!-- DAY 10 CONTENT -->
+        <div id="content-day10" class="hidden-content">
+             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 opacity-80"></div>
+             
+             <div class="text-center pt-10 pb-6 px-6 relative">
+                 <div class="absolute top-10 right-10 hidden md:block opacity-20"><i class="fas fa-hand-holding-heart text-6xl text-pink-400"></i></div>
+                <div class="inline-block px-4 py-1 rounded-full border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs font-bold tracking-widest mb-4 brand-font">Chiến Dịch Kết Nối</div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">NHIỆM VỤ <span class="gradient-text-d10">NGÀY 10</span></h1>
+                <h2 class="text-xl md:text-2xl text-gray-400 font-light tracking-wider brand-font">KẾT NỐI SÂU SẮC</h2>
+                <p class="mt-6 text-gray-300 italic max-w-3xl mx-auto text-base">"Thành công mà không có ai để chia sẻ thì đó là thất bại thảm hại nhất."</p>
+            </div>
+
+            <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="step-card day-10-hover glass-panel p-6 rounded-2xl border-t-4 border-gray-400 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-users text-4xl text-gray-300 mb-2"></i><h3 class="text-lg text-gray-300 font-bold uppercase">1. Chọn Mục Tiêu</h3></div>
+                    <div class="text-sm text-gray-400 text-center">
+                        <p class="mb-2">Viết tên 3 người quan trọng nhất đã lâu chưa bày tỏ tình cảm:</p>
+                        <div class="flex justify-center gap-2 text-xs text-white">
+                            <span class="bg-gray-700 px-2 py-1 rounded">Bố mẹ</span>
+                            <span class="bg-gray-700 px-2 py-1 rounded">Vợ chồng</span>
+                            <span class="bg-gray-700 px-2 py-1 rounded">Tri kỷ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card day-10-hover glass-panel p-6 rounded-2xl border-t-4 border-pink-500 relative flex flex-col transform md:-translate-y-4 z-10 bg-gradient-to-b from-slate-900 to-pink-900/20 shadow-xl shadow-pink-900/20">
+                     <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-pink-600 px-4 py-1 text-xs font-bold text-white rounded shadow-lg uppercase">Nhiệm Vụ Chính</div>
+                    <div class="text-center mb-4 mt-4"><i class="fas fa-phone-alt text-5xl text-pink-400 mb-3"></i><h3 class="text-xl text-pink-400 font-bold uppercase">2. Cuộc Gọi Biết Ơn</h3></div>
+                    <div class="text-sm text-gray-300 bg-black/40 p-4 rounded-xl border border-pink-500/30">
+                        <p class="text-xs text-gray-500 uppercase mb-2 font-bold">Kịch bản (Đừng nói sáo rỗng):</p>
+                        <p class="italic">"Alo..., hôm nay tự nhiên em nhớ lại <span class="text-pink-400">[Kỷ niệm cụ thể]</span>. Em chỉ muốn gọi để nói cảm ơn anh/chị vì điều đó. Em rất trân trọng sự hiện diện của anh/chị."</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card day-10-hover glass-panel p-6 rounded-2xl border-t-4 border-indigo-400 relative flex flex-col">
+                    <div class="text-center mb-4 mt-2"><i class="fas fa-dove text-4xl text-indigo-300 mb-2"></i><h3 class="text-lg text-indigo-300 font-bold uppercase">3. Tha Thứ (Nội tâm)</h3></div>
+                    <div class="text-sm text-gray-400 text-center">
+                        <p class="mb-2">Nhắm mắt lại, hình dung người làm bạn tổn thương và nói:</p>
+                        <p class="text-white font-bold italic">"Tôi tha thứ cho bạn. Tôi giải phóng cho bạn và chính tôi."</p>
+                        <p class="text-xs mt-2 text-gray-500">(Đừng uống thuốc độc và mong người khác chết)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 md:px-10 pb-10 text-center">
+                 <button class="px-8 py-4 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold rounded-full text-lg uppercase shadow-lg transform transition hover:scale-105">
+                     <i class="fas fa-phone mr-2"></i> Thực hiện 3 cuộc gọi ngay!
+                 </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(day) {
+            // Deactivate all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // Activate current tab
+            document.getElementById('tab-' + day).classList.add('active');
+            
+            // Hide all content blocks
+            const days = ['day6', 'day7', 'day8', 'day9', 'day10'];
+            
+            days.forEach(d => {
+                const el = document.getElementById('content-' + d);
+                if (d === day) {
+                    el.classList.remove('hidden-content');
+                    el.classList.add('visible-content');
+                } else {
+                    el.classList.remove('visible-content');
+                    el.classList.add('hidden-content');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

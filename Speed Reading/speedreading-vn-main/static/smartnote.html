@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phương pháp Ghi chép Smart Note</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#E53E3E', // Cờ đỏ
+                        secondary: '#C53030', // Đỏ đậm
+                        light: '#FEF2F2', // Đỏ rất nhạt cho background
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Hiệu ứng giấy kẻ ngang cho phần Nội dung chi tiết */
+        .lined-paper {
+            background-color: #ffffff;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #e2e8f0 31px, #e2e8f0 32px);
+            line-height: 32px;
+            padding-top: 8px;
+        }
+
+        /* Animation classes for scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* Blob background effect */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased relative overflow-x-hidden">
+
+    <!-- Background Blobs -->
+    <div class="blob bg-red-300 w-96 h-96 rounded-full top-[-10%] left-[-10%]"></div>
+    <div class="blob bg-red-200 w-96 h-96 rounded-full top-[20%] right-[-10%]"></div>
+    <div class="blob bg-red-300 w-96 h-96 rounded-full bottom-[-10%] left-[20%]"></div>
+
+    <!-- Header / Nav -->
+    <header class="fixed w-full top-0 bg-white/80 backdrop-blur-md z-50 border-b border-red-100 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading Logo" class="h-10">
+            <a href="#structure" class="hidden md:inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-secondary transition-colors shadow-md shadow-red-500/30">
+                Tìm hiểu ngay <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <div class="inline-block mb-4 px-4 py-1 rounded-full bg-red-100 text-primary font-semibold text-sm tracking-wide">
+                Kỹ thuật ghi chép thông minh
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 mb-6">
+                Phương pháp Ghi chép <br class="hidden md:block"> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-red-400">Smart Note</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600 mb-10 leading-relaxed">
+                Bóc tách kiến thức thụ động thành tài sản cá nhân. Hệ thống hóa thông tin, kích thích tư duy và tăng khả năng ghi nhớ bền vững, biến việc ghi chép thành công cụ ứng dụng thực tế.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 1: Cấu trúc (Visual Presentation) -->
+    <section id="structure" class="py-16 bg-white relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">1. Cấu Trúc Trang Giấy Smart Note</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Chia trang giấy thành 3 khu vực chuyên biệt để tối ưu hóa quá trình Gợi nhớ (Active Recall) và Đọc chủ động (Active Reading).</p>
+            </div>
+
+            <!-- Visual Notebook Layout -->
+            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-200 reveal delay-100 transform transition-transform hover:scale-[1.01] duration-300">
+                <!-- Notebook Header (fake) -->
+                <div class="h-10 border-b border-red-500 flex items-center px-4 bg-red-50">
+                    <div class="w-full flex justify-between text-xs text-red-400 font-semibold uppercase tracking-wider">
+                        <span>Chủ đề: Ghi chép hiệu quả</span>
+                        <span>Ngày: ... / ... / ......</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row h-auto min-h-[400px]">
+                    <!-- Cột trái: Từ khóa -->
+                    <div class="w-full md:w-1/3 border-b md:border-b-0 md:border-r border-red-300 p-6 bg-red-50/30 flex flex-col group hover:bg-red-50 transition-colors">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-primary">
+                                <i class="fa-solid fa-key"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-800">Cột bên trái</h3>
+                        </div>
+                        <h4 class="font-semibold text-primary mb-2">Từ khóa / Keywords</h4>
+                        <p class="text-sm text-slate-600 flex-grow">Ghi lại ý chính, khái niệm, cụm từ quan trọng.</p>
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-red-100 shadow-sm text-sm opacity-80 group-hover:opacity-100 transition-opacity">
+                            <span class="font-semibold block text-red-500 mb-1"><i class="fa-solid fa-bolt mr-1"></i> Active Recall</span>
+                            Nhìn từ khóa -> Nhớ lại toàn bộ nội dung.
+                        </div>
+                    </div>
+
+                    <!-- Cột phải: Nội dung -->
+                    <div class="w-full md:w-2/3 p-6 lined-paper group hover:bg-slate-50 transition-colors relative">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                <i class="fa-solid fa-align-left"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-800">Khu vực trung tâm</h3>
+                        </div>
+                        <h4 class="font-semibold text-blue-600 mb-2">Nội dung chi tiết</h4>
+                        <p class="text-sm text-slate-600 mb-2">Ghi chép cụ thể từ sách/bài giảng.</p>
+                        <ul class="text-sm text-slate-600 list-disc pl-5 space-y-1">
+                            <li>Chắt lọc câu nói hay.</li>
+                            <li>Ghi rõ ý chính và ý phụ theo mạch.</li>
+                            <li>Tóm tắt bằng ngôn ngữ của chính mình.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Phần dưới cùng: Hành động -->
+                <div class="border-t-2 border-red-400 p-6 bg-amber-50 group hover:bg-amber-100/50 transition-colors">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-8 h-8 rounded-full bg-amber-200 flex items-center justify-center text-amber-700">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Phần dưới cùng</h3>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="font-semibold text-amber-700 mb-1">Tâm đắc & Hành động</h4>
+                            <p class="text-sm text-slate-700">Ghi lại điều tâm đắc, liên hệ bản thân và rút ra bài học.</p>
+                        </div>
+                        <div class="px-4 py-2 bg-white rounded-lg border border-amber-200 shadow-sm text-sm font-medium text-amber-800 whitespace-nowrap">
+                            <i class="fa-solid fa-rocket mr-1"></i> Active Reading
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Quy trình -->
+    <section class="py-16 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">2. Quy Trình Ghi Chép Hiệu Quả</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Thực hiện tuần tự 4 bước sau để duy trì sự tập trung và tối ưu hóa lượng kiến thức tiếp thu.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 reveal delay-100 relative pt-12">
+                    <div class="absolute -top-6 left-6 w-12 h-12 bg-red-100 text-primary rounded-xl flex items-center justify-center text-xl font-bold shadow-sm shadow-red-200">1</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3"><i class="fa-solid fa-book-open text-red-400 mr-2"></i>Đọc/Nghe theo đoạn</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Đọc khoảng 2-3 trang sách hoặc nghe hết một phần nội dung rồi mới dừng lại để bắt đầu ghi chép. Tránh vừa đọc vừa chép gây mất tập trung.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 reveal delay-200 relative pt-12">
+                    <div class="absolute -top-6 left-6 w-12 h-12 bg-red-100 text-primary rounded-xl flex items-center justify-center text-xl font-bold shadow-sm shadow-red-200">2</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3"><i class="fa-solid fa-magnifying-glass text-red-400 mr-2"></i>Trích lọc từ khóa</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Tìm và viết các từ khóa lặp đi lặp lại hoặc các định nghĩa quan trọng vào <strong>cột bên trái</strong> của vở ghi.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 reveal delay-300 relative pt-12">
+                    <div class="absolute -top-6 left-6 w-12 h-12 bg-red-100 text-primary rounded-xl flex items-center justify-center text-xl font-bold shadow-sm shadow-red-200">3</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3"><i class="fa-solid fa-pen-nib text-red-400 mr-2"></i>Tổng hợp nội dung</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Dựa trên các từ khóa đã lọc, tóm tắt nội dung chính bằng <strong>ngôn ngữ của chính mình</strong> vào phần trung tâm (cột bên phải).</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 reveal delay-100 lg:delay-400 relative pt-12">
+                    <div class="absolute -top-6 left-6 w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center text-xl font-bold shadow-md shadow-red-500/40">4</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3"><i class="fa-solid fa-person-running text-white mr-2 bg-red-400 p-1 rounded"></i>Chuyển hóa</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Cuối buổi học, tự hỏi: "Tác giả muốn giúp gì cho mình?". Viết kế hoạch ứng dụng ngay lập tức vào phần dưới cùng.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3 & 4 Container -->
+    <section class="py-16 bg-white relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16">
+                
+                <!-- Cột Mẹo -->
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8 reveal border-l-4 border-primary pl-4">3. Mẹo Tối Ưu Hóa</h2>
+                    <div class="space-y-6">
+                        <!-- Mẹo 1 -->
+                        <div class="flex gap-4 p-5 rounded-2xl bg-slate-50 hover:bg-red-50 transition-colors reveal delay-100 border border-slate-100 group">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-icons text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-1">Sử dụng biểu tượng (Symbols)</h4>
+                                <p class="text-sm text-slate-600">Tăng tốc độ & trực quan hóa. VD: Dấu (<span class="text-red-500 font-bold">*</span>) ý tâm đắc, (<span class="text-red-500">♥</span>) liên hệ bản thân, (<span class="text-red-500">■/▲</span>) hành động.</p>
+                            </div>
+                        </div>
+                        <!-- Mẹo 2 -->
+                        <div class="flex gap-4 p-5 rounded-2xl bg-slate-50 hover:bg-red-50 transition-colors reveal delay-200 border border-slate-100 group">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-palette text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-1">Cá nhân hóa</h4>
+                                <p class="text-sm text-slate-600">Không cần theo chuẩn cứng nhắc. Tùy biến theo kích thước vở và sở thích cá nhân để tạo cảm hứng học tập.</p>
+                            </div>
+                        </div>
+                        <!-- Mẹo 3 -->
+                        <div class="flex gap-4 p-5 rounded-2xl bg-slate-50 hover:bg-red-50 transition-colors reveal delay-300 border border-slate-100 group">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-network-wired text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-1">Kết hợp Mind Map</h4>
+                                <p class="text-sm text-slate-600">Dùng Skimming lấy "khung sườn", vẽ Mind Map trước khi đi vào chi tiết Smart Note để có cái nhìn tổng thể.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột Lợi ích -->
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8 reveal border-l-4 border-primary pl-4">4. Lợi Ích Vượt Trội</h2>
+                    <div class="grid gap-6">
+                        <!-- Lợi ích 1 -->
+                        <div class="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl text-white shadow-lg shadow-red-200 reveal delay-100 transform transition hover:-translate-y-1">
+                            <div class="flex items-center gap-4 mb-3">
+                                <div class="bg-white/20 p-3 rounded-lg backdrop-blur-sm">
+                                    <i class="fa-solid fa-stopwatch text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold">Tiết kiệm thời gian</h3>
+                            </div>
+                            <p class="text-red-50 text-sm">Giảm thiểu việc ghi chép dư thừa, lan man. Giúp bạn tập trung cao độ vào những giá trị cốt lõi nhất của bài học.</p>
+                        </div>
+                        <!-- Lợi ích 2 -->
+                        <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl text-white shadow-lg reveal delay-200 transform transition hover:-translate-y-1">
+                            <div class="flex items-center gap-4 mb-3">
+                                <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                    <i class="fa-solid fa-brain text-2xl text-red-400"></i>
+                                </div>
+                                <h3 class="text-xl font-bold">Nhớ lâu, hiểu sâu</h3>
+                            </div>
+                            <p class="text-slate-300 text-sm">Viết ra ý chính từ trí nhớ (Record) giúp khắc sâu kiến thức vào não bộ hiệu quả gấp nhiều lần so với việc đọc thụ động.</p>
+                        </div>
+                        <!-- Lợi ích 3 -->
+                        <div class="bg-white border-2 border-red-100 p-6 rounded-2xl shadow-md reveal delay-300 transform transition hover:-translate-y-1">
+                            <div class="flex items-center gap-4 mb-3">
+                                <div class="bg-red-50 text-primary p-3 rounded-lg">
+                                    <i class="fa-solid fa-gears text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800">Tăng tính ứng dụng</h3>
+                            </div>
+                            <p class="text-slate-600 text-sm">Luôn trả lời câu hỏi "Làm gì tiếp theo?". Không chỉ học để biết mà học để thay đổi nhận thức và tạo ra hành động.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 border-t-4 border-primary">
+        <div class="max-w-6xl mx-auto px-4 text-center flex flex-col items-center">
+            <img src="https://img.speedreading.vn/logo.png" alt="Logo" class="h-10 mb-6 brightness-0 invert opacity-80">
+            <h2 class="text-2xl font-bold mb-4">Sẵn sàng tối ưu hóa việc học của bạn?</h2>
+            <p class="text-slate-400 mb-8 max-w-md mx-auto">Áp dụng phương pháp Smart Note ngay hôm nay để thấy sự khác biệt trong tư duy và trí nhớ.</p>
+            <button onclick="window.scrollTo(0,0)" class="px-8 py-3 bg-primary hover:bg-secondary text-white font-bold rounded-full transition-all shadow-lg shadow-red-500/30 hover:scale-105 active:scale-95">
+                <i class="fa-solid fa-arrow-up mr-2"></i> Trở lên đầu trang
+            </button>
+            <div class="mt-12 text-sm text-slate-500">
+                &copy; 2026 Phương pháp Ghi chép Smart Note. Designed based on your requirements.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for scroll animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const revealOnScroll = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: stop observing once revealed
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, {
+                threshold: 0.15, // Trigger when 15% of the element is visible
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>

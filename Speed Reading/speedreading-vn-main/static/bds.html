@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuyển dụng Chuyên viên Môi giới - Bất động sản Thiên Khôi</title>
+    <meta name="description" content="Khởi nghiệp Bất động sản 0 đồng cùng Thiên Khôi. Khóa học miễn phí, hoa hồng 35.5 triệu/căn, nhận tiền trong 24h. Đăng ký ngay!">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Roboto Flex"', 'sans-serif'],
+                    },
+                    colors: {
+                        tk: {
+                            DEFAULT: '#da251d', // Corporate Red matching the logo
+                            dark: '#a81c15',
+                            light: '#ef4444',
+                            50: '#fef2f2',
+                        },
+                        accent: {
+                            DEFAULT: '#f59e0b', // Amber/Gold for Real Estate luxury
+                            dark: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        html { scroll-behavior: smooth; }
+        .hero-bg {
+            /* Sử dụng hình ảnh tòa nhà/văn phòng hiện đại làm background */
+            background-image: linear-gradient(rgba(15, 0, 0, 0.8), rgba(15, 0, 0, 0.9)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 37, 29, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased selection:bg-tk selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="flex items-center gap-2">
+                        <div class="w-10 h-10 bg-tk rounded-lg flex items-center justify-center text-white">
+                            <i class="ph-bold ph-house-line text-2xl"></i>
+                        </div>
+                        <span class="font-extrabold text-2xl text-tk tracking-tight">THIÊN KHÔI</span>
+                    </a>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" class="text-gray-600 hover:text-tk font-medium transition-colors">Về Tập đoàn</a>
+                    <a href="#" class="text-gray-600 hover:text-tk font-medium transition-colors">Kho hàng 50K+</a>
+                    <a href="#" class="text-tk font-bold border-b-2 border-tk pb-1">Tuyển dụng</a>
+                    <a href="#ung-tuyen" class="bg-tk hover:bg-tk-dark text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-2">
+                        Ứng Tuyển <i class="ph-bold ph-arrow-right"></i>
+                    </a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-tk focus:outline-none">
+                        <i class="ph ph-list text-3xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tk hover:bg-gray-50">Về Tập đoàn</a>
+                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-tk hover:bg-gray-50">Kho hàng 50K+</a>
+                <a href="#" class="block px-3 py-2 text-base font-medium text-tk bg-tk-50 rounded-md">Tuyển dụng</a>
+                <a href="#ung-tuyen" class="block px-3 py-2 text-base font-bold text-white bg-tk rounded-md text-center mt-4">Ứng Tuyển Ngay</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg relative text-white py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="inline-block py-1 px-4 rounded-full bg-accent/90 text-white text-sm font-bold tracking-wider mb-6 uppercase shadow-lg">Cơ hội đổi đời 2026</span>
+            
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
+                Khởi Nghiệp BĐS 0 Đồng <br class="hidden md:block"/> 
+                Trở Thành Đại Gia Cùng <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-yellow-200">Thiên Khôi</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl font-light mb-10 max-w-3xl mx-auto opacity-95 leading-relaxed">
+                <strong class="font-bold text-white">Chào bạn!</strong> Khát khao thu nhập nhưng ngại rủi ro? 50% đại gia BĐS hiện nay đi lên từ Môi giới. Hãy bắt đầu hành trình "Đúng - Đủ - Rõ ràng" ngay hôm nay!
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#ung-tuyen" class="bg-accent hover:bg-accent-dark text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:shadow-[0_0_30px_rgba(245,158,11,0.6)] transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i class="ph-fill ph-rocket-launch text-xl"></i> Bứt Phá Thu Nhập Ngay
+                </a>
+                <a href="#thong-tin" class="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2">
+                    Khám Phá Đặc Quyền <i class="ph-bold ph-caret-down"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lợi ích nổi bật (Hook Insight) -->
+    <section id="thong-tin" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Tại Sao Bạn Nên Chọn Thiên Khôi?</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Vượt qua mọi rào cản tài chính ban đầu. Chúng tôi cung cấp bệ phóng vững chắc nhất để bạn thành công với nghề môi giới.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Lợi ích 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-tk/30 transition-all group">
+                    <div class="w-14 h-14 bg-tk-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform text-tk">
+                        <i class="ph-fill ph-graduation-cap text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Bắt Đầu 0 Đồng</h3>
+                    <p class="text-gray-600">Miễn phí 100% khóa học môi giới trị giá 25 triệu. Được "cầm tay chỉ việc", có người dẫn đi gặp khách thực tế. Không phát sinh chi phí.</p>
+                </div>
+
+                <!-- Lợi ích 2 -->
+                <div class="bg-gradient-to-br from-tk to-tk-dark p-8 rounded-2xl shadow-xl transform md:-translate-y-4">
+                    <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-6 text-accent">
+                        <i class="ph-fill ph-money text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Thu Nhập Đột Phá</h3>
+                    <p class="text-white/90">Hoa hồng tối thiểu <strong class="text-accent text-lg">35.5 triệu/căn</strong> (1.1%). Đặc biệt: Tiền về túi cực nhanh trong vòng <strong>24h</strong> sau khi chốt giao dịch.</p>
+                </div>
+
+                <!-- Lợi ích 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-tk/30 transition-all group">
+                    <div class="w-14 h-14 bg-tk-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform text-tk">
+                        <i class="ph-fill ph-database text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Công Cụ "Khủng"</h3>
+                    <p class="text-gray-600">Tiếp cận <strong>50.000+</strong> căn nhà pháp lý chuẩn. Hỗ trợ 90% chi phí đăng tin (batdongsan.com, chotot...) và tặng ngay 2 triệu đồng đăng tin.</p>
+                </div>
+
+                <!-- Lợi ích 4 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-tk/30 transition-all group">
+                    <div class="w-14 h-14 bg-tk-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform text-tk">
+                        <i class="ph-fill ph-map-pin-line text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Môi Trường Tự Do</h3>
+                    <p class="text-gray-600">Thời gian linh hoạt, không gò bó. Sở hữu <strong>22 trụ sở</strong> hiện đại, tiện ích đầy đủ phủ khắp các quận TP.HCM và Bình Dương.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2 Đối tượng ứng viên -->
+    <section class="py-16 bg-tk-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">Vị Trí: Chuyên Viên Môi Giới Bất Động Sản</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Dành cho người mới -->
+                <div class="bg-white rounded-3xl p-8 shadow-md border-t-4 border-gray-300 hover:border-tk transition-colors">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Dành Cho Người Mới</h3>
+                        <span class="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Chưa kinh nghiệm</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-tk mt-1 mr-3 text-xl shrink-0"></i>
+                            <span class="text-gray-700"><strong>Đào tạo từ số 0:</strong> Bạn không cần biết gì về BĐS, chúng tôi dạy bạn mọi thứ hoàn toàn miễn phí.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-tk mt-1 mr-3 text-xl shrink-0"></i>
+                            <span class="text-gray-700"><strong>Cầm tay chỉ việc:</strong> Có đội nhóm đồng hành, trưởng phòng trực tiếp dẫn đi thực chiến gặp khách hàng.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-tk mt-1 mr-3 text-xl shrink-0"></i>
+                            <span class="text-gray-700"><strong>Bảo hiểm an tâm:</strong> Bảo hiểm tai nạn và bảo lãnh hoa hồng, giúp bạn an tâm làm nghề.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Đã có kinh nghiệm -->
+                <div class="bg-white rounded-3xl p-8 shadow-md border-t-4 border-accent relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-accent text-white text-xs font-bold px-4 py-1 rounded-bl-lg uppercase tracking-wider">THỰC CHIẾN</div>
+                    <div class="flex items-center justify-between mb-6 mt-2">
+                        <h3 class="text-2xl font-bold text-gray-900">Người Đã Có Kinh Nghiệm</h3>
+                        <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Bứt phá ngay</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-tk mt-1 mr-3 text-xl shrink-0"></i>
+                            <span class="text-gray-700"><strong>Bán hàng ngay:</strong> Tiếp cận ngay rổ hàng lớn nhất miền Nam với 50.000 căn nhà phố pháp lý chuẩn.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-tk mt-1 mr-3 text-xl shrink-0"></i>
+                            <span class="text-gray-700"><strong>Đặc quyền Marketing:</strong> Đăng bài miễn phí trên hệ thống 300 hội nhóm FB tương tác thật. Tặng tiền đăng tin Web.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-tk mt-1 mr-3 text-xl shrink-0"></i>
+                            <span class="text-gray-700"><strong>Cơ chế tốt nhất:</strong> Chốt giao dịch nhận ngay 35.5tr/căn trong 24h. Lộ trình thăng tiến Quản lý siêu tốc.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quyền Lợi & Chân Dung -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Lộ trình thăng tiến -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="bg-tk/10 p-3 rounded-xl text-tk">
+                            <i class="ph-fill ph-trend-up text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Lộ Trình Thăng Tiến Minh Bạch</h2>
+                    </div>
+                    <div class="prose text-gray-600">
+                        <p class="mb-4 text-lg">Tại Thiên Khôi, chúng tôi <strong>không quan trọng thâm niên</strong>. Năng lực của bạn sẽ quyết định vị trí của bạn.</p>
+                        
+                        <div class="relative pl-8 mt-8 space-y-8 before:absolute before:inset-0 before:ml-[1.1rem] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-tk before:to-tk-50">
+                            <!-- Step 1 -->
+                            <div class="relative">
+                                <div class="absolute left-[-2.4rem] mt-1.5 w-5 h-5 rounded-full bg-tk ring-4 ring-tk-50 flex items-center justify-center"></div>
+                                <h4 class="text-lg font-bold text-gray-900">Chuyên viên Môi giới thực chiến</h4>
+                                <p class="text-sm mt-1 text-gray-600">Học nghề, chốt những giao dịch đầu tiên và định hình phong cách làm việc.</p>
+                            </div>
+                            <!-- Step 2 -->
+                            <div class="relative">
+                                <div class="absolute left-[-2.4rem] mt-1.5 w-5 h-5 rounded-full bg-tk ring-4 ring-tk-50 flex items-center justify-center"></div>
+                                <h4 class="text-lg font-bold text-gray-900">Trưởng phòng Kinh doanh</h4>
+                                <p class="text-sm mt-1 text-gray-600">Xây dựng và dẫn dắt đội nhóm riêng. Nhận hoa hồng quản lý hấp dẫn.</p>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="relative">
+                                <div class="absolute left-[-2.4rem] mt-1.5 w-5 h-5 rounded-full bg-tk ring-4 ring-tk-50 flex items-center justify-center"></div>
+                                <h4 class="text-lg font-bold text-gray-900">Giám đốc Khối / Lãnh đạo</h4>
+                                <p class="text-sm mt-1 text-gray-600">Quản lý khu vực, định hướng chiến lược. Thu nhập không giới hạn.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-tk-dark flex items-start">
+                            <i class="ph-fill ph-handshake mr-3 text-2xl"></i> 
+                            <span>Môi trường làm việc năng động, chuyên nghiệp và tử tế. Nơi bạn được tỏa sáng theo cách riêng của mình.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chân dung ứng viên -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="bg-tk/10 p-3 rounded-xl text-tk">
+                            <i class="ph-fill ph-users text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Chúng Tôi Tìm Kiếm Ai?</h2>
+                    </div>
+                    <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6 lg:p-8">
+                        <ul class="space-y-5">
+                            <li class="flex items-start">
+                                <div class="bg-green-100 p-1 rounded-full mr-4 mt-0.5 shrink-0">
+                                    <i class="ph-bold ph-target text-green-600"></i>
+                                </div>
+                                <span class="text-gray-700 text-lg">Những người <strong>thực sự muốn làm giàu</strong> và có khao khát bứt phá thu nhập nghiêm túc từ BĐS.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-green-100 p-1 rounded-full mr-4 mt-0.5 shrink-0">
+                                    <i class="ph-bold ph-lightning text-green-600"></i>
+                                </div>
+                                <span class="text-gray-700 text-lg">Các bạn <strong>trẻ năng động</strong>, hoài bão lớn.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="bg-green-100 p-1 rounded-full mr-4 mt-0.5 shrink-0">
+                                    <i class="ph-bold ph-rocket text-green-600"></i>
+                                </div>
+                                <span class="text-gray-700 text-lg">Những người đang tìm kiếm <strong>cơ hội khởi nghiệp</strong> an toàn nhưng không lo về vốn.</span>
+                            </li>
+                        </ul>
+                        
+                        <hr class="my-6 border-gray-100">
+                        
+                        <div class="text-center bg-gradient-to-r from-tk-50 to-red-50 py-4 px-6 rounded-xl border border-red-100">
+                            <h4 class="text-tk font-bold text-xl mb-1">Không Yêu Cầu Kinh Nghiệm</h4>
+                            <p class="text-gray-600 text-sm">Tại Thiên Khôi, thái độ quan trọng hơn trình độ!</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA & Liên hệ -->
+    <section id="ung-tuyen" class="py-20 bg-gray-900 relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-tk/30 blur-[100px]"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-accent/20 blur-[80px]"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 uppercase tracking-tight">Hành Động Ngay <br/>Để Thay Đổi Tương Lai!</h2>
+            <p class="text-xl text-amber-300 font-medium mb-10 max-w-2xl mx-auto">
+                "Học nghề không mất tiền – Ra nghề có người dẫn – Chốt giao dịch có thu nhập ngay."
+            </p>
+
+            <div class="glass-card rounded-3xl p-8 md:p-10 mb-10 max-w-2xl mx-auto text-left relative bg-white/10 border-white/20">
+                <h3 class="text-2xl font-bold text-white mb-6 text-center">Chỉ mất 30 giây để bắt đầu</h3>
+                
+                <div class="space-y-6">
+                    <!-- Contact Option 1 -->
+                    <div class="flex items-center gap-4 bg-white/5 border border-white/10 p-5 rounded-2xl hover:bg-white/10 transition-colors">
+                        <div class="w-14 h-14 bg-tk rounded-full flex items-center justify-center text-white shrink-0 shadow-md">
+                            <i class="ph-fill ph-coffee text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-300 font-medium mb-1">Kết nối Zalo - Cùng Coffee trao đổi thêm</p>
+                            <a href="https://zalo.me/0899320202" target="_blank" class="text-2xl font-bold text-white hover:text-accent transition-colors">
+                                0899.320.202 <span class="text-sm font-normal text-gray-400 ml-1">(Phòng Tuyển dụng)</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center opacity-50">
+                        <span class="w-16 h-px bg-gray-400"></span>
+                        <span class="px-3 text-gray-400 font-medium text-sm uppercase">Hoặc</span>
+                        <span class="w-16 h-px bg-gray-400"></span>
+                    </div>
+
+                    <!-- Contact Option 2 -->
+                    <div class="text-center pt-2">
+                        <a href="#" class="inline-flex items-center justify-center w-full bg-accent hover:bg-amber-400 text-gray-900 font-bold text-lg py-5 px-10 rounded-xl transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                            <i class="ph-fill ph-pencil-simple-line mr-2 text-2xl"></i> ĐĂNG KÝ ỨNG TUYỂN NGAY
+                        </a>
+                        <p class="text-gray-400 text-sm mt-4 italic">* Thông tin của bạn được bảo mật tuyệt đối. Chúng tôi sẽ liên hệ trong 2h làm việc.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Col 1 -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6 uppercase tracking-wider flex items-center gap-2">
+                        <i class="ph-fill ph-house-line text-tk"></i> Tập đoàn BĐS Thiên Khôi
+                    </h4>
+                    <p class="text-sm leading-relaxed mb-4">
+                        Nơi hội tụ tinh hoa Bất động sản. Môi trường đào tạo Môi giới số 1 Việt Nam với kho hàng khổng lồ và cơ chế tốt nhất thị trường.
+                    </p>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-tk hover:text-white transition-colors">
+                            <i class="ph-fill ph-facebook-logo text-xl"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-tk hover:text-white transition-colors">
+                            <i class="ph-fill ph-youtube-logo text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Col 2 -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6 uppercase tracking-wider">Hệ thống Trụ sở (Tiêu biểu)</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start"><i class="ph-fill ph-map-pin text-tk mt-1 mr-2 shrink-0"></i> <strong>Hội sở Q.10:</strong> 52 Phạm Ngọc Thạch, Phường 6, Quận 3, TP.HCM (Ví dụ)</li>
+                        <li class="flex items-start"><i class="ph-fill ph-map-pin text-tk mt-1 mr-2 shrink-0"></i> <strong>Trụ sở Q.1:</strong> Nguyễn Đình Chiểu, Phường Đa Kao, Quận 1</li>
+                        <li class="flex items-start"><i class="ph-fill ph-map-pin text-tk mt-1 mr-2 shrink-0"></i> <strong>Trụ sở Tân Bình:</strong> Phổ Quang, Phường 2, Tân Bình</li>
+                        <li class="flex items-start"><i class="ph-fill ph-map-pin text-tk mt-1 mr-2 shrink-0"></i> <strong>Trụ sở Thủ Đức:</strong> Kha Vạn Cân, TP. Thủ Đức</li>
+                        <li class="mt-2 text-accent italic">* Và 18 trụ sở khác phủ sóng toàn TP.HCM & Bình Dương</li>
+                    </ul>
+                </div>
+
+                <!-- Col 3 -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6 uppercase tracking-wider">Liên kết nhanh</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="ph-bold ph-caret-right text-tk"></i> Về Thiên Khôi</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="ph-bold ph-caret-right text-tk"></i> Kho hàng 50.000+ căn</a></li>
+                        <li><a href="#ung-tuyen" class="hover:text-white transition-colors flex items-center gap-2"><i class="ph-bold ph-caret-right text-tk"></i> Ứng tuyển Môi giới</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="ph-bold ph-caret-right text-tk"></i> Đăng tin trên Bannha888</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                <p>&copy; 2026 Bất động sản Thiên Khôi. Nội dung thiết kế tối ưu chuyển đổi.</p>
+                <p class="mt-2 md:mt-0 font-bold text-tk-light">THIÊN KHÔI - SỐ 1 VỀ THỔ CƯ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile menu toggle script -->
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá Thế Giới Sách Cùng Hỉ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Quicksand for a cute, rounded look -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for winning effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            blue: '#E0F4FF',
+                            pink: '#FFE4F2',
+                            yellow: '#FFF7D6',
+                            green: '#D4F5E9',
+                            purple: '#EBDDFF'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #E0F4FF, #FFE4F2);
+            min-height: 100vh;
+        }
+        .pop-in {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .btn-option {
+            transition: all 0.2s ease;
+        }
+        .btn-option:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-option:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        .correct {
+            background-color: #34D399 !important; /* emerald-400 */
+            color: white !important;
+            border-color: #059669 !important;
+        }
+        .wrong {
+            background-color: #F87171 !important; /* red-400 */
+            color: white !important;
+            border-color: #DC2626 !important;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 text-gray-800">
+
+    <div id="app" class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden pop-in relative">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-pink-300 to-purple-300 p-6 text-center text-white rounded-b-3xl shadow-sm">
+            <h1 class="text-2xl font-bold tracking-wide flex items-center justify-center gap-2">
+                📚 Khám Phá Sách 🌟
+            </h1>
+            <p class="text-sm mt-1 opacity-90">Cùng Hỉ rèn thói quen đọc sách!</p>
+        </div>
+
+        <!-- START SCREEN -->
+        <div id="start-screen" class="p-8 text-center flex flex-col items-center">
+            <div class="text-6xl mb-4 animate-bounce">🦉</div>
+            <h2 class="text-xl font-bold mb-2 text-purple-700">Sẵn sàng chưa nào?</h2>
+            <p class="text-gray-600 mb-8 text-sm">Vượt qua 15 câu hỏi để xem con hiểu về các cuốn sách thần kỳ như thế nào nhé!</p>
+            <button onclick="startGame()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-4 rounded-2xl text-lg shadow-[0_4px_0_#B45309] active:shadow-none active:translate-y-1 transition-all">
+                🚀 Bắt Đầu Chơi
+            </button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="hidden p-6">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-sm font-bold text-gray-500 bg-gray-100 py-1 px-3 rounded-full">
+                    Câu <span id="current-question-num" class="text-purple-600">1</span>/15
+                </span>
+                <span class="text-sm font-bold text-gray-500 bg-yellow-100 py-1 px-3 rounded-full flex items-center gap-1">
+                    ⭐ <span id="score">0</span>
+                </span>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+                <div id="progress-bar" class="bg-purple-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <div class="min-h-[120px] flex items-center mb-6">
+                <h3 id="question-text" class="text-lg font-bold text-gray-800 leading-relaxed text-center w-full">
+                    Nội dung câu hỏi sẽ hiển thị ở đây?
+                </h3>
+            </div>
+
+            <div id="options-container" class="space-y-3">
+                <!-- Options injected via JS -->
+            </div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div id="end-screen" class="hidden p-8 text-center flex flex-col items-center">
+            <div id="end-emoji" class="text-6xl mb-4">🏆</div>
+            <h2 id="end-title" class="text-2xl font-bold mb-2 text-pink-600">Tuyệt Vời!</h2>
+            <p class="text-gray-600 mb-2">Con đã hoàn thành thử thách.</p>
+            <div class="bg-pastel-yellow w-full p-4 rounded-2xl mb-8 border-2 border-yellow-200">
+                <p class="text-sm text-gray-600">Điểm số của con</p>
+                <p class="text-4xl font-bold text-yellow-600 my-1"><span id="final-score">0</span>/15</p>
+                <p id="end-message" class="text-sm font-semibold text-purple-700 mt-2">Đọc sách nhiều sẽ giúp con thông minh hơn!</p>
+            </div>
+            <button onclick="resetGame()" class="w-full bg-blue-400 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl text-lg shadow-[0_4px_0_#1E3A8A] active:shadow-none active:translate-y-1 transition-all">
+                🔄 Chơi Lại Từ Đầu
+            </button>
+        </div>
+
+    </div>
+
+    <!-- AUDIO SYNTHESIS LOGIC (No external files needed) -->
+    <script>
+        // Use Web Audio API for sound effects to guarantee they work everywhere without downloading files
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTone(freq, type, duration, vol = 0.1) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playCorrectSound() {
+            playTone(523.25, 'sine', 0.1, 0.2); // C5
+            setTimeout(() => playTone(659.25, 'sine', 0.2, 0.2), 100); // E5
+        }
+
+        function playWrongSound() {
+            playTone(300, 'sawtooth', 0.15, 0.1);
+            setTimeout(() => playTone(250, 'sawtooth', 0.2, 0.1), 150);
+        }
+
+        function playWinSound() {
+            let delay = 0;
+            [523.25, 659.25, 783.99, 1046.50].forEach(freq => {
+                setTimeout(() => playTone(freq, 'square', 0.15, 0.1), delay);
+                delay += 100;
+            });
+        }
+    </script>
+
+    <!-- GAME LOGIC -->
+    <script>
+        const questions = [
+            {
+                q: "1. Cuốn sách nào giúp con rèn luyện sơ đồ tư duy và phương pháp ghi nhớ siêu tốc?",
+                opts: ["A. Totto-chan bên cửa sổ", "B. Tôi tài giỏi, bạn cũng thế!", "C. Hạt giống tâm hồn"],
+                ans: 1
+            },
+            {
+                q: "2. Tác giả Adam Khoo (Tôi tài giỏi, bạn cũng thế!) từng bị mọi người gán nhãn là gì khi còn nhỏ?",
+                opts: ["A. Thần đồng", "B. Thiên tài bẩm sinh", "C. Học dốt"],
+                ans: 2
+            },
+            {
+                q: "3. Nếu không rèn luyện phương pháp học tập đúng cách, trẻ dễ rơi vào tình trạng nào?",
+                opts: ["A. Cày cuốc mệt mỏi, nản chí và mất niềm tin", "B. Tự nhiên học giỏi lên", "C. Trở nên năng động hơn"],
+                ans: 0
+            },
+            {
+                q: "4. Cuốn sách nào được ví như 'nghệ thuật giao tiếp thu nhỏ' dành cho trẻ em?",
+                opts: ["A. 7 Thói quen để trẻ trưởng thành", "B. Tôi tài giỏi, bạn cũng thế!", "C. Bộ sách Khoa học khủng khiếp"],
+                ans: 0
+            },
+            {
+                q: "5. '7 Thói quen để trẻ trưởng thành' đặc biệt phù hợp với những bé đang gặp vấn đề gì?",
+                opts: ["A. Hiếu động, thích chạy nhảy", "B. Rụt rè, không biết bắt chuyện, hay cãi bướng", "C. Học giỏi nhưng hay quên"],
+                ans: 1
+            },
+            {
+                q: "6. Nếu thiếu kỹ năng mềm khi lên cấp 2, con sẽ ra sao?",
+                opts: ["A. Dễ bị ngợp, thiệt thòi và thu mình lại", "B. Kết bạn dễ dàng hơn", "C. Tự tin tỏa sáng ngay lập tức"],
+                ans: 0
+            },
+            {
+                q: "7. Bộ sách nào chuyên dùng để rèn luyện chỉ số cảm xúc (EQ) cho bé mỗi ngày?",
+                opts: ["A. Hạt giống tâm hồn", "B. Totto-chan bên cửa sổ", "C. 7 Thói quen để trẻ trưởng thành"],
+                ans: 0
+            },
+            {
+                q: "8. Lợi ích lớn nhất khi cho con đọc 'Hạt giống tâm hồn' là gì?",
+                opts: ["A. Giúp con giải toán nhanh hơn", "B. Tâm hồn rộng mở, bao dung và kiên cường", "C. Giúp con viết chữ đẹp hơn"],
+                ans: 1
+            },
+            {
+                q: "9. Những bé có tính cách nhạy cảm, dễ khóc, hở chút là bỏ cuộc nên làm bạn với cuốn sách nào?",
+                opts: ["A. Tôi tài giỏi, bạn cũng thế!", "B. Hạt giống tâm hồn", "C. Bách khoa toàn thư"],
+                ans: 1
+            },
+            {
+                q: "10. Nếu không rèn luyện cảm xúc (EQ), trẻ dễ mắc phải tâm lý nào khi gặp áp lực học đường?",
+                opts: ["A. Tâm lý nạn nhân, hay đổ lỗi và dễ gục ngã", "B. Luôn vui vẻ và lạc quan", "C. Thích giúp đỡ bạn bè hơn"],
+                ans: 0
+            },
+            {
+                q: "11. Cuốn sách nào kể về tuổi thơ từng bị đuổi học của chính tác giả để vươn lên thành một người vĩ đại?",
+                opts: ["A. Totto-chan bên cửa sổ", "B. Tôi tài giỏi, bạn cũng thế!", "C. Nhật ký chú bé nhút nhát"],
+                ans: 0
+            },
+            {
+                q: "12. Thông điệp cốt lõi mà 'Totto-chan bên cửa sổ' muốn gửi gắm đến các bé là gì?",
+                opts: ["A. Phải cố gắng thay đổi để giống các bạn", "B. Sự khác biệt là một món quà, hãy dám là chính mình", "C. Chơi nhiều hơn học"],
+                ans: 1
+            },
+            {
+                q: "13. Cuốn 'Totto-chan bên cửa sổ' là chân ái cho những bé hay bị chê bai bằng từ ngữ nào?",
+                opts: ["A. 'Khác người', 'cá biệt'", "B. 'Nhút nhát', 'ít nói'", "C. 'Ngoan ngoãn', 'dễ bảo'"],
+                ans: 0
+            },
+            {
+                q: "14. Điều gì dễ xảy ra nếu những đứa trẻ hiếu động, mơ mộng bị gò ép quá mức bởi những lời chê bai?",
+                opts: ["A. Trở nên xuất chúng hơn", "B. Bị dập tắt tài năng, trở thành bản sao vô hồn", "C. Phát triển khả năng tư duy logic"],
+                ans: 1
+            },
+            {
+                q: "15. Tác giả của cuốn '7 Thói quen để trẻ trưởng thành' là ai?",
+                opts: ["A. Sean Covey", "B. Adam Khoo", "C. Tetsuko Kuroyanagi"],
+                ans: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let isAnswering = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const endScreen = document.getElementById('end-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQNum = document.getElementById('current-question-num');
+        const scoreDisplay = document.getElementById('score');
+        const progressBar = document.getElementById('progress-bar');
+        const appContainer = document.getElementById('app');
+
+        function startGame() {
+            initAudio(); // Initialize audio on first user interaction
+            currentQuestion = 0;
+            score = 0;
+            scoreDisplay.textContent = score;
+            startScreen.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            isAnswering = false;
+            const q = questions[currentQuestion];
+            currentQNum.textContent = currentQuestion + 1;
+            questionText.textContent = q.q;
+            
+            // Update progress bar
+            const progress = ((currentQuestion) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Remove animation class to re-trigger it
+            appContainer.classList.remove('pop-in');
+            void appContainer.offsetWidth; // trigger reflow
+            appContainer.classList.add('pop-in');
+
+            optionsContainer.innerHTML = '';
+            
+            q.opts.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option w-full text-left bg-pastel-blue hover:bg-blue-100 border-2 border-blue-200 text-gray-700 font-semibold py-4 px-5 rounded-2xl flex items-center justify-between';
+                
+                // Add icon based on index
+                const icons = ['🍎', '📘', '🎨'];
+                
+                btn.innerHTML = `
+                    <span class="flex-1 pr-2">${opt}</span>
+                    <span class="text-xl opacity-70">${icons[index]}</span>
+                `;
+                
+                btn.onclick = () => selectAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex, btnElement) {
+            if (isAnswering) return;
+            isAnswering = true;
+
+            const q = questions[currentQuestion];
+            const buttons = optionsContainer.querySelectorAll('button');
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === q.ans) {
+                // Correct answer
+                btnElement.classList.add('correct');
+                playCorrectSound();
+                score++;
+                scoreDisplay.textContent = score;
+                confetti({
+                    particleCount: 30,
+                    spread: 50,
+                    origin: { y: 0.6 },
+                    colors: ['#34D399', '#10B981']
+                });
+            } else {
+                // Wrong answer
+                btnElement.classList.add('wrong');
+                appContainer.classList.add('shake');
+                playWrongSound();
+                
+                // Highlight correct answer
+                buttons[q.ans].classList.add('correct');
+                buttons[q.ans].classList.replace('bg-pastel-blue', 'bg-green-100');
+                
+                setTimeout(() => {
+                    appContainer.classList.remove('shake');
+                }, 400);
+            }
+
+            // Move to next question after delay
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showEndScreen();
+                }
+            }, 1500);
+        }
+
+        function showEndScreen() {
+            quizScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            
+            document.getElementById('final-score').textContent = score;
+            const endTitle = document.getElementById('end-title');
+            const endMessage = document.getElementById('end-message');
+            const endEmoji = document.getElementById('end-emoji');
+
+            if (score === 15) {
+                endTitle.textContent = "Tuyệt Đỉnh!";
+                endTitle.className = "text-2xl font-bold mb-2 text-yellow-600";
+                endMessage.textContent = "Con chính là mọt sách chính hiệu rồi! 🌟";
+                endEmoji.textContent = "👑";
+            } else if (score >= 10) {
+                endTitle.textContent = "Rất Tốt!";
+                endTitle.className = "text-2xl font-bold mb-2 text-green-600";
+                endMessage.textContent = "Kiến thức của con về sách rất tuyệt đấy! 👍";
+                endEmoji.textContent = "🌟";
+            } else {
+                endTitle.textContent = "Cố Gắng Lên Nhé!";
+                endTitle.className = "text-2xl font-bold mb-2 text-blue-600";
+                endMessage.textContent = "Hãy cùng đọc thêm nhiều sách để khám phá thế giới nha! 📚";
+                endEmoji.textContent = "💪";
+            }
+
+            playWinSound();
+            
+            // Big confetti
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#FFE4F2', '#E0F4FF', '#FFF7D6']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#FFE4F2', '#E0F4FF', '#FFF7D6']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function resetGame() {
+            appContainer.classList.remove('pop-in');
+            void appContainer.offsetWidth;
+            startGame();
+        }
+    </script>
+</body>
+</html>

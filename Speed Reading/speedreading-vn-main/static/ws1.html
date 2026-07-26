@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khai Phóng Tư Duy Cùng Speed Reading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#4c0519',
+                            panel: '#881337',
+                            accent: '#f43f5e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            /* Gradient đỏ đậm sâu để vừa nổi bật vừa bảo vệ mắt */
+            background: radial-gradient(circle at center, #4c0519 0%, #1c0008 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Lớp phủ hoa văn chủ đề đào tạo (Mũ cử nhân, Sách, Bóng đèn tri thức, Mạng lưới học tập) */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23ffffff' fill-opacity='0.022'%3E%3Cpath d='M15 15h2v2h-2zm30 0h2v2h-2zm30 0h2v2h-2zm30 0h2v2h-2zM15 45h2v2h-2zm30 0h2v2h-2zm30 0h2v2h-2zm30 0h2v2h-2z'/%3E%3Cpath d='M50 25 L55 20 L60 25 L55 30 Z M110 85 L115 80 L120 85 L115 90 Z'/%3E%3Ccircle cx='20' cy='80' r='3'/%3E%3Ccircle cx='80' cy='20' r='3'/%3E%3C!-- Mũ cử nhân --%3E%3Cpath d='M12 95 l8-4 8 4-8 4-8-4 v5 l8 4 8-4 v-5 M20 98 v4' stroke='%23fff' stroke-width='0.6' fill='none'/%3E%3C!-- Quyển sách mở --%3E%3Cpath d='M85 75 h10 v8 h-10 z M88 72 h4 v3 h-4 z' stroke='%23fff' stroke-width='0.6' fill='none'/%3E%3C!-- Bóng đèn tri thức --%3E%3Cpath d='M50 90 a5 5 0 0 1 10 0 c0 5-5 8-5 8 z' stroke='%23fff' stroke-width='0.6' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .glass-panel {
+            background: rgba(136, 19, 55, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        /* Reader display area styles */
+        .reader-display {
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Focus guides */
+        .focus-guide {
+            position: absolute;
+            height: 100%;
+            width: 2px;
+            background-color: rgba(255, 255, 255, 0.1);
+            top: 0;
+            z-index: 0;
+        }
+        
+        .word-chunk {
+            position: relative;
+            z-index: 10;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        /* RPM Tachometer transition */
+        #rpm-bar {
+            transition: width 0.3s ease-out, background-color 0.3s ease;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -8px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #4c0519;
+            border-radius: 4px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Shake Animation for Wrong Answers */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Glow effect for BGM */
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.6);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Floating Background Music Control -->
+    <div class="fixed bottom-4 right-4 z-[100] flex items-center gap-2">
+        <button id="bgm-toggle" onclick="toggleBackgroundMusic()" class="bg-rose-950 hover:bg-rose-900 text-white border border-rose-500 rounded-full px-4 py-3 flex items-center gap-2 shadow-2xl transition-all transform hover:scale-105 neon-glow">
+            <i class="fa-solid fa-gamepad text-emerald-400 animate-pulse"></i>
+            <span class="text-xs font-bold uppercase tracking-wider" id="bgm-text">Nhạc nền: TẮT</span>
+        </button>
+    </div>
+
+    <!-- Background Confetti Canvas -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-[90] hidden"></canvas>
+
+    <header class="bg-rose-950 border-b border-rose-800 py-4 px-6 flex justify-between items-center shadow-lg shrink-0">
+        <div class="flex items-center gap-3">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading" class="h-10 w-auto rounded-lg shadow-lg shadow-rose-500/30 bg-white p-1">
+            <h1 class="text-2xl font-bold tracking-tight text-white">Speed Reading <span class="text-rose-400">Workshop</span></h1>
+        </div>
+        
+        <nav class="flex gap-2 bg-rose-900/60 p-1 rounded-xl border border-rose-800">
+            <button onclick="switchTab('tab-intro')" id="btn-tab-intro" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-rose-600 text-white shadow-md">
+                1. Sát Thủ
+            </button>
+            <button onclick="switchTab('tab-reader')" id="btn-tab-reader" class="px-4 py-2 rounded-lg text-sm font-semibold text-rose-200 hover:text-white transition-all">
+                2. Đấu Trường Đọc
+            </button>
+            <button onclick="switchTab('tab-application')" id="btn-tab-application" class="px-4 py-2 rounded-lg text-sm font-semibold text-rose-200 hover:text-white transition-all">
+                3. Ứng Dụng
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow relative flex flex-col items-center justify-start p-6 overflow-y-auto">
+        
+        <!-- TAB 1: SÁT THỦ ĐỌC CHẬM -->
+        <section id="tab-intro" class="w-full max-w-6xl mx-auto flex flex-col justify-center animate-fade-in transition-all duration-500 py-6">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl md:text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-yellow-300">
+                    3 SÁT THỦ ĐỌC CHẬM
+                </h2>
+                <p class="text-xl text-rose-200">Hủy diệt chúng trước khi kích hoạt bộ não thiên tài của bạn</p>
+            </div>
+            
+            <!-- Nút mở thuyết trình -->
+            <div class="flex justify-center mb-10">
+                <button onclick="openPdfModal()" class="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 flex items-center gap-3 border border-rose-400/30">
+                    <i class="fa-solid fa-person-chalkboard text-xl"></i>
+                    <span>Xem Slide Thuyết Trình</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Sát thủ 1 -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+                    <div class="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center mb-6 border border-red-500/30">
+                        <i class="fa-solid fa-comment-slash text-5xl text-red-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-red-300">Đọc Thầm</h3>
+                    <p class="text-rose-100 mb-4">Mấp máy môi, lẩm nhẩm trong đầu.</p>
+                    <div class="mt-auto bg-rose-950/80 px-4 py-2 rounded-lg w-full text-sm font-semibold text-rose-300 border border-rose-800">
+                        <i class="fa-solid fa-bug mr-2 text-red-400"></i> Ẩn dụ: Ve sầu rỉ rả
+                    </div>
+                </div>
+
+                <!-- Sát thủ 2 -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+                    <div class="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mb-6 border border-yellow-500/30">
+                        <i class="fa-solid fa-magnifying-glass-minus text-5xl text-yellow-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-yellow-300">Đọc Từng Chữ</h3>
+                    <p class="text-rose-100 mb-4">Nhìn chằm chằm từng chữ, không thấy toàn cảnh.</p>
+                    <div class="mt-auto bg-rose-950/80 px-4 py-2 rounded-lg w-full text-sm font-semibold text-rose-300 border border-rose-800">
+                        <i class="fa-solid fa-eye-slash mr-2 text-yellow-400"></i> Ẩn dụ: Góc nhìn ống hút
+                    </div>
+                </div>
+
+                <!-- Sát thủ 3 -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+                    <div class="w-24 h-24 bg-purple-500/20 rounded-full flex items-center justify-center mb-6 border border-purple-500/30">
+                        <i class="fa-solid fa-arrow-rotate-left text-5xl text-purple-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-purple-300">Đọc Giật Lùi</h3>
+                    <p class="text-rose-100 mb-4">Thiếu tự tin, đọc xong lại quay lại đọc từ đầu.</p>
+                    <div class="mt-auto bg-rose-950/80 px-4 py-2 rounded-lg w-full text-sm font-semibold text-rose-300 border border-rose-800">
+                        <i class="fa-solid fa-boomerang mr-2 text-purple-400"></i> Ẩn dụ: Chiếc Boomerang
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: ĐẤU TRƯỜNG ĐỌC (CÔNG CỤ CHÍNH) -->
+        <section id="tab-reader" class="w-full max-w-5xl mx-auto flex flex-col hidden opacity-0 transition-opacity duration-500 py-6">
+            
+            <!-- Setup & Selection -->
+            <div class="glass-panel p-4 rounded-xl mb-6 flex flex-wrap gap-4 items-center justify-between z-20">
+                <div class="flex-grow">
+                    <label class="block text-xs text-rose-300 uppercase tracking-wider font-bold mb-1">Chọn Văn Bản Thực Hành</label>
+                    <select id="text-selector" class="w-full bg-rose-950/60 border border-rose-700 rounded-lg p-2 text-white outline-none focus:border-rose-500 animate-none" onchange="loadSelectedText()">
+                        <option value="0" class="bg-rose-950">Bài 1: Trứng Đại Bàng (Phá vỡ định kiến)</option>
+                        <option value="1" class="bg-rose-950">Bài 2: Tờ Giấy Trắng (Góc nhìn đa chiều)</option>
+                        <option value="2" class="bg-rose-950">Bài 3: Nhìn Lá Bồ Đề (Thách đấu gia đình)</option>
+                        <option value="3" class="bg-rose-950">Bài 4: Cây Tre Moso (Sức mạnh của sự kiên trì)</option>
+                        <option value="4" class="bg-rose-950">Bài 5: Chiếc Bình Nứt (Giá trị của sự không hoàn hảo)</option>
+                        <option value="5" class="bg-rose-950">Bài 6: Chú Ếch Điếc (Bỏ ngoài tai tiêu cực)</option>
+                        <option value="6" class="bg-rose-950">Bài 7: Hòn Đá Xù Xì (Giá trị tiềm ẩn bên trong)</option>
+                        <option value="7" class="bg-rose-950">Bài 8: Con Lừa Sập Bẫy (Vượt qua nghịch cảnh)</option>
+                        <option value="8" class="bg-rose-950">Bài 9: Cốc Nước Đục (Sức mạnh của sự tĩnh tâm)</option>
+                        <option value="9" class="bg-rose-950">Bài 10: Người Thợ Mộc (Trách nhiệm với bản thân)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-rose-300 uppercase tracking-wider font-bold mb-1">Chế Độ Đọc</label>
+                    <select id="chunk-selector" class="bg-rose-950/60 border border-rose-700 rounded-lg p-2 text-white outline-none focus:border-rose-500" onchange="loadSelectedText()">
+                        <option value="1" class="bg-rose-950">1 Chữ / Nhịp</option>
+                        <option value="2" selected class="bg-rose-950">2 Chữ / Nhịp (Đọc Cụm)</option>
+                        <option value="3" class="bg-rose-950">3 Chữ / Nhịp (Chuyên Gia)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dashboard / RPM Meter -->
+            <div class="glass-panel rounded-2xl p-6 mb-6 flex-grow flex flex-col">
+                <div class="flex justify-between items-end mb-2">
+                    <div class="uppercase tracking-widest text-sm font-bold text-rose-300">Tốc Độ Vòng Tua Mắt</div>
+                    <div class="text-4xl font-black tabular-nums glow-text text-white" id="wpm-display">250 <span class="text-lg text-rose-300">WPM</span></div>
+                </div>
+                
+                <!-- RPM Bar -->
+                <div class="w-full bg-rose-950/80 h-4 rounded-full overflow-hidden border border-rose-800 mb-8 relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-500 via-yellow-500 to-red-600 opacity-20"></div>
+                    <div id="rpm-bar" class="h-full bg-green-500 rounded-full w-[20%] shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+                </div>
+
+                <!-- READER DISPLAY SCREEN -->
+                <div class="flex-grow bg-rose-950/90 rounded-xl border-2 border-rose-800 reader-display shadow-inner overflow-hidden">
+                    <div class="focus-guide left-1/3"></div>
+                    <div class="focus-guide right-1/3"></div>
+                    
+                    <div id="reader-word" class="word-chunk text-6xl md:text-8xl text-center px-4 w-full break-words text-rose-300">
+                        SẴN SÀNG!
+                    </div>
+
+                    <!-- Progress Bar for Reading -->
+                    <div class="absolute bottom-0 left-0 h-1 bg-rose-950 w-full">
+                        <div id="reading-progress" class="h-full bg-rose-500 w-0 transition-all duration-100"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="glass-panel p-6 rounded-2xl flex flex-col md:flex-row items-center gap-6 z-20">
+                <div class="flex gap-4">
+                    <button id="btn-play" onclick="togglePlay()" class="w-16 h-16 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(244,63,94,0.6)] transition-all transform hover:scale-105">
+                        <i class="fa-solid fa-play ml-1" id="icon-play"></i>
+                    </button>
+                    <button onclick="resetReader()" class="w-16 h-16 rounded-full bg-rose-900 hover:bg-rose-850 text-white flex items-center justify-center text-xl transition-all">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-grow w-full flex flex-col gap-2">
+                    <div class="flex justify-between text-sm font-bold text-rose-300">
+                        <span>Khởi động (250)</span>
+                        <span class="text-red-400">Tối đa (650)</span>
+                    </div>
+                    <input type="range" id="wpm-slider" min="250" max="650" step="100" value="250" oninput="updateWPM(this.value)" class="w-full mb-1">
+                    
+                    <!-- Các nút bấm nhanh tốc độ cho Diễn giả -->
+                    <div class="flex justify-between gap-2">
+                        <button onclick="document.getElementById('wpm-slider').value=250; updateWPM(250)" class="flex-1 bg-rose-950/60 hover:bg-rose-900 py-1.5 rounded text-xs font-bold transition border border-rose-800 hover:border-rose-500">250</button>
+                        <button onclick="document.getElementById('wpm-slider').value=350; updateWPM(350)" class="flex-1 bg-rose-950/60 hover:bg-rose-900 py-1.5 rounded text-xs font-bold transition border border-rose-800 hover:border-rose-500">350</button>
+                        <button onclick="document.getElementById('wpm-slider').value=450; updateWPM(450)" class="flex-1 bg-rose-950/60 hover:bg-rose-900 py-1.5 rounded text-xs font-bold transition border border-rose-800 hover:border-rose-500">450</button>
+                        <button onclick="document.getElementById('wpm-slider').value=550; updateWPM(550)" class="flex-1 bg-rose-950/60 hover:bg-rose-900 py-1.5 rounded text-xs font-bold transition border border-rose-800 hover:border-rose-500">550</button>
+                        <button onclick="document.getElementById('wpm-slider').value=650; updateWPM(650)" class="flex-1 bg-rose-950/60 hover:bg-rose-900 py-1.5 rounded text-xs font-bold text-red-400 transition border border-rose-800 hover:border-rose-550">650</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 text-center">
+                <button class="bg-gradient-to-r from-rose-600 to-red-600 px-8 py-4 rounded-full text-xl font-bold shadow-[0_0_20px_rgba(244,63,94,0.5)] hover:scale-105 transition-transform inline-flex items-center">
+                    <i class="fa-solid fa-passport mr-2"></i> Kích hoạt Hộ Chiếu 7 Ngày
+                </button>
+            </div>
+        </section>
+
+        <!-- TAB 3: ỨNG DỤNG THỰC TIỄN -->
+        <section id="tab-application" class="w-full max-w-6xl mx-auto flex flex-col justify-center hidden opacity-0 transition-opacity duration-500 p-6">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl md:text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-yellow-300">
+                    ỨNG DỤNG THỰC TIỄN
+                </h2>
+                <p class="text-xl text-rose-200">Từ công cụ luyện tập đến thói quen tư duy trọn đời</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Point 1 -->
+                <div class="glass-panel p-6 rounded-2xl border-t-4 border-rose-400 hover:scale-105 transition-transform">
+                    <h3 class="text-xl font-bold mb-4 text-rose-300"><i class="fa-solid fa-brain mr-2"></i>Giá trị Tư duy Khai phóng</h3>
+                    <ul class="space-y-4 text-rose-100 text-sm">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-rose-400 mt-1 mr-3"></i><span><strong>Đa góc nhìn:</strong> Tiếp thu kiến thức cởi mở, không phán xét vội vàng.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-rose-400 mt-1 mr-3"></i><span><strong>Thấu hiểu bản chất:</strong> Vượt qua lớp vỏ ngôn từ để chạm đến lõi tư tưởng.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-rose-400 mt-1 mr-3"></i><span><strong>Mở rộng thế giới quan:</strong> Bước lên vai người khổng lồ thông qua sách.</span></li>
+                    </ul>
+                </div>
+                
+                <!-- Point 2 -->
+                <div class="glass-panel p-6 rounded-2xl border-t-4 border-red-500 hover:scale-105 transition-transform">
+                    <h3 class="text-xl font-bold mb-4 text-red-400"><i class="fa-solid fa-triangle-exclamation mr-2"></i>3 Nguyên nhân Đọc chậm</h3>
+                    <ul class="space-y-4 text-rose-100 text-sm">
+                        <li class="flex items-start"><i class="fa-solid fa-comment-slash text-red-400 mt-1 mr-3"></i><span><strong>Đọc thầm:</strong> Não bị kìm hãm bởi tốc độ của lưỡi (Ve sầu rỉ rả).</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-magnifying-glass-minus text-red-400 mt-1 mr-3"></i><span><strong>Đọc từng chữ:</strong> Tầm nhìn hẹp, vụn vặt, không thấy toàn cảnh (Ống hút).</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-arrow-rotate-left text-red-400 mt-1 mr-3"></i><span><strong>Đọc giật lùi:</strong> Thiếu tự tin, hay quên, tạo thói quen nghi ngờ (Boomerang).</span></li>
+                    </ul>
+                </div>
+                
+                <!-- Point 3 -->
+                <div class="glass-panel p-6 rounded-2xl border-t-4 border-emerald-500 hover:scale-105 transition-transform">
+                    <h3 class="text-xl font-bold mb-4 text-emerald-400"><i class="fa-solid fa-rocket mr-2"></i>Phương pháp Đọc nhanh</h3>
+                    <ul class="space-y-4 text-rose-100 text-sm">
+                        <li class="flex items-start"><i class="fa-solid fa-eye text-emerald-400 mt-1 mr-3"></i><span><strong>Quét cụm từ:</strong> Mắt hoạt động như máy ảnh, chụp 2-3 chữ cùng lúc.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-bolt text-emerald-400 mt-1 mr-3"></i><span><strong>Tăng tốc độ nhận diện:</strong> Ép não xử lý thông tin dưới áp lực (RPM cao).</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-forward text-emerald-400 mt-1 mr-3"></i><span><strong>Giữ nhịp điệu tiến tới:</strong> Tuyệt đối không quay đầu nhìn lại chữ cũ.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- PHẦN TRẮC NGHIỆM ĐO NĂNG LỰC TƯ DUY & ĐỌC NHANH -->
+            <div class="glass-panel rounded-2xl p-6 md:p-8 border border-rose-500/30 max-w-4xl mx-auto w-full" id="quiz-card-wrapper">
+                <div class="text-center mb-6">
+                    <span class="bg-rose-500/20 text-rose-300 text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border border-rose-500/30"><i class="fa-solid fa-graduation-cap mr-1"></i> Trắc nghiệm Thấu hiểu</span>
+                    <h3 class="text-3xl font-extrabold text-white mt-3">Đánh Giá Năng Lực & Đọc Nhanh</h3>
+                    <p class="text-sm text-rose-200 mt-2">Đo lường mức độ tiếp thu thông qua 20 câu hỏi được tổng hợp từ lý thuyết và các bài học tư duy</p>
+                </div>
+
+                <!-- Giao diện bài thi -->
+                <div id="quiz-workspace" class="bg-rose-950/60 border border-rose-800 rounded-xl p-6 shadow-inner relative overflow-hidden">
+                    <!-- Progress Bar -->
+                    <div class="flex justify-between items-center mb-4 text-xs font-semibold text-rose-300">
+                        <span>Tiến độ: <span id="quiz-progress-text" class="text-rose-400">1 / 20</span></span>
+                        <span>Đúng: <span id="quiz-correct-count" class="text-green-400">0</span></span>
+                    </div>
+                    <div class="w-full bg-rose-950 h-2 rounded-full overflow-hidden mb-6 border border-rose-900">
+                        <div id="quiz-progress-bar" class="h-full bg-rose-500 w-[5%] transition-all duration-300"></div>
+                    </div>
+
+                    <!-- Question Block -->
+                    <div id="quiz-question-container">
+                        <p id="quiz-question-title" class="text-lg font-bold text-gray-100 mb-6 leading-relaxed"></p>
+                        <div id="quiz-options-list" class="space-y-3">
+                            <!-- Các lựa chọn đáp án được sinh tự động -->
+                        </div>
+                    </div>
+
+                    <!-- Explanations & Next Step -->
+                    <div id="quiz-feedback-box" class="hidden mt-6 p-4 rounded-lg bg-rose-950/95 border border-rose-800 text-sm">
+                        <p id="quiz-feedback-status" class="font-bold mb-1"></p>
+                        <p id="quiz-feedback-explanation" class="text-rose-100 leading-relaxed"></p>
+                        <button onclick="nextQuizQuestion()" class="mt-4 w-full md:w-auto bg-rose-600 hover:bg-rose-500 text-white font-bold px-6 py-2 rounded-lg transition shadow-md">Câu tiếp theo <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+
+                    <!-- Screen Result -->
+                    <div id="quiz-result-screen" class="hidden text-center py-6">
+                        <div class="text-6xl text-yellow-400 mb-4"><i class="fa-solid fa-award"></i></div>
+                        <h4 class="text-2xl font-black text-white mb-2">Hoàn Thành Thử Thách!</h4>
+                        <p class="text-gray-300 text-lg mb-4">Bạn đã trả lời đúng <span id="quiz-final-score" class="font-bold text-emerald-400">0/20</span> câu hỏi.</p>
+                        <div id="quiz-assessment-msg" class="text-rose-200 text-sm max-w-lg mx-auto mb-6 leading-relaxed"></div>
+                        <button onclick="restartQuiz()" class="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg transform hover:scale-105"><i class="fa-solid fa-rotate-right mr-2"></i>Thực hiện lại bài kiểm tra</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="question-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300 overflow-y-auto py-10">
+            <div class="bg-rose-950 border border-rose-800 rounded-2xl p-8 max-w-3xl w-full mx-4 shadow-[0_0_40px_rgba(0,0,0,0.8)] transform scale-95 transition-transform duration-300 relative my-auto" id="modal-content-box">
+                <!-- Nội dung được bơm bằng Javascript -->
+            </div>
+        </div>
+
+        <!-- PDF Presentation Modal (Sử dụng PDF gốc) -->
+        <div id="pdf-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] hidden flex flex-col items-center justify-center opacity-0 transition-opacity duration-300 p-4 md:p-8">
+            <div class="w-full max-w-6xl flex justify-between items-center mb-4 transform scale-95 transition-transform duration-300" id="pdf-modal-header">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-file-pdf text-red-500"></i>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-rose-300 to-yellow-300">Unlocking Reading Superpowers</span>
+                </h3>
+                <button onclick="closePdfModal()" class="w-10 h-10 rounded-full bg-rose-900 hover:bg-red-600 border border-rose-800 hover:border-red-500 text-white flex items-center justify-center transition-all shadow-lg">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="w-full max-w-6xl flex-grow bg-rose-950 rounded-2xl border border-rose-800 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden relative transform scale-95 transition-transform duration-300" id="pdf-modal-content">
+                <iframe src="https://img.speedreading.vn/unlocking-reading-superpowers.pdf#view=FitH&toolbar=0" 
+                        class="w-full h-full border-0 rounded-2xl bg-white" 
+                        title="Speed Reading Presentation"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- DATA & TEXTS ---
+        const texts = [
+            "Một quả trứng đại bàng rơi vào tổ gà. Đại bàng con nở ra, sống và hành động như một chú gà: bới đất tìm giun, chỉ bay cao được vài mét. Nó nhìn lên bầu trời, thấy một loài chim dũng mãnh sải cánh giữa bão giông. Nó ao ước được như vậy, nhưng bầy gà bảo: 'Mày là gà, đừng mơ mộng'. Đại bàng cúi đầu, tiếp tục bới đất và chết đi như một con gà. Nó chết không phải vì thiếu đôi cánh, mà vì nó tin mình là một con gà.",
+            "Thầy giáo giơ lên một tờ giấy trắng có một chấm đen nhỏ ở giữa và hỏi học sinh thấy gì. Tất cả đồng thanh: 'Một chấm đen!'. Thầy thở dài: 'Ai cũng nhìn thấy một chấm đen nhỏ bé, nhưng không ai nhìn thấy khoảng trắng bao la xung quanh'. Con người thường có xu hướng tập trung vào một lỗi sai nhỏ nhặt của người khác, hoặc một khiếm khuyết của chính mình, rồi dùng nó để phủ nhận toàn bộ những giá trị tốt đẹp còn lại.",
+            "Một danh y nhận cậu bé mồ côi làm học trò. Ngày đầu tiên, ông không dạy bốc thuốc mà đưa cậu vào rừng, bắt cậu quan sát và ghi lại sự khác biệt của từng chiếc lá bồ đề. Cậu bé hỏi: 'Học bốc thuốc sao lại phải nhìn lá?'. Danh y trả lời: 'Nếu con nhìn vạn vật xung quanh bằng một đôi mắt hời hợt, con sẽ không bao giờ nhìn thấy được nỗi đau ẩn giấu của người bệnh. Trở thành người giỏi bắt đầu từ việc học cách quan sát sâu sắc'.",
+            "Một hạt giống tre được gieo xuống đất. Trong suốt bốn năm đầu, bạn không thấy một mầm non nào nhú lên. Tất cả sự phát triển đều diễn ra âm thầm dưới lòng đất, nơi rễ tre vươn dài hàng chục mét để bám chặt vào đá cứng. Đến năm thứ năm, chỉ trong vòng sáu tuần, cây tre đột ngột vọt lên cao hơn hai mươi bảy mét. Bốn năm chờ đợi không phải là vô ích, đó là quá trình cắm rễ sâu để chuẩn bị cho một sự bứt phá vĩ đại.",
+            "Người gánh nước có hai chiếc bình, một chiếc hoàn hảo và một chiếc bị nứt. Chiếc bình nứt luôn buồn bã vì chỉ giữ được một nửa lượng nước khi về đến nhà. Một ngày, nó xin lỗi ông chủ. Người gánh nước mỉm cười, chỉ vào vệ đường: 'Ngươi có thấy những bông hoa tươi tốt mọc bên phía của ngươi không? Ta biết vết nứt của ngươi, nên đã gieo hạt giống ở đó. Chính nước rỉ ra từ ngươi đã tưới mát cho chúng mỗi ngày'. Không có ai vô dụng, ngay cả khuyết điểm cũng có giá trị riêng.",
+            "Bầy ếch tổ chức cuộc thi leo lên đỉnh tháp cao. Khán giả đứng dưới hò hét: 'Khó lắm!', 'Không làm được đâu!', 'Rơi xuống bây giờ!'. Nghe vậy, nhiều chú ếch nản chí và bỏ cuộc. Cuối cùng, chỉ còn duy nhất một chú ếch nhỏ bé kiên trì leo lên tới đỉnh. Khi được hỏi bí quyết, mọi người mới phát hiện ra chú ếch đó bị điếc. Chú đã hiểu lầm rằng những tiếng la ó phản đối kia chính là tiếng reo hò cổ vũ tiếp thêm sức mạnh cho mình.",
+            "Một người thợ điêu khắc mua một hòn đá xù xì thô ráp. Ai cũng chê cười vì trông nó xấu xí và vô giá trị. Qua nhiều tháng ngày gọt giũa tỉ mỉ, ông đã tạo ra một bức tượng tuyệt đẹp. Người ta kinh ngạc hỏi bí quyết, ông đáp: 'Bức tượng tuyệt mỹ đã nằm sẵn bên trong hòn đá, tôi chỉ đơn giản là gọt bỏ đi những phần thừa thãi'. Đừng vội đánh giá bản thân qua vẻ bề ngoài, vì viên ngọc quý luôn cần thời gian để mài giũa.",
+            "Một con lừa vô ý rơi xuống giếng cạn. Người chủ thấy giếng sâu bèn quyết định lấp giếng chôn nó. Khi những xẻng đất rơi xuống, lừa kêu la thảm thiết. Nhưng sau đó nó chợt nhận ra: cứ mỗi xẻng đất rơi trúng lưng, nó lại lắc mình cho đất rớt xuống và dẫm lên trên. Cứ thế, lừa dần dần tiến lên gần miệng giếng và tự bước ra ngoài. Đôi khi, nghịch cảnh đổ lên đầu bạn chính là những bậc thang giúp bạn vươn cao hơn.",
+            "Một người học trò ôm một cốc nước đục ngầu đến hỏi thầy làm sao để nước trong lại. Người thầy mỉm cười, chỉ đặt cốc nước lên bàn và bảo cậu hãy ngồi im lặng. Trải qua một thời gian, những cặn bẩn dần dần tự động lắng xuống đáy, trả lại phần nước trong vắt ở phía trên. Tâm trí con người cũng vậy, khi gặp bão giông hay nóng giận, đừng vội phản ứng. Hãy để tâm trí tĩnh lặng, sự sáng suốt sẽ tự hiện ra.",
+            "Một người thợ mộc già xin nghỉ hưu. Ông chủ nhờ ông xây một ngôi nhà cuối cùng. Vì nôn nóng nghỉ ngơi, ông làm việc qua quýt, dùng vật liệu rẻ tiền và thi công cẩu thả. Khi hoàn thành, ông chủ trao chiếc chìa khóa cho ông và nói: 'Đây là món quà tôi tặng ông để tri ân'. Người thợ mộc sững sờ và hối hận tột cùng vì đã tự xây cho mình một ngôi nhà tồi tàn bằng chính sự cẩu thả."
+        ];
+
+        const questionsData = [
+            {
+                icon: "fa-tags", iconColor: "text-red-400", title: "Phá vỡ chiếc lồng định kiến",
+                question: "Bài học lớn nhất từ con đại bàng tin mình là gà là gì?",
+                options: ["Phải học cách bay sớm hơn những con gà khác.", "Niềm tin sai lệch từ môi trường sẽ giam cầm tiềm năng thật sự.", "Gà và đại bàng không thể sống chung một tổ."], correctOption: 1,
+                actionTitle: "Hành động khai phóng", actionColor: "text-rose-300", actionBorder: "border-rose-500/50", actionBg: "bg-rose-900/30",
+                actionText: "Lên sân khấu, lột bỏ chiếc \"Nhãn định kiến\" (Dốt, Lười, Nhút nhát...) xé nát nó và dán tên bạn lên Bức Tường Đại Bàng!"
+            },
+            {
+                icon: "fa-circle-dot", iconColor: "text-gray-200", title: "Góc nhìn đa chiều",
+                question: "Tại sao mọi người chỉ thấy chấm đen mà quên mất khoảng trắng?",
+                options: ["Vì màu đen thì luôn nổi bật hơn màu trắng.", "Vì bản năng thường soi mói vào lỗi lầm và khiếm khuyết của người khác.", "Vì khoảng trắng trên tờ giấy không có giá trị thực tế."], correctOption: 1,
+                actionTitle: "Hành động khai phóng", actionColor: "text-yellow-400", actionBorder: "border-yellow-500/50", actionBg: "bg-yellow-900/30",
+                actionText: "Dùng bút vẽ một vòng hoa xung quanh \"chấm đen\". Hãy nhìn vào 3 điểm tốt của người bạn bên cạnh thay vì phàn nàn về họ."
+            },
+            {
+                icon: "fa-leaf", iconColor: "text-green-500", title: "Sự thấu cảm sâu sắc",
+                question: "Tại sao vị danh y lại bắt học trò quan sát chiếc lá bồ đề?",
+                options: ["Để rèn luyện đôi mắt tinh tế, từ đó mới thấu hiểu được nỗi đau ẩn giấu của người bệnh.", "Để học cách phân loại các giống cây thuốc trong rừng.", "Để kiểm tra xem cậu bé có bị các bệnh lý về thị lực không."], correctOption: 0,
+                actionTitle: "Hành động khai phóng", actionColor: "text-green-400", actionBorder: "border-green-500/50", actionBg: "bg-green-900/30",
+                actionText: "Kích hoạt \"Mắt Camera\" - Dừng lại 5 giây quan sát khuôn mặt của ba mẹ ngay lúc này để cảm nhận sự vất vả của họ."
+            },
+            {
+                icon: "fa-pagelines", iconColor: "text-emerald-500", title: "Sức mạnh của sự cắm rễ",
+                question: "4 năm đầu tiên không thấy mầm tre mọc lên có ý nghĩa gì?",
+                options: ["Bộ não và cơ thể đang mệt mỏi cần nghỉ ngơi.", "Hạt giống đã chết và không thể phát triển được nữa.", "Quá trình âm thầm cắm rễ sâu để chuẩn bị cho sự bứt phá vĩ đại."], correctOption: 2,
+                actionTitle: "Hành động khai phóng", actionColor: "text-emerald-400", actionBorder: "border-emerald-500/50", actionBg: "bg-emerald-900/30",
+                actionText: "Khi học mãi chưa thấy điểm cao, đừng bỏ cuộc. Bộ não đang \"cắm rễ\". Hãy đọc hết cuốn sách bạn từng bỏ dở!"
+            },
+            {
+                icon: "fa-droplet", iconColor: "text-fuchsia-400", title: "Vết nứt nở hoa",
+                question: "Giá trị thực sự của chiếc bình nứt trong câu chuyện là gì?",
+                options: ["Làm cho ông chủ gánh nước đỡ mệt vì nhẹ hơn.", "Chính khuyết điểm của nó đã tạo ra nguồn nước tưới mát cho những bông hoa bên đường.", "Nó giúp chiếc bình hoàn hảo cảm thấy tự hào hơn."], correctOption: 1,
+                actionTitle: "Hành động khai phóng", actionColor: "text-fuchsia-400", actionBorder: "border-fuchsia-500/50", actionBg: "bg-fuchsia-900/30",
+                actionText: "Gọi tên 1 khuyết điểm khiến bạn tự ti (chữ xấu, nói lắp...) và tìm cách dùng nó làm điểm nhấn đặc biệt của riêng bạn."
+            },
+            {
+                icon: "fa-volume-xmark", iconColor: "text-orange-500", title: "Kích hoạt chế độ Ếch Điếc",
+                question: "Chú ếch nhỏ bé chiến thắng cuộc thi leo tháp là nhờ vào điều gì?",
+                options: ["Có thể lực và kỹ năng leo trèo giỏi nhất bầy.", "Bị điếc nên không nghe thấy những lời chê bai, vô tình biến nó thành lời cổ vũ.", "Được những chú ếch khác đẩy lên trên."], correctOption: 1,
+                actionTitle: "Hành động khai phóng", actionColor: "text-orange-400", actionBorder: "border-orange-500/50", actionBg: "bg-orange-900/30",
+                actionText: "Lấy hai tay bịt tai lại trong 3 giây. Từ nay, hãy tự tạo một \"màng lọc\" để bỏ ngoài tai những lời nói tiêu cực."
+            },
+            {
+                icon: "fa-gem", iconColor: "text-teal-400", title: "Giá trị tiềm ẩn",
+                question: "Bí quyết tạo ra tuyệt tác của người thợ điêu khắc là gì?",
+                options: ["Đắp thêm nhiều vàng ngọc và trang sức lên hòn đá.", "Nhìn thấy vẻ đẹp sẵn có bên trong và dũng cảm gọt bỏ những phần thô ráp thừa thãi.", "Dùng những dụng cụ điêu khắc đắt tiền nhất."], correctOption: 1,
+                actionTitle: "Hành động khai phóng", actionColor: "text-teal-400", actionBorder: "border-teal-500/50", actionBg: "bg-teal-900/30",
+                actionText: "Đừng chê bai bản thân khi chưa hoàn hảo. Bạn đang trong quá trình \"gọt giũa\" tâm trí để trở thành phiên bản tuyệt vời nhất."
+            },
+            {
+                icon: "fa-arrow-up-right-dots", iconColor: "text-indigo-400", title: "Nghịch cảnh là bậc thang",
+                question: "Con lừa đã làm gì với những xẻng đất định chôn sống nó?",
+                options: ["Dẫm lên đất để làm bậc thang bước dần lên cao và thoát hiểm.", "Đứng im chịu trận vì không còn hy vọng nào cả.", "Tìm cách ăn những chỗ đất đó để sinh tồn."], correctOption: 0,
+                actionTitle: "Hành động khai phóng", actionColor: "text-indigo-400", actionBorder: "border-indigo-500/50", actionBg: "bg-indigo-900/30",
+                actionText: "Biến 1 bài tập khó nhất hoặc 1 môn học bạn ghét nhất hôm nay thành \"bậc thang\" để nâng cấp não bộ của bạn."
+            },
+            {
+                icon: "fa-glass-water", iconColor: "text-cyan-400", title: "Sức mạnh của tĩnh tâm",
+                question: "Cách tốt nhất để làm cốc nước đục trở nên trong trẻo là gì?",
+                options: ["Lấy đũa khuấy liên tục để cặn tan ra.", "Đổ thêm thật nhiều nước sạch vào cốc.", "Để yên một thời gian cho cặn bẩn tự động lắng xuống đáy."], correctOption: 2,
+                actionTitle: "Hành động khai phóng", actionColor: "text-cyan-400", actionBorder: "border-cyan-500/50", actionBg: "bg-cyan-900/30",
+                actionText: "Khi đang giận dữ hoặc bế tắc, tuyệt đối không hành động. Hãy nhắm mắt, hít thở sâu 5 lần chờ \"cặn bẩn\" lắng xuống."
+            },
+            {
+                icon: "fa-house-chimney-crack", iconColor: "text-amber-500", title: "Ngôi nhà của chính mình",
+                question: "Tại sao người thợ mộc lại hối hận tột cùng khi nhận chiếc chìa khóa?",
+                options: ["Vì ông nhận ra mình đã tự tay xây một ngôi nhà tồi tàn cho chính mình ở.", "Vì ông không được ông chủ trả thêm tiền lương.", "Vì ngôi nhà quá to, ông không thể dọn dẹp hết được."], correctOption: 0,
+                actionTitle: "Hành động khai phóng", actionColor: "text-amber-400", actionBorder: "border-amber-500/50", actionBg: "bg-amber-900/30",
+                actionText: "Mỗi ngày đi học là bạn đang tự xây tương lai. Hãy làm việc với 100% tâm huyết để không phải ở trong \"ngôi nhà tồi tàn\" sau này!"
+            }
+        ];
+
+        // --- 20 QUESTIONS FOR COMPREHENSIVE QUIZ ---
+        const comprehensiveQuizData = [
+            {
+                question: "Sát thủ 'Đọc thầm' (Subvocalization) kìm hãm tốc độ đọc của chúng ta ở giới hạn nào?",
+                options: ["Tốc độ nhận diện hình ảnh của mắt", "Tốc độ phát âm của lưỡi và vòm họng (khoảng 150-250 từ/phút)", "Tốc độ lật trang sách", "Khả năng lưu trữ bộ nhớ ngắn hạn"],
+                correct: 1,
+                explanation: "Đọc thầm ép não bộ phải xử lý thông tin bằng cách lẩm nhẩm từng từ trong đầu, giới hạn tốc độ đọc bằng tốc độ nói, thay vì sử dụng tốc độ quét hình ảnh vượt trội của mắt."
+            },
+            {
+                question: "Ẩn dụ 'Góc nhìn ống hút' mô tả sai lầm nào trong các nguyên nhân đọc chậm?",
+                options: ["Đọc giật lùi", "Đọc thầm", "Đọc từng chữ một", "Đọc thiếu tập trung"],
+                correct: 2,
+                explanation: "Đọc từng chữ tương tự như nhìn thế giới qua một ống hút, khiến mắt mất đi tầm nhìn ngoại vi và không nắm bắt được cấu trúc cũng như ngữ nghĩa toàn cảnh của cụm từ."
+            },
+            {
+                question: "Khi mắc lỗi 'Chiếc Boomerang' (Đọc giật lùi), nguyên nhân chủ yếu xuất phát từ đâu?",
+                options: ["Do mắt bị mỏi và nháy liên tục", "Do thiếu tự tin và thói quen nghi ngờ khả năng ghi nhớ của bản thân", "Do văn bản quá dài", "Do tốc độ WPM quá cao"],
+                correct: 1,
+                explanation: "Đọc giật lùi bắt nguồn từ tâm lý thiếu tự tin, sợ bỏ sót thông tin, tạo thói quen xấu khiến mắt thụt lùi liên tục làm gián đoạn luồng tư duy mạch lạc."
+            },
+            {
+                question: "Phương pháp cốt lõi để loại bỏ thói quen 'Đọc từng chữ' là gì?",
+                options: ["Mở rộng tầm nhìn mắt để thu nhận và quét thông tin theo cụm từ", "Nhắm một mắt khi đọc", "Đọc to thành tiếng", "Sử dụng thước kẻ che bớt dòng dưới"],
+                correct: 0,
+                explanation: "Quét cụm từ giúp tận dụng tầm nhìn ngoại vi, gom 2-3 chữ trong một nhịp dừng của mắt để xử lý khối lượng thông tin lớn hơn."
+            },
+            {
+                question: "Tại sao việc ép bộ não làm việc ở RPM cao (WPM từ 450-650) lại giúp cải thiện khả năng tập trung?",
+                options: ["Làm não mệt mỏi và dễ buồn ngủ", "Dưới áp lực tốc độ, não buộc phải cắt bỏ các luồng suy nghĩ lan man ngoài lề", "Giúp cải thiện thị lực của mắt", "Làm giảm nhịp tim"],
+                correct: 1,
+                explanation: "Khi đẩy tốc độ lên cao, não bộ tập trung cao độ để bám đuổi thông tin, từ đó ngăn chặn tình trạng phân tâm hay suy nghĩ lan man."
+            },
+            {
+                question: "Câu chuyện 'Trứng Đại Bàng' mang lại thông điệp gì về việc phát triển bản thân?",
+                options: ["Cần sống hòa nhập với môi trường xung quanh", "Niềm tin giới hạn có sức tàn phá lớn hơn cả việc thiếu công cụ vật lý", "Nên bay cao hết sức khi còn nhỏ", "Đại bàng không thể sống ở mặt đất"],
+                correct: 1,
+                explanation: "Đại bàng chết đi như một con gà không phải vì thiếu đôi cánh, mà vì định kiến và niềm tin sai lệch từ môi trường đã giới hạn tâm trí nó."
+            },
+            {
+                question: "Thông qua câu chuyện 'Tờ Giấy Trắng', chấm đen nhỏ đại diện cho điều gì?",
+                options: ["Những giá trị bao la chưa được khám phá", "Một lỗi lầm, khiếm khuyết nhỏ nhặt mà mọi người thường soi xét", "Kiến thức trọng tâm của bài học", "Mục tiêu cần hướng đến"],
+                correct: 1,
+                explanation: "Chấm đen nhỏ tượng trưng cho những khiếm khuyết hay sai phạm nhỏ nhoi mà con người dễ có xu hướng tập trung vào để phủ nhận những giá trị tốt đẹp lớn lao bao quanh."
+            },
+            {
+                question: "Vì sao vị danh y trong chuyện 'Nhìn Lá Bồ Đề' lại bắt học trò rèn luyện thói quen quan sát tỉ mỉ?",
+                options: ["Để phân biệt các loại cây độc", "Để kiểm tra xem học trò có trung thực không", "Sự tinh tế trong quan sát là nền tảng của sự thấu cảm và chẩn bệnh sâu sắc", "Để tìm kiếm chiếc lá có hình dáng đẹp nhất"],
+                correct: 2,
+                explanation: "Quan sát sâu sắc vạn vật giúp rèn luyện tâm trí nhạy bén, từ đó mới nhìn nhận và thấu hiểu được những nỗi đau hay tâm sự thầm kín của người khác."
+            },
+            {
+                question: "Cây tre Moso mất 4 năm đầu tiên hầu như không phát triển chiều cao để làm gì?",
+                options: ["Để tích trữ nước trong thân", "Để âm thầm cắm sâu hệ thống rễ vững chắc dưới lòng đất", "Chờ đợi điều kiện thời tiết thích hợp", "Tránh bị động vật phá hoại"],
+                correct: 1,
+                explanation: "Bốn năm đầu không hề lãng phí, đó là giai đoạn chuẩn bị nền móng vững vàng để nâng đỡ cho sự bứt phá thần tốc ở năm thứ năm."
+            },
+            {
+                question: "Bài học từ chiếc 'Bình Nứt' nhắc nhở chúng ta điều gì về khuyết điểm cá nhân?",
+                options: ["Cần giấu kín khuyết điểm để người khác không phát hiện", "Nên mua một chiếc bình mới hoàn hảo hơn", "Khuyết điểm nếu được nhìn nhận đúng cách vẫn có thể tạo ra giá trị đặc biệt", "Khuyết điểm luôn mang lại sự thất bại"],
+                correct: 2,
+                explanation: "Chiếc bình nứt đã tưới mát cho những hạt hoa ven đường. Không ai là vô dụng, mọi khuyết điểm đều có thể trở thành giá trị riêng biệt nếu biết tận dụng."
+            },
+            {
+                question: "Chú ếch nhỏ điếc trong cuộc thi leo tháp đã chiến thắng nhờ vào yếu tố nào?",
+                options: ["Nhờ may mắn không bị trượt chân", "Nghĩ rằng những lời phản đối, chê bai là những tiếng cổ vũ nhiệt tình", "Có sức khỏe vượt trội so với các chú ếch khác", "Được bầy đàn nâng đỡ từ phía dưới"],
+                correct: 1,
+                explanation: "Nhờ không nghe thấy những lời bàn lùi tiêu cực, chú ếch giữ vững mục tiêu và chuyển hóa áp lực từ tiếng ồn thành động lực thúc đẩy tiến lên."
+            },
+            {
+                question: "Quá trình gọt bỏ những phần thô ráp của 'Hòn Đá Xù Xì' tương ứng với hành động nào trong rèn luyện trí tuệ?",
+                options: ["Đọc sách giải trí thụ động", "Sàng lọc thông tin nhiễu, loại bỏ thói quen xấu để bộc lộ giá trị nội tại", "Giữ nguyên các suy nghĩ lối mòn", "Phụ thuộc vào ý kiến của số đông"],
+                correct: 1,
+                explanation: "Sự tuyệt mỹ vốn có sẵn bên trong, việc loại bỏ thói quen cũ thô kệch giúp định hình tư duy sắc sảo và hoàn thiện bản thân."
+            },
+            {
+                question: "Cách con lừa vượt qua giếng cạn khi bị người chủ lấp đất là gì?",
+                options: ["Chờ đợi người khác đến cứu hộ", "Lắc mạnh để đất rơi xuống chân, biến khó khăn thành bệ đỡ để leo lên", "Cố gắng đào hầm xuyên qua giếng", "Kêu gào liên tục để phản đối"],
+                correct: 1,
+                explanation: "Bằng cách dẫm lên chính những xẻng đất định chôn sống mình, con lừa biến nghịch cảnh thành những bậc thang tự cứu thoát mình."
+            },
+            {
+                question: "Trong câu chuyện 'Cốc Nước Đục', làm thế nào để nước trong trẻo trở lại?",
+                options: ["Dùng thìa khuấy thật mạnh", "Pha thêm chất tẩy rửa", "Để yên tĩnh một thời gian cho các cặn bẩn lắng xuống", "Đổ nước sang một cốc lớn hơn"],
+                correct: 2,
+                explanation: "Đặt cốc nước yên lặng giúp cặn bẩn lắng xuống đáy. Khi gặp giông bão hay nóng giận, giữ tâm trí tĩnh lặng là cách tốt nhất để sáng suốt trở lại."
+            },
+            {
+                question: "Sự hối hận của người thợ mộc già khi nhận chiếc chìa khóa ngôi nhà nhắc nhở điều gì?",
+                options: ["Cần yêu cầu ông chủ thanh toán tiền trước", "Mọi sự cẩu thả, hời hợt ở hiện tại đều do chính chúng ta gánh chịu kết quả trong tương lai", "Nên từ chối xây dựng nếu mệt mỏi", "Ngôi nhà quá to khó dọn dẹp"],
+                correct: 1,
+                explanation: "Ông đã xây ngôi nhà của chính mình bằng sự qua quýt. Hành động hằng ngày tích lũy nên tương lai của chính bản thân chúng ta."
+            },
+            {
+                question: "Khi luyện tập với công cụ Speed Reading, chế độ đọc cụm từ '2 Chữ / Nhịp' mang lại hiệu quả gì?",
+                options: ["Làm tăng thói quen đọc thầm từng từ", "Giúp mắt bắt đầu học cách gom từ và xử lý thông tin theo khối thay vì đơn lẻ", "Làm chậm tốc độ tiếp thu của não bộ", "Khiến người đọc dễ bị hoa mắt"],
+                correct: 1,
+                explanation: "Chế độ đọc cụm 2 chữ là bước đệm rèn luyện cơ mắt chụp ảnh thông tin nhanh hơn, chuyển dần từ đọc tuyến tính sang đọc chụp khối."
+            },
+            {
+                question: "Tại sao tư duy khai phóng được coi là đích đến cuối cùng của kỹ năng đọc nhanh?",
+                options: ["Để đọc được nhiều sách hơn nhằm mục đích khoe khoang", "Đọc nhanh để vượt qua ranh giới của câu chữ, thấu cảm cốt lõi tư tưởng và mở rộng nhân sinh quan", "Để học thuộc lòng toàn bộ cuốn sách", "Để tránh việc thảo luận với người khác"],
+                correct: 1,
+                explanation: "Đọc nhanh không chỉ là công cụ cơ học mà là để giải phóng thời gian, đón nhận đa dạng góc nhìn và nâng cao sự thấu cảm nhân văn sâu sắc."
+            },
+            {
+                question: "Thói quen đọc lướt qua để tìm từ khóa chính, bỏ qua các từ nối không quan trọng được gọi là kỹ năng gì?",
+                options: ["Đọc giật lùi chủ động", "Kỹ năng quét thông tin (Scanning & Skimming)", "Đọc thầm âm lượng nhỏ", "Đọc từng chữ một"],
+                correct: 1,
+                explanation: "Quét thông tin (Skimming & Scanning) giúp định vị nhanh ý chính và cấu trúc bài đọc mà không bị mắc kẹt vào các tiểu tiết."
+            },
+            {
+                question: "Khi gặp một từ mới hoặc khó hiểu trong lúc luyện tập đọc nhanh ở RPM cao, bạn nên xử lý thế nào?",
+                options: ["Dừng ngay bộ đọc lại để tra từ điển", "Tiếp tục giữ nhịp tiến tới, dùng ngữ cảnh chung của cả câu để suy đoán ý nghĩa", "Quay lại đọc từ đầu tiên của bài", "Tắt trình duyệt và nghỉ ngơi"],
+                correct: 1,
+                explanation: "Giữ nhịp điệu giúp não bộ phát triển khả năng suy luận logic dựa trên ngữ cảnh xung quanh thay vì bị cắt đứt mạch tư duy tập trung."
+            },
+            {
+                question: "Ý nghĩa thực sự của việc nâng cao tốc độ đọc (WPM) đối với học sinh là gì?",
+                options: ["Có thêm thời gian để hoàn thành nhiều bài thi nhanh hơn", "Giải phóng rào cản tiếp thu tri thức, xây dựng thói quen tự học và tự tin đối mặt với lượng kiến thức khổng lồ", "Trở nên thông minh hơn người khác mà không cần rèn luyện", "Được thầy cô khen ngợi nhiều hơn"],
+                correct: 1,
+                explanation: "Tối ưu hóa tốc độ đọc giúp học sinh tiết kiệm thời gian, tiếp cận kho tàng tri thức nhân loại một cách chủ động và tự tin xây dựng thói quen học tập trọn đời."
+            }
+        ];
+
+        // --- AUDIO ENGINE (Web Audio API - Synthesizer) ---
+        class WebAudioEngine {
+            constructor() {
+                this.ctx = null;
+                this.bgmPlaying = false;
+                this.schedulerTimer = null;
+                this.currentStep = 0;
+                // Chuỗi hợp âm tươi sáng, vui vẻ theo cung Đô Trưởng (C Major Pop Progression)
+                this.chords = [
+                    [261.63, 329.63, 392.00], // C (C4, E4, G4)
+                    [196.00, 246.94, 293.66], // G (G3, B3, D4)
+                    [220.00, 261.63, 329.63], // Am (A3, C4, E4)
+                    [174.61, 220.00, 261.63]  // F (F3, A3, C4)
+                ];
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playSFX(type) {
+                this.init();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime;
+
+                if (type === 'correct') {
+                    // Âm thanh vui mừng khi trả lời đúng (Arpeggio đi lên tươi sáng)
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 - E5 - G5 - C6
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.08, now + idx * 0.06);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.15);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.06);
+                        osc.stop(now + idx * 0.06 + 0.2);
+                    });
+                } else if (type === 'incorrect') {
+                    // Âm thanh báo lỗi khi trả lời sai (Buzzer đi xuống)
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220.00, now);
+                    osc.frequency.linearRampToValueAtTime(110.00, now + 0.25);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    // Âm thanh click nút nhẹ nhàng
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800.00, now);
+                    gain.gain.setValueAtTime(0.03, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(now + 0.06);
+                } else if (type === 'victory') {
+                    // Âm thanh hoàn thành xuất sắc
+                    const notes = [523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.06, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.3);
+                    });
+                }
+            }
+
+            // Nhạc nền vui tươi, rộn rã mang âm hưởng vui tươi hơn (Lively bouncy major synth)
+            startBGM() {
+                this.init();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+                this.bgmPlaying = true;
+                this.currentStep = 0;
+                this.runBgmLoop();
+            }
+
+            stopBGM() {
+                this.bgmPlaying = false;
+                clearTimeout(this.schedulerTimer);
+            }
+
+            runBgmLoop() {
+                if (!this.bgmPlaying) return;
+
+                const chordIndex = Math.floor(this.currentStep / 4) % this.chords.length;
+                const noteIndex = this.currentStep % 3;
+                
+                // Tạo một giai điệu Pluck/Arpeggio vui nhộn bật nẩy trên thang âm trưởng
+                let noteFreq = this.chords[chordIndex][noteIndex] * 2.0; 
+                if (this.currentStep % 8 === 2) noteFreq *= 1.25; // Thêm nốt phụ vui tai tạo tiết tấu đảo phách sinh động
+                if (this.currentStep % 8 === 5) noteFreq *= 1.5;
+
+                const osc1 = this.ctx.createOscillator();
+                const osc2 = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                const filter = this.ctx.createBiquadFilter();
+
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(noteFreq, this.ctx.currentTime);
+                
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(noteFreq / 2, this.ctx.currentTime); // âm trầm đệm dày hơn
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(1400, this.ctx.currentTime); // mở rộng dải tần để âm thanh rộn ràng hơn
+
+                // Giữ âm lượng ở mức rất tinh tế ở nền
+                gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.5);
+
+                osc1.connect(filter);
+                osc2.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc1.start();
+                osc2.start();
+                osc1.stop(this.ctx.currentTime + 0.6);
+                osc2.stop(this.ctx.currentTime + 0.6);
+
+                this.currentStep++;
+                // Nhịp điệu nhanh hơn một chút để tạo sự vui tươi (tempo ~170 bpm)
+                this.schedulerTimer = setTimeout(() => this.runBgmLoop(), 280); 
+            }
+        }
+
+        const audio = new WebAudioEngine();
+
+        function toggleBackgroundMusic() {
+            const toggleBtn = document.getElementById('bgm-toggle');
+            const toggleText = document.getElementById('bgm-text');
+
+            if (!audio.bgmPlaying) {
+                audio.startBGM();
+                toggleText.innerText = "Nhạc nền: BẬT";
+                toggleBtn.classList.add('border-rose-500');
+                audio.playSFX('click');
+            } else {
+                audio.stopBGM();
+                toggleText.innerText = "Nhạc nền: TẮT";
+                toggleBtn.classList.remove('border-rose-500');
+            }
+        }
+
+        // --- CANVAS CONFETTI EFFECT (Hiệu ứng pháo hoa khi trả lời đúng) ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiParticles = [];
+        let confettiAnimationId = null;
+
+        function resizeConfettiCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeConfettiCanvas);
+
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 8 + 5;
+                this.speedX = Math.random() * 6 - 3;
+                this.speedY = -Math.random() * 15 - 10;
+                this.gravity = 0.35;
+                this.color = `hsl(${Math.random() * 360}, 90%, 60%)`;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 10 - 5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.rotation += this.rotationSpeed;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+
+        function spawnConfetti() {
+            canvas.classList.remove('hidden');
+            resizeConfettiCanvas();
+            confettiParticles = [];
+            for (let i = 0; i < 60; i++) {
+                confettiParticles.push(new ConfettiParticle());
+            }
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles.forEach((p, idx) => {
+                p.update();
+                p.draw();
+                if (p.y > canvas.height + 50) {
+                    confettiParticles.splice(idx, 1);
+                }
+            });
+
+            if (confettiParticles.length > 0) {
+                confettiAnimationId = requestAnimationFrame(animateConfetti);
+            } else {
+                canvas.classList.add('hidden');
+            }
+        }
+
+        // --- STATE COMPREHENSIVE QUIZ ---
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let selectedOption = null;
+
+        // --- DOM COMPREHENSIVE QUIZ ---
+        const quizProgText = document.getElementById('quiz-progress-text');
+        const quizProgBar = document.getElementById('quiz-progress-bar');
+        const quizCorrectCount = document.getElementById('quiz-correct-count');
+        const quizQuestionTitle = document.getElementById('quiz-question-title');
+        const quizOptionsList = document.getElementById('quiz-options-list');
+        const quizFeedbackBox = document.getElementById('quiz-feedback-box');
+        const quizFeedbackStatus = document.getElementById('quiz-feedback-status');
+        const quizFeedbackExplanation = document.getElementById('quiz-feedback-explanation');
+        const quizResultScreen = document.getElementById('quiz-result-screen');
+        const quizFinalScore = document.getElementById('quiz-final-score');
+        const quizAssessmentMsg = document.getElementById('quiz-assessment-msg');
+        const quizQuestionContainer = document.getElementById('quiz-question-container');
+
+        // --- FUNCTIONS COMPREHENSIVE QUIZ ---
+        function renderQuizQuestion() {
+            if (currentQuizIndex >= comprehensiveQuizData.length) {
+                showQuizResult();
+                return;
+            }
+
+            // Reset state
+            selectedOption = null;
+            quizFeedbackBox.classList.add('hidden');
+            quizQuestionContainer.classList.remove('hidden');
+
+            // Set progress
+            quizProgText.innerText = `${currentQuizIndex + 1} / ${comprehensiveQuizData.length}`;
+            const percentage = ((currentQuizIndex + 1) / comprehensiveQuizData.length) * 100;
+            quizProgBar.style.width = `${percentage}%`;
+            quizCorrectCount.innerText = quizScore;
+
+            // Load data
+            const currentData = comprehensiveQuizData[currentQuizIndex];
+            quizQuestionTitle.innerHTML = `<span class="text-rose-300 mr-2">Câu ${currentQuizIndex + 1}:</span> ${currentData.question}`;
+
+            // Render options
+            quizOptionsList.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            currentData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-rose-950/40 hover:bg-rose-900/60 text-gray-200 font-semibold p-4 rounded-xl border border-rose-800 transition-all flex items-start shadow-md";
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-full bg-rose-950 text-xs flex items-center justify-center mr-3 font-bold text-rose-300 shrink-0 mt-0.5">${letters[idx]}</span>
+                    <span class="flex-1 text-sm md:text-base">${opt}</span>
+                `;
+                btn.onclick = () => selectQuizAnswer(idx, btn);
+                quizOptionsList.appendChild(btn);
+            });
+        }
+
+        function selectQuizAnswer(idx, clickedBtn) {
+            if (selectedOption !== null) return; // Prevent double click
+            selectedOption = idx;
+
+            const currentData = comprehensiveQuizData[currentQuizIndex];
+            const buttons = quizOptionsList.querySelectorAll('button');
+            const cardWrapper = document.getElementById('quiz-card-wrapper');
+
+            // Disable all buttons
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-rose-900/60');
+                btn.classList.add('opacity-70', 'cursor-not-allowed');
+            });
+
+            // Mark clicked/correct/incorrect
+            if (idx === currentData.correct) {
+                // Correct -> Play Sound, Spawn Confetti
+                audio.playSFX('correct');
+                spawnConfetti();
+
+                quizScore++;
+                quizCorrectCount.innerText = quizScore;
+                clickedBtn.classList.remove('bg-rose-950/40', 'text-gray-200', 'border-rose-800', 'opacity-70');
+                clickedBtn.classList.add('bg-green-900/40', 'border-green-500/80', 'text-green-300', 'opacity-100');
+                clickedBtn.querySelector('span').className = "w-7 h-7 rounded-full bg-green-800 text-xs flex items-center justify-center mr-3 font-bold text-white shrink-0 mt-0.5";
+                clickedBtn.querySelector('span').innerHTML = '<i class="fa-solid fa-check"></i>';
+
+                quizFeedbackStatus.className = "text-green-400 font-bold mb-1";
+                quizFeedbackStatus.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i>Chính xác!';
+            } else {
+                // Incorrect -> Play Sound, Shake Card
+                audio.playSFX('incorrect');
+                cardWrapper.classList.add('animate-shake');
+                setTimeout(() => cardWrapper.classList.remove('animate-shake'), 400);
+
+                clickedBtn.classList.remove('bg-rose-950/40', 'text-gray-200', 'border-rose-800', 'opacity-70');
+                clickedBtn.classList.add('bg-red-900/40', 'border-red-500/80', 'text-red-300', 'opacity-100');
+                clickedBtn.querySelector('span').className = "w-7 h-7 rounded-full bg-red-800 text-xs flex items-center justify-center mr-3 font-bold text-white shrink-0 mt-0.5";
+                clickedBtn.querySelector('span').innerHTML = '<i class="fa-solid fa-xmark"></i>';
+
+                // Highlight correct one
+                const correctBtn = buttons[currentData.correct];
+                correctBtn.classList.remove('bg-rose-950/40', 'text-gray-200', 'border-rose-800', 'opacity-70');
+                correctBtn.classList.add('bg-green-900/30', 'border-green-600/50', 'text-green-300', 'opacity-100');
+                correctBtn.querySelector('span').className = "w-7 h-7 rounded-full bg-green-800 text-xs flex items-center justify-center mr-3 font-bold text-white shrink-0 mt-0.5";
+                correctBtn.querySelector('span').innerHTML = '<i class="fa-solid fa-check"></i>';
+
+                quizFeedbackStatus.className = "text-red-400 font-bold mb-1";
+                quizFeedbackStatus.innerHTML = '<i class="fa-solid fa-circle-xmark mr-2"></i>Chưa chính xác!';
+            }
+
+            // Show explanation
+            quizFeedbackExplanation.innerText = currentData.explanation;
+            quizFeedbackBox.classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            audio.playSFX('click');
+            currentQuizIndex++;
+            renderQuizQuestion();
+        }
+
+        function showQuizResult() {
+            audio.playSFX('victory');
+            quizQuestionContainer.classList.add('hidden');
+            quizFeedbackBox.classList.add('hidden');
+            quizResultScreen.classList.remove('hidden');
+
+            quizFinalScore.innerText = `${quizScore} / ${comprehensiveQuizData.length}`;
+
+            let msg = "";
+            if (quizScore >= 18) {
+                msg = "Trí tuệ vượt trội! Bạn đã hoàn toàn làm chủ các kiến thức thực tiễn và tư duy khai phóng được truyền tải trong khóa học này. Hãy tiếp tục duy trì thói quen rèn luyện hằng ngày.";
+            } else if (quizScore >= 14) {
+                msg = "Rất tốt! Bạn nắm vững hầu hết các phương pháp loại bỏ sát thủ đọc chậm và thấu hiểu các bài học nhân sinh sâu sắc từ câu chuyện hạt giống tâm hồn.";
+            } else if (quizScore >= 10) {
+                msg = "Đạt yêu cầu. Bạn hiểu cơ bản các nguyên lý cơ học của mắt và nội dung câu chuyện, tuy nhiên cần chú ý rèn luyện thực tế nhiều hơn để tối ưu tốc độ đọc.";
+            } else {
+                msg = "Bạn nên thực hành đọc lại các văn bản trên đấu trường và quan sát kỹ lưỡng hơn các bài giảng lý thuyết để cải thiện kết quả ở lần kiểm tra sau.";
+            }
+            quizAssessmentMsg.innerText = msg;
+        }
+
+        function restartQuiz() {
+            audio.playSFX('click');
+            currentQuizIndex = 0;
+            quizScore = 0;
+            quizResultScreen.classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        // --- STATE ---
+        let currentWPM = 250;
+        let isPlaying = false;
+        let wordsArray = [];
+        let currentChunkIndex = 0;
+        let playInterval = null;
+
+        // --- DOM ELEMENTS ---
+        const domWord = document.getElementById('reader-word');
+        const domProgress = document.getElementById('reading-progress');
+        const domPlayBtn = document.getElementById('btn-play');
+        const domPlayIcon = document.getElementById('icon-play');
+        const domWpmDisplay = document.getElementById('wpm-display');
+        const domRpmBar = document.getElementById('rpm-bar');
+
+        // --- UI FUNCTIONS ---
+        function switchTab(tabId) {
+            audio.playSFX('click');
+            // Hide all
+            ['tab-intro', 'tab-reader', 'tab-application'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.add('hidden');
+                    el.classList.remove('opacity-100');
+                    el.classList.add('opacity-0');
+                }
+            });
+            
+            // Reset buttons
+            ['btn-tab-intro', 'btn-tab-reader', 'btn-tab-application'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.className = "px-4 py-2 rounded-lg text-sm font-semibold text-rose-200 hover:text-white transition-all";
+                }
+            });
+
+            // Show active
+            const activeTab = document.getElementById(tabId);
+            if (activeTab) {
+                activeTab.classList.remove('hidden');
+                setTimeout(() => {
+                    activeTab.classList.remove('opacity-0');
+                    activeTab.classList.add('opacity-100');
+                }, 50);
+            }
+
+            // Highlight button
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-rose-600 text-white shadow-md";
+            }
+
+            // Stop reading if switching away from reader
+            if (tabId !== 'tab-reader' && isPlaying) {
+                togglePlay();
+            }
+        }
+
+        // --- READER LOGIC ---
+        function getChunkSize() {
+            return parseInt(document.getElementById('chunk-selector').value);
+        }
+
+        function loadSelectedText() {
+            const textIndex = document.getElementById('text-selector').value;
+            const rawText = texts[textIndex];
+            
+            // Split into words, remove multiple spaces
+            const rawWords = rawText.trim().split(/\s+/);
+            const chunkSize = getChunkSize();
+            
+            wordsArray = [];
+            for (let i = 0; i < rawWords.length; i += chunkSize) {
+                wordsArray.push(rawWords.slice(i, i + chunkSize).join(' '));
+            }
+            
+            resetReader();
+        }
+
+        function updateWPM(value) {
+            currentWPM = parseInt(value);
+            domWpmDisplay.innerHTML = `${currentWPM} <span class="text-lg text-rose-300">WPM</span>`;
+            
+            const percentage = ((currentWPM - 250) / 400) * 100;
+            domRpmBar.style.width = `${percentage}%`;
+            
+            let color = '#22c55e'; // Xanh lá
+            let shadow = 'rgba(34,197,94,0.8)';
+            if (currentWPM >= 350 && currentWPM < 450) {
+                color = '#eab308'; // Vàng
+                shadow = 'rgba(234,179,8,0.8)';
+            } else if (currentWPM >= 450 && currentWPM < 550) {
+                color = '#f97316'; // Cam
+                shadow = 'rgba(249,115,22,0.8)';
+            } else if (currentWPM >= 550) {
+                color = '#ef4444'; // Đỏ
+                shadow = 'rgba(239,68,68,0.8)';
+            }
+            
+            domRpmBar.style.backgroundColor = color;
+            domRpmBar.style.boxShadow = `0 0 15px ${shadow}`;
+
+            // Adjust interval if currently playing
+            if (isPlaying) {
+                clearInterval(playInterval);
+                startInterval();
+            }
+        }
+
+        function resetReader() {
+            if (isPlaying) togglePlay();
+            currentChunkIndex = 0;
+            domWord.innerText = "SẴN SÀNG!";
+            domProgress.style.width = '0%';
+        }
+
+        function togglePlay() {
+            audio.playSFX('click');
+            if (wordsArray.length === 0) loadSelectedText();
+            
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                // UI changes
+                domPlayIcon.classList.remove('fa-play');
+                domPlayIcon.classList.add('fa-pause');
+                domPlayIcon.classList.remove('ml-1');
+                domPlayBtn.classList.replace('bg-rose-600', 'bg-red-600');
+                domPlayBtn.classList.replace('hover:bg-rose-550', 'hover:bg-red-500');
+                domPlayBtn.style.boxShadow = '0 0 15px rgba(239,68,68,0.6)';
+                
+                // If ended, restart
+                if (currentChunkIndex >= wordsArray.length) {
+                    currentChunkIndex = 0;
+                }
+                
+                startInterval();
+            } else {
+                // UI changes
+                domPlayIcon.classList.remove('fa-pause');
+                domPlayIcon.classList.add('fa-play');
+                domPlayIcon.classList.add('ml-1');
+                domPlayBtn.classList.replace('bg-red-600', 'bg-rose-600');
+                domPlayBtn.classList.replace('hover:bg-red-500', 'hover:bg-rose-550');
+                domPlayBtn.style.boxShadow = '0 0 15px rgba(244,63,94,0.6)';
+                
+                clearInterval(playInterval);
+            }
+        }
+
+        function startInterval() {
+            const chunkSize = getChunkSize();
+            const delay = (60000 / currentWPM) * chunkSize;
+            
+            playInterval = setInterval(() => {
+                if (currentChunkIndex < wordsArray.length) {
+                    domWord.innerText = wordsArray[currentChunkIndex];
+                    const progress = ((currentChunkIndex + 1) / wordsArray.length) * 100;
+                    domProgress.style.width = `${progress}%`;
+                    currentChunkIndex++;
+                } else {
+                    togglePlay();
+                    domWord.innerHTML = `
+                        <div class='flex flex-col items-center justify-center gap-6'>
+                            <span class='text-4xl text-green-400 font-black tracking-widest animate-pulse'>HOÀN THÀNH!</span>
+                            <button onclick='showQuestion()' class='text-2xl bg-gradient-to-r from-rose-500 to-emerald-500 px-8 py-4 rounded-xl text-white shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:scale-105 transition-all transform animate-bounce'>
+                                <i class='fa-solid fa-unlock-keyhole mr-3'></i>Giải Mã Bài Học
+                            </button>
+                        </div>
+                    `;
+                }
+            }, delay);
+        }
+
+        function checkAnswer(btn, optionIndex, correctIndex) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            
+            // Khóa các nút khác
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:bg-rose-900/60');
+                b.classList.add('cursor-not-allowed', 'opacity-80');
+            });
+            
+            if (optionIndex === correctIndex) {
+                // Đúng -> Thêm pháo giấy & sfx
+                audio.playSFX('correct');
+                spawnConfetti();
+
+                btn.classList.remove('bg-rose-950/40', 'text-gray-200', 'border-rose-800');
+                btn.classList.add('bg-green-700', 'text-white', 'border-green-500');
+                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-green-900 flex items-center justify-center mr-3 font-bold"><i class="fa-solid fa-check"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+            } else {
+                // Sai -> Rung & sfx còi
+                audio.playSFX('incorrect');
+                const modalBox = document.getElementById('modal-content-box');
+                modalBox.classList.add('animate-shake');
+                setTimeout(() => modalBox.classList.remove('animate-shake'), 400);
+
+                btn.classList.remove('bg-rose-950/40', 'text-gray-200', 'border-rose-800');
+                btn.classList.add('bg-red-900', 'text-white', 'border-red-500');
+                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-red-950 flex items-center justify-center mr-3 font-bold"><i class="fa-solid fa-xmark"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+                
+                // Hiển thị đáp án đúng
+                const correctBtn = buttons[correctIndex];
+                correctBtn.classList.remove('bg-rose-950/40', 'text-gray-200', 'border-rose-800');
+                correctBtn.classList.add('bg-green-700', 'text-white', 'border-green-500');
+                correctBtn.innerHTML = `<span class="w-8 h-8 rounded-full bg-green-900 flex items-center justify-center mr-3 font-bold"><i class="fa-solid fa-check"></i></span>` + correctBtn.innerHTML.substring(correctBtn.innerHTML.indexOf('</span>') + 7);
+            }
+            
+            // Hiển thị khung Action
+            document.getElementById('action-section').classList.remove('hidden');
+            document.getElementById('action-section').classList.add('animate-fade-in-up');
+        }
+
+        function showQuestion() {
+            audio.playSFX('click');
+            const modal = document.getElementById('question-modal');
+            const contentBox = document.getElementById('modal-content-box');
+            const textIndex = document.getElementById('text-selector').value;
+            
+            const data = questionsData[textIndex];
+            
+            let optionsHtml = '';
+            const letters = ['A', 'B', 'C'];
+            data.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="checkAnswer(this, ${idx}, ${data.correctOption})" 
+                        class="w-full text-left bg-rose-950/40 hover:bg-rose-900/60 text-gray-200 font-semibold p-4 rounded-xl border border-rose-800 transition-all mb-3 flex items-center shadow-md">
+                        <span class="w-8 h-8 rounded-full bg-rose-950 flex items-center justify-center mr-3 font-bold shrink-0">${letters[idx]}</span>
+                        <span class="flex-1">${opt}</span>
+                    </button>
+                `;
+            });
+            
+            let htmlContent = `
+                <div class="text-center">
+                    <div class="text-5xl ${data.iconColor} mb-3"><i class="fa-solid ${data.icon}"></i></div>
+                    <h2 class="text-3xl font-black text-white mb-6 uppercase tracking-wide">${data.title}</h2>
+                    
+                    <div class="bg-rose-950/80 p-6 rounded-xl border border-rose-800 mb-6 text-left shadow-inner">
+                        <p class="text-xl text-rose-300 mb-4 font-bold"><i class="fa-solid fa-circle-question mr-2"></i> ${data.question}</p>
+                        <div class="flex flex-col">
+                            ${optionsHtml}
+                        </div>
+                        
+                        <!-- Action Section (Hidden initially) -->
+                        <div id="action-section" class="hidden mt-6 ${data.actionBg} p-5 rounded-lg border ${data.actionBorder}">
+                            <p class="${data.actionColor} text-lg font-bold uppercase mb-2"><i class="fa-solid fa-bolt text-yellow-400 mr-2"></i> ${data.actionTitle}:</p>
+                            <p class="text-gray-200 font-semibold leading-relaxed">${data.actionText}</p>
+                        </div>
+                    </div>
+                    <button onclick="closeQuestion()" class="bg-rose-900 hover:bg-rose-800 px-8 py-3 rounded-xl font-bold text-white transition-all text-lg w-full md:w-auto">Đóng lại & Tiếp tục</button>
+                </div>
+            `;
+
+            contentBox.innerHTML = htmlContent;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                contentBox.classList.remove('scale-95');
+                contentBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeQuestion() {
+            audio.playSFX('click');
+            const modal = document.getElementById('question-modal');
+            const contentBox = document.getElementById('modal-content-box');
+            
+            modal.classList.add('opacity-0');
+            contentBox.classList.remove('scale-100');
+            contentBox.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- PDF MODAL LOGIC (Khôi phục PDF gốc) ---
+        function openPdfModal() {
+            audio.playSFX('click');
+            const modal = document.getElementById('pdf-modal');
+            const header = document.getElementById('pdf-modal-header');
+            const content = document.getElementById('pdf-modal-content');
+            
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                header.classList.remove('scale-95');
+                header.classList.add('scale-100');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closePdfModal() {
+            audio.playSFX('click');
+            const modal = document.getElementById('pdf-modal');
+            const header = document.getElementById('pdf-modal-header');
+            const content = document.getElementById('pdf-modal-content');
+            
+            modal.classList.add('opacity-0');
+            header.classList.remove('scale-100');
+            header.classList.add('scale-95');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            loadSelectedText();
+            updateWPM(250);
+            renderQuizQuestion();
+        };
+    </script>
+</body>
+</html>

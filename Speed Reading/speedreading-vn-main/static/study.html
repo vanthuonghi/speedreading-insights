@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading Vietnam - Phòng Luyện Tập Pro</title>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+
+    <style>
+        :root {
+            --brand-red: #dc2626;
+            --brand-dark: #0f172a;
+            --brand-panel: #1e293b;
+        }
+
+        body { 
+            font-family: 'Be Vietnam Pro', sans-serif; 
+            background-color: var(--brand-dark); 
+            color: #e2e8f0; 
+            overflow-x: hidden; 
+        }
+
+        /* Utility Classes */
+        .glass-panel { 
+            background: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 16px; 
+            transition: all 0.3s ease;
+        }
+        
+        .glass-panel:hover {
+            border-color: rgba(220, 38, 38, 0.3);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .btn-brand {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
+            transition: all 0.2s;
+        }
+        .btn-brand:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(220, 38, 38, 0.23); }
+        .btn-brand:active { transform: translateY(1px); }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--brand-red); }
+
+        /* Animation Classes */
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden-section { display: none !important; }
+
+        /* 1. Pacer Line */
+        #pacer-line {
+            position: absolute; left: 0; right: 0; height: 2px; 
+            background-color: var(--brand-red);
+            box-shadow: 0 0 8px var(--brand-red);
+            pointer-events: none; z-index: 10;
+        }
+
+        /* 2. Schulte Grid - Dynamic Columns */
+        .schulte-grid { 
+            display: grid; 
+            grid-template-columns: repeat(var(--cols, 5), 1fr); 
+            gap: 10px; 
+            max-width: 500px; margin: 0 auto; aspect-ratio: 1/1; 
+        }
+        .schulte-cell {
+            display: flex; align-items: center; justify-content: center; 
+            background-color: #334155; border-radius: 8px; 
+            font-size: 1.8rem; font-weight: 700; color: white;
+            cursor: pointer; user-select: none; transition: all 0.1s;
+            border: 2px solid transparent;
+        }
+        /* Adjust font size for larger grids */
+        .schulte-grid[style*="--cols: 7"] .schulte-cell { font-size: 1.2rem; }
+        .schulte-grid[style*="--cols: 3"] .schulte-cell { font-size: 2.5rem; }
+
+        .schulte-cell:hover { background-color: #475569; }
+        .schulte-cell.correct { background-color: var(--brand-red) !important; transform: scale(0.95); }
+        .schulte-cell.wrong { animation: shake 0.3s; border-color: #ef4444; }
+        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
+
+        /* 3. Saccade Dots */
+        .saccade-dot {
+            width: 24px; height: 24px; border-radius: 50%;
+            background-color: #475569; transition: background-color 0.05s;
+        }
+        .saccade-dot.active {
+            background-color: var(--brand-red);
+            box-shadow: 0 0 20px var(--brand-red);
+            transform: scale(1.3);
+        }
+
+        /* 4. Eye Yoga Animations */
+        .yoga-container { width: 300px; height: 300px; position: relative; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.1); }
+        .yoga-ball {
+            width: 20px; height: 20px; background: var(--brand-red); border-radius: 50%;
+            position: absolute; 
+            offset-rotate: 0deg;
+            animation: moveYoga 4s linear infinite;
+            box-shadow: 0 0 15px var(--brand-red);
+        }
+        @keyframes moveYoga { 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
+
+        /* 5. Flash Word */
+        #flash-word-display {
+            font-family: 'Be Vietnam Pro', serif;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+        }
+
+        /* 6. Guide Modal */
+        #modal-guide {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="h-16 border-b border-white/5 bg-[#0f172a]/90 backdrop-blur-md fixed top-0 w-full z-50 flex items-center justify-between px-6 lg:px-12">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.app.resetToMenu()">
+            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center shadow-lg shadow-red-500/20">
+                <i data-lucide="zap" class="text-white w-5 h-5 fill-current"></i>
+            </div>
+            <span class="font-bold text-lg tracking-tight text-white">SPEED READING <span class="text-red-500">VN</span></span>
+        </div>
+        
+        <div class="hidden md:flex items-center gap-4 text-sm font-medium text-slate-400">
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700">
+                <i data-lucide="trophy" class="w-3 h-3 text-yellow-500"></i>
+                <span>Best: <span id="best-wpm-display" class="text-white font-bold">0</span> WPM</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- GUIDE MODAL (Hidden by default) -->
+    <div id="modal-guide" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 fade-in">
+        <div class="bg-slate-800 border border-slate-600 rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+            <div class="p-4 border-b border-slate-700 flex justify-between items-center bg-slate-700/50">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="info" class="text-blue-400 w-5 h-5"></i> Hướng Dẫn Sử Dụng
+                </h3>
+                <button onclick="window.app.closeGuide()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar text-slate-300 leading-relaxed" id="guide-content">
+                <!-- Content injected via JS -->
+            </div>
+            <div class="p-4 border-t border-slate-700 bg-slate-900/50 text-center">
+                <button onclick="window.app.closeGuide()" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold text-sm">Đã Hiểu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto w-full relative">
+        
+        <!-- SCREEN 1: MENU -->
+        <div id="screen-menu" class="fade-in space-y-10">
+            <div class="text-center space-y-4 py-6">
+                <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight">
+                    Phòng Gym <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Thị Giác</span>
+                </h1>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                    Kích hoạt tiềm năng não bộ với các bài tập chuyên sâu. Tập trung tối đa, kết quả tối ưu.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                
+                <!-- Group 1: Đo lường & Đọc -->
+                <div onclick="window.app.switchMode('normal')" class="glass-panel p-5 cursor-pointer group hover:bg-slate-800 relative overflow-hidden">
+                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center mb-3 text-red-500"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-white text-lg">Đo Tốc Độ (WPM)</h3>
+                    <p class="text-xs text-slate-400 mt-2">Bài test tiêu chuẩn. Đọc hiểu và đo lường tốc độ thực tế.</p>
+                </div>
+
+                <div onclick="window.app.switchMode('rsvp')" class="glass-panel p-5 cursor-pointer group hover:bg-slate-800 relative overflow-hidden">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-3 text-blue-400"><i data-lucide="fast-forward" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-white text-lg">Luyện RSVP</h3>
+                    <p class="text-xs text-slate-400 mt-2">Loại bỏ đọc thầm bằng cách hiển thị chữ tốc độ cao.</p>
+                </div>
+
+                <div onclick="window.app.switchMode('pyramid')" class="glass-panel p-5 cursor-pointer group hover:bg-slate-800 relative overflow-hidden">
+                    <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-3 text-purple-400"><i data-lucide="triangle" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-white text-lg">Đọc Hình Tháp</h3>
+                    <p class="text-xs text-slate-400 mt-2">Mở rộng tầm nhìn bằng cách tập trung vào trục giữa.</p>
+                </div>
+
+                <!-- Group 2: Gym Mắt -->
+                <div onclick="window.app.switchMode('vision')" class="glass-panel p-5 cursor-pointer group hover:bg-slate-800 relative overflow-hidden">
+                    <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center mb-3 text-green-400"><i data-lucide="grid" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-white text-lg">Bảng Schulte</h3>
+                    <p class="text-xs text-slate-400 mt-2">Tìm số ngẫu nhiên. Tăng cường tập trung và ngoại vi.</p>
+                </div>
+
+                <div onclick="window.app.switchMode('saccade')" class="glass-panel p-5 cursor-pointer group hover:bg-slate-800 relative overflow-hidden">
+                    <div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center mb-3 text-orange-400"><i data-lucide="move-horizontal" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-white text-lg">Nhảy Mắt (Saccade)</h3>
+                    <p class="text-xs text-slate-400 mt-2">Tăng tốc độ quét mắt ngang, giảm thời gian chết.</p>
+                </div>
+
+                <div onclick="window.app.switchMode('yoga')" class="glass-panel p-5 cursor-pointer group hover:bg-slate-800 relative overflow-hidden border border-pink-500/30">
+                    <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center mb-3 text-pink-400"><i data-lucide="infinity" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-white text-lg">Eye Yoga (3 Kiểu)</h3>
+                    <p class="text-xs text-slate-400 mt-2">Đa dạng bài tập thư giãn và điều tiết cơ mắt.</p>
+                </div>
+
+                <div onclick="window.app.switchMode('flash')" class="glass-panel p-5 cursor-pointer group hover:bg-slate-800 relative overflow-hidden border border-yellow-500/30">
+                    <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center mb-3 text-yellow-400"><i data-lucide="zap" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-white text-lg">Chụp Ảnh Từ</h3>
+                    <p class="text-xs text-slate-400 mt-2">Flash Words. 3 cấp độ luyện khả năng chụp thông tin.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SCREEN 2: SETUP (Generic Setup) -->
+        <div id="screen-setup" class="hidden-section max-w-3xl mx-auto fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="window.app.resetToMenu()" class="flex items-center gap-2 text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-4 h-4"></i> Menu</button>
+                <button onclick="window.app.openGuide()" class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700"><i data-lucide="help-circle" class="w-4 h-4"></i> Hướng Dẫn</button>
+            </div>
+            
+            <div class="glass-panel p-8">
+                <h2 id="setup-title" class="text-2xl font-bold text-white mb-6">Cấu Hình</h2>
+                
+                <!-- Input Source -->
+                <div class="space-y-4 mb-8">
+                    <label class="block text-sm font-medium text-slate-300 uppercase tracking-wider">1. Chọn nội dung</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <button onclick="window.app.selectRandomMaterial()" class="p-4 rounded-xl border border-slate-600 hover:border-red-500 bg-slate-800/50 text-left transition" id="btn-source-random">
+                            <div class="font-bold text-white mb-1"><i data-lucide="shuffle" class="inline w-4 h-4 mr-2 text-purple-400"></i>Thư Viện Mẫu</div>
+                            <div class="text-xs text-slate-400" id="library-status">Chọn ngẫu nhiên 1 bài</div>
+                        </button>
+                        <button onclick="window.app.fetchNews()" class="p-4 rounded-xl border border-slate-600 hover:border-red-500 bg-slate-800/50 text-left transition" id="btn-source-news">
+                            <div class="font-bold text-white mb-1"><i data-lucide="globe" class="inline w-4 h-4 mr-2 text-blue-400"></i>Tin Tức Mới</div>
+                            <div class="text-xs text-slate-400">Lấy từ VnExpress</div>
+                        </button>
+                        <button onclick="window.app.toggleCustomInput()" class="p-4 rounded-xl border border-slate-600 hover:border-red-500 bg-slate-800/50 text-left transition" id="btn-source-custom">
+                            <div class="font-bold text-white mb-1"><i data-lucide="edit-3" class="inline w-4 h-4 mr-2 text-green-400"></i>Tự Nhập / PDF</div>
+                            <div class="text-xs text-slate-400">Dán text hoặc tải file</div>
+                        </button>
+                    </div>
+                    
+                    <!-- Custom Input Area -->
+                    <div id="custom-input-box" class="hidden-section space-y-3 p-4 bg-slate-900 rounded-xl border border-slate-700">
+                        <textarea id="raw-text-input" rows="5" class="w-full bg-slate-800 text-white p-3 rounded-lg border border-slate-600 text-sm focus:border-red-500 outline-none" placeholder="Dán nội dung vào đây..."></textarea>
+                        <div class="flex gap-3">
+                            <label class="flex-1 cursor-pointer bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg text-center text-sm font-medium transition">
+                                <i data-lucide="file-up" class="inline w-4 h-4 mr-1"></i> Upload PDF
+                                <input type="file" class="hidden" accept=".pdf" onchange="window.app.handlePdf(event)">
+                            </label>
+                            <button onclick="window.app.confirmCustomText()" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-2 rounded-lg text-sm font-bold transition">Sử dụng văn bản này</button>
+                        </div>
+                        <div id="pdf-loading" class="text-xs text-yellow-400 hidden text-center">Đang xử lý PDF...</div>
+                    </div>
+                </div>
+
+                <!-- Pyramid Specific Settings -->
+                <div id="pyramid-settings-block" class="hidden-section space-y-4 mb-8">
+                     <label class="block text-sm font-medium text-slate-300 uppercase tracking-wider">Độ rộng tháp (Vision Span)</label>
+                     <div class="flex gap-2">
+                        <button onclick="window.app.setPyramidLevel(1)" id="btn-pyr-l1" class="flex-1 py-2 rounded border border-slate-600 text-sm font-bold text-slate-400 bg-slate-800 hover:bg-slate-700">Hẹp</button>
+                        <button onclick="window.app.setPyramidLevel(2)" id="btn-pyr-l2" class="flex-1 py-2 rounded border border-slate-600 text-sm font-bold text-slate-400 bg-slate-800 hover:bg-slate-700">Trung Bình</button>
+                        <button onclick="window.app.setPyramidLevel(3)" id="btn-pyr-l3" class="flex-1 py-2 rounded border border-slate-600 text-sm font-bold text-slate-400 bg-slate-800 hover:bg-slate-700">Rộng</button>
+                     </div>
+                </div>
+
+                <!-- Speed Settings -->
+                <div class="space-y-4 mb-8" id="speed-settings-block">
+                    <label class="block text-sm font-medium text-slate-300 uppercase tracking-wider">2. Tốc độ mục tiêu</label>
+                    <div class="flex items-center gap-4">
+                        <input type="range" min="100" max="1000" step="50" value="250" class="flex-1 accent-red-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('setup-wpm-display').innerText = this.value; window.app.state.targetWpm = parseInt(this.value)">
+                        <div class="w-24 text-center p-2 bg-slate-800 rounded-lg border border-slate-600">
+                            <span id="setup-wpm-display" class="text-xl font-bold text-red-500">250</span>
+                            <span class="text-xs text-slate-400 block">WPM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="window.app.launchExercise()" class="w-full btn-brand py-4 rounded-xl text-lg uppercase tracking-wider shadow-lg flex items-center justify-center gap-2">
+                    Bắt Đầu <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: READING EXECUTION -->
+        <div id="screen-exercise" class="hidden-section h-full flex flex-col fade-in">
+            <div class="flex justify-between items-center mb-6 glass-panel p-3 px-6">
+                <div class="flex items-center gap-4">
+                    <button onclick="window.app.togglePause()" id="btn-pause" class="w-10 h-10 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center text-white transition">
+                        <i data-lucide="pause" class="w-5 h-5 fill-current"></i>
+                    </button>
+                    <div class="text-sm font-medium text-slate-300">
+                        <span id="exercise-mode-label" class="text-red-400 font-bold uppercase mr-2">NORMAL</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-2xl font-mono font-bold text-white" id="exercise-timer">00:00</div>
+                    <button onclick="window.app.openGuide()" class="p-2 text-blue-400 hover:bg-slate-800 rounded-lg"><i data-lucide="help-circle" class="w-5 h-5"></i></button>
+                    <button onclick="window.app.finishExercise()" class="px-4 py-2 bg-green-600 hover:bg-green-500 text-white text-sm font-bold rounded-lg transition">Xong</button>
+                </div>
+            </div>
+
+            <div class="flex-1 glass-panel p-8 md:p-12 relative overflow-hidden flex flex-col justify-center items-center">
+                <div id="view-normal" class="hidden-section w-full h-full overflow-y-auto custom-scrollbar relative">
+                    <div id="pacer-line"></div>
+                    <div id="normal-content" class="prose prose-invert prose-lg max-w-4xl mx-auto font-serif text-justify leading-loose text-slate-200"></div>
+                </div>
+                <div id="view-rsvp" class="hidden-section w-full flex flex-col items-center justify-center">
+                    <div id="rsvp-word" class="text-6xl md:text-8xl font-black text-white font-['JetBrains_Mono'] leading-tight py-12 text-center">Ready...</div>
+                    <div class="w-full max-w-xl h-1 bg-slate-800 rounded-full mt-8 overflow-hidden"><div id="rsvp-progress-bar" class="h-full bg-red-500 w-0 transition-all duration-100"></div></div>
+                </div>
+                <div id="view-pyramid" class="hidden-section w-full h-full overflow-y-auto custom-scrollbar relative">
+                    <div class="pyramid-center-guide"></div>
+                    <div id="pyramid-content" class="text-center pt-8 pb-32 space-y-2 relative z-10"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: EYE GYM -->
+        <div id="screen-gym" class="hidden-section h-full flex flex-col items-center justify-center fade-in relative">
+            <button onclick="window.app.resetToMenu()" class="absolute top-24 left-8 flex items-center gap-2 text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-4 h-4"></i> Thoát</button>
+            <button onclick="window.app.openGuide()" class="absolute top-24 right-8 flex items-center gap-2 text-blue-400 hover:text-white transition bg-slate-800/50 px-3 py-2 rounded-lg"><i data-lucide="help-circle" class="w-4 h-4"></i> Hướng dẫn</button>
+            
+            <!-- Schulte -->
+            <div id="view-schulte" class="hidden-section text-center">
+                <div class="mb-6 flex items-center justify-center gap-8">
+                    <div class="text-right"><div class="text-xs text-slate-400 uppercase">Tìm số</div><div class="text-3xl font-bold text-red-500" id="schulte-target">1</div></div>
+                    <div class="text-left"><div class="text-xs text-slate-400 uppercase">Thời gian</div><div class="text-3xl font-mono font-bold text-white" id="schulte-timer">00:00</div></div>
+                </div>
+                
+                <!-- Schulte Controls -->
+                <div class="flex justify-center gap-2 mb-4">
+                    <button onclick="window.app.selectSchulteMode(3)" id="btn-sch-3" class="px-3 py-1 text-xs rounded border border-slate-600 bg-slate-800 text-slate-300">3x3</button>
+                    <button onclick="window.app.selectSchulteMode(5)" id="btn-sch-5" class="px-3 py-1 text-xs rounded border border-slate-600 bg-slate-800 text-slate-300">5x5</button>
+                    <button onclick="window.app.selectSchulteMode(7)" id="btn-sch-7" class="px-3 py-1 text-xs rounded border border-slate-600 bg-slate-800 text-slate-300">7x7</button>
+                </div>
+                
+                <div id="schulte-board" class="schulte-grid glass-panel p-4" style="--cols: 5"></div>
+            </div>
+
+            <!-- Saccade -->
+            <div id="view-saccade" class="hidden-section w-full max-w-4xl">
+                <div class="text-center mb-6"><h2 class="text-2xl font-bold text-white">Luyện Nhảy Mắt</h2></div>
+                
+                <!-- Saccade Controls -->
+                <div class="flex justify-center gap-2 mb-8">
+                     <button onclick="window.app.selectSaccadeLevel(1)" id="btn-sac-1" class="px-4 py-2 rounded-lg border border-slate-600 bg-slate-800 text-sm font-bold text-slate-300 hover:border-orange-500">Cấp 1 (Hẹp)</button>
+                     <button onclick="window.app.selectSaccadeLevel(2)" id="btn-sac-2" class="px-4 py-2 rounded-lg border border-slate-600 bg-slate-800 text-sm font-bold text-slate-300 hover:border-orange-500">Cấp 2 (Vừa)</button>
+                     <button onclick="window.app.selectSaccadeLevel(3)" id="btn-sac-3" class="px-4 py-2 rounded-lg border border-slate-600 bg-slate-800 text-sm font-bold text-slate-300 hover:border-orange-500">Cấp 3 (Rộng)</button>
+                </div>
+
+                <div class="glass-panel h-64 relative flex items-center justify-center">
+                    <div id="saccade-container" class="w-3/4 flex justify-between relative transition-all duration-300"><div id="dot-left" class="saccade-dot active"></div><div id="dot-right" class="saccade-dot"></div></div>
+                </div>
+                <div class="text-center mt-8"><button onclick="window.app.toggleSaccade()" id="btn-saccade-action" class="btn-brand px-8 py-3 rounded-lg">Bắt đầu</button></div>
+            </div>
+
+            <!-- Eye Yoga -->
+            <div id="view-yoga" class="hidden-section flex flex-col items-center">
+                <h2 class="text-2xl font-bold text-white mb-4">Eye Yoga</h2>
+                
+                <div class="flex gap-2 mb-8 bg-slate-800 p-1 rounded-lg">
+                    <button onclick="window.app.setYogaMode('figure8')" class="px-4 py-2 rounded-md text-sm font-bold text-slate-300 hover:bg-slate-700 focus:bg-slate-600 focus:text-white">Vô Cực</button>
+                    <button onclick="window.app.setYogaMode('circle')" class="px-4 py-2 rounded-md text-sm font-bold text-slate-300 hover:bg-slate-700 focus:bg-slate-600 focus:text-white">Hình Tròn</button>
+                    <button onclick="window.app.setYogaMode('box')" class="px-4 py-2 rounded-md text-sm font-bold text-slate-300 hover:bg-slate-700 focus:bg-slate-600 focus:text-white">Hình Hộp</button>
+                </div>
+
+                <div class="yoga-container" id="yoga-track">
+                    <svg width="300" height="300" viewBox="0 0 300 300" class="absolute top-0 left-0 pointer-events-none">
+                        <path id="yoga-path-visual" d="" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="5,5" />
+                    </svg>
+                    <div class="yoga-ball" id="yoga-ball"></div>
+                </div>
+                <p class="text-slate-400 mt-8 max-w-md text-center text-sm" id="yoga-desc">Di chuyển mắt theo quả cầu đỏ.</p>
+            </div>
+
+            <!-- Flash Words -->
+            <div id="view-flash" class="hidden-section flex flex-col items-center w-full h-full justify-center">
+                <div class="absolute top-32 right-1/2 translate-x-1/2 flex gap-2">
+                    <button onclick="window.app.setFlashLevel(1)" id="btn-flash-l1" class="px-3 py-1 rounded border border-slate-600 text-xs font-bold text-slate-400 bg-slate-800">Cơ bản</button>
+                    <button onclick="window.app.setFlashLevel(2)" id="btn-flash-l2" class="px-3 py-1 rounded border border-slate-600 text-xs font-bold text-slate-400 bg-slate-800">Nâng cao</button>
+                    <button onclick="window.app.setFlashLevel(3)" id="btn-flash-l3" class="px-3 py-1 rounded border border-slate-600 text-xs font-bold text-slate-400 bg-slate-800">Siêu cấp</button>
+                </div>
+                
+                <div id="flash-word-display" class="text-5xl md:text-6xl font-black text-white transition-opacity duration-100 opacity-0 cursor-default select-none text-center px-4">WORD</div>
+                
+                <div class="mt-12 text-center">
+                     <button onclick="window.app.toggleFlash()" id="btn-flash-action" class="btn-brand px-8 py-3 rounded-lg">Bắt đầu</button>
+                     <p class="text-xs text-slate-500 mt-2" id="flash-desc">1 từ / 500ms</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: RESULTS -->
+        <div id="screen-result" class="hidden-section flex items-center justify-center min-h-[60vh] fade-in">
+            <div class="glass-panel p-10 max-w-lg w-full text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500"></div>
+                <div class="w-20 h-20 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-yellow-500"><i data-lucide="medal" class="w-10 h-10"></i></div>
+                <h2 class="text-3xl font-bold text-white mb-2">Hoàn Thành!</h2>
+                <p class="text-slate-400 mb-8" id="result-message">Bạn đã làm rất tốt.</p>
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-800/50 p-4 rounded-xl"><div class="text-xs text-slate-500 uppercase">Tốc độ</div><div class="text-3xl font-black text-white" id="result-wpm">0</div><div class="text-xs text-red-500 font-bold">WPM</div></div>
+                    <div class="bg-slate-800/50 p-4 rounded-xl"><div class="text-xs text-slate-500 uppercase">Thời gian</div><div class="text-3xl font-black text-white" id="result-time">0s</div><div class="text-xs text-slate-400 font-bold">Giây</div></div>
+                </div>
+                <button onclick="window.app.resetToMenu()" class="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition">Quay lại Menu</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- 1. DATA LIBRARY & DICTIONARY ---
+        const LIBRARY = [
+            { title: "Kỹ năng tự học", content: `Thế giới đang thay đổi với tốc độ chóng mặt. Những kiến thức bạn học được trong trường đại học hôm nay có thể sẽ trở nên lỗi thời chỉ sau vài năm tốt nghiệp. Trong bối cảnh đó, "Kỹ năng tự học" (Self-learning) không còn là một lựa chọn, mà là yếu tố sống còn quyết định sự thành bại của mỗi cá nhân. Alvin Toffler từng nói: "Người mù chữ của thế kỷ 21 không phải là người không biết đọc, biết viết, mà là người không biết học, quên đi và học lại". Tự học đòi hỏi tính kỷ luật cao và khả năng quản lý thời gian hiệu quả.` },
+            { title: "Sức mạnh của thói quen", content: `Hầu hết những lựa chọn chúng ta đưa ra mỗi ngày có vẻ là kết quả của những quyết định được cân nhắc kỹ lưỡng, nhưng thực ra không phải vậy. Chúng là thói quen. Và dù mỗi thói quen riêng rẽ có thế nào đi nữa, thì theo thời gian, chúng cũng có những tác động to lớn đối với sức khỏe, năng suất làm việc, tình hình tài chính và hạnh phúc của chúng ta. Thói quen là một vòng lặp gồm ba bước: gợi ý, hành động và phần thưởng. Để thay đổi thói quen, bạn cần giữ nguyên gợi ý và phần thưởng, nhưng thay đổi hành động.` },
+            { title: "Dế Mèn Phiêu Lưu Ký", content: `Tôi sống độc lập từ thuở bé. Ấy là tục lệ lâu đời trong họ nhà dế chúng tôi. Vả lại, mẹ thường bảo chúng tôi rằng: "Phải để cho các con biết kiếm ăn một mình để sau này khỏi bỡ ngỡ". Bởi thế, lứa sinh nào cũng vậy, đẻ xong là mẹ đem chúng tôi đi rải ở các bờ cỏ, bờ ruộng rồi bỏ mặc. Đôi khi mẹ cũng đảo qua, nhưng chỉ là đứng từ xa nhìn, xem chúng tôi có đứa nào bị chết đói, chết rét không. Nhưng chẳng bao giờ mẹ phải buồn phiền về chuyện đó. Họ nhà dế chúng tôi ai cũng sống dai và cũng biết ăn uống điều độ.` }
+        ];
+
+        const FLASH_WORDS = [
+            "TẬP TRUNG", "NHANH", "MẮT", "SÁNG", "HIỂU", "NÃO BỘ", "SPEED", "READING", "VIỆT NAM", "THÔNG MINH", "KỸ NĂNG", "TƯ DUY", "PHẢN BIỆN", "SÁNG TẠO", "GHI NHỚ", "DÀI HẠN", "MỤC TIÊU", "KẾ HOẠCH", "THÀNH CÔNG", "NỖ LỰC", "KIÊN TRÌ", "ĐAM MÊ", "HỌC TẬP", "TRI THỨC", "SÁCH VỞ", "VĂN HÓA", "GIÁO DỤC", "TƯƠNG LAI", "PHÁT TRIỂN", "BẢN THÂN"
+        ];
+        
+        const FLASH_PHRASES = [
+            "Mặt trời mọc hướng Đông", "Học đi đôi với hành", "Uống nước nhớ nguồn", "Ăn quả nhớ kẻ trồng cây", "Có công mài sắt", "Có ngày nên kim", "Gần mực thì đen", "Gần đèn thì sáng", "Tốt gỗ hơn tốt nước sơn", "Lá lành đùm lá rách", "Đi một ngày đàng", "Học một sàng khôn", "Non sông gấm vóc", "Rừng vàng biển bạc"
+        ];
+
+        const GUIDES = {
+            'normal': `<h3>Hướng dẫn đo tốc độ đọc (WPM)</h3><ul class="list-disc pl-5 space-y-2 mt-2"><li><strong>Bước 1:</strong> Chọn bài đọc từ thư viện hoặc dán văn bản của bạn.</li><li><strong>Bước 2:</strong> Nhấn 'Bắt đầu'. Thước kẻ đỏ (Pacer) sẽ chạy theo tốc độ mục tiêu bạn chọn.</li><li><strong>Bước 3:</strong> Cố gắng đọc theo thước kẻ. Đừng đọc thầm, hãy lướt mắt.</li><li><strong>Bước 4:</strong> Khi đọc xong, nhấn nút 'Xong' ngay lập tức để hệ thống tính toán tốc độ WPM thực tế của bạn.</li></ul>`,
+            'rsvp': `<h3>Hướng dẫn luyện RSVP</h3><ul class="list-disc pl-5 space-y-2 mt-2"><li><strong>Bước 1:</strong> Chọn tốc độ mục tiêu (ví dụ: 300 WPM).</li><li><strong>Bước 2:</strong> Nhìn thẳng vào trung tâm màn hình.</li><li><strong>Bước 3:</strong> Chữ sẽ tự động hiện ra. Không đảo mắt, chỉ dùng não để bắt từ.</li><li><strong>Mục đích:</strong> Loại bỏ hoàn toàn thói quen đảo mắt và đọc thầm.</li></ul>`,
+            'pyramid': `<h3>Hướng dẫn đọc hình tháp</h3><ul class="list-disc pl-5 space-y-2 mt-2"><li><strong>Bước 1:</strong> Chọn 'Độ rộng tháp' phù hợp với trình độ.</li><li><strong>Bước 2:</strong> Giữ mắt cố định vào trục kẻ giữa màu đỏ.</li><li><strong>Bước 3:</strong> Dùng "tầm nhìn ngoại vi" để đọc các chữ ở hai bên rìa.</li></ul>`,
+            'vision': `<h3>Hướng dẫn Bảng Schulte</h3><ul class="list-disc pl-5 space-y-2 mt-2"><li><strong>Bước 1:</strong> Chọn kích thước lưới (3x3, 5x5, 7x7).</li><li><strong>Bước 2:</strong> Tập trung nhìn vào ô trung tâm bảng.</li><li><strong>Bước 3:</strong> Giữ nguyên mắt ở giữa, dùng tầm nhìn bao quát để tìm các số theo thứ tự.</li></ul>`,
+            'saccade': `<h3>Hướng dẫn Saccade</h3><ul class="list-disc pl-5 space-y-2 mt-2"><li><strong>Bước 1:</strong> Chọn cấp độ (Hẹp, Vừa, Rộng) để chỉnh biên độ.</li><li><strong>Bước 2:</strong> Mắt di chuyển dứt khoát theo hai điểm chấm tròn bật sáng luân phiên.</li><li><strong>Mục đích:</strong> Tăng tốc độ "quét dòng", giảm thời gian mắt bị khựng lại.</li></ul>`,
+            'yoga': `<h3>Hướng dẫn Eye Yoga</h3><ul class="list-disc pl-5 space-y-2 mt-2"><li><strong>Cách tập:</strong> Giữ đầu cố định, chỉ di chuyển nhãn cầu (con ngươi) bám theo quả cầu đỏ.</li><li><strong>Các chế độ:</strong> Vô cực (thư giãn), Hình tròn (kéo dãn cơ), Hình hộp (điều hướng).</li><li><strong>Tác dụng:</strong> Giảm mỏi mắt, tăng sự linh hoạt cho cơ mắt.</li></ul>`,
+            'flash': `<h3>Hướng dẫn Chụp Ảnh Từ</h3><ul class="list-disc pl-5 space-y-2 mt-2"><li><strong>Cách tập:</strong> Một từ hoặc cụm từ sẽ hiện ra cực nhanh rồi biến mất. Bạn phải đọc được nó.</li><li><strong>Cấp độ:</strong> Tăng dần từ 1 từ đến cả câu dài.</li><li><strong>Mục đích:</strong> Kích hoạt khả năng "chụp hình" của não phải.</li></ul>`
+        };
+
+        // --- 2. APP LOGIC ---
+        window.app = {
+            state: { 
+                mode: null, content: LIBRARY[0].content, targetWpm: 250, words: [], 
+                isPaused: false, timer: 0, interval: null, rsvpIndex: 0, 
+                schulteNext: 1, saccadeBpm: 60, isSaccadeRunning: false, saccadeLevel: 2,
+                flashLevel: 1, isFlashRunning: false, yogaMode: 'figure8',
+                schulteSize: 5, pyramidLevel: 2
+            },
+
+            init: function() {
+                this.loadLocalStats();
+                lucide.createIcons();
+            },
+
+            loadLocalStats: function() {
+                const best = localStorage.getItem('srvn_best_wpm') || 0;
+                document.getElementById('best-wpm-display').innerText = best;
+            },
+
+            resetToMenu: function() {
+                this.stopAll();
+                this.showScreen('menu');
+            },
+
+            showScreen: function(id) {
+                document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden-section'));
+                document.getElementById('screen-' + id).classList.remove('hidden-section');
+                window.scrollTo(0,0);
+            },
+
+            openGuide: function() {
+                const guideText = GUIDES[this.state.mode] || "Chưa có hướng dẫn cho mục này.";
+                document.getElementById('guide-content').innerHTML = guideText;
+                document.getElementById('modal-guide').classList.remove('hidden');
+                document.getElementById('modal-guide').classList.add('flex');
+            },
+
+            closeGuide: function() {
+                document.getElementById('modal-guide').classList.add('hidden');
+                document.getElementById('modal-guide').classList.remove('flex');
+            },
+
+            switchMode: function(mode) {
+                this.state.mode = mode;
+                if(mode === 'saccade') { this.showScreen('gym'); this.loadSaccade(); return; }
+                if(mode === 'vision') { this.showScreen('gym'); this.loadSchulte(); return; }
+                if(mode === 'yoga') { this.showScreen('gym'); this.loadYoga(); return; }
+                if(mode === 'flash') { this.showScreen('gym'); this.loadFlash(); return; }
+
+                this.showScreen('setup');
+                document.getElementById('setup-title').innerText = mode === 'normal' ? "Cấu Hình Đo Tốc Độ" : mode === 'rsvp' ? "Cấu Hình RSVP" : "Cấu Hình Đọc Tháp";
+                const speedBlock = document.getElementById('speed-settings-block');
+                const pyramidBlock = document.getElementById('pyramid-settings-block');
+                
+                speedBlock.classList.remove('hidden-section');
+                pyramidBlock.classList.add('hidden-section');
+
+                if(mode === 'normal') speedBlock.classList.add('hidden-section'); 
+                if(mode === 'pyramid') {
+                     speedBlock.classList.add('hidden-section');
+                     pyramidBlock.classList.remove('hidden-section');
+                     this.setPyramidLevel(2); // Default
+                }
+            },
+
+            // CONTENT HANDLERS
+            selectRandomMaterial: function() {
+                const item = LIBRARY[Math.floor(Math.random() * LIBRARY.length)];
+                this.state.content = item.content;
+                document.getElementById('library-status').innerText = `Đã chọn: ${item.title}`;
+                this.highlightSource('random');
+            },
+
+            async fetchNews() {
+                const btn = document.getElementById('btn-source-news');
+                btn.querySelector('.text-xs').innerText = "Đang tải...";
+                try {
+                    const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://vnexpress.net/rss/tin-moi-nhat.rss&count=3');
+                    const data = await res.json();
+                    if(data.items && data.items.length > 0) {
+                        this.state.content = data.items.map(i => i.title + ". " + i.description.replace(/<[^>]*>?/gm, '')).join(" ");
+                        btn.querySelector('.text-xs').innerText = "Đã cập nhật tin mới";
+                        this.highlightSource('news');
+                    }
+                } catch(e) { btn.querySelector('.text-xs').innerText = "Lỗi tải tin"; }
+            },
+
+            toggleCustomInput: function() { document.getElementById('custom-input-box').classList.toggle('hidden-section'); this.highlightSource('custom'); },
+            confirmCustomText: function() { 
+                const txt = document.getElementById('raw-text-input').value; 
+                if(txt.length > 0) { this.state.content = txt; this.toggleCustomInput(); } 
+            },
+            highlightSource: function(id) {
+                document.querySelectorAll('#screen-setup button[id^="btn-source"]').forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
+                document.getElementById('btn-source-' + id).classList.add('ring-2', 'ring-red-500');
+            },
+            async handlePdf(e) {
+                const file = e.target.files[0]; if(!file) return;
+                document.getElementById('pdf-loading').classList.remove('hidden');
+                try {
+                    const ab = await file.arrayBuffer(); const pdf = await pdfjsLib.getDocument(ab).promise;
+                    let t = ""; for(let i=1; i<=Math.min(pdf.numPages,5); i++) { const p = await pdf.getPage(i); const c = await p.getTextContent(); t += c.items.map(x=>x.str).join(' '); }
+                    document.getElementById('raw-text-input').value = t;
+                    document.getElementById('pdf-loading').innerText = "Đã tải xong!";
+                } catch(err) { alert("Lỗi PDF"); }
+            },
+
+            // EXECUTION CORE
+            launchExercise: function() {
+                this.state.words = this.state.content.split(/\s+/).filter(w => w.length > 0);
+                this.stopAll();
+                this.showScreen('exercise');
+                document.getElementById('exercise-mode-label').innerText = this.state.mode;
+                ['view-normal', 'view-rsvp', 'view-pyramid'].forEach(id => document.getElementById(id).classList.add('hidden-section'));
+                
+                if(this.state.mode === 'normal') this.startNormal();
+                else if(this.state.mode === 'rsvp') this.startRSVP();
+                else this.startPyramid();
+
+                this.state.startTime = Date.now();
+                this.state.interval = setInterval(() => {
+                    if(!this.state.isPaused) {
+                        const sec = Math.floor((Date.now() - this.state.startTime)/1000);
+                        document.getElementById('exercise-timer').innerText = `00:${sec.toString().padStart(2,'0')}`;
+                    } else this.state.startTime += 1000;
+                }, 1000);
+            },
+
+            stopAll: function() {
+                [this.state.interval, this.state.rsvpInterval, this.state.saccadeInterval, this.state.flashInterval].forEach(i => clearInterval(i));
+                this.state.isPaused = false;
+                this.state.isSaccadeRunning = false;
+                this.state.isFlashRunning = false;
+            },
+
+            togglePause: function() {
+                this.state.isPaused = !this.state.isPaused;
+                document.getElementById('btn-pause').innerHTML = `<i data-lucide="${this.state.isPaused?'play':'pause'}" class="w-5 h-5 fill-current"></i>`;
+                lucide.createIcons();
+            },
+
+            finishExercise: function() {
+                this.stopAll();
+                const sec = Math.floor((Date.now() - this.state.startTime)/1000) || 1;
+                let wpm = this.state.mode === 'normal' ? Math.round((this.state.words.length / sec) * 60) : this.state.targetWpm;
+                
+                const best = parseInt(localStorage.getItem('srvn_best_wpm') || 0);
+                if(wpm > best && wpm < 2000) { localStorage.setItem('srvn_best_wpm', wpm); document.getElementById('result-message').innerText = "Kỷ lục mới!"; }
+                else document.getElementById('result-message').innerText = "Hoàn thành bài tập.";
+                this.loadLocalStats();
+
+                document.getElementById('result-wpm').innerText = wpm;
+                document.getElementById('result-time').innerText = sec + "s";
+                this.showScreen('result');
+            },
+
+            // MODE IMPLEMENTATIONS
+            startNormal: function() {
+                document.getElementById('view-normal').classList.remove('hidden-section');
+                document.getElementById('normal-content').innerHTML = this.state.content.replace(/\n/g, '<br><br>');
+                const pacer = document.getElementById('pacer-line');
+                const dur = (this.state.words.length / this.state.targetWpm) * 60000;
+                pacer.style.transition = `top ${dur}ms linear`;
+                setTimeout(() => { pacer.style.top = '100%'; }, 100);
+            },
+            startRSVP: function() {
+                document.getElementById('view-rsvp').classList.remove('hidden-section');
+                this.state.rsvpIndex = 0;
+                const delay = 60000 / this.state.targetWpm;
+                this.state.rsvpInterval = setInterval(() => {
+                    if(this.state.isPaused) return;
+                    if(this.state.rsvpIndex >= this.state.words.length) { this.finishExercise(); return; }
+                    document.getElementById('rsvp-word').innerText = this.state.words[this.state.rsvpIndex];
+                    document.getElementById('rsvp-progress-bar').style.width = ((this.state.rsvpIndex+1)/this.state.words.length*100) + "%";
+                    this.state.rsvpIndex++;
+                }, delay);
+            },
+
+            // PYRAMID UPDATED
+            setPyramidLevel: function(lvl) {
+                this.state.pyramidLevel = lvl;
+                [1,2,3].forEach(i => {
+                    const btn = document.getElementById(`btn-pyr-l${i}`);
+                    if(i===lvl) btn.className = "flex-1 py-2 rounded border border-red-500 text-sm font-bold text-white bg-red-600 shadow";
+                    else btn.className = "flex-1 py-2 rounded border border-slate-600 text-sm font-bold text-slate-400 bg-slate-800 hover:bg-slate-700";
+                });
+            },
+            startPyramid: function() {
+                document.getElementById('view-pyramid').classList.remove('hidden-section');
+                const con = document.getElementById('pyramid-content'); con.innerHTML = "";
+                let idx = 0;
+                let maxLen = this.state.pyramidLevel === 1 ? 2 : this.state.pyramidLevel === 2 ? 4 : 6;
+                let len = 1;
+                
+                while(idx < this.state.words.length) {
+                    const chunk = this.state.words.slice(idx, idx+len); if(chunk.length===0) break;
+                    const div = document.createElement('div'); 
+                    div.className = "py-1 text-xl md:text-2xl text-slate-300 font-serif whitespace-nowrap";
+                    
+                    chunk.forEach((w,i) => { 
+                        const s = document.createElement('span'); 
+                        s.className = "pyramid-word"; 
+                        if(i===Math.floor(chunk.length/2)) s.style.color="white"; 
+                        s.innerText=w+" "; 
+                        div.appendChild(s); 
+                    });
+                    
+                    con.appendChild(div); 
+                    idx+=len; 
+                    len++; if(len > maxLen) len = 1;
+                }
+            },
+
+            // SCHULTE UPDATED
+            selectSchulteMode: function(size) {
+                this.state.schulteSize = size;
+                [3,5,7].forEach(s => {
+                    const btn = document.getElementById(`btn-sch-${s}`);
+                    if(s===size) btn.className = "px-3 py-1 text-xs rounded border border-red-500 bg-red-600 text-white font-bold";
+                    else btn.className = "px-3 py-1 text-xs rounded border border-slate-600 bg-slate-800 text-slate-300";
+                });
+                if(!document.getElementById('view-schulte').classList.contains('hidden-section')) {
+                     this.loadSchulte(); // Reload if already on screen
+                }
+            },
+            loadSchulte: function() {
+                ['view-schulte','view-saccade','view-yoga','view-flash'].forEach(id => document.getElementById(id).classList.add('hidden-section'));
+                document.getElementById('view-schulte').classList.remove('hidden-section');
+                
+                const size = this.state.schulteSize || 5;
+                const total = size * size;
+                this.state.schulteNext = 1; 
+                document.getElementById('schulte-target').innerText='1'; 
+                document.getElementById('schulte-timer').innerText="00:00";
+                
+                const grid = document.getElementById('schulte-board'); 
+                grid.innerHTML='';
+                grid.style.setProperty('--cols', size);
+                
+                this.selectSchulteMode(size); // Ensure buttons update
+
+                const arr = Array.from({length:total},(_,i)=>i+1).sort(()=>Math.random()-0.5);
+                arr.forEach(n => {
+                    const c = document.createElement('div'); c.className="schulte-cell"; c.innerText=n;
+                    c.onclick = (e) => {
+                        if(n===this.state.schulteNext) { e.target.classList.add('correct'); this.state.schulteNext++; if(this.state.schulteNext>total) alert("Xong!"); else document.getElementById('schulte-target').innerText=this.state.schulteNext; }
+                        else { e.target.classList.add('wrong'); setTimeout(()=>e.target.classList.remove('wrong'),300); }
+                    }
+                    grid.appendChild(c);
+                });
+                this.state.startTime = Date.now();
+                this.state.interval = setInterval(() => { document.getElementById('schulte-timer').innerText = `00:${Math.floor((Date.now()-this.state.startTime)/1000).toString().padStart(2,'0')}`; }, 1000);
+            },
+
+            // SACCADE UPDATED
+            selectSaccadeLevel: function(lvl) {
+                this.state.saccadeLevel = lvl;
+                [1,2,3].forEach(i => {
+                     const btn = document.getElementById(`btn-sac-${i}`);
+                     if(i===lvl) btn.className = "px-4 py-2 rounded-lg border border-red-500 bg-red-600 text-sm font-bold text-white shadow";
+                     else btn.className = "px-4 py-2 rounded-lg border border-slate-600 bg-slate-800 text-sm font-bold text-slate-300 hover:border-orange-500";
+                });
+                
+                const container = document.getElementById('saccade-container');
+                if(lvl === 1) container.style.width = "40%";
+                else if(lvl === 2) container.style.width = "70%";
+                else container.style.width = "95%";
+            },
+            loadSaccade: function() {
+                ['view-schulte','view-saccade','view-yoga','view-flash'].forEach(id => document.getElementById(id).classList.add('hidden-section'));
+                document.getElementById('view-saccade').classList.remove('hidden-section');
+                this.state.isSaccadeRunning = false; document.getElementById('btn-saccade-action').innerText = "Bắt đầu";
+                this.selectSaccadeLevel(2); // Default Medium
+            },
+            toggleSaccade: function() {
+                const btn = document.getElementById('btn-saccade-action');
+                if(this.state.isSaccadeRunning) { clearInterval(this.state.saccadeInterval); this.state.isSaccadeRunning=false; btn.innerText="Bắt đầu"; }
+                else {
+                    this.state.isSaccadeRunning=true; btn.innerText="Dừng lại";
+                    const delay = 60000 / 60; 
+                    let side = 'left';
+                    this.state.saccadeInterval = setInterval(() => {
+                        const l = document.getElementById('dot-left'), r = document.getElementById('dot-right');
+                        if(side==='left') { l.classList.remove('active'); r.classList.add('active'); side='right'; }
+                        else { r.classList.remove('active'); l.classList.add('active'); side='left'; }
+                    }, delay);
+                }
+            },
+            
+            // YOGA (INFINITY) IMPROVED
+            loadYoga: function() {
+                ['view-schulte','view-saccade','view-yoga','view-flash'].forEach(id => document.getElementById(id).classList.add('hidden-section'));
+                document.getElementById('view-yoga').classList.remove('hidden-section');
+                this.setYogaMode('figure8');
+            },
+            setYogaMode: function(mode) {
+                const ball = document.getElementById('yoga-ball');
+                const pathVisual = document.getElementById('yoga-path-visual');
+                const desc = document.getElementById('yoga-desc');
+                
+                let pathStr = '';
+                if(mode === 'figure8') {
+                    pathStr = 'M150,150 C250,150 300,75 150,75 C0,75 50,225 150,225 C250,225 300,150 150,150 Z'; 
+                    ball.style.offsetPath = `path('${pathStr}')`;
+                    desc.innerText = "Chế độ Vô Cực: Thư giãn não phải và não trái.";
+                } else if(mode === 'circle') {
+                    pathStr = 'M150, 20 a 130 130 0 0 1 0 260 a 130 130 0 0 1 0 -260';
+                    ball.style.offsetPath = `path('${pathStr}')`;
+                    desc.innerText = "Chế độ Hình Tròn: Kéo dãn tối đa biên độ mắt.";
+                } else if(mode === 'box') {
+                    pathStr = 'M50,50 H250 V250 H50 Z';
+                    ball.style.offsetPath = `path('${pathStr}')`;
+                    desc.innerText = "Chế độ Hình Hộp: Luyện di chuyển mắt theo góc vuông.";
+                }
+                pathVisual.setAttribute('d', pathStr);
+            },
+
+            // FLASH WORDS IMPROVED
+            loadFlash: function() {
+                ['view-schulte','view-saccade','view-yoga','view-flash'].forEach(id => document.getElementById(id).classList.add('hidden-section'));
+                document.getElementById('view-flash').classList.remove('hidden-section');
+                this.state.isFlashRunning = false; document.getElementById('btn-flash-action').innerText = "Bắt đầu";
+                this.setFlashLevel(1);
+            },
+            setFlashLevel: function(lvl) {
+                this.state.flashLevel = lvl;
+                [1,2,3].forEach(i => document.getElementById(`btn-flash-l${i}`).className = i===lvl ? "px-3 py-1 rounded border border-red-500 text-xs font-bold text-white bg-red-600" : "px-3 py-1 rounded border border-slate-600 text-xs font-bold text-slate-400 bg-slate-800");
+                const descs = ["1 từ / 500ms (Cơ bản)", "2 từ / 300ms (Nâng cao)", "Cụm từ dài / 150ms (Siêu cấp)"];
+                document.getElementById('flash-desc').innerText = descs[lvl-1];
+            },
+            toggleFlash: function() {
+                const btn = document.getElementById('btn-flash-action');
+                const el = document.getElementById('flash-word-display');
+                if(this.state.isFlashRunning) { 
+                    clearInterval(this.state.flashInterval); 
+                    this.state.isFlashRunning=false; 
+                    btn.innerText="Bắt đầu"; 
+                    el.style.opacity=0; 
+                } else {
+                    this.state.isFlashRunning=true; btn.innerText="Dừng lại";
+                    const lvl = this.state.flashLevel;
+                    const delay = lvl === 1 ? 2000 : lvl === 2 ? 1500 : 1000;
+                    const showTime = lvl === 1 ? 500 : lvl === 2 ? 300 : 150;
+                    
+                    this.state.flashInterval = setInterval(() => {
+                        const x = Math.random() * 40 - 20; const y = Math.random() * 20 - 10; 
+                        el.style.transform = `translate(${x}vw, ${y}vh)`;
+                        
+                        let txt = "";
+                        if(lvl === 1) txt = FLASH_WORDS[Math.floor(Math.random()*FLASH_WORDS.length)];
+                        else if(lvl === 2) txt = FLASH_WORDS[Math.floor(Math.random()*FLASH_WORDS.length)] + " " + FLASH_WORDS[Math.floor(Math.random()*FLASH_WORDS.length)];
+                        else txt = FLASH_PHRASES[Math.floor(Math.random()*FLASH_PHRASES.length)];
+                        
+                        el.innerText = txt;
+                        el.style.opacity = 1;
+                        setTimeout(() => { el.style.opacity = 0; }, showTime); 
+                    }, delay); 
+                }
+            }
+        };
+
+        window.onload = () => window.app.init();
+    </script>
+</body>
+</html>

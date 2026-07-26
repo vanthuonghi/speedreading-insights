@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hành Trình Chiến Binh: Ngày 21 - VINH QUANG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0f172a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Gold Gradients & Effects */
+        .text-gold {
+            color: #fbbf24;
+            background: linear-gradient(to bottom, #fcd34d, #fbbf24, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.3);
+        }
+        .border-gold {
+            border-color: #fbbf24;
+        }
+        .bg-gold-gradient {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(180, 83, 9, 0.1) 100%);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-anim { animation: float 4s ease-in-out infinite; }
+        
+        @keyframes shine {
+            0% { background-position: -100% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .shine-text {
+            background: linear-gradient(to right, #fbbf24 20%, #fff 50%, #fbbf24 80%);
+            background-size: 200% auto;
+            color: #000;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        /* Confetti elements (Static CSS representation) */
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #fcd34d;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 bg-[url('https://images.unsplash.com/photo-1533227297464-60f95652cd79?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat bg-fixed relative">
+    
+    <!-- Celebration Overlay -->
+    <div class="absolute inset-0 bg-slate-900/90 z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-amber-900/20 z-0 pointer-events-none"></div>
+
+    <!-- Confetti Dots (Decorative) -->
+    <div class="absolute top-10 left-10 w-2 h-2 bg-yellow-400 rounded-full animate-ping z-0"></div>
+    <div class="absolute top-20 right-20 w-3 h-3 bg-red-400 rounded-full animate-ping delay-700 z-0"></div>
+    <div class="absolute bottom-40 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-ping delay-300 z-0"></div>
+
+    <!-- Main Container -->
+    <div class="max-w-4xl w-full bg-slate-900/80 border border-amber-500/30 rounded-3xl shadow-2xl overflow-hidden relative z-10 backdrop-blur-md mt-6 mb-20">
+        
+        <!-- Header Section -->
+        <div class="text-center pt-12 pb-8 px-6 relative overflow-hidden">
+            <!-- Halo Effect -->
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[600px] h-[300px] bg-amber-500/10 blur-[100px] pointer-events-none rounded-full"></div>
+            
+            <div class="relative z-10">
+                <div class="inline-block mb-4">
+                    <i class="fas fa-trophy text-6xl text-gold float-anim filter drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]"></i>
+                </div>
+                <h2 class="text-sm md:text-base text-gray-400 tracking-[0.3em] uppercase mb-2">Chúc Mừng Chiến Binh</h2>
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 brand-font shine-text">NGÀY VINH QUANG</h1>
+                <p class="text-lg md:text-xl text-gray-300 serif-font italic max-w-2xl mx-auto border-t border-b border-gray-700 py-6 leading-relaxed">
+                    "Hôm nay không có bài tập nặng nhọc.<br>
+                    Hôm nay là <span class="text-amber-400 font-bold">Lễ Tốt Nghiệp</span> của riêng bạn."
+                </p>
+            </div>
+        </div>
+
+        <!-- Content Body -->
+        <div class="px-6 md:px-12 pb-12 space-y-12">
+
+            <!-- Intro Text -->
+            <div class="text-center space-y-4 text-gray-400">
+                <p>Hãy nhìn lại người của 21 ngày trước. Một người loay hoay, nghi ngờ.</p>
+                <p>Và hãy nhìn vào gương sáng nay. <strong class="text-white">Một người kỷ luật, mạnh mẽ và tràn đầy khát vọng.</strong></p>
+            </div>
+
+            <!-- MISSION: CORONATION -->
+            <div class="glass-panel p-8 rounded-2xl border-t-4 border-amber-500 relative">
+                <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-amber-600 text-black font-bold px-6 py-2 rounded-full shadow-lg shadow-amber-500/30 uppercase tracking-wider text-sm">
+                    Lễ Đăng Quang
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center text-center p-4 hover:bg-white/5 rounded-xl transition duration-300">
+                        <div class="w-12 h-12 rounded-full bg-slate-800 border border-gray-600 flex items-center justify-center mb-3">
+                            <i class="fas fa-history text-gray-400"></i>
+                        </div>
+                        <h3 class="text-white font-bold uppercase mb-2">1. Nhìn Lại Hành Trình</h3>
+                        <p class="text-sm text-gray-400">Lật lại sổ tay từ Ngày 1. Viết xuống <span class="text-amber-400">3 THAY ĐỔI LỚN NHẤT</span> trong con người bạn.</p>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center text-center p-4 hover:bg-white/5 rounded-xl transition duration-300">
+                        <div class="w-12 h-12 rounded-full bg-amber-900/30 border border-amber-500/50 flex items-center justify-center mb-3">
+                            <i class="fas fa-champagne-glasses text-amber-400"></i>
+                        </div>
+                        <h3 class="text-white font-bold uppercase mb-2">2. Ăn Mừng Chiến Thắng</h3>
+                        <p class="text-sm text-gray-400">Bắt buộc tự thưởng: Một bữa ăn sang trọng? Một món đồ mơ ước? <span class="text-amber-400">"TÔI XỨNG ĐÁNG!"</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THE OATH (Centerpiece) -->
+            <div class="relative py-8">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/10 to-transparent"></div>
+                <div class="glass-panel p-8 md:p-12 rounded-sm border-2 border-double border-amber-600/40 text-center relative bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]">
+                    <!-- Decoration corners -->
+                    <div class="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-500"></div>
+                    <div class="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-amber-500"></div>
+                    <div class="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-amber-500"></div>
+                    <div class="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-500"></div>
+
+                    <h3 class="text-2xl md:text-3xl text-gold font-bold uppercase brand-font mb-8 tracking-widest">Lời Tuyên Thệ Chiến Binh</h3>
+                    
+                    <div class="space-y-4 text-gray-200 text-lg md:text-xl font-light serif-font leading-relaxed">
+                        <p>"Hôm nay, tôi khép lại 21 ngày huấn luyện để bước vào hành trình thực sự."</p>
+                        <p>Tôi cam kết sẽ không bao giờ chấp nhận sự tầm thường.</p>
+                        <p>Khi vấp ngã, tôi sẽ đứng dậy mạnh mẽ hơn.</p>
+                        <p>Khi sợ hãi, tôi sẽ hành động bất chấp.</p>
+                        <p class="font-bold text-white pt-4">Tôi là người làm chủ số phận.</p>
+                        <p class="font-bold text-white">Tôi là kiến trúc sư của tương lai.</p>
+                    </div>
+                    
+                    <div class="mt-8 pt-8 border-t border-amber-500/30">
+                        <p class="text-2xl md:text-4xl font-bold text-gold brand-font uppercase">TÔI LÀ MỘT CON NGƯỜI PHI THƯỜNG!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Message -->
+            <div class="text-center space-y-6">
+                <div class="w-16 h-1 bg-amber-500 mx-auto rounded-full"></div>
+                <p class="text-gray-400 italic text-sm md:text-base max-w-2xl mx-auto">
+                    "Bên trong bạn có một Sức Mạnh Khổng Lồ đang ngủ yên. Bạn đã đánh thức nó dậy rồi. Đừng bao giờ ru nó ngủ lại nữa."
+                </p>
+                <div class="pt-4">
+                    <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mb-2">Mission Complete</p>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white brand-font" style="text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);">LIVE WITH PASSION!</h1>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="text-center pb-8">
+                <button class="px-10 py-4 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-lg font-bold rounded-full shadow-lg shadow-amber-500/20 transform hover:scale-105 transition duration-300 uppercase tracking-wider brand-font">
+                    <i class="fas fa-check-circle mr-2"></i> Tôi Đã Tốt Nghiệp
+                </button>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

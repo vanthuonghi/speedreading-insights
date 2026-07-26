@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading - The Immersive Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Montserrat:wght@300;400;600;800&family=Merriweather:ital,wght@1,300;1,700&display=swap&subset=vietnamese" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #000; color: white; overflow: hidden; }
+        
+        /* --- BACKGROUND --- */
+        .layer-bg       { z-index: 0; }
+        .layer-particles{ z-index: 10; pointer-events: none; }
+        .layer-content  { z-index: 30; position: relative; }
+        .layer-overlay  { z-index: 50; }
+
+        .bg-layer {
+            position: absolute; inset: 0; background-size: cover; background-position: center;
+            transition: opacity 1.5s ease-in-out;
+            filter: brightness(0.7) contrast(1.1) saturate(1.1);
+        }
+        .ken-burns { animation: kenBurns 80s infinite alternate linear; }
+        @keyframes kenBurns { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+        .vignette-overlay {
+            position: absolute; inset: 0; z-index: 20; pointer-events: none;
+            background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+        }
+
+        /* --- UI ELEMENTS --- */
+        #particles-canvas { position: absolute; inset: 0; background: transparent; }
+
+        .glass-panel {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        /* --- VISUAL EFFECTS --- */
+        .breathing-wrapper {
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+            z-index: -1; pointer-events: none;
+        }
+        .breathing-circle {
+            width: 550px; height: 550px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 60%);
+            border: 1px solid rgba(59,130,246,0.05);
+            animation: breatheAnim 8s infinite ease-in-out;
+        }
+        @keyframes breatheAnim {
+            0%, 100% { transform: scale(0.8); opacity: 0.2; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        .equalizer { display: flex; gap: 3px; align-items: flex-end; height: 16px; }
+        .bar { width: 3px; background: #60a5fa; border-radius: 2px; animation: bounce 0.5s infinite ease-in-out alternate; }
+        .bar:nth-child(2) { animation-duration: 0.4s; }
+        .bar:nth-child(3) { animation-duration: 0.6s; }
+        .bar:nth-child(4) { animation-duration: 0.3s; }
+        @keyframes bounce { from { height: 3px; opacity: 0.5; } to { height: 16px; opacity: 1; } }
+
+        /* --- TIMELINE (UPDATED BIGGER) --- */
+        .timeline-item { 
+            border-left: 3px solid rgba(255,255,255,0.1); 
+            transition: all 0.3s; 
+            padding-left: 1.5rem; 
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            position: relative; 
+            margin-bottom: 0.5rem;
+        }
+        .timeline-item::before { 
+            content: ''; position: absolute; left: -7px; top: 24px; 
+            width: 12px; height: 12px; border-radius: 50%; 
+            background: #444; transition: all 0.3s; 
+        }
+        /* Active State - Highlighting */
+        .timeline-item.active { 
+            border-left: 3px solid #60a5fa; 
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, transparent 100%);
+            border-radius: 0 12px 12px 0;
+        }
+        .timeline-item.active::before { 
+            background: #60a5fa; box-shadow: 0 0 15px #60a5fa; transform: scale(1.2); 
+        }
+        .timeline-item.past { opacity: 0.4; filter: grayscale(1); }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
+        .ticker-wrap { width: 100%; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
+        .ticker { display: inline-block; animation: ticker 50s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        #startAudioOverlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;
+            backdrop-filter: blur(8px); transition: opacity 0.5s ease-out;
+        }
+
+        .number-glow { text-shadow: 0 0 30px rgba(59, 130, 246, 0.5); }
+        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col bg-gray-900 relative">
+
+    <!-- START OVERLAY -->
+    <div id="startAudioOverlay" class="layer-overlay" onclick="enableAudio()">
+        <div class="relative w-28 h-28 flex items-center justify-center group mb-6">
+            <div class="absolute inset-0 border-2 border-blue-500 rounded-full animate-[ping_1.5s_linear_infinite]"></div>
+            <div class="absolute inset-0 border-2 border-white/40 rounded-full group-hover:bg-white/10 transition-colors bg-black/50"></div>
+            <i class="fas fa-play text-4xl text-white ml-2"></i>
+        </div>
+        <h2 class="text-3xl font-light tracking-[0.3em] mb-3 text-white drop-shadow-lg text-center">SPEED READING</h2>
+        <p class="text-blue-300 font-mono text-sm uppercase tracking-widest drop-shadow-md bg-black/40 px-4 py-1 rounded">Chạm để bắt đầu (Phiên bản Hosting)</p>
+    </div>
+
+    <!-- BACKGROUND LAYERS -->
+    <div id="bgLayer1" class="bg-layer ken-burns layer-bg"></div>
+    <div id="bgLayer2" class="bg-layer ken-burns layer-bg" style="opacity: 0;"></div>
+    
+    <!-- PARTICLES -->
+    <canvas id="particles-canvas" class="layer-particles"></canvas>
+
+    <!-- VIGNETTE -->
+    <div class="vignette-overlay"></div>
+
+    <!-- AUDIO PLAYER (Local) -->
+    <audio id="bgAudio" preload="auto"></audio>
+
+    <!-- === MAIN LAYOUT === -->
+    <div class="flex-1 flex overflow-hidden layer-content">
+        
+        <!-- LEFT: MAIN CONTENT -->
+        <div class="flex-1 flex flex-col justify-between p-12 pb-0 relative">
+            
+            <!-- Top Bar -->
+            <div class="flex justify-between items-start z-40">
+                <div>
+                    <div class="text-7xl font-['JetBrains_Mono'] font-bold leading-none tracking-tighter text-white drop-shadow-lg" id="clockDisplay">00:00</div>
+                    <div class="text-blue-100 text-sm tracking-[0.2em] uppercase mt-2 font-medium flex items-center gap-4 drop-shadow-md">
+                        <span id="dateDisplay">...</span>
+                        <div class="h-1 w-1 bg-white/50 rounded-full"></div>
+                        <span id="weatherDisplay"><i class="fas fa-cloud-sun"></i> 24°C</span>
+                    </div>
+                </div>
+                
+                <div class="glass-panel px-4 py-2 flex items-center gap-3">
+                    <div class="text-right">
+                        <div class="text-[9px] text-gray-300 uppercase font-bold">Community Focus</div>
+                        <div class="text-sm font-bold text-white font-mono"><span class="text-green-400">●</span> <span id="onlineCounter">482</span> đang học</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CENTER: DYNAMIC CONTENT -->
+            <div id="dynamicContent" class="absolute top-[42%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-10">
+                
+                <!-- FOCUS UI -->
+                <div id="focusUI" class="hidden transition-opacity duration-1000 relative">
+                    <div class="breathing-wrapper"><div class="breathing-circle"></div></div>
+                    <div class="text-blue-200 font-bold tracking-[0.5em] uppercase mb-4 text-xs opacity-90 drop-shadow-md">Deep Focus Session</div>
+                    <div id="focusTimer" class="text-[8rem] md:text-[10rem] lg:text-[11rem] font-['JetBrains_Mono'] font-bold text-white leading-none number-glow select-none relative z-10 drop-shadow-2xl">25:00</div>
+                    <div class="w-64 h-1.5 bg-white/20 mx-auto mt-6 rounded-full overflow-hidden backdrop-blur-sm">
+                        <div id="timerProgress" class="h-full bg-blue-500 w-full transition-all duration-1000 shadow-[0_0_10px_#3b82f6]"></div>
+                    </div>
+                    <div class="mt-12 max-w-4xl mx-auto min-h-[100px] flex items-center justify-center relative">
+                        <div id="focusMessageContent" class="transition-all duration-700 transform"></div>
+                    </div>
+                </div>
+
+                <!-- EXERCISE UI -->
+                <div id="exerciseUI" class="hidden transition-opacity duration-1000">
+                    <div class="text-orange-500 text-9xl mb-6 opacity-90 drop-shadow-[0_0_30px_rgba(249,115,22,0.6)]"><i class="fas fa-running"></i></div>
+                    <h2 class="text-7xl font-black text-white uppercase tracking-tighter mb-4 text-shadow">VẬN ĐỘNG</h2>
+                    <div class="text-2xl text-white font-light tracking-wide bg-orange-500/20 inline-block px-8 py-3 rounded-full backdrop-blur-md border border-orange-500/30">
+                        Đứng dậy • Vươn vai • Hít thở
+                    </div>
+                </div>
+
+                <!-- BREAK UI -->
+                <div id="breakUI" class="hidden transition-opacity duration-1000">
+                    <div class="text-green-400 text-9xl mb-6 opacity-90 drop-shadow-[0_0_30px_rgba(74,222,128,0.6)]"><i class="fas fa-mug-hot"></i></div>
+                    <h2 class="text-6xl font-bold text-white uppercase tracking-widest mb-4 text-shadow">THƯ GIÃN</h2>
+                    <p class="text-2xl text-white font-light font-['Merriweather'] italic drop-shadow-md">Thả lỏng mắt trong 5 phút</p>
+                </div>
+
+                <div id="videoUI" class="hidden"></div>
+            </div>
+
+            <!-- BOTTOM: FOOTER INFO -->
+            <div class="mt-auto mb-10 flex items-end gap-6 z-40">
+                <div class="flex-1 border-l-4 border-blue-500 pl-6 py-2 transition-colors duration-500 bg-black/20 backdrop-blur-sm rounded-r-lg" id="statusBorder">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        <span class="text-blue-300 font-bold text-[10px] uppercase tracking-[0.2em]" id="programStatus">LOADING...</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-none uppercase tracking-wide text-shadow font-['Montserrat']" id="nowPlayingMainTitle">...</h1>
+                    <p class="text-gray-200 text-sm mt-2 font-light tracking-wide" id="nowPlayingDesc">...</p>
+                </div>
+                
+                <!-- Music Control -->
+                <div onclick="skipTrack()" class="hidden md:flex flex-col items-end gap-2 cursor-pointer group hover:scale-105 transition-transform" title="Click để đổi bài hát">
+                    <div class="glass-panel px-5 py-3 flex items-center gap-4 hover:bg-white/20 transition-colors border-blue-500/30">
+                        <div class="equalizer" id="musicEqualizer">
+                            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[9px] text-gray-300 uppercase font-bold tracking-wider mb-0.5 flex items-center justify-end gap-1">
+                                Now Playing <i class="fas fa-step-forward text-[8px] opacity-50 group-hover:opacity-100"></i>
+                            </div>
+                            <div class="text-xs font-bold text-white max-w-[140px] truncate" id="nowPlayingMusic">...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: SIDEBAR (EXPANDED TO 450px) -->
+        <div class="w-[450px] bg-[#080808]/85 backdrop-blur-xl border-l border-white/10 flex flex-col z-20 shadow-2xl layer-content">
+            <div class="p-8 border-b border-white/10">
+                <h2 class="text-blue-400 font-bold uppercase tracking-[0.2em] text-sm flex items-center gap-3">
+                    <i class="fas fa-stream text-lg"></i> Lịch Trình Hôm Nay
+                </h2>
+            </div>
+            
+            <!-- Timeline List -->
+            <div class="flex-1 overflow-y-auto px-6 custom-scrollbar pt-6 pb-6 space-y-2" id="timelineList"></div>
+            
+            <!-- Redesigned Promo Box -->
+            <div class="p-0 mt-auto relative group">
+                <!-- Gradient Divider -->
+                <div class="h-1 w-full bg-gradient-to-r from-blue-600 to-purple-600"></div>
+                
+                <div class="bg-gradient-to-b from-gray-900 to-black p-6 flex items-center gap-5">
+                    <!-- Bigger QR Code with Glow -->
+                    <div class="relative bg-white p-2 rounded-xl shrink-0 shadow-[0_0_20px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-500">
+                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://speedreading.vn" class="w-24 h-24">
+                         <div class="absolute -bottom-2 -right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">SCAN</div>
+                    </div>
+                    
+                    <!-- Bigger Text -->
+                    <div class="flex-1">
+                        <div class="text-orange-400 text-xs font-bold uppercase tracking-widest mb-1 animate-pulse">Miễn phí 100%</div>
+                        <div class="text-white font-extrabold text-2xl leading-none mb-1 font-['Montserrat']">SpeedReading.vn</div>
+                        <div class="text-gray-400 text-sm font-light">Kiểm tra tốc độ đọc & Nhận lộ trình luyện tập ngay.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKER -->
+    <div class="h-8 bg-black border-t border-white/10 flex items-center text-[10px] text-gray-400 z-30 font-['JetBrains_Mono'] layer-content">
+        <div class="px-6 h-full flex items-center shrink-0 font-bold text-blue-500 bg-[#0a0a0a] border-r border-white/10 uppercase tracking-widest">
+            Up Next
+        </div>
+        <div class="ticker-wrap"><div class="ticker" id="tickerContent"></div></div>
+    </div>
+
+    <script>
+        // --- 1. LOCAL ASSETS CONFIG (Cấu hình file nội bộ) ---
+        // Bạn hãy tải file nhạc về và đặt trong thư mục 'audio'
+        // Tên file ở đây phải TRÙNG KHỚP với tên file bạn lưu trên máy/hosting.
+        
+        const musicLibrary = {
+            focus: [
+                { src: "./audio/focus1.mp3", name: "Nhạc Tập Trung 1" },
+                { src: "./audio/focus2.mp3", name: "Nhạc Tập Trung 2" },
+                { src: "./audio/focus3.mp3", name: "Nhạc Tập Trung 3" },
+                { src: "./audio/focus4.mp3", name: "Piano Thư Giãn" },
+                { src: "./audio/focus5.mp3", name: "Sóng Alpha" }
+            ],
+            exercise: [
+                { src: "./audio/exercise1.mp3", name: "Nhạc Thể Dục 1" },
+                { src: "./audio/exercise2.mp3", name: "Nhạc Thể Dục 2" },
+                { src: "./audio/exercise3.mp3", name: "Nhạc Thể Dục 3" },
+                { src: "./audio/exercise4.mp3", name: "Nhạc Thể Dục 4" },
+                { src: "./audio/exercise5.mp3", name: "Nhạc Thể Dục 5" }
+            ],
+            break: [
+                { src: "./audio/break1.mp3", name: "Nhạc Cafe Sáng" },
+                { src: "./audio/break2.mp3", name: "Tiếng Mưa Rơi" },
+                { src: "./audio/break3.mp3", name: "Guitar Thư Giãn" },
+                { src: "./audio/break4.mp3", name: "Tiếng Rừng" },
+                { src: "./audio/break5.mp3", name: "Chill Lounge" }
+            ],
+            video: [] // Video (Show 20h) sẽ dùng tiếng gốc của Video
+        };
+
+        // --- BACKGROUNDS ---
+        const backgrounds = {
+            focus: [
+                "https://images.unsplash.com/photo-1497294815431-9365093b7331?q=80&w=2670&auto=format&fit=crop", 
+                "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?q=80&w=2730&auto=format&fit=crop", 
+                "https://images.unsplash.com/photo-1518600506278-4e8ef466b810?q=80&w=2693&auto=format&fit=crop"
+            ],
+            exercise: ["https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2670&auto=format&fit=crop"],
+            break: ["https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=2669&auto=format&fit=crop"],
+            video: ["https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2670&auto=format&fit=crop"]
+        };
+
+        const messages = [
+            { type: 'quote', text: "Sự tập trung là tài sản quý giá nhất trong kỷ nguyên số." },
+            { type: 'tip', title: "KỸ THUẬT META-GUIDING", text: "Dùng ngón tay hoặc bút làm vật dẫn đường mắt để tăng 20% tốc độ đọc ngay lập tức." },
+            { type: 'quote', text: "Đừng dừng lại khi mệt mỏi, hãy dừng lại khi đã xong." },
+            { type: 'tip', title: "LOẠI BỎ ĐỌC THẦM", text: "Cố gắng nhìn từ khóa bằng mắt thay vì phát âm trong đầu." },
+            { type: 'quote', text: "Mỗi trang sách là một cuộc đời mới mà bạn được sống." },
+            { type: 'tip', title: "QUY TẮC 20-20-20", text: "Cứ 20 phút đọc, hãy nhìn xa 20 feet (6m) trong 20 giây để bảo vệ mắt." }
+        ];
+
+        const schedule = [
+            { start: "06:00", end: "06:45", title: "Khởi Động & Nhạc Alpha", type: "focus" },
+            { start: "06:45", end: "07:00", title: "Thể Dục Sáng Nạp Oxy", type: "exercise" },
+            { start: "07:00", end: "08:00", title: "Điểm Tin & Cà Phê", type: "break" },
+            { start: "08:00", end: "09:30", title: "Phiên Làm Việc Sâu 1", type: "focus" },
+            { start: "09:30", end: "09:45", title: "Nghỉ Giải Lao (Mắt)", type: "break" },
+            { start: "09:45", end: "11:30", title: "Phiên Làm Việc Sâu 2", type: "focus" },
+            { start: "11:30", end: "13:30", title: "Nghỉ Trưa & Nhạc Chill", type: "break" },
+            { start: "13:30", end: "15:00", title: "Phiên Làm Việc Chiều", type: "focus" },
+            { start: "15:00", end: "15:15", title: "Vận Động Giữa Giờ", type: "exercise" },
+            { start: "15:15", end: "17:00", title: "Phiên Về Đích", type: "focus" },
+            { start: "17:00", end: "20:00", title: "Nghỉ Tối & Gia Đình", type: "break" },
+            { start: "20:00", end: "21:00", title: "SHOW: Kỹ Thuật Đọc", type: "video" },
+            { start: "21:00", end: "23:59", title: "Cú Đêm Học Bài", type: "focus" }
+        ];
+
+        let audioEnabled = false;
+        let currentType = null;
+        let currentAudioSrc = null;
+        let activeBgLayer = 1;
+        
+        // --- PARTICLES ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1; 
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < 60; i++) particlesArray.push(new Particle());
+        }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); }
+            requestAnimationFrame(animateParticles);
+        }
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); });
+
+        // --- LOGIC ---
+        function getCurrentScheduleItem() {
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            let idx = schedule.findIndex(s => timeStr >= s.start && timeStr < s.end);
+            if (idx === -1) idx = (now.getHours() < 6) ? schedule.length - 1 : 0;
+            return { item: schedule[idx], index: idx };
+        }
+
+        // --- AUDIO SYSTEM (LOCAL HOSTING) ---
+        function enableAudio() {
+            const overlay = document.getElementById('startAudioOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.remove(), 600);
+            
+            audioEnabled = true;
+            const bgAudio = document.getElementById('bgAudio');
+            
+            bgAudio.muted = false;
+            bgAudio.volume = 1.0; 
+
+            bgAudio.onerror = () => {
+                // Nếu không tìm thấy file nhạc, báo lỗi nhẹ
+                console.log("Không tìm thấy file nhạc. Hãy kiểm tra thư mục 'audio'.");
+                document.getElementById('nowPlayingMusic').innerText = "Chưa có file nhạc...";
+                // Không skip liên tục để tránh loop vô hạn nếu thư mục rỗng
+            };
+            bgAudio.onended = () => skipTrack();
+
+            const current = getCurrentScheduleItem();
+            playRandomTrack(current.item.type);
+        }
+        
+        function playRandomTrack(type) {
+            const playlist = musicLibrary[type] || musicLibrary.focus;
+            if (!playlist || playlist.length === 0) {
+                const bgAudio = document.getElementById('bgAudio');
+                bgAudio.pause();
+                document.getElementById('nowPlayingMusic').innerText = "Chế độ im lặng (Video/Trống)";
+                document.querySelectorAll('.bar').forEach(b => b.style.animationPlayState = 'paused');
+                return;
+            }
+
+            const track = playlist[Math.floor(Math.random() * playlist.length)];
+            const bgAudio = document.getElementById('bgAudio');
+            
+            if (track.src === currentAudioSrc && !bgAudio.ended && !bgAudio.error) return;
+
+            // Debug UI
+            document.getElementById('nowPlayingMusic').innerText = "Đang tải: " + track.name + "...";
+
+            bgAudio.src = track.src;
+            bgAudio.load(); 
+            
+            var playPromise = bgAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    currentAudioSrc = track.src;
+                    document.getElementById('nowPlayingMusic').innerText = track.name;
+                    document.querySelectorAll('.bar').forEach(b => b.style.animationPlayState = 'running');
+                })
+                .catch(error => {
+                    console.log("Lỗi phát nhạc:", error);
+                    document.getElementById('nowPlayingMusic').innerText = "Lỗi file nhạc. Đang thử bài khác...";
+                    setTimeout(() => skipTrack(), 2000);
+                });
+            }
+        }
+
+        function skipTrack() {
+            if (!audioEnabled) return;
+            const current = getCurrentScheduleItem();
+            let playlist = musicLibrary[current.item.type] || musicLibrary.focus;
+            
+            if(playlist.length > 0) {
+                let newTrack;
+                let attempts = 0;
+                do {
+                    newTrack = playlist[Math.floor(Math.random() * playlist.length)];
+                    attempts++;
+                } while (newTrack.src === currentAudioSrc && playlist.length > 1 && attempts < 5);
+                
+                const bgAudio = document.getElementById('bgAudio');
+                document.getElementById('nowPlayingMusic').innerText = "Đang đổi bài...";
+
+                bgAudio.src = newTrack.src;
+                bgAudio.load();
+                
+                bgAudio.play().then(() => {
+                     currentAudioSrc = newTrack.src;
+                     document.getElementById('nowPlayingMusic').innerText = newTrack.name;
+                     document.querySelectorAll('.bar').forEach(b => b.style.animationPlayState = 'running');
+                }).catch(e => {
+                    console.log("Skip error:", e);
+                    setTimeout(() => skipTrack(), 1000);
+                });
+            }
+        }
+
+        function updateSystem() {
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            document.getElementById('clockDisplay').innerText = timeStr;
+            const dateStr = now.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit' });
+            document.getElementById('dateDisplay').innerText = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+
+            if(Math.random() > 0.9) {
+                const countEl = document.getElementById('onlineCounter');
+                let count = parseInt(countEl.innerText) + (Math.random() > 0.5 ? 1 : -1);
+                countEl.innerText = Math.max(100, count);
+            }
+
+            const { item, index } = getCurrentScheduleItem();
+
+            if (currentType !== item.type) {
+                switchUI(item.type); updateBackground(item.type);
+                if (audioEnabled) playRandomTrack(item.type);
+                
+                document.getElementById('nowPlayingMainTitle').innerText = item.title;
+                document.getElementById('nowPlayingDesc').innerText = item.desc || "";
+                document.getElementById('programStatus').innerText = getFriendlyType(item.type);
+                updateThemeColors(item.type); updateMessageDisplay();
+                currentType = item.type;
+            }
+
+            if (item.type === 'focus') {
+                document.getElementById('focusTimer').innerText = getPomodoroTime();
+                const percent = ((pTime / 1500) * 100).toFixed(1);
+                document.getElementById('timerProgress').style.width = `${percent}%`;
+            }
+            updateTimeline(index);
+        }
+
+        function updateMessageDisplay() {
+            const msg = messages[Math.floor(Math.random() * messages.length)];
+            const container = document.getElementById('focusMessageContent');
+            container.style.opacity = '0'; container.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                let html = '';
+                if(msg.type === 'tip') {
+                    html = `<div class="bg-blue-900/40 border border-blue-400/50 px-8 py-4 rounded-xl backdrop-blur-md shadow-lg flex flex-col items-center animate-fade-in"><div class="text-yellow-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2"><i class="fas fa-lightbulb"></i> ${msg.title}</div><p class="text-xl md:text-2xl text-white font-bold font-['Montserrat'] text-center">${msg.text}</p></div>`;
+                } else {
+                    html = `<div class="max-w-4xl mx-auto text-center animate-fade-in"><i class="fas fa-quote-left text-white/30 text-2xl mb-3 block"></i><p class="text-2xl md:text-3xl text-white font-['Merriweather'] italic font-light leading-relaxed drop-shadow-md">"${msg.text}"</p></div>`;
+                }
+                container.innerHTML = html; container.style.opacity = '1'; container.style.transform = 'translateY(0)';
+            }, 500);
+        }
+        setInterval(updateMessageDisplay, 45000);
+
+        function switchUI(type) {
+            ['focusUI', 'exerciseUI', 'breakUI', 'videoUI'].forEach(id => {
+                const el = document.getElementById(id); el.classList.add('hidden'); el.classList.remove('animate-fade-in'); 
+            });
+            let activeId = 'focusUI';
+            if (type === 'exercise') activeId = 'exerciseUI'; if (type === 'break' || type === 'news') activeId = 'breakUI'; if (type === 'video') activeId = 'videoUI';
+            const el = document.getElementById(activeId); el.classList.remove('hidden'); el.classList.add('animate-fade-in'); 
+        }
+
+        function updateBackground(type) {
+            const list = backgrounds[type] || backgrounds.focus;
+            const url = list[Math.floor(Math.random() * list.length)];
+            const layer1 = document.getElementById('bgLayer1'); const layer2 = document.getElementById('bgLayer2');
+            const next = activeBgLayer === 1 ? layer2 : layer1; const curr = activeBgLayer === 1 ? layer1 : layer2;
+            next.style.backgroundImage = `url('${url}')`; next.style.opacity = '1'; curr.style.opacity = '0';
+            activeBgLayer = activeBgLayer === 1 ? 2 : 1;
+        }
+
+        let isTimelineRendered = false;
+        function updateTimeline(activeIdx) {
+            const list = document.getElementById('timelineList');
+            if (!isTimelineRendered) {
+                list.innerHTML = '';
+                schedule.forEach((s, i) => {
+                    const div = document.createElement('div'); div.className = `timeline-item mb-2`;
+                    // Updated to use larger text
+                    div.innerHTML = `
+                        <div class="text-blue-300/80 text-sm mb-1 font-['JetBrains_Mono'] tracking-wide">${s.start} - ${s.end}</div>
+                        <div class="font-bold text-lg text-white font-['Montserrat']">${s.title}</div>
+                    `;
+                    list.appendChild(div);
+                });
+                isTimelineRendered = true;
+            }
+            Array.from(list.children).forEach((el, i) => {
+                el.className = `timeline-item mb-2 ${i === activeIdx ? 'active' : (i < activeIdx ? 'past' : '')}`;
+                if (i === activeIdx) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+            const next3 = [1,2,3].map(i => schedule[(activeIdx + i) % schedule.length]);
+            const html = next3.map(s => `<span class="mx-8 text-gray-400 text-xs"><span class="text-blue-400 font-bold mr-2">${s.start}</span>${s.title}</span>`).join('');
+            document.getElementById('tickerContent').innerHTML = html;
+        }
+
+        function updateThemeColors(type) {
+            const border = document.getElementById('statusBorder'); const statusText = document.getElementById('programStatus');
+            let color = 'border-blue-500'; let textColor = 'text-blue-300';
+            if (type === 'exercise') { color = 'border-orange-500'; textColor = 'text-orange-300'; }
+            else if (type === 'break') { color = 'border-green-500'; textColor = 'text-green-300'; }
+            else if (type === 'video') { color = 'border-red-500'; textColor = 'text-red-300'; }
+            border.className = `flex-1 border-l-4 pl-6 py-2 transition-colors duration-500 ${color} bg-black/20 backdrop-blur-sm rounded-r-lg`;
+            statusText.className = `font-bold text-[10px] uppercase tracking-[0.2em] ${textColor}`;
+        }
+
+        function getFriendlyType(type) {
+            const map = { 'focus': 'Tự Học', 'exercise': 'Vận Động', 'break': 'Giải Lao', 'video': 'Trực Tiếp' };
+            return map[type] || 'Live';
+        }
+
+        let pTime = 1500;
+        function getPomodoroTime() {
+            pTime--; if (pTime < 0) pTime = 1500;
+            const m = Math.floor(pTime/60).toString().padStart(2,'0'); const s = (pTime%60).toString().padStart(2,'0');
+            return `${m}:${s}`;
+        }
+
+        // --- INIT ---
+        initParticles(); animateParticles(); updateSystem(); updateMessageDisplay(); setInterval(updateSystem, 1000);
+    </script>
+    <style>
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</body>
+</html>

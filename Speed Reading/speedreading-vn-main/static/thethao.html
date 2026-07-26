@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>15 Phút Độ Body</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a; /* slate-900 */
+            color: white;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SVG Timer Circle */
+        .timer-circle {
+            transition: stroke-dashoffset 1s linear, stroke 0.5s ease;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .pulse-text {
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        /* Screen Transitions */
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Canvas for confetti */
+        #confetti-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- MÀN HÌNH CHÍNH (HOME) -->
+    <div id="screen-home" class="screen active justify-center items-center text-center">
+        <div class="mb-8">
+            <i class="fas fa-fire-alt text-6xl text-orange-500 mb-4 drop-shadow-[0_0_15px_rgba(249,115,22,0.8)]"></i>
+            <h1 class="text-4xl font-extrabold tracking-tight mb-2">15 PHÚT<br><span class="text-orange-500">ĐỘ BODY</span></h1>
+            <p class="text-slate-400">Không dụng cụ. Mọi lúc. Mọi nơi.</p>
+        </div>
+
+        <div class="bg-slate-800 rounded-2xl p-6 w-full mb-8 shadow-lg border border-slate-700">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-slate-300 font-semibold"><i class="fas fa-calendar-check mr-2 text-green-400"></i>Chuỗi ngày tập</span>
+                <span class="text-2xl font-bold text-white"><span id="streak-count">0</span> 🔥</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-300 font-semibold"><i class="fas fa-stopwatch mr-2 text-blue-400"></i>Hôm nay</span>
+                <span id="today-status" class="text-sm font-bold px-3 py-1 bg-slate-700 rounded-full">Chưa tập</span>
+            </div>
+        </div>
+
+        <button onclick="startApp()" class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 rounded-2xl text-xl shadow-[0_4px_20px_rgba(249,115,22,0.4)] transition-all transform active:scale-95">
+            BẮT ĐẦU NGAY <i class="fas fa-play ml-2"></i>
+        </button>
+        
+        <p class="mt-6 text-xs text-slate-500">Mở nhạc yêu thích của bạn trước khi bắt đầu nhé!</p>
+    </div>
+
+    <!-- MÀN HÌNH TẬP LUYỆN (WORKOUT) -->
+    <div id="screen-workout" class="screen justify-between items-center text-center">
+        
+        <div class="w-full flex justify-between items-center text-slate-400 text-sm">
+            <span>Bài: <span id="current-ex-num" class="font-bold text-white">1</span>/15</span>
+            <button onclick="confirmQuit()" class="bg-slate-800 p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-center w-full">
+            <h2 id="phase-title" class="text-2xl font-bold mb-2 tracking-wider text-orange-400 uppercase">CHUẨN BỊ</h2>
+            <h3 id="exercise-name" class="text-3xl font-extrabold mb-8 min-h-[80px] flex items-center justify-center">Sẵn sàng!</h3>
+
+            <!-- Timer Vòng Tròn -->
+            <div class="relative w-64 h-64 mb-8">
+                <svg class="w-full h-full" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#1e293b" stroke-width="8"></circle>
+                    <circle id="timer-path" class="timer-circle" cx="50" cy="50" r="45" fill="none" stroke="#f97316" stroke-width="8" stroke-dasharray="283" stroke-dashoffset="0" stroke-linecap="round"></circle>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span id="timer-text" class="text-6xl font-extrabold">--</span>
+                </div>
+            </div>
+
+            <!-- Dành cho lúc nghỉ -->
+            <div id="rest-info" class="hidden w-full bg-slate-800 rounded-xl p-4 border border-slate-700">
+                <p class="text-sm text-slate-400 mb-1">Bài tiếp theo:</p>
+                <p id="next-exercise-name" class="font-bold text-lg text-blue-400">Squat</p>
+                <p id="motivational-quote" class="mt-3 text-sm italic text-slate-300">"Cố lên!"</p>
+            </div>
+        </div>
+
+        <div class="w-full">
+            <button id="btn-pause" onclick="togglePause()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-2xl text-lg transition-all">
+                <i class="fas fa-pause mr-2"></i> TẠM DỪNG
+            </button>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH HOÀN THÀNH (FINISH) -->
+    <div id="screen-finish" class="screen justify-center items-center text-center">
+        <div class="mb-8">
+            <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.6)]">
+                <i class="fas fa-check text-5xl text-white"></i>
+            </div>
+            <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 mb-2">XUẤT SẮC!</h1>
+            <p class="text-slate-300 text-lg">Bạn đã hoàn thành 15 phút rèn luyện hôm nay.</p>
+        </div>
+
+        <div class="bg-slate-800 rounded-2xl p-6 w-full mb-8 shadow-lg border border-slate-700">
+            <p class="text-slate-400 mb-2">Chuỗi ngày tập hiện tại</p>
+            <p class="text-5xl font-black text-orange-500 pulse-text"><span id="final-streak">1</span> 🔥</p>
+            <p class="mt-4 text-sm text-slate-300">Hãy quay lại vào ngày mai để duy trì ngọn lửa này nhé!</p>
+        </div>
+
+        <button onclick="goHome()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl text-xl shadow-lg transition-all">
+            VỀ TRANG CHỦ
+        </button>
+    </div>
+
+</div>
+
+<script>
+    // --- CẤU HÌNH BÀI TẬP (15 Bài - 15 Phút: 45s Tập / 15s Nghỉ) ---
+    const exercises = [
+        { name: "Jumping Jacks (Bật nhảy)", type: "cardio" },
+        { name: "Squats (Ngồi xổm)", type: "lower" },
+        { name: "Push-ups (Hít đất / Quỳ gối)", type: "upper" },
+        { name: "Lunges (Chùng chân)", type: "lower" },
+        { name: "Plank (Đoàn kết)", type: "core" },
+        { name: "High Knees (Nâng cao đùi)", type: "cardio" },
+        { name: "Glute Bridges (Nâng hông)", type: "lower" },
+        { name: "Mountain Climbers (Leo núi)", type: "core" },
+        { name: "Bicycle Crunches (Đạp xe)", type: "core" },
+        { name: "Burpees (Hoặc đi bộ ra sau)", type: "full" },
+        { name: "Side Plank - Trái", type: "core" },
+        { name: "Side Plank - Phải", type: "core" },
+        { name: "Reverse Lunges (Lùi chân)", type: "lower" },
+        { name: "Tricep Dips (Chống tay sau)", type: "upper" },
+        { name: "Wall Sit (Ngồi dựa tường)", type: "lower" }
+    ];
+
+    const quotes = [
+        "Mồ hôi của hôm nay là sức khỏe của ngày mai!",
+        "Đừng dừng lại khi mệt mỏi, hãy dừng lại khi đã xong!",
+        "15 phút này là khoản đầu tư tốt nhất cho cơ thể bạn.",
+        "Kỷ luật là cây cầu nối giữa mục tiêu và kết quả.",
+        "Bạn mạnh mẽ hơn bạn nghĩ rất nhiều!",
+        "Hít thở sâu vào, bạn làm được!",
+        "Cơ bắp đang được xây dựng ngay lúc này.",
+        "Không có thang máy tới thành công, bạn phải đi bộ thôi."
+    ];
+
+    const WORK_TIME = 45; // 45 giây tập
+    const REST_TIME = 15; // 15 giây nghỉ
+    const PREP_TIME = 10; // 10 giây chuẩn bị lúc đầu
+
+    // --- BIẾN TRẠNG THÁI ---
+    let currentExIndex = 0;
+    let timeLeft = 0;
+    let totalTimePhase = 0;
+    let timerInterval;
+    let isPaused = false;
+    let currentPhase = 'prep'; // prep, work, rest
+    let audioCtx;
+
+    // --- DOM Elements ---
+    const screens = {
+        home: document.getElementById('screen-home'),
+        workout: document.getElementById('screen-workout'),
+        finish: document.getElementById('screen-finish')
+    };
+    const timerText = document.getElementById('timer-text');
+    const timerPath = document.getElementById('timer-path');
+    const phaseTitle = document.getElementById('phase-title');
+    const exerciseName = document.getElementById('exercise-name');
+    const currentExNum = document.getElementById('current-ex-num');
+    const restInfo = document.getElementById('rest-info');
+    const nextExerciseName = document.getElementById('next-exercise-name');
+    const motivationalQuote = document.getElementById('motivational-quote');
+    const btnPause = document.getElementById('btn-pause');
+
+    const circleLength = 283; // 2 * pi * r (r=45)
+
+    // --- KHỞI TẠO ---
+    function init() {
+        loadData();
+    }
+
+    function showScreen(screenName) {
+        Object.values(screens).forEach(s => s.classList.remove('active'));
+        screens[screenName].classList.add('active');
+    }
+
+    function loadData() {
+        let lastDate = localStorage.getItem('lastWorkoutDate');
+        let streak = parseInt(localStorage.getItem('streak') || 0);
+        let today = new Date().toDateString();
+
+        if (lastDate === today) {
+            document.getElementById('today-status').innerText = "Đã hoàn thành ✓";
+            document.getElementById('today-status').classList.replace('bg-slate-700', 'bg-green-600');
+        } else {
+            // Kiểm tra xem có bị đứt chuỗi không (nếu ngày cuối cùng không phải hôm qua thì reset)
+            let yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (lastDate !== yesterday.toDateString() && lastDate !== null) {
+                streak = 0; 
+                localStorage.setItem('streak', streak);
+            }
+        }
+        
+        document.getElementById('streak-count').innerText = streak;
+    }
+
+    // --- ÂM THANH (Web Audio API - Không cần file ngoài) ---
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function playBeep(type) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        if (type === 'tick') {
+            // Tiếng bíp đếm ngược (giây 3, 2, 1)
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        } else if (type === 'start') {
+            // Tiếng còi báo hiệu BẮT ĐẦU/CHUYỂN
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        } else if (type === 'finish') {
+            // Tiếng hoàn thành bài tập (Dây chuyền note)
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.2);
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.4);
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.6);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.6);
+        }
+    }
+
+    // --- LOGIC LUYỆN TẬP ---
+    function startApp() {
+        initAudio();
+        currentExIndex = 0;
+        isPaused = false;
+        btnPause.innerHTML = '<i class="fas fa-pause mr-2"></i> TẠM DỪNG';
+        showScreen('workout');
+        startPhase('prep');
+    }
+
+    function startPhase(phase) {
+        clearInterval(timerInterval);
+        currentPhase = phase;
+        
+        // Reset vòng tròn
+        timerPath.style.transition = 'none';
+        timerPath.style.strokeDashoffset = '0';
+        // Force reflow
+        void timerPath.offsetWidth;
+        timerPath.style.transition = 'stroke-dashoffset 1s linear, stroke 0.5s ease';
+
+        if (phase === 'prep') {
+            timeLeft = PREP_TIME;
+            totalTimePhase = PREP_TIME;
+            phaseTitle.innerText = "CHUẨN BỊ";
+            phaseTitle.className = "text-2xl font-bold mb-2 tracking-wider text-yellow-400 uppercase";
+            exerciseName.innerText = exercises[currentExIndex].name;
+            timerPath.setAttribute('stroke', '#eab308'); // yellow
+            restInfo.classList.add('hidden');
+        } 
+        else if (phase === 'work') {
+            timeLeft = WORK_TIME;
+            totalTimePhase = WORK_TIME;
+            phaseTitle.innerText = "TẬP LUYỆN!";
+            phaseTitle.className = "text-2xl font-bold mb-2 tracking-wider text-red-500 uppercase pulse-text";
+            exerciseName.innerText = exercises[currentExIndex].name;
+            currentExNum.innerText = currentExIndex + 1;
+            timerPath.setAttribute('stroke', '#ef4444'); // red
+            restInfo.classList.add('hidden');
+            playBeep('start');
+        } 
+        else if (phase === 'rest') {
+            timeLeft = REST_TIME;
+            totalTimePhase = REST_TIME;
+            phaseTitle.innerText = "NGHỈ NGƠI";
+            phaseTitle.className = "text-2xl font-bold mb-2 tracking-wider text-blue-400 uppercase";
+            exerciseName.innerText = "Hít thở sâu";
+            timerPath.setAttribute('stroke', '#3b82f6'); // blue
+            
+            // Hiển thị bài tiếp theo & câu nói
+            restInfo.classList.remove('hidden');
+            nextExerciseName.innerText = exercises[currentExIndex + 1].name;
+            motivationalQuote.innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+            playBeep('start');
+        }
+
+        updateUI();
+        timerInterval = setInterval(tick, 1000);
+    }
+
+    function tick() {
+        if (isPaused) return;
+
+        timeLeft--;
+        updateUI();
+
+        // Âm thanh đếm ngược 3 giây cuối
+        if (timeLeft > 0 && timeLeft <= 3) {
+            playBeep('tick');
+            timerText.classList.add('text-red-400');
+            setTimeout(() => timerText.classList.remove('text-red-400'), 500);
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            
+            if (currentPhase === 'prep') {
+                startPhase('work');
+            } 
+            else if (currentPhase === 'work') {
+                if (currentExIndex < exercises.length - 1) {
+                    startPhase('rest');
+                } else {
+                    completeWorkout();
+                }
+            } 
+            else if (currentPhase === 'rest') {
+                currentExIndex++;
+                startPhase('work');
+            }
+        }
+    }
+
+    function updateUI() {
+        // Cập nhật text thời gian
+        let m = Math.floor(timeLeft / 60);
+        let s = timeLeft % 60;
+        timerText.innerText = `${m > 0 ? m + ':' : ''}${s.toString().padStart(2, '0')}`;
+
+        // Cập nhật vòng tròn
+        let progress = timeLeft / totalTimePhase;
+        let offset = circleLength - (progress * circleLength);
+        timerPath.style.strokeDashoffset = offset;
+    }
+
+    function togglePause() {
+        initAudio(); // Đảm bảo audio hoạt động
+        isPaused = !isPaused;
+        if (isPaused) {
+            btnPause.innerHTML = '<i class="fas fa-play mr-2"></i> TIẾP TỤC';
+            btnPause.classList.replace('bg-slate-700', 'bg-orange-500');
+            timerPath.style.transition = 'none'; // Dừng hiệu ứng chuyển động của viền
+        } else {
+            btnPause.innerHTML = '<i class="fas fa-pause mr-2"></i> TẠM DỪNG';
+            btnPause.classList.replace('bg-orange-500', 'bg-slate-700');
+            timerPath.style.transition = 'stroke-dashoffset 1s linear, stroke 0.5s ease';
+        }
+    }
+
+    function confirmQuit() {
+        if (confirm('Bạn có chắc muốn dừng bài tập hôm nay? Sẽ không được tính vào chuỗi đâu nhé!')) {
+            clearInterval(timerInterval);
+            goHome();
+        }
+    }
+
+    function completeWorkout() {
+        playBeep('finish');
+        
+        // Lưu dữ liệu
+        let today = new Date().toDateString();
+        let lastDate = localStorage.getItem('lastWorkoutDate');
+        let streak = parseInt(localStorage.getItem('streak') || 0);
+
+        if (lastDate !== today) {
+            streak++;
+            localStorage.setItem('streak', streak);
+            localStorage.setItem('lastWorkoutDate', today);
+        }
+
+        document.getElementById('final-streak').innerText = streak;
+        showScreen('finish');
+        fireConfetti();
+    }
+
+    function goHome() {
+        loadData();
+        showScreen('home');
+    }
+
+    // --- HIỆU ỨNG PHÁO HOA (Tự code bằng Canvas) ---
+    function fireConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const colors = ['#f97316', '#3b82f6', '#22c55e', '#eab308', '#ef4444', '#a855f7'];
+
+        for (let i = 0; i < 100; i++) {
+            particles.push({
+                x: canvas.width / 2,
+                y: canvas.height / 2 + 100,
+                r: Math.random() * 6 + 2,
+                dx: Math.random() * 10 - 5,
+                dy: Math.random() * -15 - 5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                tilt: Math.floor(Math.random() * 10) - 10,
+                tiltAngleInc: (Math.random() * 0.07) + 0.05,
+                tiltAngle: 0
+            });
+        }
+
+        let animationId;
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.tiltAngle += p.tiltAngleInc;
+                p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
+                p.x += Math.sin(p.tiltAngle) * 2;
+                p.dy += 0.2; // Gravity
+                p.y += p.dy;
+                p.x += p.dx;
+
+                if (p.y <= canvas.height) active = true;
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+                ctx.stroke();
+            }
+
+            if (active) {
+                animationId = requestAnimationFrame(render);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+        render();
+    }
+
+    // Chạy khi load web
+    window.onload = init;
+
+</script>
+</body>
+</html>

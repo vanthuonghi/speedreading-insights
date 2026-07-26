@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sách Giáo Khoa Speed Reading 7 - Phần Đầu Sách & Mục Lục</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 25mm 20mm 25mm 25mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.4;
+            color: #111;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        h1, h2, h3, h4 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #003366;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            text-indent: 1cm;
+        }
+        .page-break {
+            page-break-after: always;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 40px;
+            margin-bottom: 40px;
+        }
+        /* Trang Bìa Lót */
+        .cover-page {
+            text-align: center;
+            height: 900px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 0;
+        }
+        .cover-compiler {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cover-title-box {
+            margin-top: 150px;
+        }
+        .cover-subject {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #555;
+        }
+        .cover-main-title {
+            font-family: Arial, sans-serif;
+            font-size: 34px;
+            font-weight: bold;
+            color: #003366;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .cover-grade {
+            font-family: Arial, sans-serif;
+            font-size: 56px;
+            font-weight: bold;
+            color: #cc0000;
+            line-height: 1;
+        }
+        .cover-publisher {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: auto;
+            letter-spacing: 1px;
+        }
+        /* Lời Nói Đầu */
+        .section-headline {
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+        }
+        .author-sign {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 40px;
+            padding-right: 20px;
+            font-style: italic;
+        }
+        /* Hướng Dẫn Sử Dụng Sách */
+        .guide-box {
+            border: 1px solid #003366;
+            background-color: #f9fbfd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .guide-icon-title {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: #003366;
+            margin-bottom: 5px;
+        }
+        .guide-box p {
+            text-indent: 0;
+            margin-bottom: 0;
+        }
+        /* Mục Lục */
+        .toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .toc-table td {
+            padding: 5px 0;
+            vertical-align: bottom;
+        }
+        .toc-theme {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: #003366;
+            font-size: 14px;
+            padding-top: 15px !important;
+            text-transform: uppercase;
+        }
+        .toc-lesson {
+            font-weight: bold;
+            padding-left: 15px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+        .toc-period {
+            padding-left: 30px;
+            font-style: normal;
+            color: #222;
+        }
+        .dots {
+            border-bottom: 1px dotted #888;
+        }
+        .page-num {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            width: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cover-page page-break">
+        <div class="cover-compiler">
+            HỘI ĐỒNG THẨM ĐỊNH TÀI LIỆU GIÁO DỤC PHÁT TRIỂN NĂNG LỰC
+        </div>
+        <div class="cover-title-box">
+            <div class="cover-subject">Tài liệu giáo khoa</div>
+            <div class="cover-main-title">KỸ NĂNG ĐỌC HIỂU TỐC ĐỘ CAO</div>
+            <div class="cover-grade">7</div>
+        </div>
+        <div class="cover-publisher">
+            NHÀ XUẤT BẢN GIÁO DỤC VIỆT NAM
+        </div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Lời nói đầu</div>
+        <p>Các em học sinh thân mến!</p>
+        <p>Chương trình Ngữ văn và các môn học lớp 7 đánh dấu một bước chuyển dịch quan trọng trong tiến trình phát triển tư duy của các em. Lượng văn bản thông tin chuyên sâu, văn bản khoa học và đặc biệt là hệ thống văn bản nghị luận đòi hỏi một năng lực xử lý thông tin ở cấp độ cao hơn. Ở giai đoạn này, việc đọc không chỉ dừng lại ở mức độ nhận diện từ ngữ cơ học, mà yêu cầu tư duy phải chủ động phân tích cấu trúc, thấu hiểu logic và trích xuất dữ liệu một cách linh hoạt.</p>
+        <p>Cuốn sách <strong>Kỹ năng Đọc hiểu Tốc độ cao (Speed Reading) – Lớp 7</strong> được biên soạn nhằm nâng cấp toàn diện năng lực đọc tư duy của các em. Với chủ đề cốt lõi <em>“Làm chủ nhịp điệu – Giải mã tư duy”</em>, cuốn sách sẽ hướng dẫn các em nghệ thuật <strong>Đọc biến tốc</strong> – kỹ thuật điều chỉnh tốc độ đọc linh hoạt theo từng thể loại và độ khó của văn bản, từ đọc lướt định vị tổng quan cho đến đọc sâu phân tích hệ thống luận điểm.</p>
+        <p>Trải qua 35 tiết học được thiết kế khoa học, kết hợp chặt chẽ giữa lý thuyết và các ngữ liệu thực tế từ chương trình học lớp 7, các em sẽ làm chủ được các mô hình đoạn văn phức hợp, tối ưu hóa tốc độ ghi nhớ dài hạn bằng các phương pháp ghi chép tiên tiến. Kỹ năng này sẽ là điểm tựa vững chắc giúp các em tối ưu hóa thời gian tự học, giảm thiểu áp lực thi cử và mở rộng chân trời tri thức.</p>
+        <p>Chúc các em có một năm học đầy tiến bộ và chinh phục được những cột mốc năng lực mới!</p>
+        <div class="author-sign">CÁC TÁC GIẢ</div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Hướng dẫn sử dụng sách</div>
+        <p style="text-indent: 0; margin-bottom: 20px;">Để hỗ trợ tiến trình tự điều chỉnh và phát triển kỹ năng một cách bài bản, cấu trúc của mỗi tiết học trong sách giáo khoa được tổ chức thống nhất theo bốn hoạt động sư phạm:</p>
+        
+        <div class="guide-box">
+            <div class="guide-icon-title">🎯 KHỞI ĐỘNG (Kích hoạt tư duy và thị giác)</div>
+            <p>Bao gồm các bài tập vận nhãn nâng cao và các câu hỏi tình huống tư duy diễn ra trong 3 – 5 phút. Hoạt động này nhằm thiết lập tiêu điểm tập trung tối đa cho não bộ, sẵn sàng cho việc tiếp nhận thông tin cường độ cao.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">🧠 KHÁM PHÁ TRI THỨC (Cơ sở khoa học)</div>
+            <p>Giới thiệu các nguyên lý khoa học về nhận thức, cơ chế điều khiển nhịp điệu đọc của não bộ và cấu trúc logic của văn bản. Nội dung được chuẩn hóa, kết nối chặt chẽ giúp học sinh nắm vững bản chất của kĩ thuật.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">🚀 THỰC HÀNH LƯYỆN TẬP (Huấn luyện kỹ năng)</div>
+            <p>Học sinh trực tiếp áp dụng kĩ thuật đọc trên các văn bản mẫu tương thích với độ tuổi lớp 7. Các bài tập đều yêu cầu đo lường cụ thể hai chỉ số: Tốc độ đọc (WPM) và Tỉ lệ hiểu văn bản (CR) để tính ra Chỉ số hiệu quả thực tế (ERR).</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">⚔️ VẬN DỤNG VÀ SUY NGẪM (Chuyển hóa thực tế)</div>
+            <p>Hướng dẫn học sinh tích hợp kĩ thuật đọc vừa học vào việc giải quyết trực tiếp các bài học trong sách giáo khoa Ngữ văn, Khoa học tự nhiên, Lịch sử và Địa lý 7. Học sinh tự đối chiếu với mục tiêu cá nhân trong nhật ký tiến độ.</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-headline">Mục lục</div>
+        <table class="toc-table">
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ I: LÀM CHỦ NHỊP ĐIỆU ĐỌC VÀ ÔN TẬP NỀN TẢNG</td>
+                <td class="dots"></td>
+                <td class="page-num">5</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 1: Đánh giá năng lực và Khởi động hệ thống</td>
+                <td class="dots"></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 1: Khảo sát chỉ số WPM và ERR đầu năm với văn bản thông tin phức hợp</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 2: Ôn tập cơ chế ức chế đọc thầm và kỹ thuật sử dụng Vật dẫn đường nâng cao</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">10</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 3: Thiết lập Bảng chiến lược đọc hiểu và hệ thống mục tiêu năng lực Lớp 7</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">14</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 2: Nghệ thuật "Biến tốc" (Flexible Reading)</td>
+                <td class="dots"></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 4: Bản chất của nhịp điệu đọc và nguyên lý phân tách độ khó văn bản</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 5: Kỹ thuật gài số chuyển tốc độ: Mô hình Skim - Scan - Normal - Deep</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">22</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 6: Thực hành phản xạ điều tốc dựa trên hệ thống nhận diện tín hiệu văn bản</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">26</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 7: Kiểm tra kỹ năng kiểm soát tốc độ trên văn bản tổng hợp đa mục tiêu</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">30</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ II: KỸ THUẬT XỬ LÝ VĂN BẢN PHÂN TÍCH VÀ LOGIC</td>
+                <td class="dots"></td>
+                <td class="page-num">35</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 3: Giải mã mô hình đoạn văn phức hợp</td>
+                <td class="dots"></td>
+                <td class="page-num">36</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 8: Nhận diện và xử lý cấu trúc đoạn văn Nguyên nhân - Kết quả</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">36</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 9: Nhận diện và xử lý cấu trúc đoạn văn Vấn đề - Giải pháp</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">40</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 10: Nhận diện và xử lý cấu trúc đoạn văn So sánh - Đối chiếu</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">44</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 11: Thực hành tổng hợp lọc cấu trúc xương sống của đoạn văn phức hợp</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">48</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 4: Kỹ thuật đọc suy luận và làm rõ thông tin ẩn</td>
+                <td class="dots"></td>
+                <td class="page-num">52</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 12: Bản chất của thông tin ẩn và cơ chế đọc giữa các dòng chữ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">52</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 13: Mô hình kết hợp từ khóa và ngữ cảnh để xác định quan điểm tác giả</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">56</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 14: Thực hành đọc hiểu tốc độ cao trên văn bản bộc lộ cảm xúc, tư tưởng</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">60</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 5: Phản xạ nâng cao với từ vựng học thuật</td>
+                <td class="dots"></td>
+                <td class="page-num">64</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 15: Hệ thống từ nối tín hiệu điều hướng logic và cách quét nhanh tiêu điểm</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">64</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 16: Phương pháp đoán nghĩa từ vựng chuyên ngành dựa trên ngữ cảnh vĩ mô</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">68</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 17: Bài tập phản xạ mở rộng trường từ vựng và tăng tốc độ bao quát khối từ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">72</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ III: TỐC ĐỌC ỨNG DỤNG THEO ĐẶC TRƯNG MÔN HỌC LỚP 7</td>
+                <td class="dots"></td>
+                <td class="page-num">77</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 6: Tuyệt chiêu chinh phục văn bản Nghị luận</td>
+                <td class="dots"></td>
+                <td class="page-num">78</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 18: Phân tích cấu trúc hệ thống của văn nghị luận: Vấn đề - Luận điểm - Luận cứ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">78</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 19: Ứng dụng Skimming định vị nhanh hệ thống Luận điểm trong bài văn</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">82</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 20: Ứng dụng Scanning trích xuất nhanh hệ thống Luận cứ và Bằng chứng</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">86</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 21: Thực hành tối ưu hóa thời gian đọc hiểu một văn bản nghị luận xã hội 7</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">90</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 7: Quét và xử lý dữ liệu môn Khoa học Tự nhiên</td>
+                <td class="dots"></td>
+                <td class="page-num">94</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 22: Đặc thù cấu trúc văn bản khoa học và cơ chế ghi nhận định lý, quy trình</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">94</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 23: Kỹ thuật phối hợp mắt đọc hình ảnh, biểu đồ, sơ đồ song song với văn bản</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">98</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 24: Thực hành tốc đọc giải mã quy trình sinh học và vật lý lớp 7</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">102</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 8: Trích xuất chuỗi thông tin môn Lịch sử và Địa lý</td>
+                <td class="dots"></td>
+                <td class="page-num">106</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 25: Kỹ thuật Timeline Scanning: Định vị chính xác mốc thời gian và sự kiện</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">106</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 26: Phương pháp đọc bao quát mối liên hệ không gian trong văn bản Địa lý</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">110</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 27: Thực hành xử lý nhanh hệ thống câu hỏi khai thác dữ liệu lịch sử - địa lý</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">114</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ IV: HỆ THỐNG HÓA THÔNG TIN VÀ LƯU TRỮ DÀI HẠN</td>
+                <td class="dots"></td>
+                <td class="page-num">119</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 9: Các mô hình cấu trúc ghi chú siêu tốc</td>
+                <td class="dots"></td>
+                <td class="page-num">120</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 28: Nâng cấp sơ đồ tư duy: Mô hình Sơ đồ Khái niệm (Concept Map) logic</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">120</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 29: Phương pháp ghi chép Cornell (Cornell Notes) tối ưu hóa tiến trình đọc hiểu</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">124</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 30: Thực hành thiết lập bố cục và ghi chép Cornell trong quá trình tốc đọc</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">128</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 31: Phương pháp Feynman: Cơ chế đơn giản hóa văn bản để nhớ sâu</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">132</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 32: Thực hành tổng hợp hóa kiến thức một chương học lớp 7 bằng mô hình tích hợp</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">136</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 10: Tổng kết chương trình và Đánh giá năng lực định kỳ</td>
+                <td class="dots"></td>
+                <td class="page-num">140</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 33: Thực hành quy trình khép kín: Đọc biến tốc - Trích xuất - Ghi chú Cornell</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">140</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 34: Đánh giá tổng thể và đo lường chỉ số WPM, ERR cuối năm học lớp 7</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">144</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 35: Tổng kết lộ trình, định hướng rèn luyện nâng cao chuẩn bị cho lớp 8</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">148</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

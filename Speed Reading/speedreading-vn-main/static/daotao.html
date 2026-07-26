@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khai Phóng Tư Duy Cùng Speed Reading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            panel: '#1e293b',
+                            accent: '#3b82f6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Reader display area styles */
+        .reader-display {
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Focus guides */
+        .focus-guide {
+            position: absolute;
+            height: 100%;
+            width: 2px;
+            background-color: rgba(255, 255, 255, 0.1);
+            top: 0;
+            z-index: 0;
+        }
+        
+        .word-chunk {
+            position: relative;
+            z-index: 10;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        /* Style for smooth auto-scroll in Highlight mode */
+        .highlight-scroll-container {
+            scroll-behavior: smooth;
+        }
+
+        /* RPM Tachometer transition */
+        #rpm-bar {
+            transition: width 0.3s ease-out, background-color 0.3s ease;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -8px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Shake Animation for Wrong Answers */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Glow effect for BGM */
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Floating Background Music Control -->
+    <div class="fixed bottom-4 right-4 z-[100] flex items-center gap-2">
+        <button id="bgm-toggle" onclick="toggleBackgroundMusic()" class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-full px-4 py-3 flex items-center gap-2 shadow-2xl transition-all transform hover:scale-105 neon-glow">
+            <i class="fa-solid fa-gamepad text-emerald-400 animate-pulse"></i>
+            <span class="text-xs font-bold uppercase tracking-wider" id="bgm-text">Nhạc nền: TẮT</span>
+        </button>
+    </div>
+
+    <!-- Background Confetti Canvas -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-[90] hidden"></canvas>
+
+    <header class="bg-brand-panel border-b border-gray-700 py-4 px-6 flex justify-between items-center shadow-lg shrink-0">
+        <div class="flex items-center gap-3">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speed Reading" class="h-10 w-auto rounded-lg shadow-lg shadow-blue-500/30 bg-white p-1">
+            <h1 class="text-2xl font-bold tracking-tight">Speed Reading <span class="text-blue-400">Workshop</span></h1>
+        </div>
+        
+        <nav class="flex gap-2 bg-gray-800 p-1 rounded-xl">
+            <button onclick="switchTab('tab-intro')" id="btn-tab-intro" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md">
+                1. Sát Thủ
+            </button>
+            <button onclick="switchTab('tab-reader')" id="btn-tab-reader" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-400 hover:text-white transition-all">
+                2. Đấu Trường Đọc
+            </button>
+            <button onclick="switchTab('tab-application')" id="btn-tab-application" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-400 hover:text-white transition-all">
+                3. Ứng Dụng
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow relative flex flex-col items-center justify-start p-6 overflow-y-auto">
+        
+        <!-- TAB 1: SÁT THỦ ĐỌC CHẬM -->
+        <section id="tab-intro" class="w-full max-w-6xl mx-auto flex flex-col justify-center animate-fade-in transition-all duration-500 py-6">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl md:text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+                    3 SÁT THỦ ĐỌC CHẬM
+                </h2>
+                <p class="text-xl text-gray-400">Hủy diệt chúng trước khi kích hoạt bộ não thiên tài của bạn</p>
+            </div>
+            
+            <div class="flex justify-center mb-10">
+                <button onclick="openPdfModal()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 flex items-center gap-3 border border-blue-400/30">
+                    <i class="fa-solid fa-person-chalkboard text-xl"></i>
+                    <span>Xem Slide Thuyết Trình</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Sát thủ 1 -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+                    <div class="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-comment-slash text-5xl text-red-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-red-300">Đọc Thầm</h3>
+                    <p class="text-gray-400 mb-4">Mấp máy môi, lẩm nhẩm trong đầu.</p>
+                    <div class="mt-auto bg-gray-800 px-4 py-2 rounded-lg w-full text-sm font-semibold text-gray-300 border border-gray-700">
+                        <i class="fa-solid fa-bug mr-2 text-red-400"></i> Ẩn dụ: Ve sầu rỉ rả
+                    </div>
+                </div>
+
+                <!-- Sát thủ 2 -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+                    <div class="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-magnifying-glass-minus text-5xl text-yellow-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-yellow-300">Đọc Từng Chữ</h3>
+                    <p class="text-gray-400 mb-4">Nhìn chằm chằm từng chữ, không thấy toàn cảnh.</p>
+                    <div class="mt-auto bg-gray-800 px-4 py-2 rounded-lg w-full text-sm font-semibold text-gray-300 border border-gray-700">
+                        <i class="fa-solid fa-eye-slash mr-2 text-yellow-400"></i> Ẩn dụ: Góc nhìn ống hút
+                    </div>
+                </div>
+
+                <!-- Sát thủ 3 -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+                    <div class="w-24 h-24 bg-purple-500/20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-arrow-rotate-left text-5xl text-purple-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-purple-300">Đọc Giật Lùi</h3>
+                    <p class="text-gray-400 mb-4">Thiếu tự tin, đọc xong lại quay lại đọc từ đầu.</p>
+                    <div class="mt-auto bg-gray-800 px-4 py-2 rounded-lg w-full text-sm font-semibold text-gray-300 border border-gray-700">
+                        <i class="fa-solid fa-boomerang mr-2 text-purple-400"></i> Ẩn dụ: Chiếc Boomerang
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: ĐẤU TRƯỜNG ĐỌC -->
+        <section id="tab-reader" class="w-full max-w-5xl mx-auto flex flex-col hidden opacity-0 transition-opacity duration-500 py-6">
+            
+            <!-- Setup & Selection -->
+            <div class="glass-panel p-4 rounded-xl mb-6 flex flex-col md:flex-row gap-4 items-center justify-between z-20">
+                <div class="flex-grow w-full md:w-auto">
+                    <label class="block text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">Chọn Chủ Đề Speed Reading</label>
+                    <select id="text-selector" class="w-full bg-gray-800 border border-gray-600 rounded-lg p-2 text-white outline-none focus:border-blue-500" onchange="loadSelectedText()">
+                        <option value="0">Bài 1: Sự Thật Về Đọc Nhanh (Bản chất)</option>
+                        <option value="1">Bài 2: Sát Thủ Đọc Thầm (Subvocalization)</option>
+                        <option value="2">Bài 3: Ảo Tưởng Đọc Từng Chữ (Góc nhìn ống hút)</option>
+                        <option value="3">Bài 4: Khai Phóng Tầm Nhìn Ngoại Vi (Peripheral Vision)</option>
+                        <option value="4">Bài 5: Sức Mạnh Của Chunking (Đọc theo cụm từ)</option>
+                        <option value="5">Bài 6: Vượt Qua Thói Quen Đọc Giật Lùi (Regression)</option>
+                        <option value="6">Bài 7: Điểm Dừng Của Mắt (Fixation)</option>
+                        <option value="7">Bài 8: Bước Nhảy Của Mắt (Saccade)</option>
+                        <option value="8">Bài 9: Sức Mạnh Của Vật Dẫn Đường (Pacer)</option>
+                        <option value="9">Bài 10: Tốc Độ Cao Tạo Sự Tập Trung (Áp lực RPM)</option>
+                    </select>
+                </div>
+                
+                <div class="w-full md:w-auto flex gap-4">
+                    <div class="flex-1 min-w-[180px]">
+                        <label class="block text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">Chế Độ Đọc</label>
+                        <select id="mode-selector" class="w-full bg-gray-800 border border-gray-600 rounded-lg p-2 text-white outline-none focus:border-blue-500" onchange="loadSelectedText()">
+                            <option value="rsvp" selected>Chớp Chữ Trung Tâm (RSVP)</option>
+                            <option value="highlight">Quét Sáng Cụm Từ (Highlight)</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[120px]">
+                        <label class="block text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">Số Từ / Nhịp</label>
+                        <select id="chunk-selector" class="w-full bg-gray-800 border border-gray-600 rounded-lg p-2 text-white outline-none focus:border-blue-500" onchange="loadSelectedText()">
+                            <option value="1">1 Từ</option>
+                            <option value="2" selected>2 Từ (Khuyên dùng)</option>
+                            <option value="3">3 Từ</option>
+                            <option value="4">4 Từ</option>
+                            <option value="5">5 Từ (Chuyên gia)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard / RPM Meter -->
+            <div class="glass-panel rounded-2xl p-6 mb-6 flex-grow flex flex-col">
+                <div class="flex justify-between items-end mb-2">
+                    <div class="uppercase tracking-widest text-sm font-bold text-gray-400">Tốc Độ Vòng Tua Mắt</div>
+                    <div class="text-4xl font-black tabular-nums glow-text" id="wpm-display">250 <span class="text-lg text-gray-400">WPM</span></div>
+                </div>
+                
+                <!-- RPM Bar -->
+                <div class="w-full bg-gray-800 h-4 rounded-full overflow-hidden border border-gray-700 mb-8 relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-500 via-yellow-500 to-red-600 opacity-20"></div>
+                    <div id="rpm-bar" class="h-full bg-green-500 rounded-full w-[20%] shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+                </div>
+
+                <!-- READER DISPLAY SCREEN -->
+                <div class="flex-grow bg-gray-900 rounded-xl border-2 border-gray-700 reader-display shadow-inner overflow-hidden relative">
+                    <div class="focus-guide left-1/3" id="guide-left"></div>
+                    <div class="focus-guide right-1/3" id="guide-right"></div>
+                    
+                    <div id="reader-word" class="word-chunk text-6xl md:text-8xl text-center px-4 w-full break-words text-blue-400 highlight-scroll-container">
+                        SẴN SÀNG!
+                    </div>
+
+                    <!-- Progress Bar for Reading -->
+                    <div class="absolute bottom-0 left-0 h-1 bg-gray-800 w-full">
+                        <div id="reading-progress" class="h-full bg-blue-500 w-0 transition-all duration-100"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="glass-panel p-6 rounded-2xl flex flex-col md:flex-row items-center gap-6 z-20">
+                <div class="flex gap-4">
+                    <button id="btn-play" onclick="togglePlay()" class="w-16 h-16 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(59,130,246,0.6)] transition-all transform hover:scale-105">
+                        <i class="fa-solid fa-play ml-1" id="icon-play"></i>
+                    </button>
+                    <button onclick="resetReader()" class="w-16 h-16 rounded-full bg-gray-700 hover:bg-gray-600 text-white flex items-center justify-center text-xl transition-all">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-grow w-full flex flex-col gap-2">
+                    <div class="flex justify-between text-sm font-bold text-gray-400">
+                        <span>Khởi động (250)</span>
+                        <span class="text-red-400">Tối đa (650)</span>
+                    </div>
+                    <input type="range" id="wpm-slider" min="250" max="650" step="100" value="250" oninput="updateWPM(this.value)" class="w-full mb-1">
+                    
+                    <div class="flex justify-between gap-2">
+                        <button onclick="document.getElementById('wpm-slider').value=250; updateWPM(250)" class="flex-1 bg-gray-800 hover:bg-gray-700 py-1.5 rounded text-xs font-bold transition border border-gray-600 hover:border-blue-500">250</button>
+                        <button onclick="document.getElementById('wpm-slider').value=350; updateWPM(350)" class="flex-1 bg-gray-800 hover:bg-gray-700 py-1.5 rounded text-xs font-bold transition border border-gray-600 hover:border-blue-500">350</button>
+                        <button onclick="document.getElementById('wpm-slider').value=450; updateWPM(450)" class="flex-1 bg-gray-800 hover:bg-gray-700 py-1.5 rounded text-xs font-bold transition border border-gray-600 hover:border-blue-500">450</button>
+                        <button onclick="document.getElementById('wpm-slider').value=550; updateWPM(550)" class="flex-1 bg-gray-800 hover:bg-gray-700 py-1.5 rounded text-xs font-bold transition border border-gray-600 hover:border-blue-500">550</button>
+                        <button onclick="document.getElementById('wpm-slider').value=650; updateWPM(650)" class="flex-1 bg-gray-800 hover:bg-gray-700 py-1.5 rounded text-xs font-bold text-red-400 transition border border-red-900/50 hover:border-red-500">650</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 text-center">
+                <button class="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-full text-xl font-bold shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform inline-flex items-center">
+                    <i class="fa-solid fa-passport mr-2"></i> Kích hoạt Hộ Chiếu 7 Ngày
+                </button>
+            </div>
+        </section>
+
+        <!-- TAB 3: ỨNG DỤNG THỰC TIỄN -->
+        <section id="tab-application" class="w-full max-w-6xl mx-auto flex flex-col justify-center hidden opacity-0 transition-opacity duration-500 p-6">
+            <!-- (Phần tab ứng dụng giữ nguyên như cũ để tương thích với trắc nghiệm cuối khóa) -->
+            <!-- Vui lòng tham khảo code gốc để đưa phần nội dung tĩnh này vào -->
+            <div class="text-center mb-10">
+                <h2 class="text-4xl md:text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                    ỨNG DỤNG THỰC TIỄN
+                </h2>
+                <p class="text-xl text-gray-400">Từ công cụ luyện tập đến thói quen tư duy trọn đời</p>
+            </div>
+            <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 text-center text-gray-300">
+                <p>Nội dung phần Ứng Dụng Thực Tiễn và Trắc Nghiệm Tổng Hợp giữ nguyên như cũ.</p>
+            </div>
+        </section>
+
+        <!-- QUESTION MODAL -->
+        <div id="question-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300 overflow-y-auto py-10">
+            <div class="bg-gray-800 border border-gray-600 rounded-2xl p-8 max-w-3xl w-full mx-4 shadow-[0_0_40px_rgba(0,0,0,0.8)] transform scale-95 transition-transform duration-300 relative my-auto" id="modal-content-box">
+                <!-- Nội dung được bơm bằng Javascript -->
+            </div>
+        </div>
+
+        <!-- PDF Presentation Modal -->
+        <div id="pdf-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] hidden flex flex-col items-center justify-center opacity-0 transition-opacity duration-300 p-4 md:p-8">
+            <div class="w-full max-w-6xl flex justify-between items-center mb-4 transform scale-95 transition-transform duration-300" id="pdf-modal-header">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-file-pdf text-red-500"></i>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Unlocking Reading Superpowers</span>
+                </h3>
+                <button onclick="closePdfModal()" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-red-600 border border-gray-600 hover:border-red-500 text-white flex items-center justify-center transition-all shadow-lg">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="w-full max-w-6xl flex-grow bg-gray-900 rounded-2xl border border-gray-700 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden relative transform scale-95 transition-transform duration-300" id="pdf-modal-content">
+                <iframe src="https://img.speedreading.vn/unlocking-reading-superpowers.pdf#view=FitH&toolbar=0" 
+                        class="w-full h-full border-0 rounded-2xl bg-white" 
+                        title="Speed Reading Presentation"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- 10 NỘI DUNG VỀ SPEED READING ---
+        const texts = [
+            "Nhiều người lầm tưởng Speed Reading chỉ là việc đọc lướt, bỏ qua chi tiết để nắm ý chính. Thực tế, đây là kỹ năng tối ưu hóa hoạt động của não bộ và đôi mắt. Thay vì bị kìm hãm bởi thói quen cơ học cũ kỹ từ thời tiểu học, bạn huấn luyện mắt xử lý khối lượng hình ảnh lớn hơn trong một khoảng thời gian ngắn hơn, giúp việc đọc trở nên trơn tru và mạnh mẽ.",
+            "Sát thủ lớn nhất kìm hãm tốc độ đọc chính là thói quen đọc thầm. Từ nhỏ, chúng ta được dạy đọc thành tiếng, rồi lớn lên ta vẫn giữ thói quen lẩm nhẩm từng từ trong đầu. Tốc độ nói của con người chỉ đạt tối đa khoảng 250 từ mỗi phút. Nếu bạn không dập tắt tiếng nói thầm này, não bộ của bạn sẽ vĩnh viễn bị giam cầm ở giới hạn tốc độ của đôi môi.",
+            "Tập trung nhìn chằm chằm vào từng chữ một là một ảo tưởng sai lầm. Giống như bạn đang nhìn thế giới qua một chiếc ống hút, tầm nhìn quá hẹp khiến bạn không thể hiểu được cấu trúc câu hay ngữ cảnh. Đọc từng chữ không làm bạn hiểu sâu hơn, nó chỉ làm bạn mệt mỏi nhanh hơn và rất dễ mất tập trung vì não bộ xử lý thông tin quá chậm chạp so với công suất thực sự.",
+            "Con người sở hữu một khả năng tuyệt vời gọi là tầm nhìn ngoại vi. Dù mắt bạn đang tập trung vào trung tâm, bạn vẫn có thể nhận biết được không gian xung quanh. Bằng cách thư giãn cơ mắt và mở rộng góc nhìn, bạn có thể bao quát được cả những từ nằm bên trái và bên phải điểm tập trung. Kích hoạt tầm nhìn ngoại vi là chìa khóa để tiến tới kỹ năng đọc theo cụm.",
+            "Bộ não chúng ta không hiểu nghĩa của văn bản qua từng từ đơn lẻ, mà thông qua các cụm từ có ý nghĩa hoàn chỉnh. Kỹ năng Chunking là cách bạn rèn luyện đôi mắt gom nhóm từ hai đến năm từ cùng một lúc. Giống như máy ảnh chụp lại toàn bộ khung hình thay vì quét từng điểm ảnh, việc đọc theo cụm giúp tăng cường khả năng thấu hiểu và ghi nhớ tự nhiên của não bộ.",
+            "Thói quen đọc giật lùi, hay còn gọi là Regression, xuất phát từ tâm lý thiếu tự tin. Bạn luôn có cảm giác mình vừa bỏ lỡ một thông tin quan trọng và vô thức đảo mắt quay lại đọc dòng cũ. Hành động lặp đi lặp lại này phá vỡ luồng tư duy mạch lạc và làm giảm nghiêm trọng tốc độ đọc. Hãy dũng cảm tiến về phía trước, não bộ thông minh hơn bạn nghĩ nhiều.",
+            "Khi bạn đọc sách, đôi mắt không hề trượt đi êm ái trên trang giấy. Chúng thực hiện những cú nhảy ngắn và dừng lại liên tục. Khoảnh khắc mắt đứng yên để chụp ảnh thông tin được gọi là Fixation. Một người đọc chậm sẽ có hàng chục điểm dừng trên mỗi dòng. Mục tiêu của Speed Reading là tối thiểu hóa số lần dừng mắt này bằng cách nới rộng lượng thông tin tiếp thu trong mỗi lần dừng.",
+            "Giữa các điểm dừng, mắt thực hiện những bước nhảy cực nhanh gọi là Saccade. Trong quá trình nhảy này, não bộ thực chất không hề tiếp nhận thêm thông tin hình ảnh nào. Việc liên tục chuyển động mắt quá nhiều khiến bạn mỏi mệt. Rèn luyện nhịp điệu mắt lướt qua các dòng một cách mượt mà, kết hợp với các bước nhảy dài hơn, sẽ giúp bạn tiết kiệm năng lượng và gia tăng tốc độ đọc đáng kể.",
+            "Trẻ em thường dùng ngón tay chỉ vào từng chữ khi đọc. Dù bị người lớn ngăn cản, đó lại là bản năng tự nhiên cực kỳ xuất sắc. Đôi mắt chúng ta có xu hướng sinh học là luôn bám theo các vật thể chuyển động. Việc sử dụng ngón tay hoặc bút làm vật dẫn đường (Pacer) không chỉ giúp mắt lướt nhanh hơn mà còn ép bộ não phải duy trì sự tập trung cao độ để không bị rớt nhịp.",
+            "Có một nghịch lý thú vị: đọc càng chậm, bạn càng dễ phân tâm. Khi tốc độ cấp dữ liệu quá chậm, bộ não dư thừa năng lượng sẽ bắt đầu suy nghĩ lan man về bữa tối hay công việc ngày mai. Ngược lại, khi bạn đẩy tốc độ lên vòng tua cao (RPM lớn), não bộ buộc phải dồn toàn bộ sự chú ý để xử lý luồng thông tin ồ ạt, từ đó tạo ra trạng thái siêu tập trung."
+        ];
+
+        // --- CÂU HỎI TƯƠNG ỨNG 10 BÀI SPEED READING ---
+        const questionsData = [
+            {
+                icon: "fa-bolt", iconColor: "text-yellow-400", title: "Bản chất Speed Reading",
+                question: "Speed Reading thực chất là kỹ năng gì?",
+                options: ["Đọc lướt và chỉ nhặt ra các từ khóa chính.", "Huấn luyện mắt và não xử lý khối lượng hình ảnh lớn hơn trong thời gian ngắn.", "Học cách đọc thành tiếng thật nhanh."], correctOption: 1,
+                actionTitle: "Hành động khai phóng", actionColor: "text-blue-400", actionBorder: "border-blue-500/50", actionBg: "bg-blue-900/30",
+                actionText: "Ngừng ngay việc tin rằng đọc nhanh là đọc ẩu. Hãy kích hoạt tiềm năng xử lý hình ảnh của não bộ!"
+            },
+            {
+                icon: "fa-comment-slash", iconColor: "text-red-400", title: "Sát thủ Đọc Thầm",
+                question: "Tại sao đọc thầm (Subvocalization) lại làm giảm tốc độ đọc?",
+                options: ["Vì nó giới hạn tốc độ tiếp thu của não bộ bằng với tốc độ của đôi môi (250 từ/phút).", "Vì nó gây ra tiếng ồn làm phiền người xung quanh.", "Vì mắt phải di chuyển chậm lại để chờ lưỡi phát âm."], correctOption: 0,
+                actionTitle: "Khóa mõm Sát thủ", actionColor: "text-red-400", actionBorder: "border-red-500/50", actionBg: "bg-red-900/30",
+                actionText: "Ép tốc độ lên mức 450 WPM - Mức tốc độ mà lưỡi bạn không thể nào lẩm nhẩm theo kịp chữ!"
+            },
+            {
+                icon: "fa-eye-slash", iconColor: "text-orange-400", title: "Ảo Tưởng Đọc Từng Chữ",
+                question: "Đọc từng chữ một được ví như hành động nào?",
+                options: ["Nhìn vạn vật qua một chiếc kính lúp.", "Nhìn thế giới qua một chiếc ống hút nhỏ.", "Đọc sách trong bóng tối."], correctOption: 1,
+                actionTitle: "Mở rộng tầm nhìn", actionColor: "text-orange-400", actionBorder: "border-orange-500/50", actionBg: "bg-orange-900/30",
+                actionText: "Đừng cố gắng soi mói từng chữ một. Hãy lùi lại một bước để thấy được vẻ đẹp của toàn bộ câu văn!"
+            },
+            {
+                icon: "fa-expand", iconColor: "text-emerald-400", title: "Tầm Nhìn Ngoại Vi",
+                question: "Lợi ích của việc kích hoạt tầm nhìn ngoại vi là gì?",
+                options: ["Giúp mắt không bị khô và mỏi khi đọc lâu.", "Bao quát được các từ nằm xung quanh điểm tập trung mà không cần di chuyển mắt.", "Nhìn thấy chữ rõ nét hơn mà không cần đeo kính."], correctOption: 1,
+                actionTitle: "Kích hoạt tiềm năng", actionColor: "text-emerald-400", actionBorder: "border-emerald-500/50", actionBg: "bg-emerald-900/30",
+                actionText: "Nhìn thẳng vào tâm màn hình, thả lỏng cơ mắt và cảm nhận các từ đang xuất hiện ở rìa tầm nhìn."
+            },
+            {
+                icon: "fa-layer-group", iconColor: "text-purple-400", title: "Sức Mạnh Chunking",
+                question: "Tại sao việc đọc theo cụm (Chunking) lại hiệu quả hơn?",
+                options: ["Vì bộ não hiểu nghĩa thông qua cụm từ có cấu trúc thay vì các từ đơn lẻ.", "Vì cụm từ có kích thước lớn hơn nên dễ nhìn hơn.", "Vì nó giúp sách mau hết hơn."], correctOption: 0,
+                actionTitle: "Chụp ảnh trí nhớ", actionColor: "text-purple-400", actionBorder: "border-purple-500/50", actionBg: "bg-purple-900/30",
+                actionText: "Chuyển ngay chế độ đọc lên 3 hoặc 4 từ/nhịp. Hãy để mắt bạn hoạt động như một chiếc máy ảnh sắc nét."
+            },
+            {
+                icon: "fa-arrow-rotate-left", iconColor: "text-gray-400", title: "Thói Quen Giật Lùi",
+                question: "Nguyên nhân chính gây ra thói quen đọc giật lùi (Regression) là gì?",
+                options: ["Tâm lý thiếu tự tin và sợ bỏ lỡ thông tin quan trọng.", "Do sách in chữ quá nhỏ hoặc mờ.", "Do thói quen cẩn thận quá mức cần thiết."], correctOption: 0,
+                actionTitle: "Dũng cảm tiến bước", actionColor: "text-gray-400", actionBorder: "border-gray-500/50", actionBg: "bg-gray-800",
+                actionText: "Tuyệt đối không quay đầu nhìn lại! Bạn thà lướt qua một từ không hiểu còn hơn là cắt đứt mạch tư duy hiện tại."
+            },
+            {
+                icon: "fa-pause", iconColor: "text-cyan-400", title: "Điểm Dừng Fixation",
+                question: "Mục tiêu của Speed Reading đối với các điểm dừng (Fixation) là gì?",
+                options: ["Tăng thời gian dừng mắt ở mỗi từ để hiểu sâu hơn.", "Tối thiểu hóa số lần dừng bằng cách nới rộng lượng thông tin trong mỗi lần chụp.", "Không để mắt dừng lại mà phải trượt đi liên tục."], correctOption: 1,
+                actionTitle: "Tối ưu hóa năng lượng", actionColor: "text-cyan-400", actionBorder: "border-cyan-500/50", actionBg: "bg-cyan-900/30",
+                actionText: "Thay vì dừng lại 10 lần trên một dòng sách, hãy luyện tập để chỉ dừng lại 3 lần. Mắt bạn sẽ bớt mỏi mệt hơn."
+            },
+            {
+                icon: "fa-forward-step", iconColor: "text-fuchsia-400", title: "Bước Nhảy Saccade",
+                question: "Điều gì xảy ra trong quá trình mắt thực hiện bước nhảy (Saccade)?",
+                options: ["Não bộ vẫn tiếp nhận hình ảnh liên tục như quay video.", "Thực chất não bộ không tiếp nhận thêm thông tin hình ảnh nào trong lúc nhảy.", "Mắt có thể nghỉ ngơi để phục hồi thị lực."], correctOption: 1,
+                actionTitle: "Nhịp điệu mượt mà", actionColor: "text-fuchsia-400", actionBorder: "border-fuchsia-500/50", actionBg: "bg-fuchsia-900/30",
+                actionText: "Giảm bớt sự giật cục của mắt. Hãy để nhịp độ đọc trôi qua trơn tru và có tính toán chính xác."
+            },
+            {
+                icon: "fa-hand-pointer", iconColor: "text-pink-400", title: "Vật Dẫn Đường Pacer",
+                question: "Tại sao dùng ngón tay hoặc bút để dẫn đường lại giúp đọc nhanh?",
+                options: ["Vì mắt có bản năng sinh học bám theo các chuyển động một cách mượt mà.", "Vì dùng ngón tay sẽ không bị lạc dòng.", "Vì nó làm cho việc đọc trở nên giống một trò chơi."], correctOption: 0,
+                actionTitle: "Kích hoạt định hướng", actionColor: "text-pink-400", actionBorder: "border-pink-500/50", actionBg: "bg-pink-900/30",
+                actionText: "Đừng ngần ngại sử dụng ngón tay lướt trên trang sách. Nó chính là dây xích kéo sự tập trung của bạn tiến lên!"
+            },
+            {
+                icon: "fa-gauge-high", iconColor: "text-red-500", title: "Tốc Độ Tạo Tập Trung",
+                question: "Tốc độ đọc cao mang lại lợi ích gì bất ngờ?",
+                options: ["Giúp bạn khoe khoang với bạn bè.", "Ép não bộ loại bỏ các suy nghĩ lan man và đạt trạng thái siêu tập trung.", "Giúp bạn nhanh chóng đi vào giấc ngủ."], correctOption: 1,
+                actionTitle: "Vượt qua giới hạn", actionColor: "text-red-500", actionBorder: "border-red-500/50", actionBg: "bg-red-900/30",
+                actionText: "Mỗi khi thấy mình đang suy nghĩ miên man lúc đọc sách, hãy TĂNG GẤP ĐÔI TỐC ĐỘ để ép não bộ quay lại đường đua!"
+            }
+        ];
+
+        // --- AUDIO ENGINE ---
+        // (Giữ nguyên class WebAudioEngine như cũ)
+        class WebAudioEngine {
+            constructor() {
+                this.ctx = null;
+                this.bgmPlaying = false;
+                this.schedulerTimer = null;
+                this.currentStep = 0;
+                this.chords = [
+                    [110.00, 130.81, 164.81],
+                    [87.31, 110.00, 130.81],
+                    [130.81, 164.81, 196.00],
+                    [98.00, 116.54, 146.83]
+                ];
+            }
+            init() { if (!this.ctx) { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } }
+            playSFX(type) {
+                this.init();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+                const now = this.ctx.currentTime;
+                if (type === 'correct') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.08, now + idx * 0.06); gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.15);
+                        osc.connect(gain); gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.2);
+                    });
+                } else if (type === 'incorrect') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(220.00, now); osc.frequency.linearRampToValueAtTime(110.00, now + 0.25);
+                    gain.gain.setValueAtTime(0.06, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(800.00, now); gain.gain.setValueAtTime(0.03, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain); gain.connect(this.ctx.destination); osc.start(); osc.stop(now + 0.06);
+                } else if (type === 'victory') {
+                    const notes = [523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                        osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.06, now + idx * 0.08); gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+                        osc.connect(gain); gain.connect(this.ctx.destination); osc.start(now + idx * 0.08); osc.stop(now + idx * 0.08 + 0.3);
+                    });
+                }
+            }
+            startBGM() {
+                this.init(); if (this.ctx.state === 'suspended') this.ctx.resume();
+                this.bgmPlaying = true; this.currentStep = 0; this.runBgmLoop();
+            }
+            stopBGM() { this.bgmPlaying = false; clearTimeout(this.schedulerTimer); }
+            runBgmLoop() {
+                if (!this.bgmPlaying) return;
+                const chordIndex = Math.floor(this.currentStep / 4) % this.chords.length;
+                const noteIndex = this.currentStep % 3;
+                const baseFreq = this.chords[chordIndex][noteIndex] * 2.0;
+                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain(); const filter = this.ctx.createBiquadFilter();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(baseFreq, this.ctx.currentTime);
+                filter.type = 'lowpass'; filter.frequency.setValueAtTime(900, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.012, this.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.7);
+                osc.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.8);
+                this.currentStep++; this.schedulerTimer = setTimeout(() => this.runBgmLoop(), 400);
+            }
+        }
+        const audio = new WebAudioEngine();
+        function toggleBackgroundMusic() {
+            const toggleBtn = document.getElementById('bgm-toggle'); const toggleText = document.getElementById('bgm-text');
+            if (!audio.bgmPlaying) {
+                audio.startBGM(); toggleText.innerText = "Nhạc nền: BẬT"; toggleBtn.classList.add('border-emerald-500'); audio.playSFX('click');
+            } else {
+                audio.stopBGM(); toggleText.innerText = "Nhạc nền: TẮT"; toggleBtn.classList.remove('border-emerald-500');
+            }
+        }
+
+        // --- CONFETTI EFFECT ---
+        // (Giữ nguyên Confetti logic như cũ)
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiParticles = []; let confettiAnimationId = null;
+        function resizeConfettiCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeConfettiCanvas);
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = canvas.height + 20; this.size = Math.random() * 8 + 5;
+                this.speedX = Math.random() * 6 - 3; this.speedY = -Math.random() * 15 - 10; this.gravity = 0.35;
+                this.color = `hsl(${Math.random() * 360}, 90%, 60%)`; this.rotation = Math.random() * 360; this.rotationSpeed = Math.random() * 10 - 5;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.speedY += this.gravity; this.rotation += this.rotationSpeed; }
+            draw() {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color; ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size); ctx.restore();
+            }
+        }
+        function spawnConfetti() {
+            canvas.classList.remove('hidden'); resizeConfettiCanvas(); confettiParticles = [];
+            for (let i = 0; i < 60; i++) { confettiParticles.push(new ConfettiParticle()); }
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId); animateConfetti();
+        }
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles.forEach((p, idx) => { p.update(); p.draw(); if (p.y > canvas.height + 50) { confettiParticles.splice(idx, 1); } });
+            if (confettiParticles.length > 0) { confettiAnimationId = requestAnimationFrame(animateConfetti); } 
+            else { canvas.classList.add('hidden'); }
+        }
+
+        // --- STATE & DOM ELEMENTS ---
+        let currentWPM = 250;
+        let isPlaying = false;
+        let wordsArray = [];
+        let rawWordsArray = [];
+        let currentChunkIndex = 0;
+        let playInterval = null;
+        let readingMode = 'rsvp'; // 'rsvp' or 'highlight'
+
+        const domWord = document.getElementById('reader-word');
+        const domProgress = document.getElementById('reading-progress');
+        const domPlayBtn = document.getElementById('btn-play');
+        const domPlayIcon = document.getElementById('icon-play');
+        const domWpmDisplay = document.getElementById('wpm-display');
+        const domRpmBar = document.getElementById('rpm-bar');
+
+        // --- UI FUNCTIONS ---
+        function switchTab(tabId) {
+            audio.playSFX('click');
+            ['tab-intro', 'tab-reader', 'tab-application'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.classList.add('hidden'); el.classList.remove('opacity-100'); el.classList.add('opacity-0'); }
+            });
+            ['btn-tab-intro', 'btn-tab-reader', 'btn-tab-application'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.className = "px-4 py-2 rounded-lg text-sm font-semibold text-gray-400 hover:text-white transition-all"; }
+            });
+            const activeTab = document.getElementById(tabId);
+            if (activeTab) {
+                activeTab.classList.remove('hidden'); setTimeout(() => { activeTab.classList.remove('opacity-0'); activeTab.classList.add('opacity-100'); }, 50);
+            }
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) { activeBtn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md"; }
+            if (tabId !== 'tab-reader' && isPlaying) { togglePlay(); }
+        }
+
+        // --- READER LOGIC ---
+        function getChunkSize() {
+            return parseInt(document.getElementById('chunk-selector').value);
+        }
+
+        function loadSelectedText() {
+            const textIndex = document.getElementById('text-selector').value;
+            const rawText = texts[textIndex];
+            rawWordsArray = rawText.trim().split(/\s+/);
+            const chunkSize = getChunkSize();
+            readingMode = document.getElementById('mode-selector').value;
+            
+            // Xử lý ẩn hiện thanh Focus Guide
+            const guideLeft = document.getElementById('guide-left');
+            const guideRight = document.getElementById('guide-right');
+            if (readingMode === 'highlight') {
+                guideLeft.style.display = 'none';
+                guideRight.style.display = 'none';
+            } else {
+                guideLeft.style.display = 'block';
+                guideRight.style.display = 'block';
+            }
+
+            resetReader();
+        }
+
+        function updateWPM(value) {
+            currentWPM = parseInt(value);
+            domWpmDisplay.innerHTML = `${currentWPM} <span class="text-lg text-gray-400">WPM</span>`;
+            const percentage = ((currentWPM - 250) / 400) * 100; domRpmBar.style.width = `${percentage}%`;
+            
+            let color = '#22c55e'; let shadow = 'rgba(34,197,94,0.8)';
+            if (currentWPM >= 350 && currentWPM < 450) { color = '#eab308'; shadow = 'rgba(234,179,8,0.8)'; } 
+            else if (currentWPM >= 450 && currentWPM < 550) { color = '#f97316'; shadow = 'rgba(249,115,22,0.8)'; } 
+            else if (currentWPM >= 550) { color = '#ef4444'; shadow = 'rgba(239,68,68,0.8)'; }
+            domRpmBar.style.backgroundColor = color; domRpmBar.style.boxShadow = `0 0 15px ${shadow}`;
+
+            if (isPlaying) { clearInterval(playInterval); startInterval(); }
+        }
+
+        function resetReader() {
+            if (isPlaying) togglePlay();
+            currentChunkIndex = 0;
+            domProgress.style.width = '0%';
+            
+            const chunkSize = getChunkSize();
+
+            if (readingMode === 'rsvp') {
+                // Chế độ RSVP: Chia văn bản thành các cụm từ gắn liền
+                wordsArray = [];
+                for (let i = 0; i < rawWordsArray.length; i += chunkSize) {
+                    wordsArray.push(rawWordsArray.slice(i, i + chunkSize).join(' '));
+                }
+                
+                domWord.className = "word-chunk text-6xl md:text-8xl text-center px-4 w-full break-words text-blue-400 highlight-scroll-container";
+                domWord.innerHTML = "SẴN SÀNG!";
+            } else {
+                // Chế độ Highlight: Hiển thị toàn bộ với thẻ span
+                wordsArray = rawWordsArray; // Lưu trữ từng từ đơn lẻ
+                domWord.className = "text-2xl md:text-3xl text-left px-6 py-8 w-full text-gray-400 leading-relaxed overflow-y-auto max-h-[300px] highlight-scroll-container";
+                
+                const spansHtml = rawWordsArray.map((w, idx) => `<span id="word-${idx}" class="transition-colors duration-100">${w}</span>`).join(' ');
+                domWord.innerHTML = spansHtml;
+            }
+        }
+
+        function togglePlay() {
+            audio.playSFX('click');
+            if (wordsArray.length === 0) loadSelectedText();
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                domPlayIcon.classList.remove('fa-play'); domPlayIcon.classList.add('fa-pause'); domPlayIcon.classList.remove('ml-1');
+                domPlayBtn.classList.replace('bg-blue-600', 'bg-red-600'); domPlayBtn.classList.replace('hover:bg-blue-500', 'hover:bg-red-500');
+                domPlayBtn.style.boxShadow = '0 0 15px rgba(239,68,68,0.6)';
+                
+                if (currentChunkIndex >= wordsArray.length) { currentChunkIndex = 0; }
+                startInterval();
+            } else {
+                domPlayIcon.classList.remove('fa-pause'); domPlayIcon.classList.add('fa-play'); domPlayIcon.classList.add('ml-1');
+                domPlayBtn.classList.replace('bg-red-600', 'bg-blue-600'); domPlayBtn.classList.replace('hover:bg-red-500', 'hover:bg-blue-500');
+                domPlayBtn.style.boxShadow = '0 0 15px rgba(59,130,246,0.6)';
+                clearInterval(playInterval);
+            }
+        }
+
+        function startInterval() {
+            const chunkSize = getChunkSize();
+            // Tính độ trễ theo nhịp WPM và số từ mỗi nhịp
+            const delay = (60000 / currentWPM) * chunkSize; 
+            
+            playInterval = setInterval(() => {
+                if (readingMode === 'rsvp') {
+                    // Logic chạy chế độ RSVP
+                    if (currentChunkIndex < wordsArray.length) {
+                        domWord.innerText = wordsArray[currentChunkIndex];
+                        const progress = ((currentChunkIndex + 1) / wordsArray.length) * 100;
+                        domProgress.style.width = `${progress}%`;
+                        currentChunkIndex++;
+                    } else {
+                        showCompletionScreen();
+                    }
+                } else {
+                    // Logic chạy chế độ Highlight Văn Bản
+                    if (currentChunkIndex < wordsArray.length) {
+                        
+                        // Xóa highlight cũ
+                        const prevHighlights = domWord.querySelectorAll('.bg-blue-900\\/50');
+                        prevHighlights.forEach(el => {
+                            el.classList.remove('text-blue-400', 'font-extrabold', 'bg-blue-900/50', 'rounded', 'shadow-[0_0_10px_rgba(59,130,246,0.3)]');
+                        });
+                        
+                        // Thêm highlight cho cụm từ hiện tại
+                        let lastSpan = null;
+                        for (let i = 0; i < chunkSize; i++) {
+                            const indexToHighlight = currentChunkIndex + i;
+                            if (indexToHighlight < wordsArray.length) {
+                                const span = document.getElementById(`word-${indexToHighlight}`);
+                                if (span) {
+                                    span.classList.add('text-blue-400', 'font-extrabold', 'bg-blue-900/50', 'rounded', 'shadow-[0_0_10px_rgba(59,130,246,0.3)]');
+                                    lastSpan = span;
+                                }
+                            }
+                        }
+
+                        // Tự động cuộn văn bản
+                        if (lastSpan) {
+                            lastSpan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+
+                        const currentPos = Math.min(currentChunkIndex + chunkSize, wordsArray.length);
+                        const progress = (currentPos / wordsArray.length) * 100;
+                        domProgress.style.width = `${progress}%`;
+                        
+                        currentChunkIndex += chunkSize;
+                    } else {
+                        showCompletionScreen();
+                    }
+                }
+            }, delay);
+        }
+
+        function showCompletionScreen() {
+            togglePlay();
+            domWord.className = "word-chunk text-center px-4 w-full text-blue-400 flex items-center justify-center";
+            domWord.innerHTML = `
+                <div class='flex flex-col items-center justify-center gap-6'>
+                    <span class='text-4xl text-green-400 font-black tracking-widest animate-pulse mt-10 md:mt-0'>HOÀN THÀNH!</span>
+                    <button onclick='showQuestion()' class='text-2xl bg-gradient-to-r from-blue-500 to-emerald-500 px-8 py-4 rounded-xl text-white shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:scale-105 transition-all transform animate-bounce'>
+                        <i class='fa-solid fa-unlock-keyhole mr-3'></i>Giải Mã Bài Học
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- QUESTION MODAL LOGIC ---
+        function checkAnswer(btn, optionIndex, correctIndex) {
+            const parent = btn.parentElement; const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => { b.disabled = true; b.classList.remove('hover:bg-gray-600'); b.classList.add('cursor-not-allowed', 'opacity-80'); });
+            
+            if (optionIndex === correctIndex) {
+                audio.playSFX('correct'); spawnConfetti();
+                btn.classList.remove('bg-gray-700', 'text-gray-300', 'border-gray-600');
+                btn.classList.add('bg-green-700', 'text-white', 'border-green-500');
+                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-green-900 flex items-center justify-center mr-3 font-bold"><i class="fa-solid fa-check"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+            } else {
+                audio.playSFX('incorrect');
+                const modalBox = document.getElementById('modal-content-box');
+                modalBox.classList.add('animate-shake'); setTimeout(() => modalBox.classList.remove('animate-shake'), 400);
+                btn.classList.remove('bg-gray-700', 'text-gray-300', 'border-gray-600');
+                btn.classList.add('bg-red-900', 'text-white', 'border-red-500');
+                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-red-950 flex items-center justify-center mr-3 font-bold"><i class="fa-solid fa-xmark"></i></span>` + btn.innerHTML.substring(btn.innerHTML.indexOf('</span>') + 7);
+                
+                const correctBtn = buttons[correctIndex];
+                correctBtn.classList.remove('bg-gray-700', 'text-gray-300', 'border-gray-600'); correctBtn.classList.add('bg-green-700', 'text-white', 'border-green-500');
+                correctBtn.innerHTML = `<span class="w-8 h-8 rounded-full bg-green-900 flex items-center justify-center mr-3 font-bold"><i class="fa-solid fa-check"></i></span>` + correctBtn.innerHTML.substring(correctBtn.innerHTML.indexOf('</span>') + 7);
+            }
+            document.getElementById('action-section').classList.remove('hidden'); document.getElementById('action-section').classList.add('animate-fade-in-up');
+        }
+
+        function showQuestion() {
+            audio.playSFX('click');
+            const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            const textIndex = document.getElementById('text-selector').value;
+            const data = questionsData[textIndex];
+            
+            let optionsHtml = ''; const letters = ['A', 'B', 'C'];
+            data.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="checkAnswer(this, ${idx}, ${data.correctOption})" 
+                        class="w-full text-left bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold p-4 rounded-xl border border-gray-600 transition-all mb-3 flex items-center shadow-md">
+                        <span class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-3 font-bold shrink-0">${letters[idx]}</span>
+                        <span class="flex-1">${opt}</span>
+                    </button>`;
+            });
+            
+            let htmlContent = `
+                <div class="text-center">
+                    <div class="text-5xl ${data.iconColor} mb-3"><i class="fa-solid ${data.icon}"></i></div>
+                    <h2 class="text-3xl font-black text-white mb-6 uppercase tracking-wide">${data.title}</h2>
+                    <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 mb-6 text-left shadow-inner">
+                        <p class="text-xl text-blue-400 mb-4 font-bold"><i class="fa-solid fa-circle-question mr-2"></i> ${data.question}</p>
+                        <div class="flex flex-col">${optionsHtml}</div>
+                        <div id="action-section" class="hidden mt-6 ${data.actionBg} p-5 rounded-lg border ${data.actionBorder}">
+                            <p class="${data.actionColor} text-lg font-bold uppercase mb-2"><i class="fa-solid fa-bolt text-yellow-400 mr-2"></i> ${data.actionTitle}:</p>
+                            <p class="text-gray-200 font-semibold leading-relaxed">${data.actionText}</p>
+                        </div>
+                    </div>
+                    <button onclick="closeQuestion()" class="bg-gray-700 hover:bg-gray-600 px-8 py-3 rounded-xl font-bold text-white transition-all text-lg w-full md:w-auto">Đóng lại & Tiếp tục</button>
+                </div>
+            `;
+            contentBox.innerHTML = htmlContent; modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); contentBox.classList.remove('scale-95'); contentBox.classList.add('scale-100'); }, 10);
+        }
+
+        function closeQuestion() {
+            audio.playSFX('click');
+            const modal = document.getElementById('question-modal'); const contentBox = document.getElementById('modal-content-box');
+            modal.classList.add('opacity-0'); contentBox.classList.remove('scale-100'); contentBox.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        // --- PDF MODAL LOGIC ---
+        function openPdfModal() {
+            audio.playSFX('click'); const modal = document.getElementById('pdf-modal'); const header = document.getElementById('pdf-modal-header'); const content = document.getElementById('pdf-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); header.classList.remove('scale-95'); header.classList.add('scale-100'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        }
+        function closePdfModal() {
+            audio.playSFX('click'); const modal = document.getElementById('pdf-modal'); const header = document.getElementById('pdf-modal-header'); const content = document.getElementById('pdf-modal-content');
+            modal.classList.add('opacity-0'); header.classList.remove('scale-100'); header.classList.add('scale-95'); content.classList.remove('scale-100'); content.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            loadSelectedText();
+            updateWPM(250);
+        };
+    </script>
+</body>
+</html>

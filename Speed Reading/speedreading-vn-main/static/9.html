@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sách Giáo Khoa Speed Reading 9 - Phần Đầu Sách & Mục Lục</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 25mm 20mm 25mm 25mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.4;
+            color: #111;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        h1, h2, h3, h4 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1b2a47; /* Xanh Navy đậm */
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            text-indent: 1cm;
+        }
+        .page-break {
+            page-break-after: always;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 40px;
+            margin-bottom: 40px;
+        }
+        /* Trang Bìa Lót */
+        .cover-page {
+            text-align: center;
+            height: 900px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 0;
+        }
+        .cover-compiler {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cover-title-box {
+            margin-top: 150px;
+        }
+        .cover-subject {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #555;
+        }
+        .cover-main-title {
+            font-family: Arial, sans-serif;
+            font-size: 34px;
+            font-weight: bold;
+            color: #1b2a47;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .cover-grade {
+            font-family: Arial, sans-serif;
+            font-size: 64px;
+            font-weight: bold;
+            color: #b30000; /* Đỏ sẫm bứt phá */
+            line-height: 1;
+            text-shadow: 2px 2px 0px #eee;
+        }
+        .slogan {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #d35400;
+            margin-top: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cover-publisher {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: auto;
+            letter-spacing: 1px;
+        }
+        /* Lời Nói Đầu */
+        .section-headline {
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+            border-bottom: 3px double #1b2a47;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+            color: #1b2a47;
+        }
+        .author-sign {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 40px;
+            padding-right: 20px;
+            font-style: italic;
+        }
+        /* Hướng Dẫn Sử Dụng Sách */
+        .guide-box {
+            border: 1px solid #1b2a47;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 6px solid #b30000;
+        }
+        .guide-icon-title {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: #1b2a47;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .guide-box p {
+            text-indent: 0;
+            margin-bottom: 0;
+        }
+        /* Mục Lục */
+        .toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .toc-table td {
+            padding: 5px 0;
+            vertical-align: bottom;
+        }
+        .toc-theme {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: #1b2a47;
+            font-size: 14px;
+            padding-top: 20px !important;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ddd;
+        }
+        .toc-lesson {
+            font-weight: bold;
+            padding-left: 15px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #b30000;
+            padding-top: 8px;
+        }
+        .toc-period {
+            padding-left: 30px;
+            font-style: normal;
+            color: #333;
+        }
+        .dots {
+            border-bottom: 1px dotted #999;
+        }
+        .page-num {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            width: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cover-page page-break">
+        <div class="cover-compiler">
+            HỘI ĐỒNG THẨM ĐỊNH TÀI LIỆU GIÁO DỤC PHÁT TRIỂN NĂNG LỰC
+        </div>
+        <div class="cover-title-box">
+            <div class="cover-subject">Tài liệu giáo khoa</div>
+            <div class="cover-main-title">KỸ NĂNG ĐỌC HIỂU TỐC ĐỘ CAO</div>
+            <div class="cover-grade">9</div>
+            <div class="slogan">"BỨT TỐC TƯ DUY - CHINH PHỤC KỲ THI"</div>
+        </div>
+        <div class="cover-publisher">
+            NHÀ XUẤT BẢN GIÁO DỤC VIỆT NAM
+        </div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Lời nói đầu</div>
+        <p>Các em học sinh thân mến!</p>
+        <p>Lớp 9 là một năm học đặc biệt, mang tính chất quyết định đối với mỗi học sinh Trung học cơ sở. Phía trước các em là kỳ thi tuyển sinh vào lớp 10 đầy cam go và thử thách. Khối lượng kiến thức cần ôn tập từ các môn học là khổng lồ, trong khi quỹ thời gian lại vô cùng hạn hẹp. Lúc này, năng lực học tập không chỉ nằm ở việc em chăm chỉ đến đâu, mà nằm ở việc em <strong>xử lý thông tin và quản trị thời gian</strong> hiệu quả như thế nào.</p>
+        <p>Kế thừa nền tảng từ lớp 6, 7 và 8, cuốn sách <strong>Kỹ năng Đọc hiểu Tốc độ cao (Speed Reading) – Lớp 9</strong> không còn là những bài tập huấn luyện cơ mắt hay tư duy phản biện đơn thuần. Cuốn sách này được thiết kế như một <strong>"Cẩm nang chiến thuật"</strong>, giúp các em biến kỹ năng tốc đọc thành một vũ khí thực chiến trong phòng thi và trong quá trình tổng ôn giai đoạn nước rút.</p>
+        <p>Xuyên suốt 35 tiết học cường độ cao, các em sẽ được rèn luyện kỹ năng: Quét nhanh và nhận diện chính xác "bẫy" trong đề thi trắc nghiệm Khoa học/Tiếng Anh; Giải phẫu siêu tốc cấu trúc các tác phẩm văn học lớn; Kỹ năng lập dàn ý chớp nhoáng và sơ đồ hóa (Mega-Mindmap) toàn bộ chương trình học để lưu trữ vào trí nhớ dài hạn. </p>
+        <p>Áp lực tạo nên kim cương. Hãy sử dụng cuốn sách này như một công cụ đắc lực để giải phóng bản thân khỏi sự quá tải, tự tin bước vào kỳ thi và chinh phục ngôi trường mơ ước của mình!</p>
+        <div class="author-sign">CÁC TÁC GIẢ</div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Hướng dẫn sử dụng sách</div>
+        <p style="text-indent: 0; margin-bottom: 20px;">Để đáp ứng tính khẩn trương của năm học cuối cấp, cấu trúc các bài học trong sách lớp 9 được tinh gọn, loại bỏ lý thuyết rườm rà, tập trung 100% vào chu trình <strong>Phân tích - Thực chiến - Rút kinh nghiệm</strong>:</p>
+        
+        <div class="guide-box">
+            <div class="guide-icon-title">⏱️ BƯỚC 1: KIỂM SOÁT THỜI GIAN (Time-Boxing)</div>
+            <p>Khởi động bằng việc thiết lập đồng hồ đếm ngược. Mọi hoạt động đọc hiểu, tìm kiếm dữ liệu hay lập dàn ý đều bị giới hạn nghiêm ngặt về mặt thời gian để tạo phản xạ tâm lý vững vàng khi vào phòng thi thật.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">🎯 BƯỚC 2: GIẢI MÃ CHIẾN THUẬT (Tactical Decoding)</div>
+            <p>Cung cấp các "Công thức đọc" chuyên biệt cho từng dạng đề thi: Cách Skimming tìm ý chính trong bài đọc Tiếng Anh; Cách Scanning từ khóa phủ định trong đề trắc nghiệm Hóa/Lý; Cách định vị hệ thống luận điểm trong văn nghị luận xã hội.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">⚔️ BƯỚC 3: THỰC CHIẾN ĐỀ THI (Mock Test)</div>
+            <p>Học sinh áp dụng kỹ thuật tốc đọc trực tiếp lên các đề thi thử, đề thi chính thức của các năm trước. Phân tích lỗi sai do đọc ẩu (đọc thiếu từ "không", "ngoại trừ"...) và sửa lỗi ngay lập tức.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">🧠 BƯỚC 4: XUẤT DỮ LIỆU TỔNG ÔN (Data Output)</div>
+            <p>Chuyển hóa dữ liệu vừa đọc thành các dạng thức ôn tập siêu tốc: Flashcard (thẻ ghi nhớ) hoặc Sơ đồ tư duy đa nhánh. Tối ưu hóa việc ôn tập bài cũ chỉ trong 5-10 phút.</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-headline">Mục lục Lớp 9</div>
+        <table class="toc-table">
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ I: THIẾT LẬP CHIẾN LƯỢC VÀ KIỂM SOÁT ÁP LỰC</td>
+                <td class="dots"></td>
+                <td class="page-num">5</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 1: Khảo sát năng lực tiền kỳ thi</td>
+                <td class="dots"></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 1: Test đầu vào: Đo lường WPM và ERR trên định dạng văn bản đề thi</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 2: Thiết lập mục tiêu Tốc độ (Target WPM) theo từng môn học cốt lõi</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">10</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 3: Khắc phục sự phân tâm do áp lực (Ám ảnh thời gian) khi đọc đề</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">14</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 2: Kỹ năng quản trị thời gian đọc (Time-Boxing)</td>
+                <td class="dots"></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 4: Nguyên lý phân bổ ngân sách thời gian cho bài thi tự luận và trắc nghiệm</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 5: Thực hành ép xung nhịp đọc: Kỹ thuật lướt đề định hình bố cục trong 2 phút</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">22</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ II: TỐC ĐỌC VÀ XỬ LÝ ĐỀ THI NGỮ VĂN VÀO LỚP 10</td>
+                <td class="dots"></td>
+                <td class="page-num">27</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 3: Giải phẫu cấu trúc tác phẩm văn học</td>
+                <td class="dots"></td>
+                <td class="page-num">28</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 6: Tốc đọc và giải mã từ khóa nghệ thuật trong Thơ (Truyện Kiều, Thơ hiện đại)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">28</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 7: Kỹ thuật phân tích cấu trúc vĩ mô của đoạn trích thơ dài</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">32</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 8: Tốc đọc quét Tuyến nhân vật và Tình huống truyện trong văn xuôi lớp 9</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">36</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 9: Thực hành trích xuất chi tiết đắt giá từ văn bản truyện ngắn</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">40</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 4: Xử lý văn bản Nghị luận xã hội (Đọc hiểu & Phân tích)</td>
+                <td class="dots"></td>
+                <td class="page-num">44</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 10: Tốc đọc nhận diện chủ đề và định vị quan điểm trong đề Đọc hiểu</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">44</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 11: Kỹ thuật Scanning truy tìm dẫn chứng và biện pháp tu từ trong văn bản</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">48</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 12: Thực chiến xử lý phần Đọc hiểu (3 điểm) của đề thi Ngữ văn trong 10 phút</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">52</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 5: Lập dàn ý siêu tốc (Flash-Outlining)</td>
+                <td class="dots"></td>
+                <td class="page-num">56</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 13: Nguyên lý chuyển hóa thông tin từ não bộ ra nháp trong 5 phút</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">56</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 14: Lập dàn ý siêu tốc cho câu Nghị luận xã hội (2 điểm)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">60</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 15: Lập dàn ý siêu tốc cho câu Nghị luận văn học (5 điểm)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">64</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ III: GIẢI MÃ ĐỀ THI TRẮC NGHIỆM VÀ NGOẠI NGỮ</td>
+                <td class="dots"></td>
+                <td class="page-num">69</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 6: Xử lý bẫy thông tin môn Toán và Khoa học</td>
+                <td class="dots"></td>
+                <td class="page-num">70</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 16: Kỹ thuật Keyword Spotting: Lọc dữ liệu số và điều kiện ẩn trong đề Toán</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">70</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 17: Tốc đọc giải phẫu đề Hóa học/Vật lý: Loại bỏ dữ liệu nhiễu (Noise Data)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">74</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 18: Bài tập phản xạ: Rút trích mô hình toán học từ văn bản ứng dụng thực tế</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">78</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 7: Tốc đọc chống "Bẫy" trắc nghiệm (Distractors)</td>
+                <td class="dots"></td>
+                <td class="page-num">82</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 19: Phân tích tâm lý ra đề và các dạng bẫy phổ biến (Từ phủ định, từ tuyệt đối)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">82</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 20: Kỹ thuật Scanning đa chiều: Đối chiếu nhanh đáp án A-B-C-D với dữ liệu gốc</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">86</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 21: Thực hành khoanh trắc nghiệm dưới áp lực 45 giây/câu</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">90</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 8: Tốc đọc ứng dụng trong Đọc hiểu Tiếng Anh</td>
+                <td class="dots"></td>
+                <td class="page-num">94</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 22: Kỹ thuật Skimming tìm Main Idea (Ý chính) và Title (Tiêu đề) trong Tiếng Anh</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">94</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 23: Kỹ thuật Scanning giải quyết nhóm câu hỏi Detail (True/False/Not Given)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">98</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 24: Kỹ thuật Context Clues: Đoán nghĩa từ vựng mới không cần từ điển</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">102</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 25: Thực chiến giải bài Đọc hiểu Tiếng Anh tuyển sinh lớp 10</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">106</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ IV: TỔNG ÔN SIÊU TỐC VÀ THỰC CHIẾN PHÒNG THI</td>
+                <td class="dots"></td>
+                <td class="page-num">111</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 9: Hệ thống hóa kiến thức giai đoạn nước rút</td>
+                <td class="dots"></td>
+                <td class="page-num">112</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 26: Ứng dụng quy tắc Pareto (80/20) trong việc chọn lọc nội dung ôn tập</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">112</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 27: Kiến tạo Mega-Mindmap (Sơ đồ tư duy vĩ mô) cho toàn bộ chương trình Ngữ Văn 9</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">116</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 28: Kỹ thuật truy xuất dữ liệu ngược từ Mega-Mindmap</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">120</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 29: Kỹ thuật Flashcard kết hợp tốc đọc để ghi nhớ công thức Toán/Hóa/Lý/Anh</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">124</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 30: Vòng lặp ôn tập ngắt quãng (Spaced Repetition) chống quên kiến thức</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">128</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 10: Trải nghiệm thi thử và Đánh giá tổng quát</td>
+                <td class="dots"></td>
+                <td class="page-num">132</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 31: Thi thử thực chiến: Giải đề thi Ngữ văn tổng hợp dưới áp lực thời gian</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">132</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 32: Thi thử thực chiến: Giải đề thi trắc nghiệm Toán/Tiếng Anh tổng hợp</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">136</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 33: Sửa lỗi chiến thuật: Phân tích nguyên nhân mất điểm do lỗi kỹ năng đọc</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">140</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 34: Đo lường tổng kết chỉ số WPM và ERR - Đánh giá sự sẵn sàng cho kỳ thi</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">144</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 35: Lời khuyên tâm lý phòng thi và Lễ tốt nghiệp lộ trình Speed Reading THCS</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">148</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

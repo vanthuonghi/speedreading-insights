@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookMaster - Ebook & Affiliate Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: rgba(30, 41, 59, 0.7);
+            --brand-primary: #10b981; /* Green for Money/Sales */
+            --brand-secondary: #3b82f6; /* Blue for Trust */
+            --vip-gold: #fbbf24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: #e2e8f0; }
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .nav-active {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 100%);
+            border-left: 3px solid var(--brand-primary);
+            color: white;
+        }
+        .hidden-tab { display: none; }
+        
+        /* Book Card */
+        .book-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.3);
+            border-color: var(--brand-primary);
+        }
+        .book-cover {
+            aspect-ratio: 2/3;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Price Tag */
+        .price-tag {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Affiliate Card */
+        .stat-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Reader/Landing Page Styles */
+        .prose-ebook h1 { color: #fff; font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; border-bottom: 2px solid var(--brand-primary); padding-bottom: 10px; }
+        .prose-ebook h2 { color: var(--brand-primary); font-size: 1.75rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; border-left: 4px solid var(--brand-secondary); padding-left: 15px; }
+        .prose-ebook ul { list-style-type: disc; padding-left: 1.5rem; color: #cbd5e1; margin-bottom: 1rem; }
+        .prose-ebook p { margin-bottom: 1rem; line-height: 1.8; }
+        .prose-ebook strong { color: #fff; font-weight: 700; background: rgba(16, 185, 129, 0.2); padding: 0 4px; border-radius: 4px; }
+        .prose-ebook blockquote { border-left: 4px solid var(--vip-gold); padding-left: 1rem; margin-left: 0; font-style: italic; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 10px; border-radius: 8px;}
+    </style>
+</head>
+<body class="h-screen w-screen flex overflow-hidden text-sm md:text-base">
+
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300">
+        <div class="glass-panel p-8 w-full max-w-md text-center shadow-2xl border border-emerald-500/30">
+            <div class="w-16 h-16 bg-emerald-600/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i data-lucide="book-open" class="w-8 h-8 text-emerald-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">BookMaster</h2>
+            <p class="text-gray-400 mb-6 text-sm">Nền tảng Ebook & Affiliate số 1</p>
+            <div class="space-y-4 text-left">
+                <input type="email" id="emailInput" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500" placeholder="Email...">
+                <input type="password" id="passwordInput" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500" placeholder="Mật khẩu...">
+                <div id="authError" class="text-red-400 text-xs hidden"></div>
+            </div>
+            <button id="authActionBtn" class="w-full py-3 mt-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition shadow-lg flex items-center justify-center gap-3">Đăng Nhập</button>
+            <div class="mt-4 border-t border-white/10 pt-4 text-sm text-gray-400"><span id="authToggleText">Chưa có tài khoản?</span><button id="authToggleBtn" class="text-emerald-400 hover:text-white font-bold underline ml-1">Đăng ký ngay</button></div>
+        </div>
+    </div>
+
+    <!-- PAYMENT MODAL (SEPAY INTEGRATION) -->
+    <div id="paymentModal" class="fixed inset-0 z-[150] bg-black/95 flex items-center justify-center backdrop-blur-md hidden">
+        <div class="glass-panel w-full max-w-4xl p-0 relative mx-4 flex flex-col md:flex-row overflow-hidden h-[80vh] md:h-auto">
+            <button onclick="document.getElementById('paymentModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-white z-20"><i data-lucide="x"></i></button>
+            
+            <!-- Book Info -->
+            <div class="w-full md:w-1/2 p-8 bg-slate-900/50 flex flex-col border-r border-white/5 relative">
+                <div class="absolute inset-0 bg-cover bg-center opacity-10" id="payBgImage"></div>
+                <div class="relative z-10">
+                    <h2 class="text-2xl font-bold text-white mb-2">Thanh Toán Đơn Hàng</h2>
+                    <p class="text-emerald-400 mb-6 font-bold" id="payOrderId">Order #...</p>
+                    
+                    <div class="flex gap-4 mb-6">
+                        <img id="payBookCover" src="" class="w-24 h-36 object-cover rounded shadow-lg">
+                        <div>
+                            <h3 class="font-bold text-white text-lg" id="payBookTitle">...</h3>
+                            <p class="text-gray-400 text-sm mb-2" id="payBookAuthor">...</p>
+                            <div class="text-2xl font-bold text-yellow-400" id="payBookPrice">...</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-500/10 border border-blue-500/30 p-4 rounded-lg">
+                        <h4 class="text-blue-400 font-bold text-xs uppercase mb-2">Hướng dẫn</h4>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc pl-4">
+                            <li>Quét mã QR bên cạnh bằng App ngân hàng.</li>
+                            <li>Nội dung chuyển khoản sẽ được tự động điền.</li>
+                            <li>Hệ thống tự động kích hoạt sách sau 1-3 phút.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Code Area -->
+            <div class="w-full md:w-1/2 bg-white text-slate-900 p-8 flex flex-col items-center justify-center relative">
+                <h3 class="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2"><img src="https://sepay.vn/assets/img/logo-sepay.svg" class="h-6" alt="SePay"> Quét mã thanh toán</h3>
+                
+                <div class="bg-white p-2 rounded-xl border-2 border-emerald-100 shadow-xl relative w-full max-w-[280px]">
+                    <img id="payQrImage" src="" alt="QR Chuyển Khoản" class="w-full rounded-lg">
+                </div>
+
+                <div class="bg-slate-100 p-3 rounded-lg mt-4 text-center w-full">
+                    <p class="text-gray-500 text-xs mb-1">Nội dung bắt buộc:</p>
+                    <div class="font-mono font-bold text-lg text-emerald-600 select-all cursor-pointer" id="payContent" onclick="app.copyToClipboard(this.innerText)">...</div>
+                    <div class="text-[10px] text-gray-400 mt-1">(Click để copy)</div>
+                </div>
+
+                <!-- Simulation Button (For Demo Only) -->
+                <button onclick="app.simulatePaymentSuccess()" class="mt-4 text-xs text-gray-400 hover:text-emerald-600 underline">
+                    [Demo] Giả lập thanh toán thành công
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- READER MODAL -->
+    <!-- This modal is now used for the Product Landing Page and actual reading -->
+    <div id="readerModal" class="fixed inset-0 z-[200] bg-slate-900 flex flex-col hidden">
+        <div class="h-16 bg-slate-800 border-b border-white/5 flex items-center justify-between px-4 sticky top-0 z-10">
+            <h3 class="text-white font-bold truncate max-w-md flex items-center gap-2" id="readerTitleContainer">
+                <i data-lucide="book-open-text" class="w-5 h-5 text-emerald-400"></i>
+                <span id="readerTitle">Đang xem Ebook...</span>
+            </h3>
+            <div id="readerActions" class="flex items-center gap-4">
+                 <!-- The Buy Button will be injected here if not owned -->
+                 <button onclick="document.getElementById('readerModal').classList.add('hidden')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-white"><i data-lucide="x"></i> Đóng</button>
+            </div>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-900/50 text-gray-300 max-w-4xl mx-auto w-full">
+            <div id="readerContent" class="prose-ebook text-sm md:text-lg">
+                <!-- Ebook Landing Page Content Here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#0B1120] border-r border-white/5 flex flex-col z-20 hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-white/5 gap-3">
+            <div class="w-8 h-8 bg-gradient-to-tr from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center text-white font-bold"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+            <span class="font-bold text-lg tracking-wide text-white">BookMaster</span>
+        </div>
+        
+        <div class="p-6 border-b border-white/5">
+             <div class="flex items-center gap-3">
+                 <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-lg font-bold border border-emerald-500 text-white" id="sidebarAvatar">U</div>
+                 <div class="overflow-hidden">
+                     <div class="text-white font-bold text-sm truncate" id="sidebarName">Guest</div>
+                     <div class="text-emerald-400 text-xs font-mono" id="sidebarBalance">0đ</div>
+                 </div>
+             </div>
+        </div>
+
+        <div class="p-4 flex-1 overflow-y-auto space-y-1">
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Menu</div>
+            <button onclick="app.nav('store')" id="nav-store" class="w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition nav-active"><i data-lucide="store" class="w-5 h-5 mr-3"></i> Cửa Hàng</button>
+            <button onclick="app.nav('library')" id="nav-library" class="w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition"><i data-lucide="library" class="w-5 h-5 mr-3"></i> Tủ Sách Của Tôi</button>
+            <button onclick="app.nav('affiliate')" id="nav-affiliate" class="w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition"><i data-lucide="share-2" class="w-5 h-5 mr-3"></i> Tiếp Thị Liên Kết</button>
+            <button onclick="app.nav('seller')" id="nav-seller" class="w-full flex items-center p-3 rounded-lg text-yellow-400 hover:text-white hover:bg-yellow-500/10 transition mt-4 border border-yellow-500/30 hidden"><i data-lucide="shopping-bag" class="w-5 h-5 mr-3"></i> Quản Lý Ebook</button>
+        </div>
+
+        <div class="p-4 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
+            <span class="text-xs text-gray-500">v1.1 Seller Integrate</span>
+            <button onclick="app.logout()" class="text-gray-500 hover:text-red-400" title="Đăng xuất"><i data-lucide="log-out" class="w-4 h-4"></i></button>
+        </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <main class="flex-1 relative bg-[url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2428&auto=format&fit=crop')] bg-cover bg-center overflow-hidden">
+        <div class="absolute inset-0 bg-[#0f172a]/95 backdrop-blur-sm"></div>
+        <div class="relative z-10 h-full overflow-y-auto custom-scrollbar p-4 md:p-8 mt-16 md:mt-0">
+            
+            <!-- MOBILE HEADER -->
+            <div class="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#0B1120] border-b border-white/5 z-50 flex items-center justify-between px-4">
+                <span class="font-bold text-white">BookMaster</span>
+                <button onclick="app.logout()" class="text-gray-400"><i data-lucide="log-out"></i></button>
+            </div>
+
+            <!-- STORE TAB -->
+            <div id="tab-store" class="max-w-6xl mx-auto fade-in">
+                <header class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">Cửa Hàng Sách</h1>
+                    <p class="text-gray-400">Khám phá tri thức và kiếm tiền từ việc chia sẻ.</p>
+                </header>
+                
+                <!-- Filters -->
+                <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+                    <button class="px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-bold whitespace-nowrap">Tất cả</button>
+                    <button class="px-4 py-2 rounded-full bg-slate-800 text-gray-400 hover:text-white border border-white/10 text-sm whitespace-nowrap">Kinh Doanh</button>
+                    <button class="px-4 py-2 rounded-full bg-slate-800 text-gray-400 hover:text-white border border-white/10 text-sm whitespace-nowrap">Marketing</button>
+                    <button class="px-4 py-2 rounded-full bg-slate-800 text-gray-400 hover:text-white border border-white/10 text-sm whitespace-nowrap">Phát Triển Bản Thân</button>
+                </div>
+
+                <div id="storeGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Javascript will render books here -->
+                </div>
+            </div>
+
+            <!-- LIBRARY TAB -->
+            <div id="tab-library" class="hidden-tab max-w-6xl mx-auto fade-in">
+                <header class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">Tủ Sách Của Tôi</h1>
+                    <p class="text-gray-400">Sách bạn đã mua sở hữu vĩnh viễn.</p>
+                </header>
+                <div id="libraryGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div class="col-span-full text-center py-20 text-gray-500 italic">Bạn chưa mua cuốn sách nào.</div>
+                </div>
+            </div>
+
+            <!-- AFFILIATE TAB -->
+            <div id="tab-affiliate" class="hidden-tab max-w-5xl mx-auto fade-in">
+                <header class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">Affiliate Center</h1>
+                    <p class="text-gray-400">Chia sẻ tri thức, nhận hoa hồng trọn đời.</p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card p-6 rounded-2xl">
+                        <div class="text-gray-400 text-xs font-bold uppercase mb-2">Số dư khả dụng</div>
+                        <div class="text-3xl font-bold text-emerald-400" id="affBalance">0đ</div>
+                        <button class="mt-4 text-xs bg-emerald-600/20 text-emerald-400 px-3 py-1.5 rounded hover:bg-emerald-600/30 transition">Rút tiền</button>
+                    </div>
+                    <div class="stat-card p-6 rounded-2xl">
+                        <div class="text-gray-400 text-xs font-bold uppercase mb-2">Tổng hoa hồng</div>
+                        <div class="text-3xl font-bold text-white" id="affTotal">0đ</div>
+                    </div>
+                    <div class="stat-card p-6 rounded-2xl">
+                        <div class="text-gray-400 text-xs font-bold uppercase mb-2">Số lượt click</div>
+                        <div class="text-3xl font-bold text-blue-400" id="affClicks">0</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 border border-emerald-500/20 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">Link Giới Thiệu Của Bạn</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="affLinkInput" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-gray-300 font-mono text-sm" readonly>
+                        <button onclick="app.copyAffLink()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-lg font-bold whitespace-nowrap">Copy Link</button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Gửi link này cho bạn bè. Khi họ mua sách, bạn nhận được <span class="text-emerald-400 font-bold">20% - 40%</span> hoa hồng.</p>
+                </div>
+
+                <h3 class="text-lg font-bold text-white mb-4">Lịch sử giới thiệu</h3>
+                <div class="glass-panel overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-white/5 text-gray-400 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">Sách</th>
+                                <th class="p-4">Giá trị</th>
+                                <th class="p-4">Hoa hồng</th>
+                                <th class="p-4">Thời gian</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm text-gray-300 divide-y divide-white/5" id="affHistoryTable">
+                            <tr><td colspan="4" class="p-4 text-center text-gray-500">Chưa có giao dịch nào</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SELLER ADMIN TAB (NEW) -->
+            <div id="tab-seller" class="hidden-tab max-w-4xl mx-auto fade-in">
+                <header class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">Quản Lý Ebook</h1>
+                    <p class="text-gray-400">Đăng tải, cập nhật và quản lý kho Ebook của bạn.</p>
+                </header>
+
+                <!-- Ebook List -->
+                <div class="glass-panel p-6 mb-8">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="book-open-check" class="w-5 h-5 text-yellow-400"></i> Danh Sách Ebook Đã Đăng</h3>
+                    <table class="w-full text-left">
+                        <thead class="bg-white/5 text-gray-400 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">Tên Ebook</th>
+                                <th class="p-4">Giá</th>
+                                <th class="p-4">HH Affiliate</th>
+                                <th class="p-4">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm text-gray-300 divide-y divide-white/5" id="sellerEbookTable">
+                            <tr><td colspan="4" class="p-4 text-center text-gray-500">Đang tải...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Add/Edit Form -->
+                <div class="glass-panel p-6 border border-yellow-500/30">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="plus-circle" class="w-5 h-5 text-yellow-400"></i> Đăng Ebook Mới / Cập Nhật</h3>
+                    <form id="ebookForm" class="space-y-4">
+                        <input type="hidden" id="ebookId">
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Tiêu đề Ebook</label>
+                            <input type="text" id="ebookTitle" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" placeholder="Tên sách phải GIẢI QUYẾT VẤN ĐỀ">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Giá (VNĐ)</label>
+                                <input type="number" id="ebookPrice" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">HH Affiliate (%)</label>
+                                <input type="number" id="ebookCommission" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" min="0" max="100">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Link Ảnh Cover (URL)</label>
+                                <input type="url" id="ebookCover" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Mô tả ngắn (SEO & Card)</label>
+                            <textarea id="ebookDesc" rows="2" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" placeholder="Tóm tắt 1-2 dòng nổi bật nhất"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Nội dung Trang Giới thiệu (Markdown)</label>
+                            <textarea id="ebookLandingContent" rows="10" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 font-mono text-xs" placeholder="Đây là nội dung bán hàng chi tiết, sử dụng cấu trúc Tỷ lệ chuyển đổi cao (tham khảo bên dưới)."></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Nội dung Ebook (Chỉ hiển thị sau khi mua - Markdown)</label>
+                            <textarea id="ebookContent" rows="5" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 font-mono text-xs" placeholder="Nội dung chính thức của sách."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-3 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded-xl transition shadow-lg flex items-center justify-center gap-3">
+                            <i data-lucide="save" class="w-5 h-5"></i> <span id="ebookFormBtnText">Đăng Tải Ebook</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-8 right-8 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-[200]">
+        <i data-lucide="check-circle" class="w-5 h-5"></i><span id="toastMsg">Thành công!</span>
+    </div>
+
+    <!-- APP LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, onSnapshot, collection, query, orderBy, getDocs, where, increment, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // CONFIG (Using the one provided in prompt)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4R_T5breMEjyfHwXLe_u_Bh99tP376_U",
+            authDomain: "contentcreater-c31cc.firebaseapp.com",
+            projectId: "contentcreater-c31cc",
+            storageBucket: "contentcreater-c31cc.firebasestorage.app",
+            messagingSenderId: "70966104656",
+            appId: "1:70966104656:web:a957d76085a73933a3b755",
+            measurementId: "G-WJD78JDKD0"
+        };
+        
+        // SEPAY CONFIG
+        const SEPAY_ACCOUNT_NO = "0899320202"; // MB Bank usually based on prev prompt
+        const SEPAY_BANK_CODE = "MB"; 
+        
+        let auth, db, currentUser, userDocData;
+        
+        // GLOBAL BOOK DATA STORED IN FIREBASE
+        let ALL_BOOKS = []; 
+
+        let activePayment = null;
+
+        // --- APP INITIALIZATION ---
+        try {
+            const firebaseApp = initializeApp(firebaseConfig);
+            auth = getAuth(firebaseApp);
+            db = getFirestore(firebaseApp);
+        } catch (e) { console.error("Firebase init failed", e); }
+
+        window.app = {
+            // --- UI NAVIGATION ---
+            nav: (id) => {
+                document.querySelectorAll('aside button').forEach(b => b.classList.remove('nav-active'));
+                document.getElementById('nav-'+id).classList.add('nav-active');
+                document.querySelectorAll('main > div > div').forEach(d => d.classList.add('hidden-tab'));
+                document.getElementById('tab-'+id).classList.remove('hidden-tab');
+                if(id === 'seller') app.loadSellerEbooks();
+            },
+
+            // --- AUTH LOGIC ---
+            toggleAuthMode: () => {
+                const btn = document.getElementById('authActionBtn'); 
+                const toggle = document.getElementById('authToggleBtn');
+                if (btn.innerText === "Đăng Ký") {
+                    btn.innerText = "Đăng Nhập"; toggle.innerText = "Đăng ký ngay"; 
+                    document.getElementById('authToggleText').innerText = "Chưa có tài khoản?";
+                } else {
+                    btn.innerText = "Đăng Ký"; toggle.innerText = "Đăng nhập ngay";
+                    document.getElementById('authToggleText').innerText = "Đã có tài khoản?";
+                }
+            },
+            handleAuth: async () => {
+                const email = document.getElementById('emailInput').value;
+                const password = document.getElementById('passwordInput').value;
+                const isReg = document.getElementById('authActionBtn').innerText === "Đăng Ký";
+                try {
+                    if (isReg) {
+                        const cred = await createUserWithEmailAndPassword(auth, email, password);
+                        const affCode = cred.user.uid.substring(0, 8).toUpperCase();
+                        await setDoc(doc(db, 'users', cred.user.uid), {
+                            email, 
+                            affCode,
+                            balance: 0,
+                            purchasedBooks: [],
+                            isSeller: false, // NEW FIELD
+                            createdAt: new Date().toISOString()
+                        });
+                    } else {
+                        await signInWithEmailAndPassword(auth, email, password);
+                    }
+                } catch (e) {
+                    document.getElementById('authError').innerText = e.message;
+                    document.getElementById('authError').classList.remove('hidden');
+                }
+            },
+            logout: () => signOut(auth),
+
+            // --- GLOBAL EBOOK LISTENER ---
+            initBookListener: () => {
+                const booksCol = collection(db, 'ebooks');
+                onSnapshot(booksCol, (snapshot) => {
+                    ALL_BOOKS = [];
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        data.id = doc.id;
+                        ALL_BOOKS.push(data);
+                    });
+                    // Re-render components dependent on ALL_BOOKS
+                    app.renderStore();
+                    if(userDocData?.isSeller) app.loadSellerEbooks();
+                });
+            },
+
+            // --- AFFILIATE SYSTEM ---
+            checkAffiliateCookie: () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const ref = urlParams.get('ref');
+                if (ref) {
+                    localStorage.setItem('bookmaster_ref', ref);
+                    console.log("Affiliate Referrer Saved:", ref);
+                }
+            },
+            renderAffiliateDashboard: () => {
+                if(!userDocData) return;
+                document.getElementById('affBalance').innerText = (userDocData.balance || 0).toLocaleString('vi-VN') + 'đ';
+                document.getElementById('affTotal').innerText = (userDocData.totalCommission || 0).toLocaleString('vi-VN') + 'đ';
+                document.getElementById('affClicks').innerText = (userDocData.clicks || 0);
+                
+                const baseUrl = window.location.origin + window.location.pathname;
+                const link = `${baseUrl}?ref=${userDocData.affCode}`;
+                document.getElementById('affLinkInput').value = link;
+                
+                app.loadAffiliateHistory();
+            },
+            copyAffLink: () => {
+                const input = document.getElementById('affLinkInput');
+                input.select();
+                document.execCommand('copy');
+                app.toast("Đã sao chép link!");
+            },
+            loadAffiliateHistory: async () => {
+                const tbody = document.getElementById('affHistoryTable');
+                if(!userDocData.commissions || userDocData.commissions.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500">Chưa có giao dịch nào</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = '';
+                userDocData.commissions.forEach(c => {
+                    tbody.innerHTML += `
+                        <tr class="border-b border-white/5 hover:bg-white/5">
+                            <td class="p-4 font-medium text-white">${c.bookTitle}</td>
+                            <td class="p-4">${c.orderValue.toLocaleString()}đ</td>
+                            <td class="p-4 text-emerald-400 font-bold">+${c.amount.toLocaleString()}đ</td>
+                            <td class="p-4 text-gray-500 text-xs">${new Date(c.date).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                });
+            },
+
+            // --- STORE LOGIC ---
+            renderStore: () => {
+                const grid = document.getElementById('storeGrid');
+                grid.innerHTML = '';
+
+                if (ALL_BOOKS.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500 italic">Hiện chưa có Ebook nào được đăng tải.</div>';
+                    return;
+                }
+
+                ALL_BOOKS.forEach(book => {
+                    const isOwned = userDocData?.purchasedBooks?.includes(book.id);
+                    const btnHtml = isOwned 
+                        ? `<button onclick="app.readBook('${book.id}', true)" class="w-full py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold flex items-center justify-center gap-2"><i data-lucide="book-open" class="w-4 h-4"></i> Đọc ngay</button>`
+                        : `<button onclick="app.viewLandingPage('${book.id}')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"><i data-lucide="shopping-cart" class="w-4 h-4"></i> Xem & Mua</button>`;
+                    
+                    const coverUrl = book.cover || 'https://placehold.co/800x1200/10b981/ffffff?text=Ebook+Cover';
+
+                    grid.innerHTML += `
+                        <div class="glass-panel book-card p-4 flex flex-col h-full bg-slate-800/50">
+                            <div class="book-cover rounded-lg mb-4 shadow-xl relative group cursor-pointer" style="background-image: url('${coverUrl}')" onclick="app.viewLandingPage('${book.id}')">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                    <span class="text-white border border-white rounded px-3 py-1 text-xs uppercase tracking-wider">Xem trang giới thiệu</span>
+                                </div>
+                                <div class="absolute top-2 right-2 price-tag text-xs px-2 py-1 rounded">${book.price.toLocaleString()}đ</div>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-1 line-clamp-1">${book.title}</h3>
+                            <p class="text-xs text-gray-400 mb-3">${book.author}</p>
+                            <p class="text-sm text-gray-300 line-clamp-2 mb-4 flex-1">${book.desc}</p>
+                            
+                            <div class="mt-auto pt-4 border-t border-white/5 flex gap-2 items-center">
+                                ${btnHtml}
+                                ${book.commission ? `<div class="text-[10px] text-emerald-400 font-mono bg-emerald-900/30 px-2 py-1 rounded border border-emerald-500/20" title="Hoa hồng tiếp thị">HH: ${book.commission}%</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                lucide.createIcons();
+            },
+
+            // --- LIBRARY LOGIC ---
+            renderLibrary: () => {
+                const grid = document.getElementById('libraryGrid');
+                if (!userDocData || !userDocData.purchasedBooks || userDocData.purchasedBooks.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500 italic">Bạn chưa sở hữu cuốn sách nào.</div>';
+                    return;
+                }
+                grid.innerHTML = '';
+                const myBooks = ALL_BOOKS.filter(b => userDocData.purchasedBooks.includes(b.id));
+                myBooks.forEach(book => {
+                    const coverUrl = book.cover || 'https://placehold.co/800x1200/10b981/ffffff?text=Ebook+Cover';
+                    grid.innerHTML += `
+                         <div class="glass-panel p-4 flex gap-4 items-center group cursor-pointer hover:bg-white/5 transition" onclick="app.readBook('${book.id}', true)">
+                            <div class="w-16 h-24 rounded bg-cover shadow-lg" style="background-image: url('${coverUrl}')"></div>
+                            <div>
+                                <h4 class="font-bold text-white group-hover:text-emerald-400 transition">${book.title}</h4>
+                                <p class="text-xs text-gray-400 mb-2">${book.author}</p>
+                                <span class="text-[10px] bg-slate-700 text-white px-2 py-0.5 rounded">Đã sở hữu</span>
+                            </div>
+                         </div>
+                    `;
+                });
+            },
+            
+            // View Product Landing Page (Not owned)
+            viewLandingPage: (bookId) => {
+                const book = ALL_BOOKS.find(b => b.id === bookId);
+                if (!book) return;
+
+                document.getElementById('readerTitle').innerText = book.title;
+                document.getElementById('readerContent').innerHTML = marked.parse(book.landingContent || app.generateDefaultLanding(book));
+
+                // Actions: Buy Button
+                const buyButton = `<button onclick="app.initPayment('${book.id}')" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-4 py-2 rounded-lg transition shadow-lg flex items-center gap-2"><i data-lucide="bolt" class="w-5 h-5"></i> MUA NGAY ${book.price.toLocaleString()}đ</button>`;
+                document.getElementById('readerActions').innerHTML = buyButton + `<button onclick="document.getElementById('readerModal').classList.add('hidden')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-white"><i data-lucide="x"></i> Đóng</button>`;
+
+                document.getElementById('readerModal').classList.remove('hidden');
+                lucide.createIcons();
+            },
+
+            // Read Full Ebook Content (Owned)
+            readBook: (bookId, isOwned) => {
+                if (!isOwned) return app.toast("Bạn chưa sở hữu Ebook này!", "error");
+                const book = ALL_BOOKS.find(b => b.id === bookId);
+                
+                document.getElementById('readerTitle').innerText = book.title;
+                document.getElementById('readerContent').innerHTML = marked.parse(book.content || "Nội dung Ebook đang được cập nhật.");
+
+                // Actions: Close Button only
+                document.getElementById('readerActions').innerHTML = `<button onclick="document.getElementById('readerModal').classList.add('hidden')" class="bg-white/10 hover:bg-white/20 p-2 rounded text-white"><i data-lucide="x"></i> Đóng</button>`;
+                
+                document.getElementById('readerModal').classList.remove('hidden');
+                lucide.createIcons();
+            },
+
+            // --- SEPAY PAYMENT LOGIC (No Change) ---
+            initPayment: (bookId) => {
+                if(!currentUser) return app.toast("Vui lòng đăng nhập để mua!", "error");
+                
+                const book = ALL_BOOKS.find(b => b.id === bookId);
+                if (!book) return app.toast("Lỗi: Không tìm thấy sách.", "error");
+
+                const orderId = `DH${Math.floor(Math.random() * 1000000)}`;
+                const transferContent = `PAY ${bookId.toUpperCase()} ${currentUser.uid.substring(0,6).toUpperCase()}`;
+                
+                activePayment = { book, orderId, content: transferContent };
+
+                document.getElementById('payOrderId').innerText = '#' + orderId;
+                document.getElementById('payBookTitle').innerText = book.title;
+                document.getElementById('payBookAuthor').innerText = book.author; // Assuming author is in book data
+                document.getElementById('payBookPrice').innerText = book.price.toLocaleString() + 'đ';
+                document.getElementById('payBookCover').src = book.cover;
+                document.getElementById('payBgImage').style.backgroundImage = `url('${book.cover}')`;
+                document.getElementById('payContent').innerText = transferContent;
+                
+                const qrUrl = `https://qr.sepay.vn/img?acc=${SEPAY_ACCOUNT_NO}&bank=${SEPAY_BANK_CODE}&amount=${book.price}&des=${encodeURIComponent(transferContent)}`;
+                document.getElementById('payQrImage').src = qrUrl;
+
+                document.getElementById('paymentModal').classList.remove('hidden');
+            },
+            
+            simulatePaymentSuccess: async () => {
+                if(!activePayment) return;
+                
+                const currentBooks = userDocData.purchasedBooks || [];
+                if(!currentBooks.includes(activePayment.book.id)) {
+                    await updateDoc(doc(db, 'users', currentUser.uid), {
+                        purchasedBooks: [...currentBooks, activePayment.book.id]
+                    });
+                }
+
+                const refCode = localStorage.getItem('bookmaster_ref');
+                if (refCode && refCode !== userDocData.affCode) {
+                    const q = query(collection(db, 'users'), where('affCode', '==', refCode));
+                    const querySnapshot = await getDocs(q);
+                    if (!querySnapshot.empty) {
+                        const referrerDoc = querySnapshot.docs[0];
+                        const commissionAmount = activePayment.book.price * (activePayment.book.commission / 100);
+                        
+                        await updateDoc(doc(db, 'users', referrerDoc.id), {
+                            balance: increment(commissionAmount),
+                            totalCommission: increment(commissionAmount),
+                            commissions: [
+                                ...(referrerDoc.data().commissions || []),
+                                {
+                                    bookTitle: activePayment.book.title,
+                                    amount: commissionAmount,
+                                    orderValue: activePayment.book.price,
+                                    date: new Date().toISOString()
+                                }
+                            ]
+                        });
+                        console.log(`Affiliate: Credit ${commissionAmount} to ${refCode}`);
+                    }
+                }
+
+                app.toast("Thanh toán thành công!");
+                document.getElementById('paymentModal').classList.add('hidden');
+                activePayment = null;
+                app.renderStore();
+            },
+
+            // --- SELLER LOGIC (NEW) ---
+            loadSellerEbooks: () => {
+                if (!currentUser || !userDocData?.isSeller) return;
+                
+                const tbody = document.getElementById('sellerEbookTable');
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500">Đang tải...</td></tr>';
+
+                // Only show books created by the current user
+                const userBooks = ALL_BOOKS.filter(b => b.authorId === currentUser.uid);
+
+                if (userBooks.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500">Bạn chưa đăng Ebook nào.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                userBooks.forEach(book => {
+                    tbody.innerHTML += `
+                        <tr class="border-b border-white/5 hover:bg-white/5">
+                            <td class="p-4 font-medium text-white">${book.title}</td>
+                            <td class="p-4">${book.price.toLocaleString()}đ</td>
+                            <td class="p-4">${book.commission}%</td>
+                            <td class="p-4 space-x-2">
+                                <button onclick="app.editEbook('${book.id}')" class="text-blue-400 hover:text-blue-300 text-xs">Sửa</button>
+                                <button onclick="app.deleteEbook('${book.id}')" class="text-red-400 hover:text-red-300 text-xs">Xóa</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            },
+
+            submitEbookForm: async (e) => {
+                e.preventDefault();
+                if (!currentUser) return app.toast("Vui lòng đăng nhập.", "error");
+
+                const id = document.getElementById('ebookId').value;
+                const title = document.getElementById('ebookTitle').value.trim();
+                const price = parseInt(document.getElementById('ebookPrice').value);
+                const commission = parseInt(document.getElementById('ebookCommission').value);
+                const cover = document.getElementById('ebookCover').value.trim();
+                const desc = document.getElementById('ebookDesc').value.trim();
+                const landingContent = document.getElementById('ebookLandingContent').value;
+                const content = document.getElementById('ebookContent').value;
+
+                if (!title || !price || !landingContent || !content) return app.toast("Vui lòng điền đủ Tiêu đề, Giá, Landing Content và Ebook Content.", "error");
+
+                const ebookData = {
+                    title,
+                    price,
+                    commission: isNaN(commission) ? 0 : commission,
+                    cover,
+                    desc,
+                    landingContent,
+                    content,
+                    author: userDocData.email.split('@')[0],
+                    authorId: currentUser.uid,
+                    updatedAt: new Date().toISOString()
+                };
+
+                try {
+                    if (id) {
+                        await updateDoc(doc(db, 'ebooks', id), ebookData);
+                        app.toast("Cập nhật Ebook thành công!");
+                    } else {
+                        await addDoc(collection(db, 'ebooks'), { ...ebookData, createdAt: new Date().toISOString() });
+                        app.toast("Đăng tải Ebook mới thành công!");
+                    }
+                    app.resetEbookForm();
+                } catch(err) {
+                    app.toast("Lỗi Firebase: " + err.message, "error");
+                    console.error("Ebook submission error:", err);
+                }
+            },
+            
+            editEbook: (id) => {
+                const book = ALL_BOOKS.find(b => b.id === id);
+                if (!book) return app.toast("Không tìm thấy sách.", "error");
+
+                document.getElementById('ebookId').value = book.id;
+                document.getElementById('ebookTitle').value = book.title;
+                document.getElementById('ebookPrice').value = book.price;
+                document.getElementById('ebookCommission').value = book.commission;
+                document.getElementById('ebookCover').value = book.cover;
+                document.getElementById('ebookDesc').value = book.desc;
+                document.getElementById('ebookLandingContent').value = book.landingContent;
+                document.getElementById('ebookContent').value = book.content;
+                document.getElementById('ebookFormBtnText').innerText = 'Cập Nhật Ebook';
+            },
+
+            deleteEbook: async (id) => {
+                if (confirm("Bạn có chắc chắn muốn xóa Ebook này?")) {
+                    try {
+                        await deleteDoc(doc(db, 'ebooks', id));
+                        app.toast("Ebook đã được xóa thành công.");
+                    } catch (e) {
+                        app.toast("Lỗi xóa Ebook: " + e.message, "error");
+                    }
+                }
+            },
+
+            resetEbookForm: () => {
+                document.getElementById('ebookForm').reset();
+                document.getElementById('ebookId').value = '';
+                document.getElementById('ebookFormBtnText').innerText = 'Đăng Tải Ebook';
+            },
+
+            // --- CONVERSION OPTIMIZATION (NEW) ---
+            generateDefaultLanding: (book) => {
+                // Tối ưu hóa cấu trúc Landing Page (Sales Page) cho Ebook
+                return `
+# Lời Hứa Lớn (Big Promise): ${book.title} - Chìa khóa...
+
+## 🔑 Vấn Đề Bạn Đang Gặp Phải (Pain Points)
+
+* Bạn đang lãng phí thời gian tự mò mẫm?
+* Bạn đã thử nhiều cách nhưng không hiệu quả?
+* Bạn cảm thấy bế tắc trong việc đạt được [Mục tiêu liên quan]?
+
+## ✨ Giải Pháp Của Chúng Tôi
+
+Ebook "${book.title}" là lộ trình 3 bước (hoặc X chương) đã được kiểm chứng để giúp bạn [Lợi ích lớn nhất].
+
+> 🏆 **Bằng chứng xã hội (Social Proof):** Hơn 500+ người đã áp dụng và thành công! Đây là những đánh giá thực tế từ cộng đồng.
+
+## 🎯 Bạn Sẽ Học Được Gì (Core Value Proposition)
+
+1.  **Chương 1: Công thức bí mật** - Từ A đến Z để đạt được thành quả.
+2.  **Chương 2: Sai lầm chết người** - Tránh ngay 5 lỗi khiến bạn mất tiền/thời gian.
+3.  **Chương 3: Hành động ngay** - Kế hoạch chi tiết để triển khai trong 24h.
+
+## 🎁 Ưu Đãi Đặc Biệt (Scarcity & Urgency)
+
+Mua ngay hôm nay, bạn sẽ được giảm giá **[Giảm giá cụ thể]** và nhận thêm:
+
+* **Tặng kèm:** Checklist hành động trị giá 100.000đ.
+* **Giá chỉ còn:** ${book.price.toLocaleString()}đ (Giá gốc: ${Math.round(book.price * 1.5).toLocaleString()}đ)
+
+**[CALL TO ACTION CUỐI TRANG - BUY NOW]**
+                `;
+            },
+            // --- UTILS (No Change) ---
+            copyToClipboard: (text) => {
+                navigator.clipboard.writeText(text);
+                app.toast("Đã copy nội dung!");
+            },
+            toast: (msg, type) => {
+                const t = document.getElementById('toast');
+                t.innerHTML = `<i data-lucide="${type==='error'?'alert-circle':'check-circle'}" class="w-5 h-5"></i> ${msg}`;
+                t.className = `fixed bottom-8 right-8 px-6 py-3 rounded-lg shadow-xl z-[200] transition-all ${type==='error'?'bg-red-600':'bg-emerald-600'} text-white translate-y-0 opacity-100 flex gap-3 items-center`;
+                setTimeout(()=> t.classList.add('translate-y-20', 'opacity-0'), 3000);
+            }
+        };
+        
+        // Listeners
+        document.getElementById('ebookForm').addEventListener('submit', app.submitEbookForm);
+        document.getElementById('authActionBtn').addEventListener('click', app.handleAuth);
+        document.getElementById('authToggleBtn').addEventListener('click', app.toggleAuthMode);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('authModal').classList.add('hidden');
+                
+                // Start listening to ALL books globally
+                app.initBookListener(); 
+
+                // Load User Data Realtime
+                onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        userDocData = docSnap.data();
+                        document.getElementById('sidebarName').innerText = user.email.split('@')[0];
+                        document.getElementById('sidebarAvatar').innerText = user.email[0].toUpperCase();
+                        document.getElementById('sidebarBalance').innerText = (userDocData.balance || 0).toLocaleString() + 'đ';
+                        
+                        // Show/Hide Seller Tab
+                        if (userDocData.isSeller) {
+                            document.getElementById('nav-seller').classList.remove('hidden');
+                        } else {
+                            document.getElementById('nav-seller').classList.add('hidden');
+                        }
+
+                        app.renderLibrary();
+                        app.renderAffiliateDashboard();
+                    }
+                });
+                
+                app.nav('store');
+            } else {
+                document.getElementById('authModal').classList.remove('hidden');
+                currentUser = null;
+            }
+        });
+
+        // Initialize Icons & Affiliate Check
+        lucide.createIcons();
+        app.checkAffiliateCookie();
+
+    </script>
+</body>
+</html>

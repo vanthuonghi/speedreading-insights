@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Marketing AI Booster</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Thiết lập font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Nền xám xanh nhạt hiện đại hơn */
+        }
+        /* CSS bổ sung để hiển thị bảng đẹp hơn trong phần kết quả */
+        #result table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        #result th {
+            background: linear-gradient(to right, #e0e7ff, #ede9fe); /* Gradient nhẹ cho header bảng */
+            color: #312e81; /* indigo-900 */
+            font-weight: bold;
+            padding: 14px;
+            text-align: left;
+            border-bottom: 2px solid #c7d2fe;
+        }
+        #result td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+            color: #374151;
+        }
+        #result tr:last-child td {
+            border-bottom: none;
+        }
+        #result tr:hover {
+            background-color: #f8fafc;
+        }
+        #result strong {
+            color: #1e1b4b; /* indigo-950 */
+            font-weight: 700;
+        }
+        #result h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e0e7ff;
+            display: inline-block;
+        }
+        #result h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4338ca;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        #result ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        #result li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Math Formula Style */
+        .math-formula {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #4f46e5;
+            margin: 10px 0;
+            display: block;
+            font-weight: bold;
+        }
+
+        /* Scrollbar đẹp hơn */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c7d2fe;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a5b4fc;
+        }
+
+        /* Modal Styles */
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        body.modal-active {
+            overflow-x: hidden;
+            overflow-y: visible !important;
+        }
+
+        /* Hiệu ứng nút bấm */
+        .btn-gradient-primary {
+            background-image: linear-gradient(to right, #4f46e5, #7c3aed); /* Indigo to Violet */
+        }
+        .btn-gradient-youtube {
+            background-image: linear-gradient(to right, #dc2626, #ea580c); /* Red to Orange */
+        }
+        .btn-gradient-evergreen {
+            background-image: linear-gradient(to right, #059669, #0d9488); /* Emerald to Teal */
+        }
+        .btn-gradient-sentiment {
+            background-image: linear-gradient(to right, #9333ea, #db2777); /* Purple to Pink */
+        }
+        .btn-gradient-course {
+            background-image: linear-gradient(to right, #0ea5e9, #2563eb); /* Sky to Blue */
+        }
+        .btn-gradient-funnel {
+            background-image: linear-gradient(to right, #d97706, #b45309); /* Amber to Orange-Dark */
+        }
+        
+        .hover-lift {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- CSS CHO CHẾ ĐỘ IN (PRINT/PDF) --- */
+        @media print {
+            body > * {
+                display: none !important;
+            }
+            #print-section {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+                background-color: white;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #print-section table {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            #print-section th, #print-section td {
+                border: 1px solid #ccc;
+            }
+            #print-section h3 {
+                 -webkit-text-fill-color: #4f46e5 !important; /* Fallback màu in */
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+    <div id="app-container" class="max-w-7xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-100">
+        
+        <!-- Header Gradient Tech -->
+        <header class="bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-900 text-white p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200">All-in-One Marketing AI Booster</h1>
+                <p class="mt-1 text-indigo-200 text-sm font-medium">Trợ lý AI Marketing Toàn diện: Từ Ý tưởng đến Thực thi.</p>
+            </div>
+            <!-- Nút Hướng dẫn -->
+            <button onclick="toggleModal()" class="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 font-semibold py-2 px-4 rounded-lg shadow transition flex items-center shrink-0 hover-lift">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Quy trình & Case Study
+            </button>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="p-4 sm:p-6 bg-gray-50/50">
+            <!-- Tab Navigation -->
+            <div class="flex border-b border-gray-200 overflow-x-auto pb-1 gap-1" id="tab-nav">
+                <!-- 1. Trend Hunter -->
+                <button onclick="changeTab('trend')" class="tab-btn active shrink-0" data-tab="trend">
+                    1. Trend Hunter
+                </button>
+                <!-- 2. Evergreen Architect -->
+                <button onclick="changeTab('evergreen')" class="tab-btn text-green-700 hover:bg-green-50 shrink-0" data-tab="evergreen">
+                    🌲 2. Evergreen Architect
+                </button>
+                <!-- 3. YouTube Builder -->
+                <button onclick="changeTab('youtube')" class="tab-btn text-red-600 hover:bg-red-50 shrink-0" data-tab="youtube">
+                    ▶️ 3. YouTube Builder
+                </button>
+                <!-- 9. Course Architect -->
+                <button onclick="changeTab('course')" class="tab-btn text-sky-600 hover:bg-sky-50 shrink-0" data-tab="course">
+                    🎓 9. Course Architect
+                </button>
+                <!-- 4. SEO Outline -->
+                <button onclick="changeTab('outline')" class="tab-btn shrink-0" data-tab="outline">
+                    4. SEO Outline
+                </button>
+                <!-- 5. Hook Generator -->
+                <button onclick="changeTab('hook')" class="tab-btn shrink-0" data-tab="hook">
+                    5. Hook Generator
+                </button>
+                <!-- 10. Sales Funnel -->
+                <button onclick="changeTab('funnel')" class="tab-btn text-amber-600 hover:bg-amber-50 shrink-0" data-tab="funnel">
+                    💰 10. Sales Funnel
+                </button>
+                <!-- 6. Email Marketing -->
+                <button onclick="changeTab('email')" class="tab-btn shrink-0" data-tab="email">
+                    6. Email Marketing
+                </button>
+                <!-- 7. Content Adapter -->
+                <button onclick="changeTab('adapter')" class="tab-btn shrink-0" data-tab="adapter">
+                    7. Content Adapter
+                </button>
+                <!-- 8. Comment Responder -->
+                <button onclick="changeTab('comment')" class="tab-btn shrink-0" data-tab="comment">
+                    8. Comment Responder
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="tab-content" class="pt-8">
+                <!-- 1. Trend Hunter -->
+                <div id="trend" class="tab-panel active">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Topic Trend Hunter</h2>
+                    <p class="text-sm text-gray-600 mb-6">Sử dụng Google Search để tìm kiếm thông tin mới nhất và đề xuất góc độ nội dung.</p>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Mô tả Sản phẩm/Thương hiệu:</label>
+                        <textarea id="trend-topic" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4 transition" placeholder="Ví dụ: Dòng cà phê hòa tan giảm cân..."></textarea>
+                        
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nền tảng mục tiêu:</label>
+                        <select id="trend-platform" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6 bg-white">
+                            <option value="Facebook">Facebook</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="YouTube">YouTube (Video dài/Shorts)</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                        </select>
+
+                        <button onclick="generateTrendIdeas()" class="w-full btn-gradient-primary text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift flex justify-center items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            Tìm kiếm & Đề xuất Ý tưởng
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Evergreen Architect -->
+                <div id="evergreen" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">🌲 Evergreen Architect</h2>
+                    <p class="text-sm text-gray-600 mb-6">Tạo dựng nội dung có giá trị bền vững, tăng trưởng thụ động.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-green-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+                        
+                        <label class="block text-sm font-bold text-gray-700 mb-2 relative z-10">Chủ đề Cốt lõi (Core Topic):</label>
+                        <input type="text" id="evergreen-topic" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 relative z-10" placeholder="Ví dụ: Quản lý tài chính cá nhân...">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 relative z-10">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Khán giả & Nỗi đau:</label>
+                                <input type="text" id="evergreen-audience" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="VD: Người mới đi làm...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Trình độ / Độ sâu:</label>
+                                <select id="evergreen-level" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white">
+                                    <option value="Nhập môn (Beginner Guide)">Nhập môn (101 Guide)</option>
+                                    <option value="Chuyên sâu (Deep Dive)">Chuyên sâu (Case Study)</option>
+                                    <option value="Giải quyết vấn đề cụ thể (How-to)">Giải quyết vấn đề (Tutorial)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="generateEvergreenPlan()" class="w-full btn-gradient-evergreen text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift flex justify-center items-center relative z-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            Thiết kế Lộ trình Evergreen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. YouTube Builder -->
+                <div id="youtube" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-orange-600">YouTube Content Builder</h2>
+                    <p class="text-sm text-gray-600 mb-6">Quy trình 5 bước xây dựng video hoàn chỉnh.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-red-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+
+                        <label class="block text-sm font-bold text-gray-700 mb-2 relative z-10">Chủ đề Video / Ngách:</label>
+                        <input type="text" id="youtube-topic" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-red-500 focus:border-red-500 relative z-10" placeholder="Ví dụ: Review iPhone 15 Pro Max...">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 relative z-10">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Khán giả mục tiêu:</label>
+                                <input type="text" id="youtube-audience" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="VD: Gen Z...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phong cách / Tone:</label>
+                                <select id="youtube-style" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white">
+                                    <option value="Hài hước & Giải trí">Hài hước & Giải trí</option>
+                                    <option value="Chuyên gia & Giáo dục">Chuyên gia & Giáo dục</option>
+                                    <option value="Vlog đời thường">Vlog đời thường</option>
+                                    <option value="Review công tâm">Review công tâm</option>
+                                    <option value="Kể chuyện (Storytelling)">Kể chuyện (Cảm xúc)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="generateYouTubePlan()" class="w-full btn-gradient-youtube text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift flex justify-center items-center relative z-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Xây dựng Kế hoạch Video (Full 5 Bước)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 9. Course Architect -->
+                <div id="course" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-blue-600">🎓 Course Architect: Thiết kế Khóa học Chuẩn Khoa học</h2>
+                    <p class="text-sm text-gray-600 mb-6">Ứng dụng mô hình <strong>Gagne’s 9 Events</strong>, <strong>Thang đo Bloom</strong> và quy tắc <strong>10-20-70</strong> để tạo khóa học thực chiến.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-sky-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+                        
+                        <label class="block text-sm font-bold text-gray-700 mb-2 relative z-10">Chủ đề Khóa học (Topic):</label>
+                        <input type="text" id="course-topic" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 relative z-10" placeholder="Ví dụ: Kỹ năng thuyết trình, Lập trình Python...">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 relative z-10">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Đối tượng học viên:</label>
+                                <input type="text" id="course-audience" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500" placeholder="VD: Nhân viên văn phòng rụt rè...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kết quả mong muốn (Transformation):</label>
+                                <input type="text" id="course-goal" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500" placeholder="VD: Tự tin nói chuyện lưu loát sau 7 ngày...">
+                            </div>
+                        </div>
+
+                        <button onclick="generateCourseOutline()" class="w-full btn-gradient-course text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift flex justify-center items-center relative z-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Thiết kế Outline (Gagne & 10-20-70)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. SEO Outline Builder -->
+                <div id="outline" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">SEO Outline Builder</h2>
+                    <p class="text-sm text-gray-600 mb-6">Phân tích đối thủ và tạo dàn bài chi tiết.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Từ khóa mục tiêu:</label>
+                        <input type="text" id="outline-keyword" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4" placeholder="Ví dụ: cách học tiếng Anh...">
+
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Yêu cầu bổ sung:</label>
+                        <textarea id="outline-competitors" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6" placeholder="Ví dụ: Tập trung vào kinh nghiệm tự học..."></textarea>
+                        
+                        <button onclick="generateSEOOutline()" class="w-full btn-gradient-primary text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift">
+                            Tạo Dàn bài & Content Brief
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. Hook Generator -->
+                <div id="hook" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Hook Generator</h2>
+                    <p class="text-sm text-gray-600 mb-6">Tạo biến thể tiêu đề thu hút tối ưu theo nền tảng.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Chủ đề/Nội dung chính:</label>
+                        <textarea id="hook-topic" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4" placeholder="Ví dụ: 3 cách tiết kiệm tiền..."></textarea>
+
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nền tảng mục tiêu:</label>
+                        <select id="hook-platform" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6 bg-white">
+                            <option value="YouTube Shorts/TikTok">Video Ngắn (Shorts/TikTok)</option>
+                            <option value="Facebook Post">Bài viết Facebook</option>
+                            <option value="Email Subject Line">Tiêu đề Email</option>
+                            <option value="Ad Headline">Tiêu đề Quảng cáo</option>
+                        </select>
+
+                        <button onclick="generateHooks()" class="w-full btn-gradient-primary text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift">
+                            Tạo 10 Biến thể Hook
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 10. Sales Funnel (Scientific Upgrade) -->
+                <div id="funnel" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-orange-600">💰 Scientific Sales Funnel Architect</h2>
+                    <p class="text-sm text-gray-600 mb-6">Xây dựng phễu bán hàng chuẩn khoa học dựa trên <strong>Thang Giá Trị (Russell Brunson)</strong> & <strong>Tâm lý học hành vi (Robert Cialdini)</strong>.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+                        
+                        <label class="block text-sm font-bold text-gray-700 mb-2 relative z-10">Sản phẩm/Lĩnh vực:</label>
+                        <input type="text" id="funnel-product" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 relative z-10" placeholder="Ví dụ: Khóa học Yoga giảm mỡ bụng...">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 relative z-10">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nỗi đau hiện tại (Pain Point):</label>
+                                <input type="text" id="funnel-pain" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500" placeholder="VD: Tập mãi không giảm, đau lưng...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kết quả mơ ước (Dream Outcome):</label>
+                                <input type="text" id="funnel-dream" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500" placeholder="VD: Vòng eo 60cm trong 30 ngày...">
+                            </div>
+                        </div>
+
+                        <button onclick="generateScientificFunnel()" class="w-full btn-gradient-funnel text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift flex justify-center items-center relative z-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Thiết kế Phễu (Value Ladder & Psychology)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 6. Email Marketing -->
+                <div id="email" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Email Marketing Automation</h2>
+                    <p class="text-sm text-gray-600 mb-6">Cá nhân hóa chuỗi email và phân tích phản hồi khách hàng.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- 6a. Sequence Generator -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-lg">
+                                <span class="text-2xl mr-2">✉️</span> Tạo Chuỗi Email
+                            </h3>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Chân dung (Persona):</label>
+                            <input type="text" id="email-persona" class="w-full p-2 border border-gray-300 rounded mb-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="VD: Chủ doanh nghiệp...">
+                            
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hành trình khách hàng:</label>
+                            <select id="email-stage" class="w-full p-2 border border-gray-300 rounded mb-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                <option value="Mới đăng ký nhận tin">Mới đăng ký</option>
+                                <option value="Đã bỏ quên giỏ hàng">Bỏ quên giỏ hàng</option>
+                                <option value="Sau khi mua hàng">Sau khi mua</option>
+                                <option value="Khách hàng lạnh">Khách hàng lạnh</option>
+                            </select>
+
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Sản phẩm/Mục tiêu:</label>
+                            <input type="text" id="email-product" class="w-full p-2 border border-gray-300 rounded mb-6 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="VD: Khóa học Marketing...">
+                            
+                            <button onclick="generateEmailSequence()" class="w-full btn-gradient-primary text-white font-bold py-2 px-4 rounded-lg shadow hover-lift text-sm">
+                                Tạo Chuỗi Email 3-5 Bước
+                            </button>
+                        </div>
+
+                        <!-- 6b. Sentiment Analyzer -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-lg">
+                                <span class="text-2xl mr-2">❤️</span> Phân tích Cảm xúc
+                            </h3>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nội dung Email khách hàng:</label>
+                            <textarea id="email-input-text" rows="6" class="w-full p-2 border border-gray-300 rounded mb-6 text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="Dán nội dung email phản hồi..."></textarea>
+                            
+                            <button onclick="analyzeEmailSentiment()" class="w-full btn-gradient-sentiment text-white font-bold py-2 px-4 rounded-lg shadow hover-lift text-sm">
+                                Phân tích & Gợi ý trả lời
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 7. Content Adapter -->
+                <div id="adapter" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Content Adapter</h2>
+                    <p class="text-sm text-gray-600 mb-6">Điều chỉnh và tái sử dụng nội dung đa nền tảng.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nội dung cần xử lý:</label>
+                        <textarea id="adapter-text" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4" placeholder="Dán đoạn văn bản vào đây."></textarea>
+
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Hành động:</label>
+                        <select id="adapter-action" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6 bg-white">
+                            <option value="Viết lại theo tông giọng thân thiện, hài hước.">Viết lại: Thân thiện, hài hước</option>
+                            <option value="Viết lại theo tông giọng chuyên nghiệp.">Viết lại: Chuyên nghiệp</option>
+                            <option value="Tóm tắt thành 3 điểm chính.">Tóm tắt (Bullet points)</option>
+                            <option value="Đề xuất 3 ý tưởng tái sử dụng nội dung.">Đề xuất ý tưởng tái sử dụng</option>
+                        </select>
+                        
+                        <button onclick="adaptContent()" class="w-full btn-gradient-primary text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift">
+                            Điều chỉnh Nội dung
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 8. Comment Responder -->
+                <div id="comment" class="tab-panel hidden">
+                    <h2 class="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Comment Responder</h2>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nội dung Bình luận:</label>
+                        <textarea id="comment-text" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4" placeholder="Ví dụ: 'Sản phẩm đắt quá'"></textarea>
+
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Giọng điệu:</label>
+                        <select id="comment-tone" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6 bg-white">
+                            <option value="Hài hước và thân mật">Hài hước và thân mật</option>
+                            <option value="Chuyên nghiệp và nghiêm túc">Chuyên nghiệp và nghiêm túc</option>
+                            <option value="Tích cực và truyền cảm hứng">Tích cực và truyền cảm hứng</option>
+                        </select>
+
+                        <button onclick="generateResponse()" class="w-full btn-gradient-primary text-white font-bold py-3 px-6 rounded-xl shadow-md hover-lift">
+                            Phân tích & Phản hồi
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Output Area -->
+                <div id="output-area" class="mt-8 relative">
+                    <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="text-2xl mr-2">✨</span> KẾT QUẢ TỪ AI
+                        </h3>
+                        <!-- Nút Xuất/Print -->
+                        <button id="export-btn" onclick="exportReport()" class="hidden flex items-center bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg text-sm transition shadow-sm hover:shadow">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            </svg>
+                            Xuất Báo Cáo / Lưu PDF
+                        </button>
+                    </div>
+                    
+                    <div id="loading" class="hidden text-center p-8 text-indigo-600">
+                        <div class="animate-spin inline-block w-10 h-10 border-4 border-t-transparent border-indigo-500 rounded-full mb-3"></div>
+                        <p class="font-medium animate-pulse">Đang xử lý thông minh...</p>
+                    </div>
+                    
+                    <!-- Kết quả -->
+                    <div id="result" class="bg-white p-6 rounded-xl border border-gray-100 text-gray-700 overflow-x-auto min-h-[150px] shadow-inner">
+                        <p class="text-gray-400 italic text-center mt-4">Kết quả sẽ hiển thị ở đây sau khi bạn nhấn nút tạo.</p>
+                    </div>
+                    <div id="sources" class="mt-4 text-xs text-gray-500 hidden bg-gray-50 p-3 rounded border border-gray-200">
+                        <p class="font-semibold text-indigo-600 mb-1">Nguồn tham khảo:</p>
+                        <ul id="source-list" class="list-disc ml-4 mt-1 space-y-1"></ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Vùng chứa nội dung để in (ẩn trên màn hình, hiện khi in) -->
+    <div id="print-section" style="display: none;"></div>
+
+    <!-- Modal Hướng dẫn MỚI -->
+    <div id="guide-modal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-70" onclick="toggleModal()"></div>
+        
+        <div class="modal-container bg-white w-11/12 md:max-w-4xl mx-auto rounded-2xl shadow-2xl z-50 overflow-hidden max-h-[90vh] flex flex-col transform transition-all scale-95">
+            
+            <!-- Modal Header (Sticky) -->
+            <div class="modal-content py-6 px-8 border-b border-gray-100 bg-white flex-shrink-0 z-20">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">📘 Hướng Dẫn Sử Dụng & Case Study</p>
+                        <p class="text-sm text-gray-500 mt-1">Bí kíp tận dụng tối đa 10 "vũ khí" AI này.</p>
+                    </div>
+                    <div class="modal-close cursor-pointer z-50 p-2 hover:bg-gray-100 rounded-full transition" onclick="toggleModal()">
+                        <svg class="fill-current text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 18 18">
+                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="modal-body overflow-y-auto p-8 bg-gray-50">
+                
+                <div class="space-y-6">
+                    <!-- 1. Trend Hunter -->
+                    <div class="bg-white p-5 rounded-xl border border-indigo-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-indigo-800 mb-2 flex items-center">
+                            <span class="bg-indigo-100 p-1.5 rounded-lg mr-3">🔥</span> 1. Trend Hunter (Săn Trend)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Tìm kiếm xu hướng nóng nhất trên Google để bạn không bao giờ bí ý tưởng.</p>
+                            <div class="bg-indigo-50 p-3 rounded-lg border-l-4 border-indigo-500">
+                                <p class="font-semibold text-indigo-900 mb-1">📌 Case Study: Kinh doanh "Cà phê giảm cân"</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> "Cà phê giảm cân" (Nền tảng TikTok)</li>
+                                    <li><strong>AI Output:</strong> Đề xuất trend "Morning Coffee Routine" kết hợp âm thanh ASMR pha chế. Gợi ý tiêu đề: "30s pha cà phê buổi sáng đánh bay mỡ bụng".</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Evergreen Architect -->
+                    <div class="bg-white p-5 rounded-xl border border-green-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-green-800 mb-2 flex items-center">
+                            <span class="bg-green-100 p-1.5 rounded-lg mr-3">🌲</span> 2. Evergreen Architect (Nội dung Bền vững)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Xây dựng hệ thống nội dung có giá trị lâu dài (3-5 năm), tạo traffic thụ động.</p>
+                            <div class="bg-green-50 p-3 rounded-lg border-l-4 border-green-500">
+                                <p class="font-semibold text-green-900 mb-1">📌 Case Study: Kênh YouTube "Tài chính cá nhân"</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> Chủ đề "Quản lý tài chính cho người mới"</li>
+                                    <li><strong>AI Output:</strong> Lộ trình 10 video từ căn bản (Quy tắc 6 chiếc lọ) đến nâng cao (Đầu tư chứng khoán). Gợi ý từ khóa SEO "Long-tail" ít cạnh tranh nhưng ổn định.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. YouTube Builder -->
+                    <div class="bg-white p-5 rounded-xl border border-red-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-red-800 mb-2 flex items-center">
+                            <span class="bg-red-100 p-1.5 rounded-lg mr-3">▶️</span> 3. YouTube Builder (Sản xuất Video)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Lên kế hoạch từ A-Z cho một video: Tiêu đề, Kịch bản, SEO, Thumbnail.</p>
+                            <div class="bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
+                                <p class="font-semibold text-red-900 mb-1">📌 Case Study: Review Công nghệ</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> "Review iPhone 15 Pro Max" (Phong cách Công tâm)</li>
+                                    <li><strong>AI Output:</strong> Kịch bản 5 bước. Hook 30s đầu: "Đừng mua iPhone 15 nếu bạn chưa biết 3 lỗi này...". Đề xuất Thumbnail: Ảnh so sánh Camera iPhone 14 vs 15.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- 9. Course Architect -->
+                     <div class="bg-white p-5 rounded-xl border border-sky-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-sky-800 mb-2 flex items-center">
+                            <span class="bg-sky-100 p-1.5 rounded-lg mr-3">🎓</span> 9. Course Architect (Thiết kế Khóa học)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Tạo outline khóa học chuẩn khoa học (Gagne + Bloom) để học viên hành động ngay.</p>
+                            <div class="bg-sky-50 p-3 rounded-lg border-l-4 border-sky-500">
+                                <p class="font-semibold text-sky-900 mb-1">📌 Case Study: Khóa học "Yoga văn phòng"</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> "Yoga giảm đau lưng cho dân văn phòng"</li>
+                                    <li><strong>AI Output:</strong> Module 1: "Giải cứu cột sống trong 5 phút". Bài học gồm: Lý thuyết (10%) -> Demo (20%) -> Action (70% - Tập ngay tại ghế).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. SEO Outline -->
+                    <div class="bg-white p-5 rounded-xl border border-purple-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-purple-800 mb-2 flex items-center">
+                            <span class="bg-purple-100 p-1.5 rounded-lg mr-3">📝</span> 4. SEO Outline (Viết Blog)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Lập dàn bài chi tiết vượt mặt đối thủ trên Google.</p>
+                            <div class="bg-purple-50 p-3 rounded-lg border-l-4 border-purple-500">
+                                <p class="font-semibold text-purple-900 mb-1">📌 Case Study: Blog "Học tiếng Anh"</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> Keyword "Cách học tiếng Anh tại nhà"</li>
+                                    <li><strong>AI Output:</strong> Phân tích Top 3 đối thủ -> Đề xuất dàn ý bổ sung phần "Lộ trình cho người mất gốc" (thứ mà đối thủ thiếu) -> Content Brief chi tiết.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Hook Generator -->
+                    <div class="bg-white p-5 rounded-xl border border-pink-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-pink-800 mb-2 flex items-center">
+                            <span class="bg-pink-100 p-1.5 rounded-lg mr-3">🎣</span> 5. Hook Generator (Tạo Tiêu đề)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Biến tấu 1 ý tưởng thành 10 tiêu đề/mở đầu video thu hút.</p>
+                            <div class="bg-pink-50 p-3 rounded-lg border-l-4 border-pink-500">
+                                <p class="font-semibold text-pink-900 mb-1">📌 Case Study: Bán Son môi</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> "Son môi lâu trôi" (Nền tảng TikTok)</li>
+                                    <li><strong>AI Output:</strong> Hook gây tò mò: "Thử thách ăn bát bún bò, son trôi đền 10 triệu". Hook tiêu cực: "Đừng mua thỏi son này nếu bạn ghét bị người yêu hôn".</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 10. Sales Funnel -->
+                    <div class="bg-white p-5 rounded-xl border border-amber-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-amber-800 mb-2 flex items-center">
+                            <span class="bg-amber-100 p-1.5 rounded-lg mr-3">💰</span> 10. Sales Funnel (Phễu Bán hàng)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Thiết kế phễu 4 bước chuẩn tâm lý hành vi để tối ưu doanh thu.</p>
+                            <div class="bg-amber-50 p-3 rounded-lg border-l-4 border-amber-500">
+                                <p class="font-semibold text-amber-900 mb-1">📌 Case Study: Sản phẩm Trị mụn</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> "Kem trị mụn thảo dược"</li>
+                                    <li><strong>AI Output:</strong> Lead Magnet (Tặng Ebook "Thực đơn ăn uống trị mụn") -> Tripwire (Bán lọ sữa rửa mặt mini giá 49k) -> Core Offer (Combo kem trị mụn) -> Upsell (Serum trị thâm).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Email Marketing -->
+                    <div class="bg-white p-5 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-blue-800 mb-2 flex items-center">
+                            <span class="bg-blue-100 p-1.5 rounded-lg mr-3">📧</span> 6. Email Marketing
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Viết chuỗi email tự động chăm sóc khách hàng.</p>
+                            <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">
+                                <p class="font-semibold text-blue-900 mb-1">📌 Case Study: Khách bỏ quên giỏ hàng</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> Thời trang nữ, Khách bỏ giỏ hàng.</li>
+                                    <li><strong>AI Output:</strong> Email 1 (1h sau): "Bạn bỏ quên chiếc váy xinh đẹp này à?". Email 2 (24h sau): Feedback khách hàng đã mua. Email 3 (48h sau): Tặng mã giảm 10% duy nhất hôm nay.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7. Content Adapter -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2 flex items-center">
+                            <span class="bg-gray-100 p-1.5 rounded-lg mr-3">🔄</span> 7. Content Adapter (Tái sử dụng)
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Chuyển đổi 1 nội dung dài thành nhiều định dạng ngắn.</p>
+                            <div class="bg-gray-100 p-3 rounded-lg border-l-4 border-gray-500">
+                                <p class="font-semibold text-gray-900 mb-1">📌 Case Study: Bài Blog -> Social</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> Bài viết 2000 từ về "AI Marketing".</li>
+                                    <li><strong>AI Output:</strong> Tóm tắt thành 1 bài Thread Twitter gồm 5 tweet. Viết lại thành 1 bài Facebook ngắn giọng hài hước. Tạo kịch bản cho video TikTok 60s.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 8. Comment Responder -->
+                    <div class="bg-white p-5 rounded-xl border border-teal-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-teal-800 mb-2 flex items-center">
+                            <span class="bg-teal-100 p-1.5 rounded-lg mr-3">💬</span> 8. Comment Responder
+                        </h3>
+                        <div class="ml-10 text-sm text-gray-600 space-y-2">
+                            <p><strong>Công dụng:</strong> Trả lời bình luận thông minh, xử lý khủng hoảng.</p>
+                            <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500">
+                                <p class="font-semibold text-teal-900 mb-1">📌 Case Study: Khách chê giá đắt</p>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li><strong>Input:</strong> "Giá bên shop cao hơn chỗ khác nhiều quá."</li>
+                                    <li><strong>AI Output:</strong> "Dạ đúng là giá bên em nhỉnh hơn chút xíu ạ, nhưng đổi lại bên em cam kết bảo hành 1 đổi 1 trong 12 tháng và dùng chất liệu cao cấp nhất..." (Chuyển tính năng thành lợi ích + Xoa dịu).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal Footer (Sticky) -->
+            <div class="flex justify-end p-6 border-t border-gray-100 bg-white flex-shrink-0 z-20">
+                <button onclick="toggleModal()" class="px-6 py-3 btn-gradient-primary rounded-xl text-white hover:shadow-lg font-bold transition transform hover:scale-105">Đã hiểu, thực hành ngay!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cấu hình API
+        const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent`;
+        const apiKey = ""; // Khóa API đã được lưu
+
+        // Xử lý Modal Hướng dẫn
+        function toggleModal() {
+            const body = document.querySelector('body');
+            const modal = document.querySelector('.modal');
+            const modalContainer = document.querySelector('.modal-container');
+            
+            modal.classList.toggle('opacity-0');
+            modal.classList.toggle('pointer-events-none');
+            body.classList.toggle('modal-active');
+            
+            // Hiệu ứng zoom nhẹ cho modal
+            if (modal.classList.contains('opacity-0')) {
+                modalContainer.classList.remove('scale-100');
+                modalContainer.classList.add('scale-95');
+            } else {
+                modalContainer.classList.remove('scale-95');
+                modalContainer.classList.add('scale-100');
+            }
+        }
+
+        // Đóng modal khi nhấn ESC
+        document.onkeydown = function(evt) {
+            evt = evt || window.event;
+            var isEscape = false;
+            if ("key" in evt) {
+                isEscape = (evt.key === "Escape" || evt.key === "Esc");
+            } else {
+                isEscape = (evt.keyCode === 27);
+            }
+            if (isEscape && document.body.classList.contains('modal-active')) {
+                toggleModal();
+            }
+        };
+
+        // Chuyển đổi Tab
+        function changeTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                // Reset style chung - Chuyển sang style Text xám, nền trong suốt
+                btn.className = 'tab-btn px-4 py-3 rounded-t-lg font-medium text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition duration-200 shrink-0 border-b-2 border-transparent';
+            });
+            
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+
+            const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+            if(activeBtn) {
+                // Active Style: Gradient Text, Bottom Border Gradient, Nền trắng
+                activeBtn.className = 'tab-btn px-4 py-3 rounded-t-lg font-bold bg-white text-indigo-700 shadow-sm shrink-0 border-b-2 border-indigo-600';
+                
+                // Custom color overrides for special tabs
+                if(tabId === 'youtube') {
+                   activeBtn.classList.add('text-red-600', 'border-red-600');
+                   activeBtn.classList.remove('text-indigo-700', 'border-indigo-600');
+                } else if(tabId === 'evergreen') {
+                   activeBtn.classList.add('text-emerald-600', 'border-emerald-600');
+                   activeBtn.classList.remove('text-indigo-700', 'border-indigo-600');
+                } else if(tabId === 'course') {
+                   activeBtn.classList.add('text-sky-600', 'border-sky-600');
+                   activeBtn.classList.remove('text-indigo-700', 'border-indigo-600');
+                } else if(tabId === 'funnel') {
+                   activeBtn.classList.add('text-amber-600', 'border-amber-600');
+                   activeBtn.classList.remove('text-indigo-700', 'border-indigo-600');
+                }
+            }
+
+            const panel = document.getElementById(tabId);
+            if(panel) {
+                panel.classList.remove('hidden');
+                // Animation nhẹ khi chuyển tab
+                panel.classList.add('animate-fade-in');
+                setTimeout(() => panel.classList.remove('animate-fade-in'), 300);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => changeTab('trend'));
+
+        // Hàm làm sạch Markdown
+        function cleanMarkdown(text) {
+            return text.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```$/i, '').trim();
+        }
+
+        // Hàm gọi API dùng chung
+        async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                    if (response.status === 429 || response.status >= 500) {
+                        await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000 + Math.random() * 1000));
+                        continue; 
+                    }
+                    throw new Error(`Lỗi HTTP: ${response.status}`);
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                }
+            }
+        }
+
+        async function callGeminiAPI(userQuery, systemPrompt, useSearch = false) {
+            // API Key validation removed to allow runtime injection
+            
+            const loading = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            const sourcesDiv = document.getElementById('sources');
+            const exportBtn = document.getElementById('export-btn');
+            
+            loading.classList.remove('hidden');
+            resultDiv.innerHTML = '';
+            resultDiv.classList.add('opacity-50'); // Dim nhẹ khi đang load
+            sourcesDiv.classList.add('hidden');
+            exportBtn.classList.add('hidden');
+
+            try {
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                };
+                if (useSearch) payload.tools = [{ "google_search": {} }];
+
+                const response = await fetchWithExponentialBackoff(`${apiUrl}?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                
+                if (!candidate?.content?.parts?.[0]?.text) throw new Error("Không nhận được phản hồi từ AI.");
+
+                const rawText = candidate.content.parts[0].text;
+                const cleanHTML = cleanMarkdown(rawText);
+                
+                resultDiv.classList.remove('opacity-50');
+                resultDiv.innerHTML = cleanHTML;
+                
+                // HIỆN NÚT XUẤT SAU KHI CÓ KẾT QUẢ
+                exportBtn.classList.remove('hidden');
+
+                // Xử lý nguồn tìm kiếm
+                if (useSearch && candidate.groundingMetadata?.groundingAttributions) {
+                    const sources = candidate.groundingMetadata.groundingAttributions
+                        .filter(src => src.web?.uri && src.web?.title);
+                    
+                    if (sources.length > 0) {
+                        const list = document.getElementById('source-list');
+                        list.innerHTML = sources.map(src => 
+                            `<li><a href="${src.web.uri}" target="_blank" class="text-indigo-600 hover:underline hover:text-indigo-800 transition">${src.web.title}</a></li>`
+                        ).join('');
+                        sourcesDiv.classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                resultDiv.classList.remove('opacity-50');
+                resultDiv.innerHTML = `<div class="bg-red-50 border-l-4 border-red-500 p-4 text-red-700"><p class="font-bold">Đã xảy ra lỗi:</p><p>${error.message}</p></div>`;
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        // HÀM XUẤT BÁO CÁO (IN / PDF)
+        function exportReport() {
+            const resultContent = document.getElementById('result').innerHTML;
+            const printSection = document.getElementById('print-section');
+            
+            const now = new Date();
+            const dateString = `Ngày xuất: ${now.toLocaleDateString('vi-VN')} lúc ${now.toLocaleTimeString('vi-VN')}`;
+
+            printSection.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="font-size: 24px; font-weight: bold; color: #4f46e5; margin-bottom: 5px;">Báo Cáo Marketing AI</h1>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">${dateString}</p>
+                    <div class="report-content">
+                        ${resultContent}
+                    </div>
+                    <div style="margin-top: 30px; font-size: 12px; color: #999; text-align: center;">Generated by All-in-One Marketing AI Booster</div>
+                </div>
+            `;
+            
+            window.print();
+        }
+
+        // --- CÁC HÀM GỌI API ---
+
+        function generateTrendIdeas() {
+            const topic = document.getElementById('trend-topic').value;
+            const platform = document.getElementById('trend-platform').value;
+            if (!topic) return alert('Vui lòng nhập mô tả sản phẩm.');
+            
+            callGeminiAPI(
+                `Thương hiệu: "${topic}". Tìm trend mới nhất và đề xuất 5 ý tưởng cho ${platform}.`,
+                `Bạn là Chuyên gia Chiến lược Content. 
+                1. Dùng Google Search tìm xu hướng 'hot' nhất hiện tại liên quan đến chủ đề.
+                2. TRẢ VỀ KẾT QUẢ DƯỚI DẠNG MÃ HTML (Không dùng Markdown block).
+                3. Tạo một bảng HTML (<table>) với các cột: 'STT', 'Ý tưởng (Concept)', 'Tiêu đề đề xuất', 'Mô tả ngắn', 'Định dạng'.
+                4. Tô đậm (<strong>) các từ khóa quan trọng trong phần Mô tả.`,
+                true
+            );
+        }
+
+        function generateHooks() {
+            const topic = document.getElementById('hook-topic').value;
+            const platform = document.getElementById('hook-platform').value;
+            if (!topic) return alert('Vui lòng nhập chủ đề.');
+
+            callGeminiAPI(
+                `Chủ đề: "${topic}". Tạo 10 hook cho ${platform}.`,
+                `Bạn là Copywriter bậc thầy. 
+                1. Tạo 10 câu mở đầu (Hook) hoặc tiêu đề tối ưu cho ${platform}.
+                2. TRẢ VỀ KẾT QUẢ DƯỚI DẠNG MÃ HTML (Không dùng Markdown block).
+                3. Tạo một bảng HTML (<table>) với các cột: 'STT', 'Hook / Tiêu đề', 'Loại Hook (Vd: Tò mò, Lợi ích)', 'Điểm mạnh'.
+                4. Tô đậm (<strong>) các từ ngữ gây chú ý (power words) trong Hook.`,
+                false
+            );
+        }
+
+        function generateResponse() {
+            const text = document.getElementById('comment-text').value;
+            const tone = document.getElementById('comment-tone').value;
+            if (!text) return alert('Vui lòng nhập bình luận.');
+
+            callGeminiAPI(
+                `Bình luận: "${text}". Phân tích và trả lời giọng ${tone}.`,
+                `Bạn là CSKH AI. 
+                1. Phân tích bình luận.
+                2. TRẢ VỀ KẾT QUẢ DƯỚI DẠNG MÃ HTML (Không dùng Markdown block).
+                3. Trình bày:
+                   - Một thẻ <div> với background nhạt cho phần 'Phân tích Sắc thái' (Tích cực/Tiêu cực/Hỏi).
+                   - Một thẻ <div> nổi bật hơn cho 'Câu trả lời đề xuất'.
+                   - Sử dụng <strong> để nhấn mạnh các ý chính trong câu trả lời.`,
+                false
+            );
+        }
+
+        function generateSEOOutline() {
+            const kw = document.getElementById('outline-keyword').value;
+            const req = document.getElementById('outline-competitors').value;
+            if (!kw) return alert('Vui lòng nhập từ khóa.');
+
+            callGeminiAPI(
+                `Từ khóa: "${kw}". Yêu cầu: "${req}". Tạo Content Brief & Dàn bài.`,
+                `Bạn là Chuyên gia SEO. 
+                1. Dùng Google Search phân tích Top 3 đối thủ.
+                2. TRẢ VỀ KẾT QUẢ DƯỚI DẠNG MÃ HTML (Không dùng Markdown block).
+                3. Phần 1: 'Content Brief' trình bày dưới dạng Bảng (<table>) gồm các hàng: Mục tiêu tìm kiếm (Intent), Độ dài (Word count), Từ khóa phụ (LSI Keywords).
+                4. Phần 2: 'Dàn bài chi tiết' sử dụng danh sách lồng nhau (<ul>, <li>). Các thẻ H2, H3 phải được tô đậm (<strong>).`,
+                true
+            );
+        }
+
+        function adaptContent() {
+            const text = document.getElementById('adapter-text').value;
+            const action = document.getElementById('adapter-action').value;
+            if (!text) return alert('Vui lòng nhập nội dung.');
+
+            callGeminiAPI(
+                `Thực hiện: "${action}" cho văn bản sau:\n${text}`,
+                `Bạn là Biên tập viên. 
+                1. Thực hiện yêu cầu chính xác.
+                2. TRẢ VỀ KẾT QUẢ DƯỚI DẠNG MÃ HTML (Không dùng Markdown block).
+                3. Nếu là 'Tóm tắt' hoặc 'Ý tưởng', hãy dùng Bảng hoặc Danh sách có dấu chấm (bullet points) để dễ đọc. Tô đậm các ý quan trọng.`,
+                false
+            );
+        }
+
+        function generateEmailSequence() {
+            const persona = document.getElementById('email-persona').value;
+            const stage = document.getElementById('email-stage').value;
+            const product = document.getElementById('email-product').value;
+            if (!persona || !product) return alert('Vui lòng nhập đầy đủ Chân dung khách hàng và Sản phẩm.');
+
+            const systemPrompt = `Bạn là Chuyên gia Email Marketing.
+            1. Viết chuỗi email (3-5 email) dựa trên hành trình khách hàng.
+            2. TRẢ VỀ KẾT QUẢ DƯỚI DẠNG MÃ HTML (Không dùng Markdown block).
+            3. Tạo một bảng HTML (<table>) duy nhất tổng hợp chuỗi email.
+            4. Các cột của bảng: 'Email #', 'Tiêu đề (Subject Line)', 'Thời điểm gửi', 'Nội dung chính (Tóm tắt & Key message)', 'CTA (Lời kêu gọi)'.
+            5. Tô đậm (<strong>) các lợi ích (Benefits) chính trong phần nội dung.`;
+            
+            const userQuery = `Hãy viết chuỗi email marketing cho: - Chân dung: ${persona} - Giai đoạn: ${stage} - Sản phẩm: ${product}`;
+
+            callGeminiAPI(userQuery, systemPrompt, false);
+        }
+
+        function analyzeEmailSentiment() {
+            const emailBody = document.getElementById('email-input-text').value;
+            if (!emailBody) return alert('Vui lòng nhập nội dung email của khách hàng.');
+
+            const systemPrompt = `Bạn là Trưởng phòng CSKH.
+            1. Phân tích tâm lý khách hàng.
+            2. TRẢ VỀ KẾT QUẢ DƯỚI DẠNG MÃ HTML (Không dùng Markdown block).
+            3. Phần 1: Bảng phân tích (<table>) gồm: 'Tâm lý (Sentiment)', 'Vấn đề chính', 'Đánh giá mức độ nghiêm trọng'.
+            4. Phần 2: 'Gợi ý phản hồi' trình bày trong khung (<div>) riêng biệt, tô đậm các từ ngữ thể hiện sự thấu cảm.`;
+
+            const userQuery = `Phân tích email sau: "${emailBody}"`;
+
+            callGeminiAPI(userQuery, systemPrompt, false);
+        }
+
+        function generateYouTubePlan() {
+            const topic = document.getElementById('youtube-topic').value;
+            const audience = document.getElementById('youtube-audience').value;
+            const style = document.getElementById('youtube-style').value;
+
+            if (!topic) return alert('Vui lòng nhập chủ đề video.');
+
+            const systemPrompt = `Bạn là một Nhà sản xuất YouTube (YouTube Producer) hàng đầu. Nhiệm vụ của bạn là xây dựng kế hoạch nội dung video hoàn chỉnh từ A-Z.
+            
+            QUY ĐỊNH VỀ ĐỊNH DẠNG ĐẦU RA (OUTPUT FORMAT):
+            - TRẢ VỀ MÃ HTML (Không dùng Markdown block).
+            - Sử dụng các thẻ <h3> cho tiêu đề từng phần.
+            - Sử dụng <table>, <ul>, <li> để trình bày rõ ràng.
+
+            NỘI DUNG YÊU CẦU (5 BƯỚC):
+            1. **Bước 1: Ý Tưởng & Góc Nhìn (Angle)**
+            2. **Bước 2: Tiêu Đề Video (Click-worthy Titles)**
+            3. **Bước 3: Kịch Bản Chi Tiết (Script Structure)**
+            4. **Bước 4: Tối Ưu SEO**
+            5. **Bước 5: Ý Tưởng Thumbnail**
+            `;
+
+            const userQuery = `
+                Hãy lập kế hoạch video YouTube cho:
+                - Chủ đề: ${topic}
+                - Khán giả: ${audience}
+                - Phong cách: ${style}
+            `;
+
+            callGeminiAPI(userQuery, systemPrompt, true); 
+        }
+
+        function generateEvergreenPlan() {
+            const topic = document.getElementById('evergreen-topic').value;
+            const audience = document.getElementById('evergreen-audience').value;
+            const level = document.getElementById('evergreen-level').value;
+
+            if (!topic) return alert('Vui lòng nhập chủ đề cốt lõi.');
+
+            const systemPrompt = `Bạn là "Kiến trúc sư Nội dung" (Content Architect) chuyên xây dựng các kênh YouTube giáo dục/chuyên sâu.
+            Nhiệm vụ: Xây dựng một chiến lược nội dung "Evergreen" (Xanh mãi/Trường tồn) xoay quanh chủ đề được yêu cầu. Mục tiêu là tạo ra một thư viện video có giá trị tra cứu lâu dài, không phụ thuộc vào trend.
+
+            ĐỊNH DẠNG OUTPUT: HTML (Không Markdown block). Sử dụng <h3>, <table>, <ul>, <strong>.
+
+            NỘI DUNG YÊU CẦU (4 PHẦN CHÍNH):
+            
+            1. **Phân tích Trụ cột Nội dung (Content Pillars):**
+               - Chia chủ đề lớn thành 3-4 trụ cột nhỏ (Sub-topics). Giải thích tại sao chúng quan trọng.
+               - Trình bày dạng danh sách bullet points.
+
+            2. **Lộ trình Chuỗi Video (Video Series Roadmap):**
+               - Đề xuất danh sách 5-7 video đi theo trình tự logic (Học lộ trình từ A-Z).
+               - Trình bày dạng Bảng (<table>) gồm: 'Tập #', 'Tiêu đề Video (SEO)', 'Mục tiêu học tập (Key Takeaway)', 'Loại video (Vd: Lý thuyết, Thực hành)'.
+
+            3. **Chiến lược SEO Dài hạn (SEO Keyword Map):**
+               - Liệt kê các từ khóa "Long-tail" có lượng tìm kiếm ổn định mà chuỗi video này sẽ nhắm tới.
+               - Gợi ý cách đặt tên Playlist để tối ưu SEO.
+
+            4. **Chiến lược Giữ chân (Retention & Interlinking):**
+               - Gợi ý cách liên kết các video với nhau (Vd: Video 1 nhắc đến Video 2 ở phút bao nhiêu...).
+               - Gợi ý "Lead Magnet" (Tài liệu tặng kèm) để thu hút email từ người xem YouTube.
+            `;
+
+            const userQuery = `
+                Xây dựng chiến lược Evergreen YouTube cho:
+                - Chủ đề cốt lõi: ${topic}
+                - Khán giả & Nỗi đau: ${audience}
+                - Trình độ/Độ sâu: ${level}
+            `;
+
+            callGeminiAPI(userQuery, systemPrompt, true);
+        }
+
+        // 9. COURSE ARCHITECT (UPDATED - Gagne's 9 Events & Bloom's Taxonomy)
+        function generateCourseOutline() {
+            const topic = document.getElementById('course-topic').value;
+            const audience = document.getElementById('course-audience').value;
+            const goal = document.getElementById('course-goal').value;
+
+            if (!topic) return alert('Vui lòng nhập Chủ đề khóa học.');
+
+            const systemPrompt = `Bạn là một Chuyên gia Thiết kế Chương trình Đào tạo (Instructional Designer) sử dụng mô hình Gagne’s 9 Events và Thang đo Bloom.
+            Nhiệm vụ: Thiết kế outline khóa học khoa học, tập trung vào chuyển hóa hành vi (10% Lý thuyết - 20% Ví dụ - 70% Thực hành).
+
+            ĐỊNH DẠNG OUTPUT: HTML (Không Markdown). Sử dụng <h3>, <h4>, <table>, <ul>.
+
+            CẤU TRÚC BẮT BUỘC:
+            1. **Tổng quan & Lời hứa:** Tên khóa học (Thu hút), Đối tượng, Kết quả đầu ra (Outcome).
+            
+            2. **Giai đoạn A: Kích hoạt (The Hook & Motivation):**
+               - Video chào mừng & Cam kết.
+               - Tại sao kỹ năng này quan trọng? (Nỗi đau/Sung sướng).
+               - Hướng dẫn cách học hiệu quả.
+
+            3. **Giai đoạn B: Nội dung Cốt lõi (Áp dụng công thức 10-20-70):**
+               - Chia thành các Module.
+               - TRONG MỖI BÀI HỌC (Lesson) phải có cấu trúc chuẩn:
+                 + **What & Why (1-2p):** Khái niệm & Tại sao cần.
+                 + **How (Quy trình):** Các bước thực hiện (Sơ đồ hóa).
+                 + **Demo/Case Study:** Cầm tay chỉ việc.
+                 + **ACTION STEP (Quan trọng nhất):** Bài tập thực hành ngay (Viết, Quay, Điền template...).
+                 + **Review:** Checklist điểm nhớ.
+            
+            4. **Giai đoạn C: Về đích (The Finish):** Final Project (Bài tập lớn), Tổng kết & Lộ trình tiếp theo.
+
+            5. **Bảng Checklist Kiểm tra chất lượng Outline (Cuối cùng):**
+               - Tạo một bảng <table> kiểm tra 4 tiêu chí: Tính rõ ràng (Mục tiêu đo lường được), Tính gọn nhẹ (Không thừa), Tính thực chiến (Có hành động ngay), Tính trực quan (Có hình ảnh/demo).
+            `;
+
+            const userQuery = `
+                Thiết kế khóa học chuẩn khoa học về: ${topic}
+                Cho đối tượng: ${audience}
+                Kết quả mong muốn: ${goal}
+            `;
+
+            callGeminiAPI(userQuery, systemPrompt, false);
+        }
+
+        // 10. SALES FUNNEL (SCIENTIFIC UPGRADE - NEW)
+        function generateScientificFunnel() {
+            const product = document.getElementById('funnel-product').value;
+            const pain = document.getElementById('funnel-pain').value;
+            const dream = document.getElementById('funnel-dream').value;
+
+            if (!product) return alert('Vui lòng nhập Tên sản phẩm.');
+
+            const systemPrompt = `Bạn là Chuyên gia Kiến trúc Phễu Bán hàng (Sales Funnel Architect) kết hợp Tâm lý học Hành vi.
+            Tư duy nền tảng: **Thang Giá Trị (Value Ladder)** của Russell Brunson + **6 Nguyên tắc Thuyết phục** của Cialdini + **5 Cấp độ Nhận thức** của Eugene Schwartz.
+
+            ĐỊNH DẠNG OUTPUT: HTML (Không Markdown). Sử dụng <h3>, <h4>, <table>, <ul>, <div>.
+
+            NHIỆM VỤ: Xây dựng phễu 4 bước chuẩn khoa học:
+
+            1. **Tổng Quan Chiến Lược:**
+               - Mô tả ngắn về cách áp dụng Thang giá trị cho sản phẩm này.
+            
+            2. **BƯỚC 1: Lead Magnet (Mồi thu hút) - Awareness Level: Problem Aware**
+               - *Nguyên lý:* Reciprocity (Có qua có lại).
+               - *Mục tiêu:* Đổi giá trị lấy Contact.
+               - *Nội dung:* Đề xuất 3 ý tưởng Lead Magnet giải quyết nỗi đau ngay lập tức (Instant Gratification).
+
+            3. **BƯỚC 2: The Tripwire (Sản phẩm mồi) - Awareness Level: Solution Aware**
+               - *Nguyên lý:* Commitment & Consistency (Cam kết & Nhất quán).
+               - *Mục tiêu:* Biến người lạ thành người mua hàng.
+               - *Đề xuất:* Sản phẩm giá thấp (No-brainer offer) nhưng giá trị cao.
+
+            4. **BƯỚC 3: The Core Offer (Sản phẩm chủ lực) - Awareness Level: Product Aware**
+               - *Nguyên lý:* Áp dụng **Phương trình Giá trị Alex Hormozi**:
+                 <div class="math-formula">Value = (Dream Outcome × Likelihood) / (Time Delay × Effort)</div>
+               - *Nội dung Sales Page:* Viết 4 gạch đầu dòng chứng minh sản phẩm này tối ưu hóa phương trình trên như thế nào.
+
+            5. **BƯỚC 4: Profit Maximizer (Upsell) - Awareness Level: Most Aware**
+               - *Nguyên lý:* Buying Mood (Tận dụng Dopamine sau khi mua).
+               - *Đề xuất:* 1 Sản phẩm bán thêm ngay lập tức để tăng LTV (Lifetime Value).
+
+            6. **Bảng Chỉ số Đo lường Khoa học (Science of Metrics):**
+               - Tạo bảng <table> gồm: Chỉ số (Metric), Mục tiêu chuẩn (Benchmark), Ý nghĩa.
+               - Bao gồm: Opt-in Rate (>20%), Sales Page CR (1-3%), Average Cart Value (ACV).
+            `;
+
+            const userQuery = `
+                Xây dựng phễu bán hàng chuẩn khoa học cho: ${product}
+                Nỗi đau (Pain): ${pain}
+                Kết quả mơ ước (Dream Outcome): ${dream}
+            `;
+
+            callGeminiAPI(userQuery, systemPrompt, false);
+        }
+        
+        // Simple Animation Fade In CSS addition via JS if not in style tag
+        const animStyle = document.createElement('style');
+        animStyle.innerHTML = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(5px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(animStyle);
+    </script>
+</body>
+</html>

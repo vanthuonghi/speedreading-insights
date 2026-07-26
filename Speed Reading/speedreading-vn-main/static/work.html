@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedReading Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; }
+        .note-item.active { background-color: #f1f5f9; border-left: 4px solid #4f46e5; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .clock-font { font-family: 'JetBrains Mono', monospace; }
+        
+        .step-card:hover .step-number { transform: scale(1.1); background-color: #4f46e5; color: white; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 overflow-hidden">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm z-10">
+            <div class="p-6">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">SR</div>
+                    <span class="font-bold text-xl tracking-tight">SpeedReading</span>
+                </div>
+
+                <nav class="space-y-1 mb-8">
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-50 text-indigo-700 shadow-sm">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                    </button>
+                    <button onclick="switchTab('notes')" id="btn-notes" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all text-slate-500 hover:bg-slate-50">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Ghi chú công việc
+                    </button>
+                </nav>
+
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Danh sách ghi chú</span>
+                    <button onclick="createNewNote()" class="text-indigo-600 hover:bg-indigo-50 p-1 rounded-md transition-colors">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div id="notes-list" class="space-y-1 overflow-y-auto max-h-[300px] pr-1">
+                    <!-- Notes will be injected here -->
+                </div>
+            </div>
+
+            <div class="mt-auto p-4 border-t border-slate-100 bg-slate-50/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs">H</div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold truncate">Hỉ - Admin</p>
+                        <p class="text-[10px] text-slate-400">Chế độ Lưu trữ Local</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto relative">
+            
+            <!-- Dashboard Tab -->
+            <div id="tab-dashboard" class="max-w-5xl mx-auto p-8 lg:p-12">
+                <header class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Chào buổi sáng, Hỉ!</h2>
+                        <p class="text-slate-500 text-lg">Hệ thống quản lý quy trình SpeedReading sẵn sàng.</p>
+                    </div>
+                    <!-- Real-time Clock Widget -->
+                    <div class="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center min-w-[180px]">
+                        <span id="current-date" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-center w-full">ĐANG TẢI...</span>
+                        <span id="real-time-clock" class="text-3xl font-bold text-indigo-600 clock-font tracking-tighter">00:00:00</span>
+                    </div>
+                </header>
+
+                <!-- Quick Links Grid -->
+                <section class="mb-12">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i> Truy cập nhanh
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <a href="https://speedreading.vn/seo" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                            <div class="bg-blue-100 p-2 rounded-lg text-blue-600 mr-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-semibold text-slate-700 text-sm">SEO Website</span>
+                        </a>
+                        <a href="https://speedreading.vn/banhang" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                            <div class="bg-emerald-100 p-2 rounded-lg text-emerald-600 mr-3 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-semibold text-slate-700 text-sm">Bán hàng</span>
+                        </a>
+                        <a href="https://github.com/vanthuonghi/speedreading-vn/tree/main/static" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                            <div class="bg-slate-100 p-2 rounded-lg text-slate-800 mr-3 group-hover:bg-slate-800 group-hover:text-white transition-colors">
+                                <i data-lucide="github" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-semibold text-slate-700 text-sm">GitHub Pages</span>
+                        </a>
+                        <a href="https://server319.web-hosting.com:2083/cpsess9328586810/frontend/jupiter/filemanager/index.html" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                            <div class="bg-orange-100 p-2 rounded-lg text-orange-600 mr-3 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                                <i data-lucide="image" class="w-4 h-4"></i>
+                            </div>
+                            <span class="font-semibold text-slate-700 text-sm">FileManager</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- WORKFLOW 1: SÁCH -->
+                <section class="mb-12">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-4 h-4 text-indigo-600"></i> Quy trình sản xuất nội dung sách
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Step 1 -->
+                        <div class="step-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm transition-all hover:border-indigo-200 flex flex-col">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="step-number w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm transition-all">1</div>
+                                <h4 class="font-bold text-slate-800 uppercase text-xs tracking-wider">Quay Source Sách</h4>
+                            </div>
+                            <ul class="text-xs text-slate-600 space-y-2 flex-grow">
+                                <li class="flex items-start gap-2"><i data-lucide="camera" class="w-3 h-3 mt-0.5 text-indigo-500"></i> Chụp bìa, mục lục, nội dung mở/kết</li>
+                                <li class="flex items-start gap-2"><i data-lucide="video" class="w-3 h-3 mt-0.5 text-indigo-500"></i> Quay B-roll lật trang, hình minh họa</li>
+                                <li class="flex items-start gap-2"><i data-lucide="mic" class="w-3 h-3 mt-0.5 text-indigo-500"></i> Ghi âm + quay timeplate skimming</li>
+                                <li class="italic text-slate-400 mt-1 pl-5 underline decoration-indigo-200">Dùng 2 điện thoại</li>
+                            </ul>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="step-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm transition-all hover:border-indigo-200 flex flex-col">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="step-number w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm transition-all">2</div>
+                                <h4 class="font-bold text-slate-800 uppercase text-xs tracking-wider">NotebookLM</h4>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-4">Chuyển âm thanh thành văn bản làm dữ liệu đầu vào (Input giá trị).</p>
+                            <a href="https://notebooklm.google.com/" target="_blank" class="mt-auto flex items-center justify-center gap-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                                Mở NotebookLM <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </a>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="step-card bg-white p-6 rounded-2xl border border-slate-200 shadow-sm transition-all hover:border-indigo-200 flex flex-col">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="step-number w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm transition-all">3</div>
+                                <h4 class="font-bold text-slate-800 uppercase text-xs tracking-wider">Viết Kịch Bản AI</h4>
+                            </div>
+                            <p class="text-[10px] bg-amber-50 text-amber-700 p-2 rounded-lg border border-amber-100 mb-3 leading-relaxed">
+                                <strong>Lưu ý:</strong> Hook 5s hút khách, xưng Hỉ-Bạn, tối giản lời nói, không dài dòng.
+                            </p>
+                            <a href="https://gemini.google.com/app/9a68e59ecf3ee135" target="_blank" class="mt-auto flex items-center justify-center gap-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                                Gemini Kịch Bản <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold italic">4</div>
+                                <span class="text-slate-600 font-medium">Lồng tiếng & Edit Video + Content</span>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold italic">5</div>
+                                <span class="text-slate-600 font-medium">Lên lịch đăng hình & video</span>
+                            </div>
+                            <div class="bg-indigo-600 p-4 rounded-xl text-white text-xs flex items-center gap-3 shadow-md">
+                                <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center font-bold italic text-white">6</div>
+                                <span class="font-bold">ĐĂNG WEBSITE & SEO</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WORKFLOW 2: TẠI NHÀ -->
+                <section class="mb-12">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                        <i data-lucide="home" class="w-4 h-4 text-emerald-600"></i> Quy trình sản xuất tại nhà
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Step 1 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full hover:border-emerald-200 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs mb-3">1</div>
+                            <h4 class="font-bold text-slate-800 text-xs mb-2 uppercase">Post Website Hugo</h4>
+                            <p class="text-[10px] text-slate-500 mb-4">Nhập liệu và tạo bài post chuẩn Hugo chuyên nghiệp.</p>
+                            <a href="https://speedreading.vn/seo" target="_blank" class="mt-auto block text-center py-2 bg-slate-50 text-emerald-600 rounded-lg text-[10px] font-bold border border-emerald-100 hover:bg-emerald-50 transition-colors">
+                                Quản trị Hugo <i data-lucide="external-link" class="w-3 h-3 inline ml-1"></i>
+                            </a>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full hover:border-emerald-200 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs mb-3">2</div>
+                            <h4 class="font-bold text-slate-800 text-xs mb-2 uppercase">Tạo Content Hình</h4>
+                            <p class="text-[10px] text-slate-500 mb-4">Copy code HTML bài viết vào AI để sinh nội dung đăng hình.</p>
+                            <a href="https://gemini.google.com/app/363ad38864ea7527" target="_blank" class="mt-auto block text-center py-2 bg-slate-50 text-emerald-600 rounded-lg text-[10px] font-bold border border-emerald-100 hover:bg-emerald-50 transition-colors">
+                                AI Content Hình <i data-lucide="external-link" class="w-3 h-3 inline ml-1"></i>
+                            </a>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full hover:border-emerald-200 transition-all">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs mb-3">3</div>
+                            <h4 class="font-bold text-slate-800 text-xs mb-2 uppercase">Kịch Bản Review</h4>
+                            <p class="text-[10px] text-slate-500 mb-4">Viết kịch bản lồng tiếng + hình ảnh tổng hợp cho Video Review.</p>
+                            <a href="https://gemini.google.com/app/9a68e59ecf3ee135" target="_blank" class="mt-auto block text-center py-2 bg-slate-50 text-emerald-600 rounded-lg text-[10px] font-bold border border-emerald-100 hover:bg-emerald-50 transition-colors">
+                                AI Review Sách <i data-lucide="external-link" class="w-3 h-3 inline ml-1"></i>
+                            </a>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="bg-emerald-600 p-5 rounded-2xl shadow-lg flex flex-col h-full text-white">
+                            <div class="w-8 h-8 rounded-lg bg-white/20 text-white flex items-center justify-center font-bold text-xs mb-3">4</div>
+                            <h4 class="font-bold text-xs mb-2 uppercase">Lên lịch đăng</h4>
+                            <p class="text-[10px] text-emerald-100 mb-4 opacity-80">Hoàn tất quy trình bằng việc lên lịch đăng hình & video đa kênh.</p>
+                            <div class="mt-auto flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest border border-white/20 rounded-lg py-2">
+                                <i data-lucide="check-circle" class="w-3 h-3"></i> Finish
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Status Card -->
+                <div class="bg-indigo-900 rounded-3xl p-8 text-white relative overflow-hidden flex flex-col justify-end min-h-[160px]">
+                    <div class="relative z-10">
+                        <i data-lucide="rocket" class="w-10 h-10 text-indigo-300/30 mb-3"></i>
+                        <h4 class="text-xl font-bold mb-1">Chào Hỉ, chúc bạn làm việc hiệu quả!</h4>
+                        <p class="text-indigo-200 text-xs leading-relaxed max-w-md">
+                            Hệ thống lưu trữ ghi chú cục bộ đang hoạt động. Mọi thay đổi trong phần Ghi Chú sẽ được tự động bảo toàn.
+                        </p>
+                    </div>
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                </div>
+            </div>
+
+            <!-- Notes Tab -->
+            <div id="tab-notes" class="hidden h-full flex flex-col bg-white">
+                <div id="editor-empty" class="flex-1 flex flex-col items-center justify-center text-center p-12">
+                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6 border border-slate-100">
+                        <i data-lucide="file-text" class="w-10 h-10 text-slate-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Chưa chọn ghi chú nào</h3>
+                    <p class="text-slate-500 mb-8 max-w-xs">Hãy chọn một ghi chú từ danh sách bên trái hoặc tạo mới để bắt đầu.</p>
+                    <button onclick="createNewNote()" class="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all">
+                        <i data-lucide="plus" class="w-5 h-5"></i> Tạo ghi chú mới
+                    </button>
+                </div>
+
+                <div id="editor-content" class="hidden h-full flex flex-col">
+                    <div class="px-8 py-4 border-b border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <button onclick="switchTab('dashboard')" class="p-2 hover:bg-slate-100 rounded-lg text-slate-400">
+                                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                            </button>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Đang chỉnh sửa</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span id="save-indicator" class="text-[10px] text-slate-400 font-medium opacity-0 transition-opacity">Đã lưu tự động...</span>
+                            <button onclick="saveCurrentNote()" class="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-bold shadow-md shadow-emerald-100">
+                                <i data-lucide="save" class="w-4 h-4"></i> Lưu
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col p-8 lg:px-24 overflow-hidden">
+                        <input type="text" id="note-title" oninput="autoSave()" class="text-4xl font-extrabold outline-none border-none placeholder-slate-200 mb-8 w-full" placeholder="Tiêu đề...">
+                        <textarea id="note-text" oninput="autoSave()" class="flex-1 w-full text-lg text-slate-600 leading-relaxed outline-none border-none resize-none placeholder-slate-200" placeholder="Nội dung ghi chú..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // State Management
+        let notes = JSON.parse(localStorage.getItem('sr_notes') || '[]');
+        let activeNoteId = null;
+        let saveTimeout;
+
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Time Update Function
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const clockEl = document.getElementById('real-time-clock');
+            if(clockEl) clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+            
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            const dateString = now.toLocaleDateString('vi-VN', options).toUpperCase();
+            const dateEl = document.getElementById('current-date');
+            if(dateEl) dateEl.textContent = dateString;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // UI Functions
+        function switchTab(tab) {
+            document.getElementById('tab-dashboard').classList.toggle('hidden', tab !== 'dashboard');
+            document.getElementById('tab-notes').classList.toggle('hidden', tab !== 'notes');
+            
+            document.getElementById('btn-dashboard').className = `w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${tab === 'dashboard' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-slate-500 hover:bg-slate-50'}`;
+            document.getElementById('btn-notes').className = `w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${tab === 'notes' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-slate-500 hover:bg-slate-50'}`;
+        }
+
+        function renderNotesList() {
+            const list = document.getElementById('notes-list');
+            if(!list) return;
+            list.innerHTML = '';
+            
+            notes.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).forEach(note => {
+                const div = document.createElement('div');
+                div.className = `group flex items-center justify-between px-3 py-2 rounded-lg text-sm cursor-pointer transition-all note-item ${activeNoteId === note.id ? 'active' : 'text-slate-500 hover:bg-slate-50'}`;
+                div.onclick = () => openNote(note.id);
+                div.innerHTML = `
+                    <span class="truncate flex-1">${note.title || 'Không tiêu đề'}</span>
+                    <button onclick="deleteNote(event, '${note.id}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 transition-all">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                `;
+                list.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        function createNewNote() {
+            const newNote = {
+                id: Date.now().toString(),
+                title: 'Ghi chú mới',
+                content: '',
+                updatedAt: Date.now()
+            };
+            notes.push(newNote);
+            saveToLocal();
+            openNote(newNote.id);
+            switchTab('notes');
+        }
+
+        function openNote(id) {
+            activeNoteId = id;
+            const note = notes.find(n => n.id === id);
+            if(!note) return;
+            
+            document.getElementById('editor-empty').classList.add('hidden');
+            document.getElementById('editor-content').classList.remove('hidden');
+            
+            document.getElementById('note-title').value = note.title;
+            document.getElementById('note-text').value = note.content;
+            
+            renderNotesList();
+            switchTab('notes');
+        }
+
+        function deleteNote(event, id) {
+            event.stopPropagation();
+            notes = notes.filter(n => n.id !== id);
+            if (activeNoteId === id) {
+                activeNoteId = null;
+                document.getElementById('editor-empty').classList.remove('hidden');
+                document.getElementById('editor-content').classList.add('hidden');
+            }
+            saveToLocal();
+            renderNotesList();
+        }
+
+        function autoSave() {
+            clearTimeout(saveTimeout);
+            const indicator = document.getElementById('save-indicator');
+            indicator.style.opacity = '1';
+            
+            saveTimeout = setTimeout(() => {
+                saveCurrentNote();
+                indicator.style.opacity = '0';
+            }, 1000);
+        }
+
+        function saveCurrentNote() {
+            if (!activeNoteId) return;
+            const noteIdx = notes.findIndex(n => n.id === activeNoteId);
+            if (noteIdx > -1) {
+                notes[noteIdx].title = document.getElementById('note-title').value;
+                notes[noteIdx].content = document.getElementById('note-text').value;
+                notes[noteIdx].updatedAt = Date.now();
+                saveToLocal();
+                renderNotesList();
+            }
+        }
+
+        function saveToLocal() {
+            localStorage.setItem('sr_notes', JSON.stringify(notes));
+        }
+
+        // Initial render
+        renderNotesList();
+    </script>
+</body>
+</html>

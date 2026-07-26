@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Những ngộ nhận về đọc hiểu nhanh</title>
+    
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tích hợp Font chữ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tích hợp FontAwesome cho Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'red-theme-dark': '#4a0000',
+                        'red-theme-mid': '#8b0000',
+                        'red-theme-light': '#b30000',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Ẩn thanh cuộn mặc định */
+            background-color: #4a0000;
+        }
+
+        /* Nền Gradient mượt mà */
+        .bg-gradient-premium {
+            background: linear-gradient(135deg, #2a0000 0%, #7a0000 50%, #ba0000 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Cấu trúc trượt (Scroll Snap) */
+        .presentation-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            /* Ẩn thanh cuộn trên container */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .presentation-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slide {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        /* Hiệu ứng kính mờ (Glassmorphism) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Hiệu ứng xuất hiện của nội dung (Animation) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delay cho các phần tử bên trong */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* Icon nhấp nháy ở trang chủ */
+        .bounce-arrow {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Thanh tiến trình (Progress Bar) */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #ffb3b3;
+            width: 0%;
+            z-index: 50;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px #ffb3b3;
+        }
+    </style>
+</head>
+<body class="bg-gradient-premium text-white font-sans antialiased relative">
+
+    <!-- Thanh tiến trình -->
+    <div id="progress-bar"></div>
+
+    <!-- Nền Canvas hạt lơ lửng cho thêm phần "ảo diệu" -->
+    <canvas id="particles-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Hướng dẫn điều khiển (chỉ hiện lúc đầu) -->
+    <div class="fixed bottom-4 left-4 z-50 text-white/50 text-sm hidden md:block">
+        <i class="fas fa-keyboard mr-2"></i>Dùng phím mũi tên [↑] [↓] để di chuyển
+    </div>
+
+    <!-- Nút điều hướng cho Mobile/Tablet -->
+    <div class="fixed right-4 bottom-4 z-50 flex flex-col gap-2">
+        <button onclick="scrollSlide(-1)" class="w-12 h-12 rounded-full glass-card hover:bg-white/20 transition flex items-center justify-center text-white focus:outline-none">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+        <button onclick="scrollSlide(1)" class="w-12 h-12 rounded-full glass-card hover:bg-white/20 transition flex items-center justify-center text-white focus:outline-none">
+            <i class="fas fa-chevron-down"></i>
+        </button>
+    </div>
+
+    <main id="presentation" class="presentation-container z-10 relative">
+        
+        <!-- SLIDE 0: Tiêu đề -->
+        <section class="slide" id="slide-0">
+            <div class="text-center max-w-5xl px-4 reveal active">
+                <div class="inline-block p-4 rounded-full bg-red-500/20 text-red-200 mb-6 border border-red-400/30">
+                    <i class="fas fa-book-reader text-3xl"></i>
+                </div>
+                <h1 class="font-serif text-5xl md:text-7xl font-black mb-6 leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-red-200 drop-shadow-lg">
+                    Những Ngộ Nhận Về<br/>Đọc Hiểu Nhanh
+                </h1>
+                <p class="text-xl md:text-2xl text-red-100/80 mb-12 font-light max-w-3xl mx-auto">
+                    Phá bỏ những lầm tưởng cản bước bạn, khám phá sự thật và làm chủ kỹ năng đọc siêu tốc.
+                </p>
+                <div class="bounce-arrow text-red-300 opacity-70 mt-10">
+                    <p class="text-sm uppercase tracking-widest mb-2 font-semibold">Bắt đầu</p>
+                    <i class="fas fa-arrow-down text-2xl"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 1 -->
+        <section class="slide" id="slide-1">
+            <div class="glass-card rounded-3xl p-8 md:p-12 w-full max-w-6xl reveal">
+                <div class="flex items-center gap-4 mb-8 border-b border-white/20 pb-6">
+                    <span class="text-5xl md:text-7xl font-serif font-bold text-red-400 opacity-50">1</span>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">Đọc nhanh là "cưỡi ngựa xem hoa", không thể hiểu sâu</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <!-- Ngộ nhận -->
+                    <div class="bg-red-950/40 rounded-2xl p-6 border border-red-500/30 reveal delay-100">
+                        <div class="flex items-center gap-3 mb-4 text-red-300">
+                            <i class="fas fa-times-circle text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Ngộ nhận</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed">
+                            Nhiều người mới bắt đầu lo sợ rằng khi tăng tốc độ đọc, họ sẽ bị "rơi" mất chữ hoặc không kịp hiểu nội dung.
+                        </p>
+                    </div>
+                    
+                    <!-- Thực tế -->
+                    <div class="bg-emerald-900/40 rounded-2xl p-6 border border-emerald-500/30 reveal delay-200 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-emerald-500/10 text-9xl"><i class="fas fa-check"></i></div>
+                        <div class="flex items-center gap-3 mb-4 text-emerald-400">
+                            <i class="fas fa-lightbulb text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Thực tế</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed relative z-10">
+                            Phương pháp Speed Reading hướng đến tốc độ trung bình <strong class="text-white">1000 từ/phút</strong> nhưng vẫn đảm bảo hiểu sâu. Việc đọc theo cụm từ (3-5 từ cùng lúc) giúp não bộ xử lý thông tin trực tiếp (Tai - Mắt - Não) thay vì đọc thầm, tăng sự tập trung và hiểu vấn đề nhanh hơn.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2 -->
+        <section class="slide" id="slide-2">
+            <div class="glass-card rounded-3xl p-8 md:p-12 w-full max-w-6xl reveal">
+                <div class="flex items-center gap-4 mb-8 border-b border-white/20 pb-6">
+                    <span class="text-5xl md:text-7xl font-serif font-bold text-red-400 opacity-50">2</span>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">Phải đọc từng từ từ đầu đến cuối mới là "đọc sách"</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <div class="bg-red-950/40 rounded-2xl p-6 border border-red-500/30 reveal delay-100">
+                        <div class="flex items-center gap-3 mb-4 text-red-300">
+                            <i class="fas fa-times-circle text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Ngộ nhận</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed">
+                            Đa số người mới vẫn giữ thói quen đọc truyền thống là bắt đầu từ trang đầu tiên, đọc kỹ từng chữ và không dám bỏ sót chi tiết nào.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-emerald-900/40 rounded-2xl p-6 border border-emerald-500/30 reveal delay-200 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-emerald-500/10 text-9xl"><i class="fas fa-search"></i></div>
+                        <div class="flex items-center gap-3 mb-4 text-emerald-400">
+                            <i class="fas fa-lightbulb text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Thực tế</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed relative z-10">
+                            Đọc chi tiết ngay lập tức thường khiến ta rối vào tiểu tiết và quên logic. Kỹ thuật <strong class="text-white text-xl">Skimming (Xem trước)</strong> trong 5-15 phút để nắm cấu trúc và "bức tranh toàn cảnh" thực chất mới là chìa khóa tăng độ hiểu lên >80% trước khi đọc sâu.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3 -->
+        <section class="slide" id="slide-3">
+            <div class="glass-card rounded-3xl p-8 md:p-12 w-full max-w-6xl reveal">
+                <div class="flex items-center gap-4 mb-8 border-b border-white/20 pb-6">
+                    <span class="text-5xl md:text-7xl font-serif font-bold text-red-400 opacity-50">3</span>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">Đọc nhanh chỉ là việc "lướt mắt" nhanh hơn</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <div class="bg-red-950/40 rounded-2xl p-6 border border-red-500/30 reveal delay-100">
+                        <div class="flex items-center gap-3 mb-4 text-red-300">
+                            <i class="fas fa-times-circle text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Ngộ nhận</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed">
+                            Người mới thường nhầm tưởng chỉ cần di chuyển mắt thật nhanh trên trang giấy là đạt yêu cầu.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-emerald-900/40 rounded-2xl p-6 border border-emerald-500/30 reveal delay-200 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-emerald-500/10 text-9xl"><i class="fas fa-eye"></i></div>
+                        <div class="flex items-center gap-3 mb-4 text-emerald-400">
+                            <i class="fas fa-lightbulb text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Thực tế</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed relative z-10">
+                            Lướt mắt đơn thuần mà không có kỹ thuật sẽ dẫn đến không hiểu gì và mỏi mắt. Đọc nhanh đúng cách là sự kết hợp giữa kỹ thuật <strong class="text-white">"nhảy mắt" (Eye Jumping)</strong> vào điểm mấu chốt, mở rộng tầm nhìn ngoại vi và kỹ năng xử lý cụm từ của não bộ.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4 -->
+        <section class="slide" id="slide-4">
+            <div class="glass-card rounded-3xl p-8 md:p-12 w-full max-w-6xl reveal">
+                <div class="flex items-center gap-4 mb-8 border-b border-white/20 pb-6">
+                    <span class="text-5xl md:text-7xl font-serif font-bold text-red-400 opacity-50">4</span>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">Ghi nhớ là khả năng thiên bẩm và cần đọc đi đọc lại</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <div class="bg-red-950/40 rounded-2xl p-6 border border-red-500/30 reveal delay-100">
+                        <div class="flex items-center gap-3 mb-4 text-red-300">
+                            <i class="fas fa-times-circle text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Ngộ nhận</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed">
+                            Học viên thường cố gắng dùng não bộ để nhớ máy móc hoặc học vẹt kiến thức bằng cách đọc đi đọc lại.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-emerald-900/40 rounded-2xl p-6 border border-emerald-500/30 reveal delay-200 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-emerald-500/10 text-9xl"><i class="fas fa-brain"></i></div>
+                        <div class="flex items-center gap-3 mb-4 text-emerald-400">
+                            <i class="fas fa-lightbulb text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Thực tế</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed relative z-10">
+                            Bí quyết ghi nhớ bền vững nằm ở cách ghi chép và hệ thống hóa. Sử dụng <strong class="text-white">Smart Note</strong> với các từ khóa (Keywords) và <strong class="text-white">Active Recall</strong> (Gợi nhớ chủ động) giúp khơi gợi trí nhớ hiệu quả hơn nhiều so với chép lại toàn văn.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5 -->
+        <section class="slide" id="slide-5">
+            <div class="glass-card rounded-3xl p-8 md:p-12 w-full max-w-6xl reveal">
+                <div class="flex items-center gap-4 mb-8 border-b border-white/20 pb-6">
+                    <span class="text-5xl md:text-7xl font-serif font-bold text-red-400 opacity-50">5</span>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">Sách nào cũng đáng để đọc chi tiết từ trang đầu đến cuối</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <div class="bg-red-950/40 rounded-2xl p-6 border border-red-500/30 reveal delay-100">
+                        <div class="flex items-center gap-3 mb-4 text-red-300">
+                            <i class="fas fa-times-circle text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Ngộ nhận</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed">
+                            Người mới hay mua sách theo cảm tính hoặc thấy tựa đề hay là nhảy vào đọc chi tiết ngay lập tức.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-emerald-900/40 rounded-2xl p-6 border border-emerald-500/30 reveal delay-200 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-emerald-500/10 text-9xl"><i class="fas fa-filter"></i></div>
+                        <div class="flex items-center gap-3 mb-4 text-emerald-400">
+                            <i class="fas fa-lightbulb text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Thực tế</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed relative z-10">
+                            Mỗi cuốn sách chỉ giải quyết một vấn đề cụ thể. Kỹ thuật đọc nhanh cho phép dùng <strong class="text-white">Skimming</strong> để đánh giá, chắt lọc và <strong class="text-white">loại bỏ</strong> những sách không giá trị hoặc không phù hợp nhu cầu hiện tại, tránh lãng phí thời gian.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6 -->
+        <section class="slide" id="slide-6">
+            <div class="glass-card rounded-3xl p-8 md:p-12 w-full max-w-6xl reveal">
+                <div class="flex items-center gap-4 mb-8 border-b border-white/20 pb-6">
+                    <span class="text-5xl md:text-7xl font-serif font-bold text-red-400 opacity-50">6</span>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">Đọc nhanh là kỹ năng đạt được tức thì không cần luyện</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <div class="bg-red-950/40 rounded-2xl p-6 border border-red-500/30 reveal delay-100">
+                        <div class="flex items-center gap-3 mb-4 text-red-300">
+                            <i class="fas fa-times-circle text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Ngộ nhận</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed">
+                            Nhiều người lầm tưởng chỉ cần "biết" phương pháp, đọc xong lý thuyết là sẽ tự động đọc nhanh được ngay.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-emerald-900/40 rounded-2xl p-6 border border-emerald-500/30 reveal delay-200 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 text-emerald-500/10 text-9xl"><i class="fas fa-dumbbell"></i></div>
+                        <div class="flex items-center gap-3 mb-4 text-emerald-400">
+                            <i class="fas fa-lightbulb text-2xl"></i>
+                            <h3 class="text-2xl font-semibold uppercase tracking-wide">Thực tế</h3>
+                        </div>
+                        <p class="text-lg text-gray-200 leading-relaxed relative z-10">
+                            Đây là quá trình phá bỏ thói quen cũ (đọc thầm, cố định mắt). Cần một chuỗi luyện tập <strong class="text-white">có ý thức và kỷ luật</strong> để định hình phản xạ mới, giúp mắt và não bộ thích nghi với tốc độ xử lý cao.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: END -->
+        <section class="slide" id="slide-7">
+            <div class="text-center max-w-4xl px-4 reveal">
+                <i class="fas fa-rocket text-6xl text-red-300 mb-6 drop-shadow-lg"></i>
+                <h2 class="font-serif text-5xl md:text-6xl font-bold mb-8 text-white">Bạn Đã Sẵn Sàng Bứt Phá?</h2>
+                <p class="text-xl md:text-2xl text-red-100 mb-10 font-light">
+                    Kỹ năng đọc nhanh không phải là phép thuật, đó là khoa học và sự rèn luyện. Hãy bắt đầu hành trình nâng cấp bản thân ngay hôm nay!
+                </p>
+                <button onclick="document.getElementById('slide-0').scrollIntoView({behavior: 'smooth'})" class="bg-white text-red-900 font-bold py-4 px-10 rounded-full text-xl hover:bg-red-100 hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transition duration-300 transform hover:-translate-y-1">
+                    <i class="fas fa-redo mr-2"></i> Trình chiếu lại
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- Logic Hiệu ứng xuất hiện (Intersection Observer) ---
+        const observerOptions = {
+            root: document.querySelector('.presentation-container'),
+            rootMargin: '0px',
+            threshold: 0.3 // Kích hoạt khi 30% phần tử xuất hiện
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // Thêm class active khi slide hiện vào khung hình
+                if (entry.isIntersecting) {
+                    const reveals = entry.target.querySelectorAll('.reveal');
+                    reveals.forEach(el => el.classList.add('active'));
+                    
+                    // Cập nhật Progress Bar
+                    updateProgressBar(entry.target.id);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach((slide) => {
+            observer.observe(slide);
+        });
+
+        // --- Logic Progress Bar ---
+        const totalSlides = document.querySelectorAll('.slide').length;
+        function updateProgressBar(slideId) {
+            const index = parseInt(slideId.split('-')[1]);
+            const progress = (index / (totalSlides - 1)) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        // --- Logic Điều hướng bằng phím & Nút bấm ---
+        const container = document.getElementById('presentation');
+        
+        // Điều khiển bằng nút bấm trên màn hình
+        function scrollSlide(direction) {
+            const currentScroll = container.scrollTop;
+            const windowHeight = window.innerHeight;
+            // Tính slide hiện tại dựa trên vị trí cuộn
+            let currentIndex = Math.round(currentScroll / windowHeight);
+            
+            let nextIndex = currentIndex + direction;
+            if(nextIndex < 0) nextIndex = 0;
+            if(nextIndex >= totalSlides) nextIndex = totalSlides - 1;
+
+            document.getElementById(`slide-${nextIndex}`).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Điều khiển bằng phím mũi tên
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+                e.preventDefault();
+                scrollSlide(1);
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                scrollSlide(-1);
+            }
+        });
+
+        // --- Nền Canvas Particles (Hạt lơ lửng) ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        // Cập nhật kích thước canvas
+        function setCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+
+        // Lớp hạt
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5; // Kích thước siêu nhỏ
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                // Nếu bay ra khỏi màn hình thì quay lại
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        // Khởi tạo hệ thống hạt
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.width * canvas.height) / 8000; // Mật độ hạt
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        // Vòng lặp animation
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function() {
+            initParticles();
+            animateParticles();
+            
+            // Kích hoạt animation slide đầu tiên ngay khi load
+            setTimeout(() => {
+                document.getElementById('slide-0').querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+            }, 100);
+        };
+    </script>
+</body>
+</html>

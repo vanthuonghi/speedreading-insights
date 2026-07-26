@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phòng Luyện Mắt Cấp Tốc | SpeedReading.vn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 900: '#0f172a', 800: '#1e293b', blue: '#3b82f6', orange: '#f97316', green: '#10b981' }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'expand-out': 'expandOut 2s ease-out forwards'
+                    },
+                    keyframes: {
+                        expandOut: {
+                            '0%': { transform: 'scale(0) translate(-50%, -50%)', opacity: '1' },
+                            '100%': { transform: 'scale(1) translate(-50%, -50%)', opacity: '0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; overflow-x: hidden; }
+        /* Tùy chỉnh thanh cuộn mang phong cách App */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        
+        .tab-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
+        .schulte-cell { transition: all 0.1s ease; }
+        .schulte-cell:active { transform: scale(0.95); }
+        .correct-click { background-color: #10b981 !important; color: white !important; }
+        
+        /* Hiệu ứng hạt di chuyển cho bài Ngoại vi */
+        .peri-dot {
+            position: absolute; top: 50%; left: 50%;
+            border-radius: 50%; background-color: #10b981;
+            transform-origin: top left;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased pb-20">
+
+    <nav class="bg-brand-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
+                <i class="fa-solid fa-rocket text-brand-orange text-2xl"></i>
+                <span class="text-xl font-bold uppercase tracking-wider text-white">Speed<span class="text-brand-blue">Reading</span>.vn</span>
+            </div>
+            <a href="https://zalo.me/g/yourlink" target="_blank" class="hidden sm:flex bg-brand-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors shadow-[0_0_15px_rgba(249,115,22,0.4)]">
+                <i class="fa-brands fa-zalo mr-2 text-lg"></i> Tham Gia Nhóm Zalo Free
+            </a>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        <!-- CỘT TRÁI: Hồ Sơ & Gamification -->
+        <div class="lg:col-span-1 space-y-4">
+            <div class="bg-brand-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center">
+                <div class="w-20 h-20 bg-gradient-to-tr from-brand-blue to-purple-500 rounded-full mx-auto mb-3 flex items-center justify-center border-4 border-slate-800 shadow-lg">
+                    <i class="fa-solid fa-user-astronaut text-3xl text-white"></i>
+                </div>
+                <h2 class="text-lg font-bold">Học Viên Speed Reading</h2>
+                <p class="text-sm text-slate-400 mb-4">Level: <span class="text-brand-orange font-bold">Tân binh</span></p>
+                
+                <div class="bg-slate-900 rounded-xl p-3 mb-4 border border-slate-700 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-blue opacity-10 blur-xl"></div>
+                    <p class="text-xs text-slate-400 font-semibold mb-1 relative z-10">TỐC ĐỘ HIỆN TẠI</p>
+                    <div class="text-3xl font-black text-white relative z-10">
+                        <span id="currentWPM">0</span> <span class="text-sm text-brand-blue font-normal">WPM</span>
+                    </div>
+                </div>
+
+                <div class="text-left mb-2">
+                    <div class="flex justify-between text-xs font-semibold mb-1">
+                        <span>Mục tiêu ngày</span>
+                        <span id="progressText" class="text-brand-green">0/15 Phút</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                        <div id="progressBar" class="bg-brand-green h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút gọi Action Zalo -->
+            <a href="https://zalo.me/g/yourlink" target="_blank" class="block w-full bg-[#0068FF] hover:bg-blue-600 text-white text-center p-3 rounded-xl font-bold transition-transform transform hover:scale-105 shadow-lg">
+                <i class="fa-solid fa-headset mr-2"></i> Hỗ Trợ Trực Tiếp (Zalo)
+            </a>
+        </div>
+
+        <div class="lg:col-span-2 bg-brand-800 rounded-2xl border border-slate-700 shadow-xl flex flex-col overflow-hidden">
+            <!-- Tab Navigation -->
+            <div class="flex border-b border-slate-700 bg-slate-900/50">
+                <button onclick="switchTab('schulte')" id="tab-schulte" class="tab-btn active flex-1 py-4 text-sm sm:text-base font-semibold border-b-2 border-transparent text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-table-cells mr-1"></i> Bảng Schulte
+                </button>
+                <button onclick="switchTab('peripheral')" id="tab-peripheral" class="tab-btn flex-1 py-4 text-sm sm:text-base font-semibold border-b-2 border-transparent text-slate-400 hover:text-white transition">
+                    <i class="fa-regular fa-eye mr-1"></i> Ngoại Vi
+                </button>
+                <button onclick="switchTab('rsvp')" id="tab-rsvp" class="tab-btn flex-1 py-4 text-sm sm:text-base font-semibold border-b-2 border-transparent text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-bolt mr-1"></i> RSVP Ép Não
+                </button>
+            </div>
+
+            <div class="p-4 sm:p-6 flex-1 relative min-h-[400px]">
+                
+                <div id="content-schulte" class="tab-content h-full flex flex-col items-center">
+                    <div class="w-full flex justify-between items-center mb-4">
+                        <div>
+                            <p class="text-sm text-slate-400">Kỷ lục: <span id="schulteRecord" class="text-brand-orange font-bold">--:--</span></p>
+                        </div>
+                        <div class="text-2xl font-mono font-bold" id="schulteTimer">00.00s</div>
+                        <select id="schulteSize" class="bg-slate-700 text-white text-sm rounded-lg border-slate-600 p-2 focus:ring-brand-blue outline-none">
+                            <option value="3">3x3 (Khởi động)</option>
+                            <option value="4">4x4 (Tiêu chuẩn)</option>
+                            <option value="5" selected>5x5 (Thử thách)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex-1 w-full flex items-center justify-center">
+                        <div id="schulteGrid" class="grid gap-2 w-full max-w-[350px] aspect-square">
+                            <!-- JS Sẽ render ô vuông vào đây -->
+                        </div>
+                    </div>
+                    <button onclick="startSchulte()" id="btnStartSchulte" class="mt-4 bg-brand-blue hover:bg-blue-600 w-full py-3 rounded-xl font-bold text-lg shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all">
+                        BẮT ĐẦU TÌM SỐ
+                    </button>
+                    <p class="text-xs text-center text-slate-400 mt-3">Giữ mắt ở điểm giữa màn hình, dùng tầm nhìn ngoại vi tìm từ số 1 đến hết.</p>
+                </div>
+
+                <div id="content-peripheral" class="tab-content hidden h-full flex flex-col">
+                    <div class="w-full flex justify-between mb-2">
+                        <span class="text-sm font-semibold">Tốc độ xuất hiện</span>
+                        <input type="range" id="periSpeed" min="500" max="2000" value="1000" class="w-1/2">
+                    </div>
+                    <div class="flex-1 bg-slate-900 rounded-xl relative overflow-hidden border border-slate-700" id="periCanvas">
+                        <!-- Điểm lấy nét trung tâm -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-red-500 rounded-full z-10 animate-pulse"></div>
+                    </div>
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="startPeripheral()" id="btnStartPeri" class="flex-1 bg-brand-green hover:bg-green-600 py-3 rounded-xl font-bold shadow-lg">BẮT ĐẦU KÉO DÃN</button>
+                        <button onclick="stopPeripheral()" class="px-4 bg-slate-700 hover:bg-slate-600 py-3 rounded-xl font-bold"><i class="fa-solid fa-stop"></i></button>
+                    </div>
+                    <p class="text-xs text-center text-slate-400 mt-3">Tuyệt đối không đảo mắt. Nhìn chằm chằm vào chấm đỏ, nhận biết chấm xanh xuất hiện ở đâu.</p>
+                </div>
+
+                <div id="content-rsvp" class="tab-content hidden h-full flex flex-col">
+                    <textarea id="rsvpInput" class="w-full h-24 bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 focus:border-brand-blue outline-none resize-none" placeholder="Dán đoạn văn bản (tiếng Việt hoặc Anh) bạn muốn luyện đọc siêu tốc vào đây..."></textarea>
+                    
+                    <div class="flex items-center justify-between my-4 bg-slate-900 p-2 rounded-lg border border-slate-700">
+                        <span class="text-sm font-bold w-16 text-center" id="rsvpWpmDisplay">300</span>
+                        <input type="range" id="rsvpSpeed" min="200" max="1000" step="50" value="300" class="flex-1 mx-4" oninput="document.getElementById('rsvpWpmDisplay').innerText = this.value">
+                        <span class="text-xs text-slate-400">WPM</span>
+                    </div>
+
+                    <div class="flex-1 bg-slate-900 rounded-xl flex items-center justify-center border border-slate-700 relative">
+                        <!-- Chữ sẽ chớp ở đây -->
+                        <div id="rsvpDisplay" class="text-4xl sm:text-5xl font-black text-center px-4 leading-tight">Sẵn sàng!</div>
+                    </div>
+
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="toggleRSVP()" id="btnRsvp" class="flex-1 bg-brand-orange hover:bg-orange-600 py-3 rounded-xl font-bold shadow-[0_0_15px_rgba(249,115,22,0.4)] text-lg">PLAY</button>
+                        <button onclick="resetRSVP()" class="px-4 bg-slate-700 hover:bg-slate-600 py-3 rounded-xl font-bold"><i class="fa-solid fa-rotate-right"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="lg:col-span-1 space-y-4">
+            
+            <!-- Banner Chốt Đơn 200k -->
+            <div class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] p-1 rounded-2xl relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-orange to-red-500 opacity-20 group-hover:opacity-40 transition-opacity blur-xl"></div>
+                <div class="bg-brand-800 rounded-xl p-4 border border-brand-orange/30 relative z-10">
+                    <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-sm uppercase absolute top-[-10px] right-2 animate-bounce">Flash Sale</span>
+                    <h3 class="font-bold text-lg leading-tight mb-2 text-brand-orange">Phá Bỏ Tật Đọc Thầm</h3>
+                    <p class="text-xs text-slate-300 mb-3 line-clamp-3">Mở khóa cấp độ bài tập cao nhất + Bộ Video Chữa Lỗi Đọc Chậm kinh điển của Hỉ.</p>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xl font-black">200.000đ</span>
+                        <span class="text-xs line-through text-slate-500">500.000đ</span>
+                    </div>
+                    <button class="w-full bg-gradient-to-r from-brand-orange to-red-500 hover:from-orange-500 hover:to-red-400 py-2 rounded-lg font-bold text-sm shadow-lg">SỞ HỮU NGAY</button>
+                </div>
+            </div>
+
+            <!-- Mock Chat Zalo tạo FOMO -->
+            <div class="bg-brand-800 rounded-2xl border border-slate-700 p-4 shadow-xl">
+                <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-700">
+                    <i class="fa-brands fa-zalo text-[#0068FF] text-xl"></i>
+                    <h3 class="font-bold text-sm">Feedback Nhóm Luyện Tập</h3>
+                </div>
+                <div class="space-y-3 h-48 overflow-y-auto pr-1 text-sm scrollbar-hide" id="chatContainer">
+                    <div class="bg-slate-700 p-2 rounded-lg rounded-tl-none w-[85%]">
+                        <p class="text-xs font-semibold text-brand-blue mb-1">Tuấn Anh (SV NEU)</p>
+                        <p>Web xịn quá Hỉ ơi! Em làm Schulte 1 tuần nay mắt hết bị mỏi hẳn.</p>
+                    </div>
+                    <div class="bg-slate-700 p-2 rounded-lg rounded-tl-none w-[85%] ml-auto bg-[#0068FF]/20 border border-[#0068FF]/30">
+                        <p class="text-xs font-semibold text-brand-orange mb-1">Admin Hỉ</p>
+                        <p>Tuyệt vời, nhớ kết hợp đo bằng RSVP mỗi ngày nha!</p>
+                    </div>
+                     <div class="bg-slate-700 p-2 rounded-lg rounded-tl-none w-[85%]">
+                        <p class="text-xs font-semibold text-brand-blue mb-1">Minh Thư</p>
+                        <p>Mình mới đăng ký khóa 200k, duyệt mình với ạ.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 w-full bg-gradient-to-r from-brand-900 to-slate-900 border-t border-brand-orange/50 p-3 z-50 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between px-4 gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-orange rounded-full flex items-center justify-center animate-pulse-slow">
+                    <i class="fa-solid fa-video text-white"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-white">Lớp Zoom Thực Chiến Cùng Hỉ</h4>
+                    <p class="text-xs text-slate-300">Đồng hành 7 buổi sửa lỗi trực tiếp. Cam kết x3 tốc độ.</p>
+                </div>
+            </div>
+            <a href="tel:0899320202" class="whitespace-nowrap bg-brand-orange hover:bg-orange-600 text-white px-6 py-2 rounded-full font-bold text-sm sm:text-base transition transform hover:scale-105 shadow-[0_0_15px_rgba(249,115,22,0.5)]">
+                Đăng Ký 1Tr (Còn 2 Slot)
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- QUẢN LÝ DỮ LIỆU LOCAL STORAGE ---
+        let userData = JSON.parse(localStorage.getItem('speedReadingData')) || {
+            wpm: 250,
+            minutesTrainedToday: 0,
+            lastTrainDate: new Date().toDateString(),
+            bestSchulte: { '3': null, '4': null, '5': null }
+        };
+
+        function saveData() {
+            localStorage.setItem('speedReadingData', JSON.stringify(userData));
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('currentWPM').innerText = userData.wpm;
+            // Reset daily progress if new day
+            if(userData.lastTrainDate !== new Date().toDateString()) {
+                userData.minutesTrainedToday = 0;
+                userData.lastTrainDate = new Date().toDateString();
+            }
+            let percent = (userData.minutesTrainedToday / 15) * 100;
+            if(percent > 100) percent = 100;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').innerText = `${userData.minutesTrainedToday}/15 Phút`;
+
+            // Update Schulte Record based on selected size
+            let size = document.getElementById('schulteSize').value;
+            let record = userData.bestSchulte[size];
+            document.getElementById('schulteRecord').innerText = record ? `${record}s` : '--:--';
+        }
+
+        // Add 1 minute to training time
+        function addTrainingTime() {
+            userData.minutesTrainedToday += 1;
+            saveData();
+        }
+
+        // --- QUẢN LÝ TAB NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            // Stop running tasks when switching
+            if(tabId !== 'schulte') clearInterval(schulteInterval);
+            if(tabId !== 'peripheral') stopPeripheral();
+            if(tabId !== 'rsvp') { clearInterval(rsvpInterval); isRsvpPlaying = false; document.getElementById('btnRsvp').innerText = "PLAY"; }
+        }
+
+        // --- STREAMING_CHUNK: LOGIC BÀI TẬP SCHULTE ---
+        let schulteInterval, schulteTime = 0, currentExpectedNumber = 1, totalSchulteNumbers = 25;
+        let isSchultePlaying = false;
+
+        document.getElementById('schulteSize').addEventListener('change', () => {
+            updateUI();
+            renderSchulteGrid(false); // Render empty/preview grid
+        });
+
+        function renderSchulteGrid(isPlaying) {
+            const grid = document.getElementById('schulteGrid');
+            const size = parseInt(document.getElementById('schulteSize').value);
+            totalSchulteNumbers = size * size;
+            
+            grid.style.gridTemplateColumns = `repeat(${size}, minmax(0, 1fr))`;
+            grid.innerHTML = '';
+
+            let numbers = Array.from({length: totalSchulteNumbers}, (_, i) => i + 1);
+            if(isPlaying) numbers = numbers.sort(() => Math.random() - 0.5);
+
+            for(let i = 0; i < totalSchulteNumbers; i++) {
+                const btn = document.createElement('div');
+                btn.className = `schulte-cell bg-slate-700 border border-slate-600 rounded-lg flex items-center justify-center font-bold text-xl sm:text-2xl cursor-pointer text-white shadow-md hover:bg-slate-600 select-none ${!isPlaying ? 'opacity-50 pointer-events-none' : ''}`;
+                btn.style.aspectRatio = "1/1";
+                btn.innerText = isPlaying ? numbers[i] : '?';
+                
+                if(isPlaying) {
+                    btn.onclick = function() { handleSchulteClick(this, parseInt(numbers[i])); };
+                }
+                grid.appendChild(btn);
+            }
+        }
+
+        function startSchulte() {
+            if(isSchultePlaying) return;
+            isSchultePlaying = true;
+            currentExpectedNumber = 1;
+            schulteTime = 0;
+            document.getElementById('schulteTimer').innerText = "00.00s";
+            document.getElementById('schulteTimer').classList.remove('text-brand-green');
+            document.getElementById('btnStartSchulte').innerText = "ĐANG TÌM SỐ...";
+            document.getElementById('btnStartSchulte').classList.add('opacity-50');
+            
+            renderSchulteGrid(true);
+
+            schulteInterval = setInterval(() => {
+                schulteTime += 0.01;
+                document.getElementById('schulteTimer').innerText = schulteTime.toFixed(2) + "s";
+            }, 10);
+        }
+
+        function handleSchulteClick(element, number) {
+            if(!isSchultePlaying) return;
+            if(number === currentExpectedNumber) {
+                element.classList.add('correct-click');
+                currentExpectedNumber++;
+                if(currentExpectedNumber > totalSchulteNumbers) {
+                    endSchulte();
+                }
+            } else {
+                // Wrong click effect
+                element.classList.add('bg-red-500');
+                setTimeout(() => element.classList.remove('bg-red-500'), 200);
+            }
+        }
+
+        function endSchulte() {
+            clearInterval(schulteInterval);
+            isSchultePlaying = false;
+            document.getElementById('btnStartSchulte').innerText = "CHƠI LẠI";
+            document.getElementById('btnStartSchulte').classList.remove('opacity-50');
+            document.getElementById('schulteTimer').classList.add('text-brand-green');
+            
+            addTrainingTime(); // Thêm phút luyện tập
+
+            // Save record
+            const size = document.getElementById('schulteSize').value;
+            const currentRecord = userData.bestSchulte[size];
+            if(!currentRecord || schulteTime < currentRecord) {
+                userData.bestSchulte[size] = schulteTime.toFixed(2);
+                saveData();
+                // Optional UI text instead of alert
+                document.getElementById('btnStartSchulte').innerText = "KỶ LỤC MỚI! CHƠI LẠI";
+            }
+        }
+
+        // --- STREAMING_CHUNK: LOGIC BÀI TẬP NGOẠI VI ---
+        let periInterval;
+        let isPeriPlaying = false;
+
+        function startPeripheral() {
+            if(isPeriPlaying) return;
+            isPeriPlaying = true;
+            const canvas = document.getElementById('periCanvas');
+            const speed = 2500 - parseInt(document.getElementById('periSpeed').value); // Invert speed slider
+            document.getElementById('btnStartPeri').innerText = "ĐANG TẬP TRUNG...";
+            
+            periInterval = setInterval(() => {
+                // Tạo chấm mới
+                const dot = document.createElement('div');
+                dot.className = 'peri-dot w-4 h-4 sm:w-6 sm:h-6 absolute animate-expand-out shadow-[0_0_10px_#10b981]';
+                
+                // Random position logic: ensure it starts from center and moves outward visually
+                // Note: The keyframe expands it, we just place it in center and let CSS do work
+                dot.style.top = '50%';
+                dot.style.left = '50%';
+                
+                // Randomly scale it up larger for different effect sizes
+                const scaleTarget = Math.random() * 5 + 5; 
+                dot.style.setProperty('--tw-scale-x', scaleTarget);
+                dot.style.setProperty('--tw-scale-y', scaleTarget);
+
+                canvas.appendChild(dot);
+                
+                // Clean up DOM
+                setTimeout(() => { if(canvas.contains(dot)) dot.remove(); }, 2000);
+            }, speed);
+
+            // Ghi nhận luyện tập sau mỗi 60s
+            setTimeout(() => { if(isPeriPlaying) addTrainingTime(); }, 60000);
+        }
+
+        function stopPeripheral() {
+            clearInterval(periInterval);
+            isPeriPlaying = false;
+            document.getElementById('btnStartPeri').innerText = "BẮT ĐẦU KÉO DÃN";
+            document.querySelectorAll('.peri-dot').forEach(el => el.remove());
+        }
+
+        // --- STREAMING_CHUNK: LOGIC BÀI TẬP RSVP ---
+        let rsvpWords = [];
+        let rsvpCurrentIndex = 0;
+        let rsvpInterval;
+        let isRsvpPlaying = false;
+
+        function toggleRSVP() {
+            const btn = document.getElementById('btnRsvp');
+            const inputTxt = document.getElementById('rsvpInput').value.trim();
+            const display = document.getElementById('rsvpDisplay');
+
+            if(isRsvpPlaying) {
+                // Pause
+                clearInterval(rsvpInterval);
+                isRsvpPlaying = false;
+                btn.innerText = "RESUME";
+                btn.classList.replace('bg-red-500', 'bg-brand-orange');
+            } else {
+                // Play
+                if(inputTxt === "") {
+                    display.innerText = "Vui lòng dán văn bản!";
+                    display.classList.add('text-red-500');
+                    setTimeout(() => display.classList.remove('text-red-500'), 1000);
+                    return;
+                }
+
+                if(rsvpCurrentIndex === 0) {
+                    // Split words handling newlines and extra spaces
+                    rsvpWords = inputTxt.replace(/\n/g, " ").split(/\s+/).filter(w => w.length > 0);
+                    if(rsvpWords.length === 0) return;
+                }
+
+                isRsvpPlaying = true;
+                btn.innerText = "PAUSE";
+                btn.classList.replace('bg-brand-orange', 'bg-red-500');
+                
+                const wpm = parseInt(document.getElementById('rsvpSpeed').value);
+                const msPerWord = 60000 / wpm;
+
+                display.classList.remove('text-brand-green');
+
+                rsvpInterval = setInterval(() => {
+                    if(rsvpCurrentIndex < rsvpWords.length) {
+                        display.innerText = rsvpWords[rsvpCurrentIndex];
+                        rsvpCurrentIndex++;
+                    } else {
+                        // Finish
+                        clearInterval(rsvpInterval);
+                        isRsvpPlaying = false;
+                        btn.innerText = "HOÀN THÀNH";
+                        btn.classList.replace('bg-red-500', 'bg-brand-green');
+                        display.innerText = "Tuyệt vời!";
+                        display.classList.add('text-brand-green');
+                        rsvpCurrentIndex = 0;
+                        addTrainingTime(); // Cộng điểm
+                        
+                        // Upsell suggestion after finishing text
+                        userData.wpm = wpm; // Cập nhật WPM hiện tại của user bằng tốc độ họ vừa đọc
+                        saveData();
+                    }
+                }, msPerWord);
+            }
+        }
+
+        function resetRSVP() {
+            clearInterval(rsvpInterval);
+            isRsvpPlaying = false;
+            rsvpCurrentIndex = 0;
+            document.getElementById('rsvpDisplay').innerText = "Sẵn sàng!";
+            document.getElementById('btnRsvp').innerText = "PLAY";
+            document.getElementById('btnRsvp').className = "flex-1 bg-brand-orange hover:bg-orange-600 py-3 rounded-xl font-bold shadow-[0_0_15px_rgba(249,115,22,0.4)] text-lg transition";
+        }
+
+        // --- KHỞI TẠO BAN ĐẦU ---
+        updateUI();
+        renderSchulteGrid(false);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trạm Content Speedreading</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Be Vietnam Pro"', 'sans-serif'] },
+                    colors: {
+                        // Tông màu đỏ/cam thương hiệu Speedreading
+                        brand: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            900: '#7f1d1d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #f8fafc; }
+        textarea::-webkit-scrollbar { width: 8px; }
+        textarea::-webkit-scrollbar-track { background: transparent; }
+        textarea::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        .filter-tab.active { @apply bg-brand-600 text-white border-brand-600; }
+    </style>
+</head>
+<body class="text-slate-800 h-screen flex flex-col overflow-hidden font-sans">
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shadow-sm shrink-0 z-10">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="app.showDashboard()">
+            <img src="https://img.speedreading.vn/logo.png" alt="Speedreading Logo" class="h-10 object-contain">
+            <span class="text-sm font-bold text-brand-700 uppercase tracking-wide">Trạm Content</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="app.logout()" class="text-sm text-slate-500 hover:text-brand-600 font-medium px-3 py-1 rounded transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Đóng trạm
+            </button>
+        </div>
+    </header>
+
+    <main id="app-container" class="flex-1 overflow-hidden relative">
+        
+        <div id="gatekeeper-view" class="h-full w-full flex items-center justify-center bg-slate-900 absolute inset-0 z-[100]">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center">
+                <div class="mb-6">
+                    <img src="https://img.speedreading.vn/logo.png" alt="Logo" class="h-14 mx-auto mb-4 object-contain">
+                    <h2 class="text-xl font-bold text-slate-800">Trạm Content Speedreading</h2>
+                    <p class="text-sm text-slate-500 mt-1">Nhập mật khẩu để truy cập</p>
+                </div>
+                <div class="space-y-4">
+                    <input type="password" id="gatekeeper-password" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-center font-bold tracking-widest text-slate-800" placeholder="••••••••" onkeypress="if(event.key === 'Enter') app.checkGatekeeper()">
+                    <button onclick="app.checkGatekeeper()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-lg transition-all shadow-lg shadow-brand-200">
+                        MỞ TRẠM
+                    </button>
+                </div>
+                <p id="gatekeeper-error" class="text-red-500 text-sm mt-4 hidden font-medium"><i class="fa-solid fa-circle-xmark mr-1"></i> Sai mật khẩu</p>
+            </div>
+        </div>
+
+        <div id="dashboard-view" class="hidden h-full w-full p-6 overflow-y-auto bg-slate-50">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Quản lý Content</h2>
+                        <p class="text-slate-500 mt-1 text-sm">Lưu trữ nội bộ trên trình duyệt (LocalStorage)</p>
+                    </div>
+                    
+                    <div class="flex flex-col gap-3 w-full md:w-auto items-end">
+                         <div class="flex gap-2 w-full md:w-auto">
+                            <div class="relative flex-1 md:w-64">
+                                <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                                <input type="text" id="search-input" oninput="app.handleSearch(this.value)" 
+                                    class="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-brand-500 transition-all"
+                                    placeholder="Tìm tiêu đề, mô tả...">
+                            </div>
+                             <button onclick="app.createNewContent()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg shadow-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap">
+                                <i class="fa-solid fa-plus"></i> Tạo Content
+                            </button>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 overflow-x-auto pb-1">
+                    <div class="flex gap-1 bg-white p-1 rounded-lg border border-slate-200 shadow-sm w-max">
+                        <button onclick="app.setFilter('all')" class="filter-tab active px-4 py-1.5 rounded text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors" data-filter="all">Tất cả</button>
+                        <button onclick="app.setFilter('chua_quay')" class="filter-tab px-4 py-1.5 rounded text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors" data-filter="chua_quay">Chưa quay video</button>
+                        <button onclick="app.setFilter('chua_dang')" class="filter-tab px-4 py-1.5 rounded text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors" data-filter="chua_dang">Chưa đăng</button>
+                        <button onclick="app.setFilter('da_dang')" class="filter-tab px-4 py-1.5 rounded text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors" data-filter="da_dang">Đã đăng</button>
+                    </div>
+                </div>
+
+                <div id="content-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+
+                <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
+                    <div class="bg-slate-200 p-6 rounded-full mb-4 text-slate-400">
+                        <i class="fa-regular fa-folder-open text-4xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-slate-700">Chưa có content nào</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="editor-view" class="hidden h-full flex flex-col bg-white">
+            <div class="border-b border-slate-100 px-6 py-3 flex justify-between items-center bg-slate-50 shrink-0">
+                <button onclick="app.showDashboard()" class="text-slate-600 hover:text-brand-600 transition-colors flex items-center gap-2 text-sm font-bold">
+                    <i class="fa-solid fa-arrow-left"></i> Trở về
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="app.deleteCurrentContent()" class="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded transition-colors text-sm font-medium">
+                        <i class="fa-regular fa-trash-can mr-1"></i> Xóa
+                    </button>
+                    <button onclick="app.saveCurrentContent()" class="bg-brand-600 text-white hover:bg-brand-700 px-6 py-1.5 rounded-lg shadow-sm transition-colors text-sm font-bold">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Content
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 md:p-10">
+                <div class="max-w-3xl mx-auto space-y-6">
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tiêu đề content</label>
+                        <input type="text" id="c-title" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none font-bold text-lg text-slate-800" placeholder="Nhập tiêu đề hấp dẫn...">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Trạng thái</label>
+                            <select id="c-status" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none text-slate-700 font-medium">
+                                <option value="chua_quay">🎥 Chưa quay video</option>
+                                <option value="chua_dang">📝 Chưa đăng</option>
+                                <option value="da_dang">✅ Đã đăng</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Ngày tạo</label>
+                            <input type="text" id="c-date" disabled class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-500 font-medium cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Link kịch bản quay video</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-file-video absolute left-3 top-3.5 text-slate-400"></i>
+                                <input type="text" id="c-link-script" class="w-full pl-10 pr-4 py-3 bg-white border border-slate-300 rounded-lg focus:border-brand-500 outline-none text-slate-700 text-sm" placeholder="https://docs.google.com/...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Link Content đã đăng</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-link absolute left-3 top-3.5 text-slate-400"></i>
+                                <input type="text" id="c-link-content" class="w-full pl-10 pr-4 py-3 bg-white border border-slate-300 rounded-lg focus:border-brand-500 outline-none text-slate-700 text-sm" placeholder="https://facebook.com/...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Mô tả chi tiết</label>
+                        <textarea id="c-desc" rows="10" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none text-slate-700 leading-relaxed resize-y" placeholder="Ghi chú thêm về nội dung, idea, hook..."></textarea>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const app = {
+            data: { 
+                contents: [], 
+                currentId: null, 
+                filter: 'all',
+                searchQuery: ''
+            },
+
+            init() { 
+                this.loadData();
+                if (sessionStorage.getItem('sr_unlocked') === 'true') {
+                    document.getElementById('gatekeeper-view').classList.add('hidden');
+                    this.showDashboard();
+                }
+            },
+
+            checkGatekeeper() {
+                const input = document.getElementById('gatekeeper-password').value;
+                const errorEl = document.getElementById('gatekeeper-error');
+                if (input === 'Vanhi') {
+                    sessionStorage.setItem('sr_unlocked', 'true');
+                    document.getElementById('gatekeeper-view').classList.add('hidden');
+                    this.showDashboard();
+                } else {
+                    errorEl.classList.remove('hidden');
+                }
+            },
+
+            logout() {
+                sessionStorage.removeItem('sr_unlocked');
+                document.getElementById('gatekeeper-password').value = '';
+                document.getElementById('gatekeeper-view').classList.remove('hidden');
+                document.getElementById('dashboard-view').classList.add('hidden');
+                document.getElementById('editor-view').classList.add('hidden');
+            },
+
+            // --- LOCAL STORAGE ---
+            loadData() {
+                const saved = localStorage.getItem('speedreading_contents');
+                if (saved) {
+                    this.data.contents = JSON.parse(saved);
+                }
+            },
+            
+            saveData() {
+                localStorage.setItem('speedreading_contents', JSON.stringify(this.data.contents));
+            },
+
+            // --- NAVIGATION ---
+            showDashboard() {
+                this.data.currentId = null;
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                document.getElementById('editor-view').classList.add('hidden');
+                this.renderList();
+            },
+
+            showEditor(id) {
+                const item = this.data.contents.find(c => c.id === id);
+                if (!item) return;
+                
+                this.data.currentId = id;
+                document.getElementById('c-title').value = item.title || '';
+                document.getElementById('c-desc').value = item.description || '';
+                document.getElementById('c-link-content').value = item.linkContent || '';
+                document.getElementById('c-link-script').value = item.linkScript || '';
+                document.getElementById('c-status').value = item.status || 'chua_quay';
+                document.getElementById('c-date').value = item.createdAt;
+
+                document.getElementById('dashboard-view').classList.add('hidden');
+                document.getElementById('editor-view').classList.remove('hidden');
+            },
+
+            // --- FILTER & SEARCH ---
+            handleSearch(val) {
+                this.data.searchQuery = val.toLowerCase().trim();
+                this.renderList();
+            },
+
+            setFilter(f) {
+                this.data.filter = f;
+                document.querySelectorAll('.filter-tab').forEach(btn => {
+                    if (btn.dataset.filter === f) {
+                        btn.classList.add('active');
+                        btn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                    } else {
+                        btn.classList.remove('active');
+                        btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                    }
+                });
+                this.renderList();
+            },
+
+            // --- CRUD ---
+            createNewContent() {
+                const now = new Date();
+                const newItem = {
+                    id: 'sr_' + Date.now(),
+                    title: '',
+                    description: '',
+                    linkContent: '',
+                    linkScript: '',
+                    status: 'chua_quay',
+                    createdAt: now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})
+                };
+                
+                this.data.contents.unshift(newItem);
+                this.saveData();
+                this.showEditor(newItem.id);
+            },
+
+            saveCurrentContent() {
+                if (!this.data.currentId) return;
+                
+                const index = this.data.contents.findIndex(c => c.id === this.data.currentId);
+                if (index === -1) return;
+
+                this.data.contents[index].title = document.getElementById('c-title').value;
+                this.data.contents[index].description = document.getElementById('c-desc').value;
+                this.data.contents[index].linkContent = document.getElementById('c-link-content').value;
+                this.data.contents[index].linkScript = document.getElementById('c-link-script').value;
+                this.data.contents[index].status = document.getElementById('c-status').value;
+
+                this.saveData();
+                this.showToast('Đã lưu Content', 'success');
+            },
+
+            deleteCurrentContent() {
+                if (!this.data.currentId) return;
+                if(confirm('Bạn có chắc muốn xóa content này không?')) {
+                    this.data.contents = this.data.contents.filter(c => c.id !== this.data.currentId);
+                    this.saveData();
+                    this.showDashboard();
+                    this.showToast('Đã xóa', 'success');
+                }
+            },
+
+            deleteFromDashboard(e, id) {
+                e.stopPropagation();
+                if(confirm('Bạn có chắc muốn xóa content này không?')) {
+                    this.data.contents = this.data.contents.filter(c => c.id !== id);
+                    this.saveData();
+                    this.renderList();
+                    this.showToast('Đã xóa', 'success');
+                }
+            },
+
+            // --- RENDER ---
+            getStatusConfig(status) {
+                const config = {
+                    'chua_quay': { text: '🎥 Chưa quay', class: 'bg-slate-100 text-slate-600 border-slate-200' },
+                    'chua_dang': { text: '📝 Chưa đăng', class: 'bg-orange-50 text-orange-600 border-orange-200' },
+                    'da_dang': { text: '✅ Đã đăng', class: 'bg-green-50 text-green-600 border-green-200' }
+                };
+                return config[status] || config['chua_quay'];
+            },
+
+            renderList() {
+                const container = document.getElementById('content-list-container');
+                const emptyState = document.getElementById('empty-state');
+                container.innerHTML = '';
+                
+                let list = this.data.contents;
+
+                // Lọc theo tab
+                if (this.data.filter !== 'all') {
+                    list = list.filter(c => c.status === this.data.filter);
+                }
+
+                // Lọc theo search
+                if (this.data.searchQuery) {
+                    const q = this.data.searchQuery;
+                    list = list.filter(c => 
+                        (c.title && c.title.toLowerCase().includes(q)) || 
+                        (c.description && c.description.toLowerCase().includes(q))
+                    );
+                }
+
+                if (list.length === 0) {
+                    container.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    emptyState.classList.add('flex');
+                    return;
+                }
+
+                container.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+
+                list.forEach(c => {
+                    const st = this.getStatusConfig(c.status);
+                    
+                    const linkScriptBtn = c.linkScript ? `<a href="${c.linkScript}" target="_blank" onclick="event.stopPropagation()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1.5 rounded flex items-center gap-1 transition"><i class="fa-solid fa-file-video text-brand-600"></i> Kịch bản</a>` : '';
+                    const linkContentBtn = c.linkContent ? `<a href="${c.linkContent}" target="_blank" onclick="event.stopPropagation()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1.5 rounded flex items-center gap-1 transition"><i class="fa-solid fa-link text-blue-600"></i> Bài đăng</a>` : '';
+
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-300 transition-all cursor-pointer relative flex flex-col h-64';
+                    card.onclick = () => this.showEditor(c.id);
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-3 gap-2">
+                            <span class="text-[11px] px-2.5 py-1 rounded-full font-bold border ${st.class}">${st.text}</span>
+                            <button class="text-slate-300 hover:text-red-500 transition-colors p-1" onclick="app.deleteFromDashboard(event, '${c.id}')"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800 line-clamp-2 mb-2 group-hover:text-brand-600 transition-colors">${c.title || '<span class="italic text-slate-400">Content chưa có tiêu đề</span>'}</h3>
+                        <p class="text-slate-500 text-sm mb-4 line-clamp-3 flex-1">${c.description || ''}</p>
+                        
+                        <div class="flex gap-2 mb-4 mt-auto">
+                            ${linkScriptBtn}
+                            ${linkContentBtn}
+                        </div>
+
+                        <div class="text-xs font-medium text-slate-400 border-t border-slate-100 pt-3 flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock"></i> ${c.createdAt}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            },
+
+            showToast(message, type = 'success') {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                const colors = type === 'error' ? 'border-red-500 text-red-700' : 'border-green-500 text-green-700';
+                const icon = type === 'error' ? 'fa-circle-exclamation' : 'fa-check-circle';
+                toast.className = `bg-white shadow-lg rounded-md p-4 flex items-center gap-3 min-w-[250px] transform transition-all duration-300 translate-x-full opacity-0 border-l-4 ${colors}`;
+                toast.innerHTML = `<i class="fa-solid ${icon}"></i><span class="font-medium text-sm text-slate-700">${message}</span>`;
+                container.appendChild(toast);
+                requestAnimationFrame(() => toast.classList.remove('translate-x-full', 'opacity-0'));
+                setTimeout(() => { toast.classList.add('translate-x-full', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
+            }
+        };
+
+        window.app = app;
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>

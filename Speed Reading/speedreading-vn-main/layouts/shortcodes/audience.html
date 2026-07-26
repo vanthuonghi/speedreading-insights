@@ -1,0 +1,20 @@
+{{- if .Page.Params.audiences -}}
+<div style="background-color: #fff1f2; border-left: 4px solid #990100; padding: 16px; margin: 20px 0 30px 0; border-radius: 0 12px 12px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#990100" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <strong style="color: #990100; font-size: 16px; font-family: 'Inter', sans-serif;">Cuốn sách này dành cho:</strong>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        {{- range .Page.Params.audiences -}}
+        <span style="background-color: white; color: #b91c1c; border: 1px solid #fecaca; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; transition: all 0.2s ease;">
+            {{ . }}
+        </span>
+        {{- end -}}
+    </div>
+</div>
+{{- end -}}

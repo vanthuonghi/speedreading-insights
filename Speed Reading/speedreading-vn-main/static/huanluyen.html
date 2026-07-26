@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kỹ Năng Đọc Nhanh - Speed Reading</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts: Changed to Be Vietnam Pro for better Vietnamese support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #0f172a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Hiệu ứng nền Gradient động - MÀU ĐỎ */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(220, 38, 38, 0.4), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(244, 63, 94, 0.25), transparent 25%);
+            filter: blur(60px);
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Active Card - MÀU ĐỎ */
+        .active-video-card {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(244, 63, 94, 0.05) 100%);
+            border-left: 4px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Danh sách Video ID từ Playlist của bạn
+        const VIDEO_DATA = [
+            { id: 'CyL76NLISzM', title: 'Kỹ Thuật 1: Làm chủ kỹ thuật chỉ tay' },
+            { id: 'wSt9EPgKpqY', title: 'Kỹ thuật 2: Phá bỏ thói quen đọc thầm' },
+            { id: '_UhBlLwQiCc', title: 'Kỹ thuật 3: Mở rộng tầm nhìn' },
+            { id: 'l7F22E8gSbw', title: 'Kỳ thuật 4: Giảm đọc quay lại' },
+            { id: '8OPelkPiTBw', title: 'Kỹ Thuật 5: Time Drill tăng tốc độ đọc' },
+            { id: 'BXein0sabbA', title: 'Kỹ thuật 6: Active Reading đọc chủ động' },
+            { id: 'm6QKcvuDvZk', title: 'Kỹ thuật 7: Skimming đọc lướt' },
+            { id: 'Lvy5ehG74Kg', title: 'Kỹ thuật 8: Scanning thông minh' },
+            { id: '6ymV9mnBFPc', title: 'Kỹ thuật 9: Smartnote ghi chú thông minh' },
+            { id: 'Oi06RvrHmno', title: 'Kỹ thuật 10: Mindmap sơ đồ sáng tạo' },
+            { id: '18-7PtIPHCA', title: 'Kỹ thuật 11: Active Recall' },
+            { id: 'vPwlVQyPyvs', title: 'Kỹ thuật 12: Ghi nhớ dài hạn' },
+            { id: 'jCM5aVud0Fg', title: 'Kỹ thuật 13: Phân biệt mục đích đọc' },
+            { id: 'Lp9JZ4D_Agw', title: 'Kỹ thuật 14: Quy trình đọc thông minh' }
+        ];
+
+        const App = () => {
+            const [currentIndex, setCurrentIndex] = React.useState(0);
+            const [isAutoPlay, setIsAutoPlay] = React.useState(true);
+
+            // Hàm tạo URL thumbnail từ YouTube ID
+            const getThumbnail = (id) => `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+
+            const currentVideo = VIDEO_DATA[currentIndex];
+
+            // Xử lý khi click vào video trong list
+            const handleVideoSelect = (index) => {
+                setCurrentIndex(index);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            // Icon components
+            const PlayIcon = () => (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            );
+            
+            const ListIcon = () => (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            );
+
+            const ExternalLinkIcon = () => (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            );
+
+            return (
+                <div className="min-h-screen relative pb-10">
+                    {/* Background Gradient */}
+                    <div className="gradient-bg"></div>
+
+                    {/* Header */}
+                    <header className="pt-4 pb-4 px-6 md:px-12 flex flex-col md:flex-row justify-between items-center glass-panel sticky top-0 z-50 border-b border-white/10 mb-6 gap-4">
+                        <div className="flex items-center gap-3">
+                            {/* Icon Box - Red Gradient */}
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-rose-500 flex items-center justify-center shadow-lg shadow-red-500/30">
+                                <PlayIcon className="text-white" />
+                            </div>
+                            <div>
+                                {/* Title - Red Gradient Text */}
+                                <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-red-200 to-red-500 leading-tight">
+                                    Kỹ Năng Đọc Hiệu Quả
+                                </h1>
+                                <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold">
+                                    Khóa Học Speed Reading
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Nút Thư viện tổng hợp */}
+                        <a 
+                            href="https://speedreading.vn/links" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/40 text-slate-200 hover:text-white transition-all duration-300 group backdrop-blur-md"
+                        >
+                            <span className="text-sm font-medium">Thư viện tổng hợp</span>
+                            <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+                                <ExternalLinkIcon />
+                            </span>
+                        </a>
+                    </header>
+
+                    {/* Main Content */}
+                    <main className="container mx-auto px-4 md:px-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            
+                            {/* Left Column: Video Player */}
+                            <div className="lg:col-span-2 space-y-4">
+                                {/* Video Wrapper - Red Shadow */}
+                                <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl shadow-red-900/40 border border-white/10 group">
+                                    <iframe 
+                                        className="w-full h-full object-cover"
+                                        src={`https://www.youtube.com/embed/${currentVideo.id}?autoplay=${isAutoPlay ? 1 : 0}&rel=0`}
+                                        title={currentVideo.title}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                                
+                                <div className="glass-panel p-6 rounded-2xl">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
+                                                {currentVideo.title}
+                                            </h2>
+                                            <p className="text-slate-400">
+                                                Video số <span className="text-red-400 font-bold">#{currentIndex + 1}</span> trong tổng số {VIDEO_DATA.length}
+                                            </p>
+                                        </div>
+                                        <div className="hidden md:block">
+                                            {/* Badge - Red Style */}
+                                           <span className="px-4 py-1 rounded-full bg-red-500/20 text-red-300 text-sm border border-red-500/30">
+                                                HD Quality
+                                           </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right Column: Playlist */}
+                            <div className="lg:col-span-1">
+                                <div className="glass-panel rounded-2xl overflow-hidden flex flex-col h-[calc(100vh-140px)] sticky top-24">
+                                    <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-lg font-semibold text-white">
+                                            <ListIcon /> 
+                                            Danh sách phát
+                                        </div>
+                                        <span className="text-xs font-bold bg-white/10 px-2 py-1 rounded text-slate-300">
+                                            {VIDEO_DATA.length} Videos
+                                        </span>
+                                    </div>
+
+                                    <div className="overflow-y-auto flex-1 p-2 space-y-2 custom-scrollbar">
+                                        {VIDEO_DATA.map((video, index) => {
+                                            const isActive = index === currentIndex;
+                                            return (
+                                                <div 
+                                                    key={video.id}
+                                                    onClick={() => handleVideoSelect(index)}
+                                                    className={`
+                                                        group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300
+                                                        ${isActive ? 'active-video-card bg-white/10' : 'hover:bg-white/5 border-l-4 border-transparent hover:border-slate-600'}
+                                                    `}
+                                                >
+                                                    <div className="relative w-32 aspect-video rounded-lg overflow-hidden shrink-0 shadow-sm">
+                                                        <img 
+                                                            src={getThumbnail(video.id)} 
+                                                            alt={video.title}
+                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                        />
+                                                        {isActive && (
+                                                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                                                <div className="w-2 h-2 bg-white rounded-full animate-ping"></div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    
+                                                    <div className="flex-1 min-w-0">
+                                                        <h3 className={`text-sm font-medium truncate ${isActive ? 'text-red-300' : 'text-slate-200 group-hover:text-white'}`}>
+                                                            {video.title}
+                                                        </h3>
+                                                        <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                                                            {isActive ? <span className="text-red-400 font-semibold">Đang phát</span> : `Bài ${index + 1}`}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </main>
+                    
+                    <footer className="mt-12 text-center text-slate-500 text-sm pb-8">
+                        <p>Speed Reading Việt Nam 2025</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

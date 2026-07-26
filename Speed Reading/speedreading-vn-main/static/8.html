@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sách Giáo Khoa Speed Reading 8 - Phần Đầu Sách & Mục Lục</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 25mm 20mm 25mm 25mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.4;
+            color: #111;
+            background-color: #fff;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        h1, h2, h3, h4 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1a4a38; /* Màu xanh lá đậm trưởng thành hơn */
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            text-indent: 1cm;
+        }
+        .page-break {
+            page-break-after: always;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 40px;
+            margin-bottom: 40px;
+        }
+        /* Trang Bìa Lót */
+        .cover-page {
+            text-align: center;
+            height: 900px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 0;
+        }
+        .cover-compiler {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cover-title-box {
+            margin-top: 150px;
+        }
+        .cover-subject {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #555;
+        }
+        .cover-main-title {
+            font-family: Arial, sans-serif;
+            font-size: 34px;
+            font-weight: bold;
+            color: #1a4a38;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .cover-grade {
+            font-family: Arial, sans-serif;
+            font-size: 60px;
+            font-weight: bold;
+            color: #d35400; /* Màu cam cháy mạnh mẽ */
+            line-height: 1;
+        }
+        .slogan {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-style: italic;
+            color: #555;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+        .cover-publisher {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: auto;
+            letter-spacing: 1px;
+        }
+        /* Lời Nói Đầu */
+        .section-headline {
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #1a4a38;
+            padding-bottom: 5px;
+            margin-bottom: 25px;
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+            color: #1a4a38;
+        }
+        .author-sign {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 40px;
+            padding-right: 20px;
+            font-style: italic;
+        }
+        /* Hướng Dẫn Sử Dụng Sách */
+        .guide-box {
+            border: 1px solid #1a4a38;
+            background-color: #f4f9f7;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .guide-icon-title {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: #1a4a38;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .guide-box p {
+            text-indent: 0;
+            margin-bottom: 0;
+        }
+        /* Mục Lục */
+        .toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .toc-table td {
+            padding: 5px 0;
+            vertical-align: bottom;
+        }
+        .toc-theme {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: #1a4a38;
+            font-size: 14px;
+            padding-top: 18px !important;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ccc;
+        }
+        .toc-lesson {
+            font-weight: bold;
+            padding-left: 15px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #d35400;
+            padding-top: 8px;
+        }
+        .toc-period {
+            padding-left: 30px;
+            font-style: normal;
+            color: #222;
+        }
+        .dots {
+            border-bottom: 1px dotted #888;
+        }
+        .page-num {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            width: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cover-page page-break">
+        <div class="cover-compiler">
+            HỘI ĐỒNG THẨM ĐỊNH TÀI LIỆU GIÁO DỤC PHÁT TRIỂN NĂNG LỰC
+        </div>
+        <div class="cover-title-box">
+            <div class="cover-subject">Tài liệu giáo khoa</div>
+            <div class="cover-main-title">KỸ NĂNG ĐỌC HIỂU TỐC ĐỘ CAO</div>
+            <div class="cover-grade">8</div>
+            <div class="slogan">"Làm chủ thông tin – Khai phóng tư duy"</div>
+        </div>
+        <div class="cover-publisher">
+            NHÀ XUẤT BẢN GIÁO DỤC VIỆT NAM
+        </div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Lời nói đầu</div>
+        <p>Các em học sinh thân mến!</p>
+        <p>Bước vào lớp 8, các em đang đối mặt với một giai đoạn bản lề của bậc Trung học cơ sở. Khối lượng kiến thức tăng vọt với sự xuất hiện của các bộ môn mới như Hóa học, cùng hệ thống văn bản Ngữ văn đòi hỏi tư duy phân tích, lập luận sắc bén. Trong thế giới bùng nổ thông tin hiện nay, việc "đọc hiểu" không còn đơn thuần là việc tiếp nhận thụ động những gì sách giáo khoa viết.</p>
+        <p>Cuốn sách <strong>Kỹ năng Đọc hiểu Tốc độ cao (Speed Reading) – Lớp 8</strong> được thiết kế để trang bị cho các em năng lực của một "Chiến lược gia thông tin". Ở lớp 6 và lớp 7, các em đã làm quen với việc rèn luyện cơ mắt và nghệ thuật điều chỉnh tốc độ đọc. Ở lớp 8 này, chúng ta sẽ bước sang một cảnh giới mới: <strong>Đọc phê phán (Critical Reading) và Xử lý văn bản đa luồng</strong>.</p>
+        <p>Qua 35 tiết học sâu sắc và thực tiễn, các em sẽ học được cách nhìn thấu tư tưởng của tác giả, phân biệt rõ ràng giữa "Sự thật" và "Ý kiến cá nhân", nhận diện các ngụy biện logic trong văn bản. Đồng thời, cuốn sách sẽ cung cấp kỹ năng tổng hợp dữ liệu từ nhiều nguồn tài liệu khác nhau (Cross-reading) và lưu trữ chúng vĩnh viễn vào "Lâu đài trí nhớ" (Memory Palace) của riêng mình.</p>
+        <p>Đây không chỉ là cuốn sách dạy cách đọc nhanh, mà là cẩm nang giúp các em tư duy độc lập, phản biện sắc sảo và học tập một cách thông minh, tiết kiệm tối đa thời gian. Hãy sẵn sàng để khai phóng giới hạn của chính mình!</p>
+        <div class="author-sign">CÁC TÁC GIẢ</div>
+    </div>
+
+    <div class="page-break">
+        <div class="section-headline">Hướng dẫn sử dụng sách</div>
+        <p style="text-indent: 0; margin-bottom: 20px;">Dành riêng cho độ tuổi lớp 8, phương pháp tiếp cận của sách sẽ giảm bớt các bài tập vận động cơ học, tập trung cao độ vào việc phân tích và xử lý thông tin. Cấu trúc bài học được chia thành 4 pha:</p>
+        
+        <div class="guide-box">
+            <div class="guide-icon-title">🔍 PHA 1: NHẬN DIỆN MỤC TIÊU (Scanning & Khởi động)</div>
+            <p>Học sinh thực hiện các bài tập kích thích não bộ ngắn, xác định rõ ràng mục tiêu khai thác dữ liệu trước khi đi sâu vào văn bản (Đọc để làm gì? Tìm kiếm sự kiện hay tìm kiếm lập luận?).</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">💡 PHA 2: GIẢI MÃ TRI THỨC (Cơ sở tư duy)</div>
+            <p>Phân tích các khái niệm về Đọc phê phán, cấu trúc ngụy biện, các mô hình lưu trữ thông tin không gian. Học sinh được cung cấp các "bộ lọc" tư duy để đánh giá chất lượng của văn bản.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">⚙️ PHA 3: THỰC CHIẾN XỬ LÝ (Huấn luyện kỹ năng)</div>
+            <p>Môi trường giả lập áp lực cao. Học sinh tiến hành đọc các văn bản khó (văn bản trào phúng, tài liệu khoa học tự nhiên) dưới áp lực thời gian, đo lường tốc độ (WPM) và kiểm tra mức độ tư duy phản biện.</p>
+        </div>
+
+        <div class="guide-box">
+            <div class="guide-icon-title">🔗 PHA 4: TỔNG HỢP & LƯU TRỮ (Chuyển hóa)</div>
+            <p>Hướng dẫn học sinh kỹ thuật đa luồng: gom nhóm kiến thức, chuyển hóa văn bản thành hệ thống Mindmap phân tích, lưu trữ vào sơ đồ không gian để ứng dụng ngay vào các bài kiểm tra thực tế trên lớp.</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-headline">Mục lục Lớp 8</div>
+        <table class="toc-table">
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ I: NÂNG CẤP HỆ THỐNG VÀ BỨT PHÁ GIỚI HẠN TỐC ĐỘ</td>
+                <td class="dots"></td>
+                <td class="page-num">5</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 1: Khảo sát và Nâng cấp phần cứng</td>
+                <td class="dots"></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 1: Đánh giá Tốc độ và Chỉ số ERR với văn bản nghị luận phức hợp</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">6</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 2: Kỹ thuật lướt khối chữ lớn (Block Reading) thay cho cụm từ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">10</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 3: Thiết lập chiến lược tự học siêu tốc và quy tắc 80/20 trong đọc sách</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">14</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 2: Tối ưu hóa chu trình nạp dữ liệu</td>
+                <td class="dots"></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 4: Sự tập trung dòng chảy (Flow State) và cách loại bỏ nhiễu sóng não</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">18</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 5: Kỹ thuật quét chữ hình chữ Z và chữ S trên trang sách giáo khoa</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">22</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 6: Áp lực ép WPM vượt ngưỡng 400 từ/phút và cơ chế phục hồi mức hiểu</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">26</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 7: Đánh giá khả năng "bức tốc" trên văn bản thông tin Địa lý lớp 8</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">30</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ II: NGHỆ THUẬT ĐỌC PHÊ PHÁN (CRITICAL READING)</td>
+                <td class="dots"></td>
+                <td class="page-num">35</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 3: Bộ lọc thông tin: Sự thật và Ý kiến</td>
+                <td class="dots"></td>
+                <td class="page-num">36</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 8: Khái niệm Đọc phê phán và ranh giới giữa Sự thật (Fact) & Ý kiến (Opinion)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">36</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 9: Kỹ thuật Scanning truy xuất nguồn dữ liệu và tính xác thực của thông tin</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">40</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 10: Phân tích thiên kiến (Bias) và dụng ý ẩn của tác giả trong văn bản</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">44</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 4: Giải phẫu lập luận và Ngụy biện logic</td>
+                <td class="dots"></td>
+                <td class="page-num">48</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 11: Mô hình tam giác lập luận: Tiền đề - Bằng chứng - Kết luận</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">48</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 12: Nhận diện các lỗi ngụy biện phổ biến khi đọc văn bản tranh biện</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">52</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 13: Đọc phản biện: Lật ngược vấn đề và đặt câu hỏi cho văn bản</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">56</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 5: Ứng dụng đọc phê phán vào Ngữ văn 8</td>
+                <td class="dots"></td>
+                <td class="page-num">60</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 14: Kỹ thuật đọc nhanh văn bản trào phúng: Bắt mạch mâu thuẫn gây cười</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">60</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 15: Tốc đọc và giải mã cấu trúc thơ Đường luật (Thất ngôn bát cú)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">64</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 16: Tốc đọc và nắm bắt mạch cảm xúc thơ Mới (Giai đoạn 1932-1945)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">68</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 17: Thực hành phân tích đa chiều một nhân vật văn học lớp 8</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">72</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ III: KỸ THUẬT TỔNG HỢP VÀ XỬ LÝ VĂN BẢN ĐA NGUỒN</td>
+                <td class="dots"></td>
+                <td class="page-num">77</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 6: Kỹ thuật Đọc chéo (Cross-Reading)</td>
+                <td class="dots"></td>
+                <td class="page-num">78</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 18: Thách thức của bài tập dự án: Nhu cầu thu thập thông tin đa nguồn</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">78</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 19: Quy trình quét song song 3 tài liệu cùng chủ đề để tìm điểm chung</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">82</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 20: Đối chiếu mâu thuẫn thông tin giữa các văn bản bằng Tốc đọc</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">86</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 21: Thực hành đọc chéo tài liệu Lịch sử và Văn học cùng một thời kỳ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">90</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 7: Xây dựng dàn ý từ mảnh ghép dữ liệu</td>
+                <td class="dots"></td>
+                <td class="page-num">94</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 22: Kỹ thuật phân loại và gom nhóm (Clustering) thông tin tốc độ cao</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">94</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 23: Biến dữ liệu hỗn hợp thành Khung tư duy (Mindmap dàn ý)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">98</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 24: Thực hành: Đọc 4 bài báo trong 15 phút và lập dàn ý thuyết trình</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">102</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 8: Xử lý chuyên sâu văn bản Khoa học Tự nhiên 8</td>
+                <td class="dots"></td>
+                <td class="page-num">106</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 25: Đặc thù môn Hóa học: Kỹ thuật đọc và ghi nhớ danh pháp, phương trình</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">106</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 26: Đặc thù môn Vật lý: Dịch thuật công thức thành chuỗi logic nguyên nhân</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">110</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 27: Thực hành bóc tách định lý và giải phẫu bài tập khoa học tự nhiên</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">114</td>
+            </tr>
+
+            <tr>
+                <td class="toc-theme" colspan="2">CHỦ ĐỀ IV: SIÊU TRÍ NHỚ VÀ TỐI ƯU HÓA HỌC TẬP CHUYÊN SÂU</td>
+                <td class="dots"></td>
+                <td class="page-num">119</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 9: Kiến tạo Lâu đài trí nhớ (Memory Palace)</td>
+                <td class="dots"></td>
+                <td class="page-num">120</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 28: Khám phá nguyên lý ghi nhớ không gian của não bộ con người</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">120</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 29: Kỹ thuật mã hóa chữ viết thành hình ảnh kỳ kì, hài hước (Visualization)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">124</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 30: Xây dựng Lâu đài trí nhớ cá nhân (Sử dụng phòng học, ngôi nhà)</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">128</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 31: Thực hành dùng tốc đọc gắn sự kiện Lịch sử 8 vào Lâu đài trí nhớ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">132</td>
+            </tr>
+            <tr>
+                <td class="toc-lesson" colspan="2">Bài 10: Tổng kết và Nâng tầm chiến lược</td>
+                <td class="dots"></td>
+                <td class="page-num">136</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 32: Nâng cấp sổ ghi chép Cornell: Tích hợp Sơ đồ tư duy và Hình ảnh mã hóa</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">136</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 33: Thực hành quy trình Đỉnh cao: Tốc đọc đa nguồn + Phản biện + Lâu đài trí nhớ</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">140</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 34: Kỳ thi đánh giá năng lực cuối năm: Đo lường WPM, ERR và Tư duy logic</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">144</td>
+            </tr>
+            <tr>
+                <td class="toc-period">Tiết 35: Lễ tốt nghiệp Lớp 8 - Thiết lập lộ trình tự học hướng tới kỳ thi chuyển cấp</td>
+                <td class="dots"></td>
+                <td></td>
+                <td class="page-num">148</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

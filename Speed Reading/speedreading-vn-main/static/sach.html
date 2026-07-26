@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Chủ Đề Đọc Sách & Phát Triển Bản Thân</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Typography & Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfbf9; /* Warm paper-like background */
+            color: #1f2937;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Merriweather', serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        /* Chart Container Utilities */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px; /* Max height constraint */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .topic-card {
+            transition: all 0.3s ease;
+        }
+        .topic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #92400e, #b45309);
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals & Earth Tones (Calm Harmony)
+         Background: #fcfbf9 (Warm Off-white)
+         Primary Text: #1f2937 (Cool Gray 800)
+         Accents: #92400e (Amber 800/Terracotta), #3f6212 (Olive/Sage), #4338ca (Indigo/Slate)
+    -->
+
+    <!-- Application Structure Plan:
+         1. Hero Section: Sets the tone, explains the "Benefit-First" philosophy.
+         2. Dashboard Overview: Visualizes the distribution of topics (Radar & Doughnut charts) to show the holistic nature of the list.
+         3. Interactive Explorer: The core tool. A filterable grid of all 100 topics. Includes search and category tabs.
+         4. "Book Matcher" / Randomizer: An engagement tool to suggest a topic based on serendipity.
+         5. Methodology: Brief explanation of the structure.
+         
+         Logic: JS handles data rendering, filtering, chart updates, and random picking.
+         Rationale: 100 items is too many for a static list. Grouping and visualization help users digest the scope.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Overview Radar Chart: Maps the 7 categories to "Life Areas" (Mind, Career, Soul, World) to show balance. (Goal: Relationships)
+         2. Category Doughnut Chart: Shows the quantitative breakdown of the 100 topics. (Goal: Inform/Compare)
+         3. Dynamic Grid: Text cards for the topics. (Goal: Organize/Inform)
+         4. Interaction: Click filters to update grid. Search input for real-time filtering.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Hero Section -->
+    <header class="w-full bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl">📚</span>
+                <h1 class="text-xl md:text-2xl font-bold serif text-stone-800 tracking-tight">Thư Viện <span class="text-amber-700">Tri Thức</span></h1>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                <a href="#dashboard" class="hover:text-amber-700 transition">Tổng Quan</a>
+                <a href="#explorer" class="hover:text-amber-700 transition">Khám Phá</a>
+                <a href="#randomizer" class="hover:text-amber-700 transition">Gợi Ý</a>
+            </nav>
+            <button onclick="scrollToSection('explorer')" class="bg-stone-800 text-white px-4 py-2 rounded-lg text-sm hover:bg-stone-700 transition shadow-sm">
+                Bắt đầu đọc
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Introduction -->
+        <section class="bg-[#fcfbf9] py-16 px-4 border-b border-stone-100">
+            <div class="max-w-4xl mx-auto text-center space-y-6">
+                <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold tracking-wide uppercase">100 Chủ Đề Hấp Dẫn</span>
+                <h2 class="text-4xl md:text-5xl font-black serif text-stone-900 leading-tight">
+                    Từ <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-orange-600">Kết Quả</span> Đến <span class="text-stone-500">Quá Trình</span>
+                </h2>
+                <p class="text-lg md:text-xl text-stone-600 leading-relaxed max-w-2xl mx-auto">
+                    Khám phá danh sách 100 ý tưởng nội dung về đọc sách và phát triển bản thân, được tối ưu hóa để tập trung vào <strong>giá trị</strong> bạn nhận được trước khi đi sâu vào <strong>phương pháp</strong> thực hiện.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <div class="flex items-center gap-2 text-sm text-stone-500">
+                        <span class="w-2 h-2 bg-amber-500 rounded-full"></span> 7 Danh Mục
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-stone-500">
+                        <span class="w-2 h-2 bg-emerald-500 rounded-full"></span> Kỹ Năng & Tâm Lý
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-stone-500">
+                        <span class="w-2 h-2 bg-indigo-500 rounded-full"></span> Sự Nghiệp & Đời Sống
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard / Visual Analysis -->
+        <section id="dashboard" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h3 class="text-2xl font-bold serif text-stone-800 mb-2">Bản Đồ Tư Duy Đọc Sách</h3>
+                    <p class="text-stone-500">Phân tích cấu trúc nội dung để hiểu rõ trọng tâm phát triển.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <!-- Chart 1: Topic Distribution -->
+                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-100 shadow-sm">
+                        <div class="mb-4">
+                            <h4 class="font-bold text-lg text-stone-700">Phân Bổ Lĩnh Vực</h4>
+                            <p class="text-xs text-stone-500">Tỷ lệ các nhóm chủ đề trong danh sách 100.</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Life Balance Radar -->
+                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-100 shadow-sm">
+                        <div class="mb-4">
+                            <h4 class="font-bold text-lg text-stone-700">Cân Bằng Cuộc Sống</h4>
+                            <p class="text-xs text-stone-500">Mức độ tác động đến các khía cạnh khác nhau của bản thân.</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insight Text -->
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-amber-50 p-5 rounded-xl border border-amber-100">
+                        <div class="text-amber-800 font-bold mb-2 text-lg">💡 Hiệu Suất</div>
+                        <p class="text-sm text-amber-900/70">15% nội dung tập trung trực tiếp vào kỹ thuật đọc nhanh, ghi nhớ và xử lý thông tin.</p>
+                    </div>
+                    <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-100">
+                        <div class="text-emerald-800 font-bold mb-2 text-lg">🌱 Phát Triển</div>
+                        <p class="text-sm text-emerald-900/70">30% nội dung dành cho sự nghiệp, tài chính và thấu hiểu tâm lý bản thân.</p>
+                    </div>
+                    <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100">
+                        <div class="text-indigo-800 font-bold mb-2 text-lg">❤️ Kết Nối</div>
+                        <p class="text-sm text-indigo-900/70">Các chủ đề về mối quan hệ và văn hóa giúp mở rộng thế giới quan và kết nối với người khác.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Topic Explorer -->
+        <section id="explorer" class="py-16 bg-[#fcfbf9]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-10 gap-4">
+                    <div>
+                        <h3 class="text-3xl font-bold serif text-stone-800 mb-2">Kho Tàng Kiến Thức</h3>
+                        <p class="text-stone-500">Tra cứu 100 chủ đề theo danh mục hoặc từ khóa.</p>
+                    </div>
+                    <div class="w-full md:w-auto">
+                        <input type="text" id="searchInput" placeholder="Tìm kiếm chủ đề..." 
+                            class="w-full md:w-64 px-4 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-sm">
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-2 mb-8" id="categoryFilters">
+                    <button class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-stone-800 text-white shadow-sm transition" data-category="all">Tất cả</button>
+                    <!-- Generated via JS -->
+                </div>
+
+                <!-- Grid -->
+                <div id="topicGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Content generated by JS -->
+                </div>
+                
+                <div id="noResults" class="hidden text-center py-12">
+                    <div class="text-4xl mb-4">🔍</div>
+                    <p class="text-stone-500 text-lg">Không tìm thấy chủ đề phù hợp.</p>
+                    <button onclick="resetFilters()" class="mt-4 text-amber-700 font-medium hover:underline">Xem tất cả</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Randomizer / Engagement -->
+        <section id="randomizer" class="py-20 bg-stone-900 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+                <h3 class="text-3xl font-bold serif mb-6">Bạn Đang Tìm Cảm Hứng?</h3>
+                <p class="text-stone-400 mb-10 text-lg">Để ngẫu nhiên chọn một chủ đề cho bạn. Hãy thử vận may tri thức.</p>
+                
+                <div id="randomCardDisplay" class="hidden transform transition-all duration-500 mb-10">
+                    <div class="bg-white text-stone-900 p-8 rounded-xl shadow-2xl max-w-xl mx-auto text-left border-l-8 border-amber-500">
+                        <span id="randomCategory" class="text-xs font-bold tracking-wider uppercase text-amber-600 mb-2 block">Category</span>
+                        <h4 id="randomBenefit" class="text-2xl font-bold serif mb-3">Benefit</h4>
+                        <div class="h-px bg-stone-200 w-full my-4"></div>
+                        <p class="text-stone-600"><span class="font-semibold text-stone-800">Phương pháp:</span> <span id="randomMethod">Method</span></p>
+                    </div>
+                </div>
+
+                <button onclick="pickRandomTopic()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all flex items-center gap-3 mx-auto">
+                    <span>🎲</span> Gợi Ý Ngẫu Nhiên
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-stone-200 py-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-stone-500 text-sm">© 2024 Ứng dụng Đọc Sách & Phát Triển. Dựa trên tài liệu "100 Chủ Đề Đọc Sách".</p>
+            <p class="text-stone-400 text-xs mt-2">Designed for focus and clarity.</p>
+        </div>
+    </footer>
+
+    <!-- DATA & LOGIC -->
+    <script>
+        // --- DATA SOURCE ---
+        const categories = [
+            { id: "skills", name: "Kỹ Năng & Hiệu Suất", color: "#d97706", range: [1, 15] },
+            { id: "career", name: "Sự Nghiệp & Tài Chính", color: "#059669", range: [16, 30] },
+            { id: "psych", name: "Tâm Lý & Bản Thân", color: "#db2777", range: [31, 45] },
+            { id: "relations", name: "Mối Quan Hệ & Gia Đình", color: "#dc2626", range: [46, 60] },
+            { id: "knowledge", name: "Văn Hóa & Kiến Thức", color: "#2563eb", range: [61, 75] },
+            { id: "lifestyle", name: "Công Cụ & Lối Sống", color: "#7c3aed", range: [76, 90] },
+            { id: "creative", name: "Độc Đáo & Sáng Tạo", color: "#c026d3", range: [91, 100] }
+        ];
+
+        // Extracted Data from Markdown
+        const rawTopics = [
+            // I. Skills (1-15)
+            "Đọc xong một cuốn sách dày trong 2 giờ: Kỹ thuật Skimming và Scanning hiệu quả.",
+            "Nhớ 90% nội dung đã đọc: Phương pháp Active Recall (Gợi nhớ chủ động).",
+            "Đọc 100 cuốn sách một năm: Chiến lược chia nhỏ thời gian và xây dựng thói quen Micro-reading.",
+            "Tăng gấp đôi tốc độ đọc hiểu: Loại bỏ thói quen đọc thầm (Subvocalization).",
+            "Biến kiến thức sách vở thành tiền: Cách áp dụng tư duy Actionable Books.",
+            "Không bao giờ buồn ngủ khi đọc: Kỹ thuật điều phối mắt và tư thế ngồi chuẩn.",
+            "Đọc sách mà không cần cầm sách: Tận dụng tối đa sức mạnh của Audiobooks khi di chuyển.",
+            "Hiểu sâu mọi vấn đề khó: Phương pháp đọc Syntopical Reading (Đọc đồng chủ đề).",
+            "Chọn đúng sách cần đọc trong 5 phút: Quy tắc 50 trang và Mục lục thông minh.",
+            "Duy trì sự tập trung tuyệt đối: Kỹ thuật Pomodoro áp dụng cho việc đọc sách.",
+            "Xây dựng Bộ não thứ hai: Cách ghi chú Zettelkasten để liên kết kiến thức.",
+            "Đọc sách ngoại văn dễ dàng: Chiến thuật học từ vựng qua ngữ cảnh (Contextual Learning).",
+            "Vượt qua tình trạng Reading Slump (Chán đọc): Cách đọc lại những cuốn sách yêu thích cũ.",
+            "Tóm tắt cả cuốn sách trên một trang giấy: Kỹ năng tư duy hình ảnh (Sketchnote).",
+            "Biến việc đọc thành đam mê: Quy tắc Goldilocks trong việc chọn độ khó của sách.",
+            // II. Career (16-30)
+            "Xây dựng tư duy triệu phú: 5 bài học cốt lõi từ Nghĩ giàu làm giàu.",
+            "Trở thành nhà lãnh đạo kiệt xuất: Phân tích tiểu sử của Steve Jobs và Elon Musk.",
+            "Thuyết phục bất kỳ ai: Nghệ thuật đắc nhân tâm trong giao tiếp hiện đại.",
+            "Quản lý tài chính cá nhân xuất sắc: Lộ trình từ sách Cha giàu cha nghèo đến tự do tài chính.",
+            "Khởi nghiệp với số vốn 0 đồng: Những bài học thực chiến từ Khởi nghiệp tinh gọn.",
+            "Nâng cao năng suất làm việc gấp 3 lần: Ứng dụng nguyên lý 80/20 vào công việc.",
+            "Giải quyết vấn đề hóc búa: Tư duy thiết kế (Design Thinking) qua trang sách.",
+            "Xây dựng thương hiệu cá nhân thu hút: Bài học từ những cuốn sách marketing hay nhất.",
+            "Đàm phán để luôn thắng: Chiến thuật từ FBI qua cuốn Đừng bao giờ đi ăn một mình.",
+            "Thăng tiến thần tốc trong sự nghiệp: 7 thói quen của người thành đạt.",
+            "Viết email và báo cáo sắc sảo: Kỹ năng Copywriting học từ các bậc thầy quảng cáo.",
+            "Đầu tư chứng khoán an toàn: Những nguyên tắc bất biến từ Benjamin Graham.",
+            "Tránh bẫy tâm lý trong kinh doanh: Hiểu về Thiên kiến xác nhận qua sách tâm lý học.",
+            "Tạo ra sản phẩm gây nghiện: Bí mật từ cuốn sách Hooked (Dính chuối).",
+            "Làm chủ nghệ thuật kể chuyện (Storytelling): Cách thôi miên khách hàng bằng ngôn từ.",
+            // III. Psychology (31-45)
+            "Chữa lành đứa trẻ bên trong: Liệu pháp từ những cuốn sách tâm lý học hành vi.",
+            "Kiểm soát cơn giận dữ tức thì: Bài học về trí tuệ cảm xúc (EQ).",
+            "Thoát khỏi sự trì hoãn mãn tính: Quy tắc 5 giây và sách về kỷ luật tự thân.",
+            "Ngủ ngon hơn mỗi đêm: Tại sao nên đọc sách giấy thay vì lướt điện thoại trước khi ngủ.",
+            "Tìm lại lẽ sống của cuộc đời: Triết lý Ikigai của người Nhật qua sách.",
+            "Vượt qua nỗi đau mất mát: Những cuốn hồi ký chữa lành tâm hồn.",
+            "Sống trọn vẹn từng khoảnh khắc: Thực hành chánh niệm (Mindfulness) qua trang sách.",
+            "Hiểu rõ tính cách người đối diện: Phân tích nhóm tính cách MBTI và DISC qua sách.",
+            "Xây dựng sự tự tin không thể lay chuyển: Sức mạnh của tư duy tích cực.",
+            "Hạnh phúc tự thân: Chủ nghĩa khắc kỷ (Stoicism) và nghệ thuật sống bản lĩnh.",
+            "Giảm stress trong 6 phút: Sức mạnh trị liệu của việc đọc văn học hư cấu.",
+            "Thoát khỏi sự thao túng tâm lý: Nhận diện Gaslighting qua sách tâm lý tội phạm.",
+            "Yêu bản thân đúng cách: Thông điệp từ những cuốn tản văn nhẹ nhàng.",
+            "Đối mặt với sự cô đơn: Những cuốn sách dành cho người hướng nội.",
+            "Cân bằng cảm xúc trong nghịch cảnh: Bài học từ Đi tìm lẽ sống của Viktor Frankl.",
+            // IV. Relationships (46-60)
+            "Giữ lửa hôn nhân bền vững: 5 ngôn ngữ tình yêu bạn cần biết.",
+            "Nuôi dạy con thành tài: Phương pháp giáo dục Do Thái qua sách.",
+            "Thấu hiểu tâm lý tuổi dậy thì: Sách gối đầu giường cho cha mẹ có con teen.",
+            "Giao tiếp hiệu quả với đồng nghiệp: Nghệ thuật lắng nghe thấu cảm.",
+            "Thoát khỏi mối quan hệ độc hại: Cách đặt ranh giới cá nhân lành mạnh.",
+            "Trở thành người bạn đời lý tưởng: Bài học từ Đàn ông sao Hỏa, Đàn bà sao Kim.",
+            "Kết nối lại với cha mẹ già: Những cuốn sách về tình cảm gia đình cảm động nhất.",
+            "Tìm kiếm tình yêu đích thực: Tâm lý học về sự thu hút và hẹn hò.",
+            "Giải quyết xung đột không nước mắt: Kỹ năng giao tiếp phi bạo lực (Nonviolent Communication).",
+            "Dạy con yêu thích đọc sách: Cách xây dựng tủ sách gia đình từ khi con còn nhỏ.",
+            "Làm bạn cùng con: Những cuốn truyện thiếu nhi kinh điển cha mẹ nên đọc cùng con.",
+            "Xây dựng mạng lưới quan hệ chất lượng: Bí quyết từ Ai che lưng cho bạn.",
+            "Tha thứ và buông bỏ: Sức mạnh của lòng bao dung trong các mối quan hệ.",
+            "Trở thành người thú vị trong mắt người khác: Kiến thức xã hội học từ sách.",
+            "Hiểu về sự khác biệt thế hệ: Đọc sách về Gen Z và Gen X để thấu hiểu.",
+            // V. Knowledge (61-75)
+            "Du lịch vòng quanh thế giới tại nhà: Những cuốn sách du ký hay nhất mọi thời đại.",
+            "Hiểu sâu về lịch sử loài người: Tóm tắt tinh hoa từ Sapiens: Lược sử loài người.",
+            "Dự đoán tương lai công nghệ: Những cuốn sách về AI và Big Data bạn không thể bỏ qua.",
+            "Khám phá bí ẩn vũ trụ: Vật lý thiên văn cho người vội vã.",
+            "Thưởng thức nghệ thuật ẩm thực: Những cuốn sách về văn hóa ăn uống thú vị.",
+            "Hiểu về chính trị thế giới: Góc nhìn đa chiều qua các tác phẩm phi hư cấu.",
+            "Sống xanh và bảo vệ môi trường: Lối sống tối giản (Minimalism) qua sách.",
+            "Giải mã các nền văn minh cổ đại: Những cuốn sách khảo cổ học hấp dẫn.",
+            "Thấu hiểu văn hóa Việt Nam: Những tác phẩm văn học kinh điển của nước nhà.",
+            "Mở rộng thế giới quan: Triết học phương Tây và phương Đông đối chiếu.",
+            "Khám phá bí ẩn cơ thể người: Y học thường thức qua những trang sách dễ hiểu.",
+            "Tìm hiểu về các tôn giáo lớn: Sách về tâm linh và tín ngưỡng không giáo điều.",
+            "Học tư duy phản biện: Những cuốn sách giúp bạn không bị dắt mũi bởi tin giả.",
+            "Cảm nhận vẻ đẹp của ngôn từ: Những tập thơ hay nhất chữa lành tâm hồn.",
+            "Khám phá thế giới ngầm: Những cuốn sách phóng sự điều tra chấn động.",
+            // VI. Lifestyle (76-90)
+            "Đọc sách mọi lúc mọi nơi: So sánh máy đọc sách Kindle, Kobo và sách giấy.",
+            "Quản lý thư viện cá nhân chuyên nghiệp: Sử dụng Notion hoặc Goodreads để theo dõi sách.",
+            "Tiết kiệm tiền mua sách: Cách săn sách cũ và sử dụng thư viện công cộng.",
+            "Tạo không gian đọc sách chill nhất: Ý tưởng Decor góc đọc sách tại nhà.",
+            "Tìm người cùng sở thích: Cách tham gia hoặc tổ chức CLB Sách (Book Club) hiệu quả.",
+            "Tặng quà tinh tế nhất: Gợi ý chọn sách làm quà tặng cho từng đối tượng.",
+            "Bảo quản sách bền đẹp theo năm tháng: Kỹ thuật bọc sách và chống mối mọt.",
+            "Nghe sách hiệu quả khi chạy bộ: Top ứng dụng sách nói (Voiz FM, Fonos, Audible).",
+            "Viết review sách thu hút ngàn like: Công thức viết Content về sách trên mạng xã hội.",
+            "Trở thành Bookstagrammer nổi tiếng: Cách chụp ảnh sách đẹp (Flatlay).",
+            "Đọc sách trong bóng tối bảo vệ mắt: Đánh giá các loại đèn đọc sách chuyên dụng.",
+            "Ghi chú trực tiếp lên sách mà không hỏng: Sử dụng giấy nhớ (Sticky notes) và bút highlight đúng cách.",
+            "Xả stress cuối tuần: List truyện tranh (Manga/Comic) ý nghĩa dành cho người lớn.",
+            "Sống chậm lại: Tạp văn và những cuốn sách về phong cách sống Hygge/Lagom.",
+            "Cai nghiện mạng xã hội: Thử thách 7 ngày thay điện thoại bằng sách.",
+            // VII. Creative (91-100)
+            "Thay đổi cuộc đời chỉ bằng một câu nói: Những trích dẫn sách (Quotes) bất hủ.",
+            "Khám phá những cái kết gây sốc nhất: Top tiểu thuyết trinh thám có Plot twist đỉnh cao.",
+            "Cười ra nước mắt: Những cuốn sách hài hước và châm biếm sâu cay.",
+            "Thử thách lòng can đảm: Những cuốn tiểu thuyết kinh dị ám ảnh hơn cả phim.",
+            "Du hành thời gian: Những cuốn sách viễn tưởng (Sci-fi) hay nhất thế kỷ.",
+            "Học cách buông bỏ: Chủ nghĩa tối giản trong tư duy (Essentialism).",
+            "Trở thành chuyên gia rượu vang/cà phê: Sách kiến thức về đồ uống sành điệu.",
+            "Viết cuốn sách của riêng bạn: Hướng dẫn từ các tác giả Best-seller.",
+            "Hiểu về thế giới tội phạm: Tâm lý học tội phạm qua lời kể của chuyên gia.",
+            "Định hình lại năm mới của bạn: Danh sách những cuốn sách cần đọc vào dịp đầu năm."
+        ];
+
+        // Process Data into Objects
+        let topics = [];
+        let globalIndex = 0;
+
+        categories.forEach(cat => {
+            const rangeSize = cat.range[1] - cat.range[0] + 1;
+            for(let i=0; i<rangeSize; i++) {
+                if(rawTopics[globalIndex]) {
+                    const parts = rawTopics[globalIndex].split(": ");
+                    topics.push({
+                        id: globalIndex + 1,
+                        categoryId: cat.id,
+                        categoryName: cat.name,
+                        benefit: parts[0] ? parts[0].trim() : "Chủ đề thú vị",
+                        method: parts[1] ? parts[1].trim() : "Xem chi tiết",
+                        color: cat.color
+                    });
+                    globalIndex++;
+                }
+            }
+        });
+
+        // --- STATE MANAGEMENT ---
+        let currentFilter = 'all';
+
+        // --- DOM ELEMENTS ---
+        const grid = document.getElementById('topicGrid');
+        const filterContainer = document.getElementById('categoryFilters');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+
+        // --- INITIALIZATION ---
+        function init() {
+            renderFilters();
+            renderGrid(topics);
+            initCharts();
+            setupEventListeners();
+        }
+
+        // --- RENDERING ---
+        function renderFilters() {
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn px-4 py-2 rounded-full text-sm font-medium border border-stone-200 text-stone-600 hover:bg-stone-100 transition whitespace-nowrap`;
+                btn.textContent = cat.name;
+                btn.dataset.category = cat.id;
+                btn.addEventListener('click', () => setFilter(cat.id, btn));
+                filterContainer.appendChild(btn);
+            });
+        }
+
+        function renderGrid(data) {
+            grid.innerHTML = '';
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                data.forEach(topic => {
+                    const card = document.createElement('div');
+                    card.className = 'topic-card bg-white p-6 rounded-xl border border-stone-100 flex flex-col h-full';
+                    
+                    // Header with number and category
+                    const header = document.createElement('div');
+                    header.className = 'flex justify-between items-start mb-4';
+                    header.innerHTML = `
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-stone-100 text-stone-500 uppercase tracking-wide">#${topic.id}</span>
+                        <span class="text-xs font-semibold text-stone-400 truncate ml-2" style="color:${topic.color}">${topic.categoryName}</span>
+                    `;
+                    
+                    // Content
+                    const content = document.createElement('div');
+                    content.className = 'flex-grow';
+                    content.innerHTML = `
+                        <h4 class="text-xl font-bold serif text-stone-800 mb-3 leading-tight">${topic.benefit}</h4>
+                        <div class="flex items-start gap-2">
+                            <span class="text-amber-500 mt-1">↳</span>
+                            <p class="text-sm text-stone-600 leading-relaxed font-light">${topic.method}</p>
+                        </div>
+                    `;
+
+                    card.appendChild(header);
+                    card.appendChild(content);
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // --- LOGIC ---
+        function setFilter(catId, btnClicked) {
+            currentFilter = catId;
+            
+            // Update buttons styling
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-stone-800', 'text-white');
+                btn.classList.add('bg-white', 'text-stone-600', 'border-stone-200');
+            });
+            if (btnClicked) {
+                btnClicked.classList.remove('bg-white', 'text-stone-600');
+                btnClicked.classList.add('bg-stone-800', 'text-white');
+            } else {
+                // If reset, highlighting 'All'
+                const allBtn = document.querySelector('[data-category="all"]');
+                if(allBtn) {
+                    allBtn.classList.remove('bg-white', 'text-stone-600');
+                    allBtn.classList.add('bg-stone-800', 'text-white');
+                }
+            }
+
+            filterAndSearch();
+        }
+
+        function filterAndSearch() {
+            const term = searchInput.value.toLowerCase();
+            const filtered = topics.filter(t => {
+                const matchesCategory = currentFilter === 'all' || t.categoryId === currentFilter;
+                const matchesSearch = t.benefit.toLowerCase().includes(term) || t.method.toLowerCase().includes(term);
+                return matchesCategory && matchesSearch;
+            });
+            renderGrid(filtered);
+        }
+
+        function resetFilters() {
+            searchInput.value = '';
+            setFilter('all', null);
+        }
+
+        function setupEventListeners() {
+            searchInput.addEventListener('input', filterAndSearch);
+            
+            // 'All' button event manually since it's hardcoded
+            document.querySelector('[data-category="all"]').addEventListener('click', (e) => setFilter('all', e.target));
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+        }
+
+        function pickRandomTopic() {
+            const randomIndex = Math.floor(Math.random() * topics.length);
+            const topic = topics[randomIndex];
+            
+            const card = document.getElementById('randomCardDisplay');
+            const catEl = document.getElementById('randomCategory');
+            const benEl = document.getElementById('randomBenefit');
+            const metEl = document.getElementById('randomMethod');
+            
+            card.classList.remove('hidden', 'scale-90', 'opacity-0');
+            card.classList.add('scale-100', 'opacity-100');
+            
+            catEl.textContent = topic.categoryName;
+            catEl.style.color = topic.color;
+            benEl.textContent = topic.benefit;
+            metEl.textContent = topic.method;
+        }
+
+        // --- CHARTS ---
+        function initCharts() {
+            // Chart 1: Distribution (Doughnut)
+            // Goal: Inform (Simple Proportions)
+            const ctxDist = document.getElementById('distributionChart').getContext('2d');
+            const distData = categories.map(c => c.range[1] - c.range[0] + 1);
+            
+            new Chart(ctxDist, {
+                type: 'doughnut',
+                data: {
+                    labels: categories.map(c => c.name),
+                    datasets: [{
+                        data: distData,
+                        backgroundColor: categories.map(c => c.color),
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: { family: "'Inter', sans-serif", size: 10 },
+                                boxWidth: 10,
+                                usePointStyle: true
+                            }
+                        },
+                         tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                }
+                            }
+                        }
+                    },
+                    layout: { padding: 10 }
+                }
+            });
+
+            // Chart 2: Radar (Life Balance)
+            // Goal: Relationships (Correlations)
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            
+            // Mapping categories to "Life Axis" conceptually
+            // Skills -> Efficiency
+            // Career -> Wealth
+            // Psych -> Self
+            // Relations -> Love
+            // Knowledge -> Wisdom
+            // Lifestyle -> Enjoyment
+            // Creative -> Innovation
+            
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['Hiệu Suất', 'Tài Chính', 'Tâm Lý', 'Kết Nối', 'Kiến Thức', 'Lối Sống', 'Sáng Tạo'],
+                    datasets: [{
+                        label: 'Mức độ tập trung',
+                        data: [15, 15, 15, 15, 15, 15, 10], // Based on counts
+                        fill: true,
+                        backgroundColor: 'rgba(217, 119, 6, 0.2)', // Amber
+                        borderColor: 'rgb(217, 119, 6)',
+                        pointBackgroundColor: 'rgb(217, 119, 6)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(217, 119, 6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
+                            pointLabels: {
+                                font: { family: "'Inter', sans-serif", size: 11 },
+                                color: '#4b5563'
+                            },
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) { return context[0].label; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Helper for Chart.js label wrapping (required)
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= maxLen) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Start
+        init();
+
+    </script>
+</body>
+</html>
